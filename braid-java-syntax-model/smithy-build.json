@@ -1,0 +1,24 @@
+{
+    "version": "2.0",
+    "plugins": {
+        "braid-codegen": {
+            "service": "mx.sugus.braid.jsyntax#JavaSyntax",
+            "shortName": "JavaSyntax",
+            "package": "mx.sugus.braid.jsyntax",
+            "packageVersion": "0.0.1",
+            "plugins": {
+                "mx.sugus.braid.core.plugins#ShapeCodegenPlugin": {
+                    "selector": "[id|namespace = 'mx.sugus.braid.jsyntax']"
+                },
+                "mx.sugus.braid.plugins.data#FlattenInterfaceMembersPlugin": {
+                },
+                "mx.sugus.braid.plugins.data#DataPlugin": {
+                },
+                "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin": {
+                    "syntaxNodes": ["mx.sugus.braid.jsyntax#SyntaxNode"]
+                },
+                "mx.sugus.braid.jsyntax.plugins#JavaSyntaxModelPlugin": {}
+            }
+        }
+    }
+}

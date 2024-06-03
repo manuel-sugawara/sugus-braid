@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FindBugsFilter>
+    <!-- Ignore all test files. -->
+    <Match>
+        <Class name="~mx.sugus.syntax.java.*"/>
+        <Bug pattern="EI_EXPOSE_REP"/>
+    </Match>
+    <Match>
+        <Class name="mx.sugus.codegen.plugin.data.StructureDataBuilder"/>
+        <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
+    </Match>
+</FindBugsFilter>

@@ -1,0 +1,14 @@
+mx.sugus.braid.traits.ConstTrait$Provider
+mx.sugus.braid.traits.CodegenIgnoreTrait$Provider
+mx.sugus.braid.traits.InterfaceTrait$Provider
+mx.sugus.braid.traits.JavaTrait$Provider
+mx.sugus.braid.traits.OptionalTrait$Provider
+mx.sugus.braid.traits.ImplementsTrait$Provider
+mx.sugus.braid.traits.NewBuilderOverridesTrait$Provider
+mx.sugus.braid.traits.AdderOverridesTrait$Provider
+mx.sugus.braid.traits.AddAllOverridesTrait$Provider
+mx.sugus.braid.traits.MultiAddOverridesTrait$Provider
+mx.sugus.braid.traits.UseBuilderReferenceTrait$Provider
+mx.sugus.braid.traits.FromFactoriesTrait$Provider
+mx.sugus.braid.traits.SetterOverridesTrait$Provider
+
