@@ -1,7 +1,7 @@
 
 ## Summary
 
-* egb is a Smithy java code generator
+* Bride is a Smithy java code generator
 
 * It supports all non-service shapes
 
