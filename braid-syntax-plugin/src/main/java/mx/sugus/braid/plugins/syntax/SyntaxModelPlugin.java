@@ -37,6 +37,7 @@ public final class SyntaxModelPlugin implements SmithyGeneratorPlugin {
         for (var syntaxNode : syntaxNodes) {
             builder.addProducer(new SyntaxVisitorJavaProducer(syntaxNode))
                    .addProducer(new SyntaxWalkVisitorJavaProducer(syntaxNode))
+                   .addProducer(new SyntaxRewriteVisitorJavaProducer(syntaxNode))
                    .addTransformer(new InterfaceSyntaxAddAcceptVisitorTransformer(syntaxNode))
                    .addTransformer(new SyntaxAddAcceptVisitorTransformer(syntaxNode));
         }

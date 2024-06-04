@@ -220,6 +220,20 @@ public abstract class AbstractBlockBuilder<B extends AbstractBlockBuilder<B, T>,
      * @param ifBody    The {@code AbstractBlockBuilder} consumer to create the body of the if statement.
      * @return This instance for call chaining
      */
+    public B ifStatement(Expression condition,
+                         Consumer<AbstractBlockBuilder<B, T>> ifBody) {
+        beginIfStatement(condition);
+        ifBody.accept(this);
+        return endIfStatement();
+    }
+
+    /**
+     * Creates and adds to the block an if statement using the given condition and the consumer to create its body.
+     *
+     * @param condition The condition for the else-if statement.
+     * @param ifBody    The {@code AbstractBlockBuilder} consumer to create the body of the if statement.
+     * @return This instance for call chaining
+     */
     public B ifStatement(String condition,
                          Consumer<AbstractBlockBuilder<B, T>> ifBody) {
         beginIfStatement(condition);

@@ -96,6 +96,10 @@ public interface JavaSymbolProvider extends SymbolProvider {
         return SymbolConstants.initReferenceBuilder(type);
     }
 
+    default TypeName concreteClassFor(SymbolConstants.AggregateType type) {
+        return SymbolConstants.concreteClassFor(type);
+    }
+
     default Name toMemberJavaName(MemberShape shape) {
         return toJavaName(shape);
     }

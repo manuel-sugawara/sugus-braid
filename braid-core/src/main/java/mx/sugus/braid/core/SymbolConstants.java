@@ -1,5 +1,11 @@
 package mx.sugus.braid.core;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import mx.sugus.braid.jsyntax.ClassName;
+import mx.sugus.braid.jsyntax.ParameterizedTypeName;
+import mx.sugus.braid.jsyntax.TypeName;
 import software.amazon.smithy.codegen.core.Symbol;
 
 public class SymbolConstants {
@@ -34,6 +40,16 @@ public class SymbolConstants {
                 case MAP -> "fromPersistentOrderedMap";
                 case LIST -> "fromPersistentList";
                 case SET -> "fromPersistentOrderedSet";
+                default -> null;
+            };
+    }
+
+    public static TypeName concreteClassFor(AggregateType type) {
+        return
+            switch (type) {
+                case MAP -> ClassName.from(LinkedHashMap.class);
+                case LIST -> ClassName.from(ArrayList.class);
+                case SET -> ClassName.from(LinkedHashSet.class);
                 default -> null;
             };
     }
