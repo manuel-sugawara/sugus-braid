@@ -8,6 +8,7 @@ import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.NonShapeProducerTask;
 import mx.sugus.braid.core.plugin.TypeSyntaxResult;
+import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.CodeBlock;
@@ -42,11 +43,9 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
     @Override
     public TypeSyntaxResult produce(CodegenState state) {
         var builder = typeSyntax(state);
-        var symbolProvider = state.symbolProvider();
         var isaKnowledgeIndex = ImplementsKnowledgeIndex.of(state.model());
         var syntaxNodeShapeId = ShapeId.from(syntaxNode);
         var syntaxNodeShape = state.model().expectShape(syntaxNodeShapeId).asStructureShape().orElseThrow();
-        var syntaxNodeType = symbolProvider.toJavaTypeName(syntaxNodeShape);
         var shapes = isaKnowledgeIndex.recursiveImplementers(syntaxNodeShape);
         for (var shape : shapes) {
             if (shape.hasTrait(InterfaceTrait.class)) {
@@ -55,7 +54,6 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
             builder.addMethod(visitForStructure(state, shape)
                                   .addAnnotation(Override.class)
                                   .addModifier(Modifier.PUBLIC)
-                                  .returns(syntaxNodeType)
                                   .build());
         }
         return TypeSyntaxResult.builder().syntax(builder.build()).build();
@@ -78,14 +76,17 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
     }
 
     MethodSyntax.Builder visitForStructure(CodegenState state, StructureShape shape) {
-        var name = shape.getId().getName();
         var symbolProvider = state.symbolProvider();
+        var name = symbolProvider.toJavaName(shape, Name.Convention.PASCAL_CASE);
         var type = symbolProvider.toJavaTypeName(shape);
-        var syntaxNodeClass = state.toJavaTypeNameClass(syntaxNode);
         var builder = MethodSyntax.builder("visit" + name)
                                   .addModifier(Modifier.PUBLIC)
-                                  .returns(syntaxNodeClass)
+                                  .returns(type)
                                   .addParameter(type, "node");
+        if (!hasVisitableMembers(state, shape)) {
+            builder.addStatement("return node");
+            return builder;
+        }
         builder.addStatement("$T.Builder builder = null", type);
         var model = state.model();
         builder.body(body -> {
@@ -120,12 +121,14 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
         builder.addStatement("$T $L = null", memberType, memberNameNew);
         if (type == SymbolConstants.AggregateType.LIST) {
             builder.forStatement("int idx = 0; idx < $L.size(); idx++", memberName, b -> {
-                // XXX, This need to be adjusted this for @sparse lists.
+                // XXX, do we need to be adjusted this for @sparse lists?.
                 b.addStatement("$T value = $L.get(idx)", memberInnerType, memberName);
-                b.addStatement("$1T newValue = ($1T) value.accept(this)", memberInnerType);
+                var acceptBlock = acceptBlock(state, memberInnerTypeShape, "value");
+                b.addStatement("$T newValue = $C", memberInnerType, acceptBlock);
                 b.ifStatement("$L == null && !value.equals(newValue)", memberNameNew, valueChanged -> {
                     valueChanged.addStatement("$L = new $T<>($L.size())",
-                                              memberNameNew, symbolProvider.concreteClassFor(SymbolConstants.AggregateType.LIST), memberName);
+                                              memberNameNew,
+                                              symbolProvider.concreteClassFor(SymbolConstants.AggregateType.LIST), memberName);
                     valueChanged.addStatement("$L.addAll($L.subList(0, idx))", memberNameNew, memberName);
                 });
                 b.ifStatement("$L != null", memberNameNew, then -> {
@@ -134,10 +137,12 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
             });
         } else if (type == SymbolConstants.AggregateType.SET) {
             builder.forStatement("$T value : $L", memberInnerType, memberName, b -> {
-                b.addStatement("$1T newValue = ($1T) value.accept(this)", memberInnerType);
+                var acceptBlock = acceptBlock(state, memberInnerTypeShape, "value");
+                b.addStatement("$T newValue = $C", memberInnerType, acceptBlock);
                 b.ifStatement("$L == null && !value.equals(newValue)", memberNameNew, valueChanged -> {
                     valueChanged.addStatement("$L = new $T<>($L.size())",
-                                              memberNameNew, symbolProvider.concreteClassFor(SymbolConstants.AggregateType.SET), memberName);
+                                              memberNameNew, symbolProvider.concreteClassFor(SymbolConstants.AggregateType.SET)
+                        , memberName);
                     // XXX This assumes that the set is ordered, for now is true but this will change
                     valueChanged.forStatement("$T innerValue : $L", memberInnerType, memberName, copyMembers -> {
                         copyMembers.ifStatement("innerValue == value", done -> done.addStatement("break"));
@@ -191,15 +196,16 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
         var memberName = symbolProvider.toMemberJavaName(member);
         var memberNameNew = memberName.withSuffix("new");
         var memberType = symbolProvider.toJavaTypeName(member);
-        builder.addStatement("$1T $2L = node.$2L()", memberType, memberName);
+        builder.addStatement("$1T $2L = node.$2L()", memberType, memberName.toString());
+        var targetShape = state.model().expectShape(member.getTarget());
+        var acceptBlock = acceptBlock(state, targetShape, memberName.toString());
         if (symbolProvider.isMemberNullable(member)) {
             builder.addStatement("$T $L = null", memberType, memberNameNew);
-            builder.ifStatement("$L != null", memberName, b -> b.addStatement("$L = ($T) $L.accept(this)",
+            builder.ifStatement("$L != null", memberName, b -> b.addStatement("$L = $C",
                                                                               memberNameNew,
-                                                                              memberType,
-                                                                              memberName));
+                                                                              acceptBlock));
         } else {
-            builder.addStatement("$T $L = ($T) $L.accept(this)", memberType, memberNameNew, memberType, memberName);
+            builder.addStatement("$T $L = $C", memberType, memberNameNew, acceptBlock);
         }
         builder.ifStatement(CodeBlock.from("!$T.equals($L, $L)", Objects.class, memberName, memberNameNew), notEqual -> {
             if (isBuilderNull) {
@@ -210,5 +216,32 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
             }
             notEqual.addStatement("builder.$L($L)", memberName, memberNameNew);
         });
+    }
+
+    private CodeBlock acceptBlock(CodegenState state, Shape targetShape, String memberName) {
+        var symbolProvider = state.symbolProvider();
+        var memberType = symbolProvider.toJavaTypeName(targetShape);
+        CodeBlock acceptBlock;
+        if (targetShape.hasTrait(InterfaceTrait.class)) {
+            acceptBlock = CodeBlock.from("($T) $L.accept(this)", memberType, memberName);
+        } else {
+            var targetVisitName = symbolProvider.toJavaName(targetShape, Name.Convention.CAMEL_CASE, "visit");
+            acceptBlock = CodeBlock.from("$L($L)", targetVisitName, memberName);
+        }
+        return acceptBlock;
+    }
+
+    private boolean hasVisitableMembers(CodegenState state, StructureShape shape) {
+        var model = state.model();
+        for (var member : shape.members()) {
+            var memberShape = model.expectShape(member.getTarget());
+            if (SyntaxVisitorJavaProducer.shapeImplements(syntaxNode, model, memberShape)) {
+                return true;
+            }
+            if (isCollectionOfSyntaxNode(state, member)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

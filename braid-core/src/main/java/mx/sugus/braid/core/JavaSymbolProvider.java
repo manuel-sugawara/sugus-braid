@@ -20,6 +20,13 @@ public interface JavaSymbolProvider extends SymbolProvider {
         return validateName(name, shape);
     }
 
+    default Name toJavaName(Shape shape, Name.Convention kind, String prefix) {
+        var name = toSymbol(shape).getProperty(Name.class.getName(), Name.class).orElseThrow()
+                                  .toNameConvention(kind)
+                                  .withPrefix(prefix);
+        return validateName(name, shape);
+    }
+
     default Name toJavaName(Shape shape, String prefix) {
         var name = toSymbol(shape).getProperty(Name.class.getName(), Name.class).orElseThrow()
                                   .withPrefix(prefix);
