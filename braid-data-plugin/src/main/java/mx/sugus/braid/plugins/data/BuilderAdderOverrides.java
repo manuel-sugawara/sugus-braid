@@ -49,8 +49,7 @@ public final class BuilderAdderOverrides implements DirectedClass {
 
     @Override
     public List<MethodSyntax> methodsFor(ShapeCodegenState state, MemberShape member) {
-        var symbol = state.symbolProvider().toSymbol(member);
-        var aggregateType = SymbolConstants.aggregateType(symbol);
+        var aggregateType = state.symbolProvider().aggregateType(member);
         if (aggregateType == SymbolConstants.AggregateType.NONE) {
             return List.of();
         }

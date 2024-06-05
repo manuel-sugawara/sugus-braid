@@ -108,4 +108,10 @@ public interface JavaSymbolProvider extends SymbolProvider {
         var name = shape.getId().getName();
         return Name.of(name);
     }
+
+    default SymbolConstants.AggregateType aggregateType(Shape shape) {
+        var symbol = toSymbol(shape);
+        return symbol.getProperty(SymbolConstants.AGGREGATE_TYPE, SymbolConstants.AggregateType.class)
+                     .orElse(SymbolConstants.AggregateType.NONE);
+    }
 }

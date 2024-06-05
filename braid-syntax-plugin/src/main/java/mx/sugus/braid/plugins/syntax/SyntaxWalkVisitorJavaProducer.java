@@ -107,7 +107,7 @@ public final class SyntaxWalkVisitorJavaProducer implements NonShapeProducerTask
         var memberInnerType = symbolProvider.toJavaTypeName(memberInnerTypeShape);
         var memberType = symbolProvider.toJavaTypeName(member);
         builder.addStatement("$T $L = node.$L()", memberType, memberName, memberName);
-        var type = SymbolConstants.aggregateType(symbolProvider.toSymbol(member));
+        var type = symbolProvider.aggregateType(member);
         if (type == SymbolConstants.AggregateType.LIST) {
             builder.forStatement("int idx = 0; idx < $L.size(); idx++", memberName, b -> {
                 b.addStatement("$T value = $L.get(idx)", memberInnerType, memberName);
@@ -134,8 +134,7 @@ public final class SyntaxWalkVisitorJavaProducer implements NonShapeProducerTask
         var targetId = member.getTarget();
         var target = state.model().expectShape(targetId);
         var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
-        var type = SymbolConstants.aggregateType(symbol);
+        var type = symbolProvider.aggregateType(member);
         if (type == SymbolConstants.AggregateType.LIST || type == SymbolConstants.AggregateType.SET) {
             var listShape = target.asListShape().orElseThrow();
             var targetShape = state.model().expectShape(listShape.getMember().getTarget());

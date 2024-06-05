@@ -19,10 +19,10 @@ import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
-import mx.sugus.braid.traits.ConstTrait;
-import mx.sugus.braid.traits.UseBuilderReferenceTrait;
 import mx.sugus.braid.rt.util.BuilderReference;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
+import mx.sugus.braid.traits.ConstTrait;
+import mx.sugus.braid.traits.UseBuilderReferenceTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.traits.DefaultTrait;
 import software.amazon.smithy.model.traits.DocumentationTrait;
@@ -62,8 +62,7 @@ public final class StructureDataBuilder implements DirectedClass {
         if (member.hasTrait(ConstTrait.class)) {
             return Collections.emptyList();
         }
-        var symbol = state.symbolProvider().toSymbol(member);
-        var aggregateType = SymbolConstants.aggregateType(symbol);
+        var aggregateType = state.symbolProvider().aggregateType(member);
         if (aggregateType == SymbolConstants.AggregateType.NONE) {
             if (usesBuilderReference(state, member)) {
                 return List.of(setter(state, member), builderReferenceMutator(state, member));
@@ -94,8 +93,7 @@ public final class StructureDataBuilder implements DirectedClass {
     private FieldSyntax fieldFor(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
         var type = symbolProvider.toJavaTypeName(member);
-        var symbol = symbolProvider.toSymbol(member);
-        var aggregateType = SymbolConstants.aggregateType(symbol);
+        var aggregateType = state.symbolProvider().aggregateType(member);
         var finalType = switch (aggregateType) {
             case LIST, SET, MAP -> finalTypeForAggregate(type);
             default -> typeForMember(state, member);
@@ -135,8 +133,7 @@ public final class StructureDataBuilder implements DirectedClass {
         var builder = ConstructorMethodSyntax.builder();
         builder.body(b -> {
             for (var member : state.shape().members()) {
-                var symbol = symbolProvider.toSymbol(member);
-                var aggregateType = SymbolConstants.aggregateType(symbol);
+                var aggregateType = state.symbolProvider().aggregateType(member);
                 if (usesBuilderReference(state, member)) {
                     initializeBuilderReference(state, member, b, "null");
                 } else if (member.hasTrait(DefaultTrait.class)) {
@@ -167,8 +164,7 @@ public final class StructureDataBuilder implements DirectedClass {
                     initializeBuilderReference(state, member, b, "data." + name);
                     continue;
                 }
-                var symbol = symbolProvider.toSymbol(member);
-                var aggregateType = SymbolConstants.aggregateType(symbol);
+                var aggregateType = symbolProvider.aggregateType(member);
                 if (aggregateType == SymbolConstants.AggregateType.NONE) {
                     b.addStatement("this.$1L = data.$1L", name);
                 } else {
@@ -195,13 +191,12 @@ public final class StructureDataBuilder implements DirectedClass {
     private MethodSyntax setter(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
         var name = symbolProvider.toMemberName(member);
-        var symbol = symbolProvider.toSymbol(member);
         var builder = MethodSyntax.builder(name)
                                   .addModifier(Modifier.PUBLIC)
                                   .addParameter(symbolProvider.toJavaTypeName(member), name)
                                   .returns(className(state));
         builder.body(b -> {
-            var aggregateType = SymbolConstants.aggregateType(symbol);
+            var aggregateType = symbolProvider.aggregateType(member);
             switch (aggregateType) {
                 case LIST, SET -> setListValue(state, member, b);
                 case MAP -> setMapValue(state, member, b);
@@ -244,8 +239,7 @@ public final class StructureDataBuilder implements DirectedClass {
 
     private List<MethodSyntax> adder(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
-        var aggregateType = SymbolConstants.aggregateType(symbol);
+        var aggregateType = symbolProvider.aggregateType(member);
         return switch (aggregateType) {
             case LIST, SET -> collectionAdder(state, member);
             case MAP -> mapAdder(state, member);
@@ -266,8 +260,7 @@ public final class StructureDataBuilder implements DirectedClass {
                                              "Member " + name + " value is constant"));
             return List.of(builder.build());
         }
-        var symbol = symbolProvider.toSymbol(member);
-        var aggregateType = SymbolConstants.aggregateType(symbol);
+        var aggregateType = symbolProvider.aggregateType(member);
         builder.body(body -> {
             switch (aggregateType) {
                 case LIST, SET -> {
@@ -396,18 +389,16 @@ public final class StructureDataBuilder implements DirectedClass {
 
     static void setEmptyValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
         var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
         var name = symbolProvider.toMemberName(member);
-        var aggregateType = SymbolConstants.aggregateType(symbol);
+        var aggregateType = symbolProvider.aggregateType(member);
         var emptyReferenceBuilder = symbolProvider.emptyReferenceBuilder(aggregateType);
         builder.addStatement("this.$L = $T.$L()", name, CollectionBuilderReference.class, emptyReferenceBuilder);
     }
 
     static void setValueFromPersistent(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
         var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
         var name = symbolProvider.toMemberName(member);
-        var aggregateType = SymbolConstants.aggregateType(symbol);
+        var aggregateType = symbolProvider.aggregateType(member);
         var init = symbolProvider.initReferenceBuilder(aggregateType);
         builder.addStatement("this.$1L = $2T.$3L(data.$1L)", name, CollectionBuilderReference.class,
                              init);

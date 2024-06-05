@@ -93,7 +93,6 @@ public final class StructureData implements DirectedClass {
                 continue;
             }
             var name = symbolProvider.toMemberName(member);
-            var symbol = symbolProvider.toSymbol(member);
             if (StructureDataBuilder.usesBuilderReference(state, member)) {
                 if (symbolProvider.isMemberRequired(member)) {
                     builder.addStatement("this.$1L = $2T.requireNonNull(builder.$1L.asPersistent(), $1S)", name, Objects.class);
@@ -102,7 +101,7 @@ public final class StructureData implements DirectedClass {
                 }
                 continue;
             }
-            var aggregateType = SymbolConstants.aggregateType(symbol);
+            var aggregateType = state.symbolProvider().aggregateType(member);
             switch (aggregateType) {
                 case LIST, SET, MAP -> memberValueFromBuilder(state, member, builder);
                 default -> {

@@ -116,7 +116,7 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
         var memberInnerType = symbolProvider.toJavaTypeName(memberInnerTypeShape);
         var memberType = symbolProvider.toJavaTypeName(member);
         builder.addStatement("$T $L = node.$L()", memberType, memberName, memberName);
-        var type = SymbolConstants.aggregateType(symbolProvider.toSymbol(member));
+        var type = symbolProvider.aggregateType(member);
         builder.addStatement("$T $L = null", memberType, memberNameNew);
         if (type == SymbolConstants.AggregateType.LIST) {
             builder.forStatement("int idx = 0; idx < $L.size(); idx++", memberName, b -> {
@@ -125,7 +125,7 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
                 b.addStatement("$1T newValue = ($1T) value.accept(this)", memberInnerType);
                 b.ifStatement("$L == null && !value.equals(newValue)", memberNameNew, valueChanged -> {
                     valueChanged.addStatement("$L = new $T<>($L.size())",
-                                              memberNameNew, symbolProvider.concreteClassFor(type), memberName);
+                                              memberNameNew, symbolProvider.concreteClassFor(SymbolConstants.AggregateType.LIST), memberName);
                     valueChanged.addStatement("$L.addAll($L.subList(0, idx))", memberNameNew, memberName);
                 });
                 b.ifStatement("$L != null", memberNameNew, then -> {
@@ -137,7 +137,7 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
                 b.addStatement("$1T newValue = ($1T) value.accept(this)", memberInnerType);
                 b.ifStatement("$L == null && !value.equals(newValue)", memberNameNew, valueChanged -> {
                     valueChanged.addStatement("$L = new $T<>($L.size())",
-                                              memberNameNew, symbolProvider.concreteClassFor(type), memberName);
+                                              memberNameNew, symbolProvider.concreteClassFor(SymbolConstants.AggregateType.SET), memberName);
                     // XXX This assumes that the set is ordered, for now is true but this will change
                     valueChanged.forStatement("$T innerValue : $L", memberInnerType, memberName, copyMembers -> {
                         copyMembers.ifStatement("innerValue == value", done -> done.addStatement("break"));
@@ -174,8 +174,7 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
         var targetId = member.getTarget();
         var target = state.model().expectShape(targetId);
         var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
-        var type = SymbolConstants.aggregateType(symbol);
+        var type = symbolProvider.aggregateType(member);
         if (type == SymbolConstants.AggregateType.LIST || type == SymbolConstants.AggregateType.SET) {
             var listShape = target.asListShape().orElseThrow();
             var targetShape = state.model().expectShape(listShape.getMember().getTarget());
