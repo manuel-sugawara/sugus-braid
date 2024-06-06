@@ -36,6 +36,7 @@ import software.amazon.smithy.model.shapes.OperationShape;
 import software.amazon.smithy.model.shapes.ResourceShape;
 import software.amazon.smithy.model.shapes.ServiceShape;
 import software.amazon.smithy.model.shapes.Shape;
+import software.amazon.smithy.model.shapes.ShapeId;
 import software.amazon.smithy.model.shapes.ShapeType;
 import software.amazon.smithy.model.shapes.ShapeVisitor;
 import software.amazon.smithy.model.shapes.ShortShape;
@@ -101,10 +102,9 @@ public final class JavaSymbolProviderImpl implements JavaSymbolProvider, ShapeVi
     }
 
     @Override
-    public Symbol blobShape(BlobShape blobShape) {
-        // FIXME, verify what the AWS Java SDK does.
-        // We need a supporting package.
-        return fromClass(ByteBuffer.class);
+    public Symbol blobShape(BlobShape shape) {
+        // FIXME, add support for this
+        throw new UnsupportedOperationException("unsupported shape with type: " + shape.getType());
     }
 
     @Override
@@ -220,15 +220,10 @@ public final class JavaSymbolProviderImpl implements JavaSymbolProvider, ShapeVi
 
     @Override
     public Symbol memberShape(MemberShape memberShape) {
-        try {
-            return toSymbol(model.expectShape(memberShape.getTarget()))
-                .toBuilder()
-                .putProperty(Name.class.getName(), toJavaName2(memberShape))
-                .build();
-        } catch (Exception e) {
-            System.out.printf("=================>> Target: %s\n", memberShape.getTarget());
-            throw e;
-        }
+        return toSymbol(model.expectShape(memberShape.getTarget()))
+            .toBuilder()
+            .putProperty(Name.class.getName(), toJavaName2(memberShape))
+            .build();
     }
 
     @Override
