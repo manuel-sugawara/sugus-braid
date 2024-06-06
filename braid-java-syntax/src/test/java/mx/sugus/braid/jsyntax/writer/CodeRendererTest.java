@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.lang.model.element.Modifier;
+import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.writer.CodeRenderer;
 import mx.sugus.braid.jsyntax.AbstractMethodSyntax;
 import mx.sugus.braid.jsyntax.Annotation;
@@ -33,6 +34,7 @@ import mx.sugus.braid.jsyntax.TypeVariableTypeName;
 import mx.sugus.braid.jsyntax.WildcardTypeName;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.rt.util.annotations.Generated;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -43,6 +45,18 @@ class CodeRendererTest {
     public void runTestCase(TestCase testCase) {
         var rendered = CodeRenderer.render(testCase.node);
         assertEquals(testCase.expected, rendered);
+    }
+
+    @Test
+    public void foobar() {
+        var node = BodyBuilder.create()
+            .addStatement("$B", BodyBuilder.create()
+                .addStatement("foo.clear()")
+                .addStatement("foo.addAll(bar)")
+                .build())
+            .build();
+        var rendered = CodeRenderer.render(node);
+        System.out.printf("============\n%s\n", rendered);
     }
 
     public static List<TestCase> testCases() {
