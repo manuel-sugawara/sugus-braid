@@ -19,7 +19,7 @@ import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.TypeSyntax;
 import mx.sugus.braid.jsyntax.block.AbstractBlockBuilder;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
-import mx.sugus.braid.plugins.data.StructureJavaProducer;
+import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
 import software.amazon.smithy.model.shapes.ShapeId;
 import software.amazon.smithy.model.shapes.StructureShape;
 

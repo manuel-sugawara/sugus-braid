@@ -1,4 +1,4 @@
-package mx.sugus.braid.plugins.data;
+package mx.sugus.braid.plugins.data.producers;
 
 import java.util.List;
 import javax.lang.model.element.Modifier;

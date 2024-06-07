@@ -1,4 +1,4 @@
-package mx.sugus.braid.plugins.data;
+package mx.sugus.braid.plugins.data.producers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,7 @@ import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.block.AbstractBlockBuilder;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
+import mx.sugus.braid.plugins.data.DataPlugin;
 import mx.sugus.braid.traits.ConstTrait;
 import software.amazon.smithy.model.shapes.EnumShape;
 import software.amazon.smithy.model.shapes.MemberShape;

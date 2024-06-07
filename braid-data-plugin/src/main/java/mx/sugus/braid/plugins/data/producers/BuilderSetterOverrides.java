@@ -1,7 +1,7 @@
-package mx.sugus.braid.plugins.data;
+package mx.sugus.braid.plugins.data.producers;
 
-import static mx.sugus.braid.plugins.data.StructureCodegenUtils.getTargetTrait;
-import static mx.sugus.braid.plugins.data.StructureCodegenUtils.toParameters;
+import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.getTargetTrait;
+import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.toParameters;
 
 import java.util.ArrayList;
 import java.util.List;

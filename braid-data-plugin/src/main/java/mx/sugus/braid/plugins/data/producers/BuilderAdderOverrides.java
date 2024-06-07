@@ -1,14 +1,14 @@
-package mx.sugus.braid.plugins.data;
+package mx.sugus.braid.plugins.data.producers;
 
 import static mx.sugus.braid.core.util.Utils.coalesce;
-import static mx.sugus.braid.plugins.data.StructureCodegenUtils.getTargetListMember;
-import static mx.sugus.braid.plugins.data.StructureCodegenUtils.getTargetListMemberTrait;
-import static mx.sugus.braid.plugins.data.StructureCodegenUtils.getTargetTrait;
-import static mx.sugus.braid.plugins.data.StructureCodegenUtils.toParameters;
-import static mx.sugus.braid.plugins.data.Utils.toJavaName;
-import static mx.sugus.braid.plugins.data.Utils.toJavaSingularName;
-import static mx.sugus.braid.plugins.data.Utils.toJavaTypeName;
-import static mx.sugus.braid.plugins.data.Utils.toMemberJavaName;
+import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.getTargetListMember;
+import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.getTargetListMemberTrait;
+import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.getTargetTrait;
+import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.toParameters;
+import static mx.sugus.braid.plugins.data.producers.Utils.toJavaName;
+import static mx.sugus.braid.plugins.data.producers.Utils.toJavaSingularName;
+import static mx.sugus.braid.plugins.data.producers.Utils.toJavaTypeName;
+import static mx.sugus.braid.plugins.data.producers.Utils.toMemberJavaName;
 
 import java.util.ArrayList;
 import java.util.List;

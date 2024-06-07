@@ -47,13 +47,13 @@ import software.amazon.smithy.model.shapes.UnionShape;
 import software.amazon.smithy.model.traits.ErrorTrait;
 import software.amazon.smithy.model.traits.UniqueItemsTrait;
 
-public class SymbolProvider2 implements SymbolProvider, ShapeVisitor<Symbol> {
+public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol> {
     private final Model model;
     private final ShapeToJavaName shapeToJavaName;
     private final ShapeToJavaType shapeToJavaType;
     private final String packageName;
 
-    public SymbolProvider2(Model model, ShapeToJavaName shapeToJavaName, ShapeToJavaType shapeToJavaType, String packageName) {
+    public BraidSymbolProvider(Model model, ShapeToJavaName shapeToJavaName, ShapeToJavaType shapeToJavaType, String packageName) {
         this.model = model;
         this.shapeToJavaName = shapeToJavaName;
         this.shapeToJavaType = shapeToJavaType;
@@ -159,8 +159,8 @@ public class SymbolProvider2 implements SymbolProvider, ShapeVisitor<Symbol> {
         var builder = targetSymbol
             .toBuilder()
             .putProperty(SymbolProperties.SIMPLE_NAME, shapeToJavaName.toJavaName(shape))
-            .putProperty(SymbolProperties.EMPTY_BUILDER_INIT, SymbolProvider2::emptyBuilderInitializer)
-            .putProperty(SymbolProperties.DATA_BUILDER_INIT, SymbolProvider2::dataBuilderInitializer);
+            .putProperty(SymbolProperties.EMPTY_BUILDER_INIT, BraidSymbolProvider::emptyBuilderInitializer)
+            .putProperty(SymbolProperties.DATA_BUILDER_INIT, BraidSymbolProvider::dataBuilderInitializer);
 
         return builder.build();
     }

@@ -12,8 +12,8 @@ import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeVariableTypeName;
 import mx.sugus.braid.jsyntax.ext.TypeNameExt;
-import mx.sugus.braid.plugins.data.StructureJavaProducer;
-import mx.sugus.braid.plugins.data.Utils;
+import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
+import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.traits.InterfaceTrait;
 import software.amazon.smithy.model.shapes.ShapeId;
 

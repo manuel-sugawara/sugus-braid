@@ -1,19 +1,25 @@
-package mx.sugus.braid.core.plugin;
+package mx.sugus.braid.plugins.data;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import mx.sugus.braid.core.plugin.CodegenModuleConfig;
+import mx.sugus.braid.core.plugin.CodegenState;
+import mx.sugus.braid.core.plugin.ConsumerTask;
+import mx.sugus.braid.core.plugin.Identifier;
+import mx.sugus.braid.core.plugin.ShapeCodegenState;
+import mx.sugus.braid.core.plugin.ShapeReducer;
+import mx.sugus.braid.core.plugin.SmithyGeneratorPlugin;
+import mx.sugus.braid.core.plugin.TypeSyntaxResult;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.writer.CodeRenderer;
-import mx.sugus.braid.plugins.data.Utils;
+import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.traits.JavaTrait;
 import software.amazon.smithy.model.node.ObjectNode;
 import software.amazon.smithy.model.shapes.ShapeType;
 
 /**
  * Provides serialization for instances of {@link TypeSyntaxResult}.
- * <p>
- * TODO: move onto its own plugin module.
  */
 public final class JavaSyntaxPlugin implements SmithyGeneratorPlugin {
     public static final Identifier ID = Identifier.of(JavaSyntaxPlugin.class);

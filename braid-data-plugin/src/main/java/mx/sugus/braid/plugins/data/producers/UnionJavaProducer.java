@@ -1,4 +1,4 @@
-package mx.sugus.braid.plugins.data;
+package mx.sugus.braid.plugins.data.producers;
 
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;

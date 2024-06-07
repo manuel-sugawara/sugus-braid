@@ -56,7 +56,6 @@ public class BraidCodegenDirector {
         LOG.fine("Beginning non-shape codegen");
         var nonShapeState = stateFor(properties);
         module.generateNonShape(nonShapeState);
-
     }
 
     private Collection<Shape> selectedShapes() {

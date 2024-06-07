@@ -8,7 +8,7 @@ import mx.sugus.braid.core.plugin.ComposedPluginLoader;
 import mx.sugus.braid.core.plugin.DefaultBaseModuleConfig;
 import mx.sugus.braid.core.plugin.PluginLoader;
 import mx.sugus.braid.core.plugin.SpiPluginLoader;
-import mx.sugus.braid.core.symbol.SymbolProvider2;
+import mx.sugus.braid.core.symbol.BraidSymbolProvider;
 import software.amazon.smithy.build.PluginContext;
 import software.amazon.smithy.build.SmithyBuildPlugin;
 import software.amazon.smithy.codegen.core.ReservedWords;
@@ -48,15 +48,15 @@ public final class BraidCodegenPlugin implements SmithyBuildPlugin {
         var escaper = RESERVED_WORDS;
         var shapeToJavaName = new ShapeToJavaName(model, escaper, settings.packageName());
         var shapeToJavaType = new ShapeToJavaType(shapeToJavaName, model);
-        return new SymbolProvider2(model, shapeToJavaName, shapeToJavaType, settings.packageName());
+        return new BraidSymbolProvider(model, shapeToJavaName, shapeToJavaType, settings.packageName());
     }
 
     private static ReservedWords buildReservedWords() {
         return
             new ReservedWordsBuilder()
-                .loadWords(Objects.requireNonNull(JavaSymbolProviderImpl.class.getResource("java-reserved-words.txt")),
+                .loadWords(Objects.requireNonNull(BraidCodegenPlugin.class.getResource("java-reserved-words.txt")),
                            Function.identity())
-                .loadWords(Objects.requireNonNull(JavaSymbolProviderImpl.class.getResource("java-system-type-names.txt")),
+                .loadWords(Objects.requireNonNull(BraidCodegenPlugin.class.getResource("java-system-type-names.txt")),
                            Function.identity())
                 .build();
     }

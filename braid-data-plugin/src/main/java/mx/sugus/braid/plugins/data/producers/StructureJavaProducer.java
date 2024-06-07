@@ -1,4 +1,4 @@
-package mx.sugus.braid.plugins.data;
+package mx.sugus.braid.plugins.data.producers;
 
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
@@ -8,10 +8,10 @@ import mx.sugus.braid.traits.InterfaceTrait;
 import mx.sugus.braid.traits.JavaTrait;
 import software.amazon.smithy.model.shapes.ShapeType;
 
-public final class StructureInterfaceJavaProducer implements ShapeProducerTask<TypeSyntaxResult> {
-    public static final Identifier ID = Identifier.of(StructureInterfaceJavaProducer.class);
+public final class StructureJavaProducer implements ShapeProducerTask<TypeSyntaxResult> {
+    public static final Identifier ID = Identifier.of(StructureJavaProducer.class);
 
-    StructureInterfaceJavaProducer() {
+    public StructureJavaProducer() {
     }
 
     @Override
@@ -35,10 +35,10 @@ public final class StructureInterfaceJavaProducer implements ShapeProducerTask<T
         if (shape.hasTrait(JavaTrait.class)) {
             return null;
         }
-        if (!shape.hasTrait(InterfaceTrait.class)) {
+        if (shape.hasTrait(InterfaceTrait.class)) {
             return null;
         }
-        var syntax = new InterfaceData().build(directive);
+        var syntax = StructureData.INSTANCE.build(directive);
         return TypeSyntaxResult.builder()
                                .syntax(syntax)
                                .build();

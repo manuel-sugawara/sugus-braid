@@ -1,4 +1,4 @@
-package mx.sugus.braid.plugins.data;
+package mx.sugus.braid.plugins.data.producers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +55,4 @@ public class StructureCodegenUtils {
         }
         return result;
     }
-
-
 }

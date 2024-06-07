@@ -1,4 +1,4 @@
-package mx.sugus.braid.plugins.data;
+package mx.sugus.braid.plugins.data.producers;
 
 import java.util.List;
 import javax.lang.model.element.Modifier;
@@ -14,6 +14,7 @@ import mx.sugus.braid.jsyntax.FieldSyntax;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.SwitchStatement;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
+import mx.sugus.braid.plugins.data.DataPlugin;
 import software.amazon.smithy.model.traits.DocumentationTrait;
 
 public final class EnumData implements DirectedEnum {

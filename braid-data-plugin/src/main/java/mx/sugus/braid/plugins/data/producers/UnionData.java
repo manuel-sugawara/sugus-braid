@@ -1,7 +1,7 @@
-package mx.sugus.braid.plugins.data;
+package mx.sugus.braid.plugins.data.producers;
 
-import static mx.sugus.braid.plugins.data.StructureCodegenUtils.BUILDER_TYPE;
-import static mx.sugus.braid.plugins.data.StructureCodegenUtils.toParameters;
+import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.BUILDER_TYPE;
+import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.toParameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +21,7 @@ import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.SwitchStatement;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
+import mx.sugus.braid.plugins.data.DataPlugin;
 import mx.sugus.braid.traits.NewBuilderOverridesTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.traits.DocumentationTrait;

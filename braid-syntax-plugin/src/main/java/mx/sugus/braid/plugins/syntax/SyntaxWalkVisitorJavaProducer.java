@@ -12,7 +12,7 @@ import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
-import mx.sugus.braid.plugins.data.Utils;
+import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.traits.InterfaceTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.shapes.Shape;

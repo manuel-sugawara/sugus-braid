@@ -4,10 +4,13 @@ import java.util.Collection;
 import java.util.List;
 import mx.sugus.braid.core.plugin.CodegenModuleConfig;
 import mx.sugus.braid.core.plugin.Identifier;
-import mx.sugus.braid.core.plugin.JavaSyntaxPlugin;
 import mx.sugus.braid.core.plugin.SmithyGeneratorPlugin;
 import mx.sugus.braid.jsyntax.Annotation;
 import mx.sugus.braid.jsyntax.CodeBlock;
+import mx.sugus.braid.plugins.data.producers.EnumJavaProducer;
+import mx.sugus.braid.plugins.data.producers.StructureInterfaceJavaProducer;
+import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
+import mx.sugus.braid.plugins.data.producers.UnionJavaProducer;
 import mx.sugus.braid.rt.util.annotations.Generated;
 import software.amazon.smithy.model.node.ObjectNode;
 

@@ -1,8 +1,8 @@
-package mx.sugus.braid.plugins.data;
+package mx.sugus.braid.plugins.data.producers;
 
-import static mx.sugus.braid.plugins.data.DataFromFactoryOverrides.fromFactory;
-import static mx.sugus.braid.plugins.data.Utils.toJavaName;
-import static mx.sugus.braid.plugins.data.Utils.toJavaTypeName;
+import static mx.sugus.braid.plugins.data.producers.DataFromFactoryOverrides.fromFactory;
+import static mx.sugus.braid.plugins.data.producers.Utils.toJavaName;
+import static mx.sugus.braid.plugins.data.producers.Utils.toJavaTypeName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +15,7 @@ import mx.sugus.braid.jsyntax.InterfaceSyntax;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
+import mx.sugus.braid.plugins.data.DataPlugin;
 import mx.sugus.braid.traits.FromFactoriesTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.traits.DocumentationTrait;

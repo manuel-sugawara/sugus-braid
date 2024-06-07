@@ -1,4 +1,4 @@
-package mx.sugus.braid.plugins.data;
+package mx.sugus.braid.plugins.data.producers;
 
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
@@ -10,7 +10,7 @@ import software.amazon.smithy.model.shapes.ShapeType;
 public final class EnumJavaProducer implements ShapeProducerTask<TypeSyntaxResult> {
     public static final Identifier ID = Identifier.of(EnumJavaProducer.class);
 
-    EnumJavaProducer() {
+    public EnumJavaProducer() {
     }
 
     @Override

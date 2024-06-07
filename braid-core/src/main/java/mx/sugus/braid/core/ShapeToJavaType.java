@@ -19,6 +19,7 @@ import software.amazon.smithy.model.shapes.LongShape;
 import software.amazon.smithy.model.shapes.MapShape;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.shapes.OperationShape;
+import software.amazon.smithy.model.shapes.ServiceShape;
 import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeVisitor;
 import software.amazon.smithy.model.shapes.ShortShape;
@@ -48,12 +49,17 @@ public class ShapeToJavaType extends ShapeVisitor.Default<TypeName> {
 
     @Override
     public TypeName operationShape(OperationShape shape) {
-        return null;
+        return from(shape);
+    }
+
+    @Override
+    public TypeName serviceShape(ServiceShape shape) {
+        return from(shape);
     }
 
     @Override
     public TypeName blobShape(BlobShape shape) {
-        // Still need to figure out what to do about blob shapes :(
+        // XXX figure out what to do about blob shapes
         throw new UnsupportedOperationException("Unsupported shape: " + shape);
     }
 

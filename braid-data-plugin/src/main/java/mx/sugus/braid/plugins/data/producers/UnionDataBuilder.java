@@ -1,8 +1,8 @@
-package mx.sugus.braid.plugins.data;
+package mx.sugus.braid.plugins.data.producers;
 
-import static mx.sugus.braid.plugins.data.Utils.toJavaName;
-import static mx.sugus.braid.plugins.data.Utils.toJavaSingularName;
-import static mx.sugus.braid.plugins.data.Utils.toJavaTypeName;
+import static mx.sugus.braid.plugins.data.producers.Utils.toJavaName;
+import static mx.sugus.braid.plugins.data.producers.Utils.toJavaSingularName;
+import static mx.sugus.braid.plugins.data.producers.Utils.toJavaTypeName;
 
 import java.util.ArrayList;
 import java.util.Collections;

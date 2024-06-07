@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
-import mx.sugus.braid.core.symbol.SymbolProvider2;
+import mx.sugus.braid.core.symbol.BraidSymbolProvider;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.core.util.PathUtil;
 import mx.sugus.braid.jsyntax.TypeName;
@@ -314,7 +314,7 @@ public final class JavaSymbolProviderImpl implements JavaSymbolProvider, ShapeVi
         if (false) {
             return new JavaSymbolProviderImpl(model, settings);
         }
-        return new SymbolProvider2(model, shapeToJavaName, shapeToJavaType, settings.packageName());
+        return new BraidSymbolProvider(model, shapeToJavaName, shapeToJavaType, settings.packageName());
     }
 
     private static Symbol.Builder createSymbolBuilder(String typeName, String namespace) {
