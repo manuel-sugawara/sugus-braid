@@ -20,18 +20,6 @@ public final class UseBuilderReferenceTrait extends AbstractTrait implements ToS
         this.fromPersistent = builder.fromPersistent;
     }
 
-    public static UseBuilderReferenceTrait fromNode(Node node) {
-        Builder builder = builder();
-        node.expectObjectNode()
-            .expectStringMember("builderType", builder::builderType)
-            .expectStringMember("fromPersistent", builder::fromPersistent);
-        return builder.build();
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
     @Override
     protected Node createNode() {
         return Node.objectNodeBuilder()
@@ -56,6 +44,18 @@ public final class UseBuilderReferenceTrait extends AbstractTrait implements ToS
         return builder().sourceLocation(getSourceLocation())
                         .builderType(builderType.toString())
                         .fromPersistent(fromPersistent.toString());
+    }
+
+    public static UseBuilderReferenceTrait fromNode(Node node) {
+        Builder builder = builder();
+        node.expectObjectNode()
+            .expectStringMember("builderType", builder::builderType)
+            .expectStringMember("fromPersistent", builder::fromPersistent);
+        return builder.build();
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**

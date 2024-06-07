@@ -21,26 +21,6 @@ public final class AddAllOverridesTrait extends AbstractTrait implements ToSmith
         this.values = builder.values.copy();
     }
 
-    /**
-     * Creates a {@link AddAllOverridesTrait} from a {@link Node}.
-     *
-     * @param node Node to create the AddAllOverridesTrait from.
-     * @return Returns the created AddAllOverridesTrait.
-     * @throws software.amazon.smithy.model.node.ExpectationNotMetException if the given Node is invalid.
-     */
-    public static AddAllOverridesTrait fromNode(Node node) {
-        Builder builder = builder();
-        node.expectArrayNode()
-            .getElements().stream()
-            .map(BuilderOverride::fromNode)
-            .forEach(builder::addValues);
-        return builder.build();
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
     @Override
     protected Node createNode() {
         return values.stream()
@@ -60,6 +40,26 @@ public final class AddAllOverridesTrait extends AbstractTrait implements ToSmith
         return builder().sourceLocation(getSourceLocation())
                         .values(values);
 
+    }
+
+    /**
+     * Creates a {@link AddAllOverridesTrait} from a {@link Node}.
+     *
+     * @param node Node to create the AddAllOverridesTrait from.
+     * @return Returns the created AddAllOverridesTrait.
+     * @throws software.amazon.smithy.model.node.ExpectationNotMetException if the given Node is invalid.
+     */
+    public static AddAllOverridesTrait fromNode(Node node) {
+        Builder builder = builder();
+        node.expectArrayNode()
+            .getElements().stream()
+            .map(BuilderOverride::fromNode)
+            .forEach(builder::addValues);
+        return builder.build();
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**

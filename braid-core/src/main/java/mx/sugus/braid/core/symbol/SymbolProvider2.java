@@ -14,7 +14,6 @@ import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.core.util.PathUtil;
 import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.jsyntax.ClassName;
-import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.traits.JavaTrait;

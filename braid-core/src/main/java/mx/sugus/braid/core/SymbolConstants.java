@@ -3,9 +3,7 @@ package mx.sugus.braid.core;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import mx.sugus.braid.core.symbol.SymbolProperties;
 import mx.sugus.braid.jsyntax.ClassName;
-import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeName;
 import software.amazon.smithy.codegen.core.Symbol;
 

@@ -4,13 +4,13 @@ import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
 import mx.sugus.braid.core.plugin.TypeSyntaxResult;
-import mx.sugus.braid.plugins.data.StructureInterfaceJavaProducer;
-import mx.sugus.braid.plugins.data.Utils;
 import mx.sugus.braid.jsyntax.AbstractMethodSyntax;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.InterfaceSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeVariableTypeName;
+import mx.sugus.braid.plugins.data.StructureInterfaceJavaProducer;
+import mx.sugus.braid.plugins.data.Utils;
 import mx.sugus.braid.traits.InterfaceTrait;
 import software.amazon.smithy.model.shapes.ShapeId;
 
@@ -48,13 +48,13 @@ public final class InterfaceSyntaxAddAcceptVisitorTransformer implements ShapeTa
                                                            .build();
             var visitor = ParameterizedTypeName.from(visitorClass, visitorResultTypeVar);
             var syntax = ((InterfaceSyntax) result.syntax()).toBuilder()
-                               .addMethod(AbstractMethodSyntax.builder()
-                                                              .name("accept")
-                                                              .returns(visitorResultTypeVar)
-                                                              .addTypeParam(visitorResultTypeVar)
-                                                              .addParameter(visitor, "visitor")
-                                                              .build())
-                               .build();
+                                                            .addMethod(AbstractMethodSyntax.builder()
+                                                                                           .name("accept")
+                                                                                           .returns(visitorResultTypeVar)
+                                                                                           .addTypeParam(visitorResultTypeVar)
+                                                                                           .addParameter(visitor, "visitor")
+                                                                                           .build())
+                                                            .build();
             return result.toBuilder()
                          .syntax(Utils.addGeneratedBy(syntax, SyntaxModelPlugin.ID))
                          .build();

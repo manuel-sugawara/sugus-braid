@@ -35,7 +35,7 @@ public final class InterfaceData implements DirectedInterface {
         var shape = state.shape().asStructureShape().orElseThrow();
         var superInterfaces = ImplementsKnowledgeIndex.of(state.model()).superInterfaces(shape);
         for (var superInterface : superInterfaces) {
-            var parentClass = Utils.toJavaTypeName(state, superInterface);
+            var parentClass = toJavaTypeName(state, superInterface);
             result.addSuperInterface(parentClass);
         }
         if (shape.hasTrait(DocumentationTrait.class)) {

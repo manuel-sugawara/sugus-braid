@@ -24,36 +24,11 @@ public final class BuilderOverride implements ToNode, ToSmithyBuilder<BuilderOve
         this.body = builder.body.copy();
     }
 
-    /**
-     * Creates a {@link BuilderOverride} from a {@link Node}.
-     *
-     * @param node Node to create the BuilderOverride from.
-     * @return Returns the created BuilderOverride.
-     * @throws software.amazon.smithy.model.node.ExpectationNotMetException if the given Node is invalid.
-     */
-    public static BuilderOverride fromNode(Node node) {
-        Builder builder = builder();
-        var objectNode = node.expectObjectNode();
-        objectNode
-            .getStringMember("name").map(StringNode::getValue).map(builder::name);
-        objectNode
-            .getStringMember("javadoc").map(StringNode::getValue).map(builder::javadoc);
-        objectNode
-            .getArrayMember("args", Argument::fromNode, builder::args)
-            .getArrayMember("body", n -> n.expectStringNode().getValue(), builder::body);
-
-        return builder.build();
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
     @Override
     public Node toNode() {
         var builder = Node.objectNodeBuilder()
-                   .withMember("args", getArgs().stream().map(Argument::toNode).collect(ArrayNode.collect()))
-                   .withMember("body", getBody().stream().map(Node::from).collect(ArrayNode.collect()));
+                          .withMember("args", getArgs().stream().map(Argument::toNode).collect(ArrayNode.collect()))
+                          .withMember("body", getBody().stream().map(Node::from).collect(ArrayNode.collect()));
         if (name != null) {
             builder.withMember("name", name);
         }
@@ -95,12 +70,11 @@ public final class BuilderOverride implements ToNode, ToSmithyBuilder<BuilderOve
     public boolean equals(Object other) {
         if (other == this) {
             return true;
-        } else if (!(other instanceof BuilderOverride)) {
-            return false;
-        } else {
-            BuilderOverride b = (BuilderOverride) other;
-            return toNode().equals(b.toNode());
         }
+        if (!(other instanceof BuilderOverride b)) {
+            return false;
+        }
+        return toNode().equals(b.toNode());
     }
 
     @Override
@@ -109,13 +83,38 @@ public final class BuilderOverride implements ToNode, ToSmithyBuilder<BuilderOve
     }
 
     /**
+     * Creates a {@link BuilderOverride} from a {@link Node}.
+     *
+     * @param node Node to create the BuilderOverride from.
+     * @return Returns the created BuilderOverride.
+     * @throws software.amazon.smithy.model.node.ExpectationNotMetException if the given Node is invalid.
+     */
+    public static BuilderOverride fromNode(Node node) {
+        Builder builder = builder();
+        var objectNode = node.expectObjectNode();
+        objectNode
+            .getStringMember("name").map(StringNode::getValue).map(builder::name);
+        objectNode
+            .getStringMember("javadoc").map(StringNode::getValue).map(builder::javadoc);
+        objectNode
+            .getArrayMember("args", Argument::fromNode, builder::args)
+            .getArrayMember("body", n -> n.expectStringNode().getValue(), builder::body);
+
+        return builder.build();
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
      * Builder for {@link BuilderOverride}.
      */
     public static final class Builder implements SmithyBuilder<BuilderOverride> {
-        private String name;
-        private String javadoc;
         private final BuilderRef<List<Argument>> args = BuilderRef.forList();
         private final BuilderRef<List<String>> body = BuilderRef.forList();
+        private String name;
+        private String javadoc;
 
         private Builder() {
         }

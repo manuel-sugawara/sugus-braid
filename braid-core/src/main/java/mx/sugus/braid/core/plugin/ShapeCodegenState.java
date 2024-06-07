@@ -3,7 +3,6 @@ package mx.sugus.braid.core.plugin;
 import java.util.Map;
 import java.util.Objects;
 import mx.sugus.braid.core.JavaCodegenSettings;
-import mx.sugus.braid.core.JavaSymbolProvider;
 import software.amazon.smithy.build.FileManifest;
 import software.amazon.smithy.codegen.core.Symbol;
 import software.amazon.smithy.codegen.core.SymbolProvider;

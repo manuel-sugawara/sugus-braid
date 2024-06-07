@@ -4,7 +4,6 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
-import mx.sugus.braid.jsyntax.ext.TypeNameExt;
 import mx.sugus.braid.jsyntax.AbstractControlFlow;
 import mx.sugus.braid.jsyntax.AbstractMethodSyntax;
 import mx.sugus.braid.jsyntax.Annotation;
@@ -41,6 +40,7 @@ import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.TypeSyntax;
 import mx.sugus.braid.jsyntax.TypeVariableTypeName;
 import mx.sugus.braid.jsyntax.WildcardTypeName;
+import mx.sugus.braid.jsyntax.ext.TypeNameExt;
 
 public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
     private final CodeWriter writer;
@@ -215,7 +215,7 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
         return node;
     }
 
-    protected SyntaxNode visitTypeSyntax(TypeSyntax node) {
+    private SyntaxNode visitTypeSyntax(TypeSyntax node) {
         types.push(node);
         Javadoc doc = node.javadoc();
         if (doc != null) {
@@ -611,7 +611,7 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
     }
 
     enum CodeBlockContext {
-        NONE, EXPRESSION, JAVADOC, STATEMENT;
+        NONE, EXPRESSION, JAVADOC, STATEMENT
     }
 }
 

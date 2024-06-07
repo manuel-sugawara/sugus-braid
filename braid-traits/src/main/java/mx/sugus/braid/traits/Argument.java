@@ -14,26 +14,6 @@ public final class Argument implements ToNode, ToSmithyBuilder<Argument> {
         this.name = SmithyBuilder.requiredState("name", builder.name);
     }
 
-    /**
-     * Creates a {@link Argument} from a {@link Node}.
-     *
-     * @param node Node to create the Argument from.
-     * @return Returns the created Argument.
-     * @throws software.amazon.smithy.model.node.ExpectationNotMetException if the given Node is invalid.
-     */
-    public static Argument fromNode(Node node) {
-        Builder builder = builder();
-        node.expectObjectNode()
-            .expectStringMember("type", builder::type)
-            .expectStringMember("name", builder::name);
-
-        return builder.build();
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
     @Override
     public Node toNode() {
         return Node.objectNodeBuilder()
@@ -66,17 +46,36 @@ public final class Argument implements ToNode, ToSmithyBuilder<Argument> {
     public boolean equals(Object other) {
         if (other == this) {
             return true;
-        } else if (!(other instanceof Argument)) {
-            return false;
-        } else {
-            Argument b = (Argument) other;
-            return toNode().equals(b.toNode());
         }
+        if (!(other instanceof Argument b)) {
+            return false;
+        }
+        return toNode().equals(b.toNode());
     }
 
     @Override
     public int hashCode() {
         return toNode().hashCode();
+    }
+
+    /**
+     * Creates a {@link Argument} from a {@link Node}.
+     *
+     * @param node Node to create the Argument from.
+     * @return Returns the created Argument.
+     * @throws software.amazon.smithy.model.node.ExpectationNotMetException if the given Node is invalid.
+     */
+    public static Argument fromNode(Node node) {
+        Builder builder = builder();
+        node.expectObjectNode()
+            .expectStringMember("type", builder::type)
+            .expectStringMember("name", builder::name);
+
+        return builder.build();
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**

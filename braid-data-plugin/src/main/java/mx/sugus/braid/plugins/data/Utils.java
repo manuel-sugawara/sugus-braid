@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import mx.sugus.braid.core.JavaSymbolProviderImpl;
 import mx.sugus.braid.core.SymbolConstants;
-import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.CodegenState;
+import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.symbol.SymbolProperties;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.Annotation;
@@ -34,7 +34,7 @@ public final class Utils {
         if (generatedBy == null) {
             generatedBy = generatedBy(id);
         } else {
-            var value = removeBrackets((CodeBlock) generatedBy.value());
+            var value = removeBrackets(generatedBy.value());
             var newValue = CodeBlock.from("{$C, $S}", value, id.toString());
             generatedBy = generatedBy.toBuilder()
                                      .value(newValue)
@@ -89,7 +89,7 @@ public final class Utils {
         for (var part : parts) {
             if (part instanceof FormatterLiteral literal) {
                 var value = literal.value();
-                if (value.equals("{") || value.equals("}")) {
+                if ("{".equals(value) || "}".equals(value)) {
                     continue;
                 }
             }

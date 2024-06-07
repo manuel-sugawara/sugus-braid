@@ -19,25 +19,6 @@ public final class SetterOverride implements ToNode, ToSmithyBuilder<SetterOverr
         this.body = builder.body;
     }
 
-    /**
-     * Creates a {@link SetterOverride} from a {@link Node}.
-     *
-     * @param node Node to create the SetterOverride from.
-     * @return Returns the created SetterOverride.
-     * @throws software.amazon.smithy.model.node.ExpectationNotMetException if the given Node is invalid.
-     */
-    public static SetterOverride fromNode(Node node) {
-        Builder builder = builder();
-        node.expectObjectNode().getArrayMember("args", n -> Argument.fromNode(n), builder::args)
-            .getStringMember("body", builder::body);
-
-        return builder.build();
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
     @Override
     public Node toNode() {
         return Node.objectNodeBuilder()
@@ -66,17 +47,35 @@ public final class SetterOverride implements ToNode, ToSmithyBuilder<SetterOverr
     public boolean equals(Object other) {
         if (other == this) {
             return true;
-        } else if (!(other instanceof SetterOverride)) {
-            return false;
-        } else {
-            SetterOverride b = (SetterOverride) other;
-            return toNode().equals(b.toNode());
         }
+        if (!(other instanceof SetterOverride b)) {
+            return false;
+        }
+        return toNode().equals(b.toNode());
     }
 
     @Override
     public int hashCode() {
         return toNode().hashCode();
+    }
+
+    /**
+     * Creates a {@link SetterOverride} from a {@link Node}.
+     *
+     * @param node Node to create the SetterOverride from.
+     * @return Returns the created SetterOverride.
+     * @throws software.amazon.smithy.model.node.ExpectationNotMetException if the given Node is invalid.
+     */
+    public static SetterOverride fromNode(Node node) {
+        Builder builder = builder();
+        node.expectObjectNode().getArrayMember("args", n -> Argument.fromNode(n), builder::args)
+            .getStringMember("body", builder::body);
+
+        return builder.build();
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**

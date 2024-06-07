@@ -4,8 +4,8 @@ import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
 import mx.sugus.braid.core.plugin.TypeSyntaxResult;
-import mx.sugus.braid.plugins.data.StructureInterfaceJavaProducer;
 import mx.sugus.braid.jsyntax.InterfaceSyntax;
+import mx.sugus.braid.plugins.data.StructureInterfaceJavaProducer;
 import software.amazon.smithy.model.node.ToNode;
 
 public final class InterfaceAddToNodeTransformer implements ShapeTaskTransformer<TypeSyntaxResult> {

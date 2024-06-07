@@ -7,7 +7,6 @@ import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
 import mx.sugus.braid.core.plugin.TypeSyntaxResult;
-import mx.sugus.braid.plugins.data.StructureJavaProducer;
 import mx.sugus.braid.jsyntax.BaseMethodSyntax;
 import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.jsyntax.ClassName;
@@ -20,6 +19,7 @@ import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.TypeSyntax;
 import mx.sugus.braid.jsyntax.block.AbstractBlockBuilder;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
+import mx.sugus.braid.plugins.data.StructureJavaProducer;
 import software.amazon.smithy.model.shapes.ShapeId;
 import software.amazon.smithy.model.shapes.StructureShape;
 
@@ -29,7 +29,7 @@ public final class BlockBuilderTransformer implements ShapeTaskTransformer<TypeS
     private static final ShapeId BLOCK_SHAPE_ID = ShapeId.fromParts("mx.sugus.braid.jsyntax", "Block");
     private static final ShapeId METHOD_SHAPE_ID = ShapeId.fromParts("mx.sugus.braid.jsyntax", "MethodSyntax");
 
-    private TypeName blockConsumer = blockConsumer();
+    private final TypeName blockConsumer = blockConsumer();
 
     @Override
     public Identifier taskId() {
@@ -56,7 +56,7 @@ public final class BlockBuilderTransformer implements ShapeTaskTransformer<TypeS
         var innerTypes = new ArrayList<>(type.innerTypes());
         for (var idx = 0; idx < innerTypes.size(); idx++) {
             var innerType = innerTypes.get(idx);
-            if (innerType.name().equals("Builder")) {
+            if ("Builder".equals(innerType.name())) {
                 var enhancedBuilder = enhanceBuilder((ClassSyntax) innerType, blockMemberName, directive);
                 innerTypes.set(idx, enhancedBuilder);
             }

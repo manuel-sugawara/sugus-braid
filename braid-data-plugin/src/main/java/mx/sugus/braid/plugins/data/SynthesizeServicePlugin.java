@@ -14,6 +14,16 @@ public final class SynthesizeServicePlugin implements SmithyGeneratorPlugin {
 
     public static final Identifier ID = Identifier.of(SynthesizeServicePlugin.class);
 
+    @Override
+    public Identifier provides() {
+        return ID;
+    }
+
+    @Override
+    public CodegenModuleConfig moduleConfig(ObjectNode node) {
+        return newBaseConfig(configuredServiceId(node));
+    }
+
     static ShapeId configuredServiceId(ObjectNode node) {
         var serviceId = node.getMember("service").map(x -> x.asStringNode().map(StringNode::getValue).orElse(null))
                             .orElse(null);
@@ -35,16 +45,6 @@ public final class SynthesizeServicePlugin implements SmithyGeneratorPlugin {
                                                                  .transform(SynthesizeServiceTransform.transformer(serviceId))
                                                                  .build())
             .build();
-    }
-
-    @Override
-    public Identifier provides() {
-        return ID;
-    }
-
-    @Override
-    public CodegenModuleConfig moduleConfig(ObjectNode node) {
-        return newBaseConfig(configuredServiceId(node));
     }
 
 }

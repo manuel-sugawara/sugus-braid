@@ -6,7 +6,6 @@ import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.NonShapeProducerTask;
 import mx.sugus.braid.core.plugin.TypeSyntaxResult;
-import mx.sugus.braid.plugins.data.Utils;
 import mx.sugus.braid.jsyntax.AbstractMethodSyntax;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
@@ -15,6 +14,7 @@ import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeSyntax;
 import mx.sugus.braid.jsyntax.TypeVariableTypeName;
+import mx.sugus.braid.plugins.data.Utils;
 import mx.sugus.braid.traits.InterfaceTrait;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.shapes.Shape;
@@ -23,7 +23,7 @@ import software.amazon.smithy.model.shapes.StructureShape;
 
 public final class SyntaxVisitorJavaProducer implements NonShapeProducerTask<TypeSyntaxResult> {
     public static final Identifier ID = Identifier.of(SyntaxVisitorJavaProducer.class);
-    final static TypeVariableTypeName T_TYPE_ARG = TypeVariableTypeName.from("T");
+    static final TypeVariableTypeName T_TYPE_ARG = TypeVariableTypeName.from("T");
     private final String syntaxNode;
 
     SyntaxVisitorJavaProducer(String syntaxNode) {
