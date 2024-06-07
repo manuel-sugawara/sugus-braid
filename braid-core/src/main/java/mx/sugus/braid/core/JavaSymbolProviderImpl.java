@@ -16,6 +16,7 @@ import mx.sugus.braid.traits.JavaTrait;
 import software.amazon.smithy.codegen.core.ReservedWords;
 import software.amazon.smithy.codegen.core.ReservedWordsBuilder;
 import software.amazon.smithy.codegen.core.Symbol;
+import software.amazon.smithy.codegen.core.SymbolProvider;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.shapes.BigDecimalShape;
 import software.amazon.smithy.model.shapes.BigIntegerShape;
@@ -306,7 +307,7 @@ public final class JavaSymbolProviderImpl implements JavaSymbolProvider, ShapeVi
             .build();
     }
 
-    public static JavaSymbolProvider create(Model model, JavaCodegenSettings settings) {
+    public static SymbolProvider create(Model model, JavaCodegenSettings settings) {
         var escaper = RESERVED_WORDS;
         var shapeToJavaName = new ShapeToJavaName(model, escaper, settings.packageName());
         var shapeToJavaType = new ShapeToJavaType(shapeToJavaName, model);

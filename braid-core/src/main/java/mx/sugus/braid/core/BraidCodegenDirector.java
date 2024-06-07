@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.logging.Logger;
 import mx.sugus.braid.core.plugin.CodegenModule;
 import mx.sugus.braid.core.plugin.Identifier;
@@ -11,44 +12,28 @@ import mx.sugus.braid.core.plugin.NonShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.traits.CodegenIgnoreTrait;
 import software.amazon.smithy.build.FileManifest;
+import software.amazon.smithy.codegen.core.SymbolProvider;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.shapes.Shape;
 
-public class SmithyCodegenDirector {
-    private static final Logger LOG = Logger.getLogger(SmithyCodegenDirector.class.getName());
+public class BraidCodegenDirector {
+    private static final Logger LOG = Logger.getLogger(BraidCodegenDirector.class.getName());
     private final FileManifest fileManifest;
     private final JavaCodegenSettings settings;
     private final CodegenModule module;
-    private final JavaSymbolProvider symbolProvider;
-    private Model sourceModel;
-    private Model model;
+    private final SymbolProvider symbolProvider;
+    private final Model model;
 
-    SmithyCodegenDirector(Builder builder) {
-        this.sourceModel = Objects.requireNonNull(builder.model, "model");
+    BraidCodegenDirector(Builder builder) {
+        this.model = Objects.requireNonNull(builder.model, "model");
         this.fileManifest = Objects.requireNonNull(builder.fileManifest, "fileManifest");
         this.settings = Objects.requireNonNull(builder.settings, "settings");
         this.symbolProvider = Objects.requireNonNull(builder.symbolProvider, "symbolProvider");
         this.module = Objects.requireNonNull(builder.module, "module");
     }
 
-    private Model prepareModel(Model model) {
-        LOG.fine("Running module configured model early processors");
-        var newModel = module.earlyPreprocessModel(model);
-        LOG.fine("Running module configured model processors");
-        newModel = module.preprocessModel(newModel);
-        return newModel;
-    }
-
-    public void generate2() {
-
-        execute();
-    }
-
     public void execute() {
         LOG.fine("Begin model preparation for codegen");
-        model = prepareModel(sourceModel);
-        // Avoid attempts to run twice this.
-        sourceModel = null;
         var sortedShapes = selectedShapes();
         var properties = new HashMap<Identifier, Object>();
         LOG.fine("Running shape reducers");
@@ -79,7 +64,6 @@ public class SmithyCodegenDirector {
     }
 
     private ShapeCodegenState stateForShape(Shape shape) {
-        var symbolProvider = new JavaSymbolProviderWrapper(this.symbolProvider);
         return ShapeCodegenState
             .builder()
             .model(model)
@@ -91,7 +75,6 @@ public class SmithyCodegenDirector {
     }
 
     private ShapeCodegenState stateForShape(Shape shape, Map<Identifier, Object> properties) {
-        var symbolProvider = new JavaSymbolProviderWrapper(this.symbolProvider);
         return ShapeCodegenState
             .builder()
             .model(model)
@@ -104,7 +87,6 @@ public class SmithyCodegenDirector {
     }
 
     private NonShapeCodegenState stateFor(Map<Identifier, Object> properties) {
-        var symbolProvider = new JavaSymbolProviderWrapper(this.symbolProvider);
         return NonShapeCodegenState
             .builder()
             .model(model)
@@ -123,7 +105,8 @@ public class SmithyCodegenDirector {
         private Model model;
         private FileManifest fileManifest;
         private JavaCodegenSettings settings;
-        private JavaSymbolProvider symbolProvider;
+        private SymbolProvider symbolProvider;
+        private BiFunction<Model, JavaCodegenSettings, SymbolProvider> symbolProviderFactory;
         private CodegenModule module;
 
         public Builder model(Model model) {
@@ -141,7 +124,7 @@ public class SmithyCodegenDirector {
             return this;
         }
 
-        public Builder symbolProvider(JavaSymbolProvider symbolProvider) {
+        public Builder symbolProvider(SymbolProvider symbolProvider) {
             this.symbolProvider = symbolProvider;
             return this;
         }
@@ -151,14 +134,31 @@ public class SmithyCodegenDirector {
             return this;
         }
 
-        public SmithyCodegenDirector build() {
-            Objects.requireNonNull(settings);
-            Objects.requireNonNull(model);
-            Objects.requireNonNull(fileManifest);
-            if (symbolProvider == null) {
-                symbolProvider = JavaSymbolProviderImpl.create(model, settings);
-            }
-            return new SmithyCodegenDirector(this);
+        public Builder symbolProviderFactory(BiFunction<Model, JavaCodegenSettings, SymbolProvider> symbolProviderFactory) {
+            this.symbolProviderFactory = symbolProviderFactory;
+            return this;
+        }
+
+        public BraidCodegenDirector build() {
+            Objects.requireNonNull(settings, "settings");
+            Objects.requireNonNull(model, "model");
+            Objects.requireNonNull(module, "module");
+            Objects.requireNonNull(fileManifest, "fileManifest");
+            Objects.requireNonNull(symbolProviderFactory, "symbolProviderFactory");
+            // We prepare here such that afterward the director can be fully
+            // immutable.
+            prepare();
+            return new BraidCodegenDirector(this);
+        }
+
+        private void prepare() {
+            LOG.fine("Running module configured model early processors");
+            var newModel = module.earlyPreprocessModel(model);
+            LOG.fine("Running module configured model processors");
+            newModel = module.preprocessModel(newModel);
+            this.model = newModel;
+            var sourceSymbolProvider = symbolProviderFactory.apply(model, settings);
+            this.symbolProvider = module.decorateSymbolProvider(this.model, sourceSymbolProvider);
         }
     }
 }

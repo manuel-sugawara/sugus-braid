@@ -6,7 +6,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import mx.sugus.braid.core.JavaSymbolProvider;
 import mx.sugus.braid.core.ShapeToJavaName;
 import mx.sugus.braid.core.ShapeToJavaType;
 import mx.sugus.braid.core.SymbolConstants.AggregateType;
@@ -19,6 +18,7 @@ import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.traits.JavaTrait;
 import mx.sugus.braid.traits.OrderedTrait;
 import software.amazon.smithy.codegen.core.Symbol;
+import software.amazon.smithy.codegen.core.SymbolProvider;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.shapes.BigDecimalShape;
 import software.amazon.smithy.model.shapes.BigIntegerShape;
@@ -47,7 +47,7 @@ import software.amazon.smithy.model.shapes.UnionShape;
 import software.amazon.smithy.model.traits.ErrorTrait;
 import software.amazon.smithy.model.traits.UniqueItemsTrait;
 
-public class SymbolProvider2 implements JavaSymbolProvider, ShapeVisitor<Symbol> {
+public class SymbolProvider2 implements SymbolProvider, ShapeVisitor<Symbol> {
     private final Model model;
     private final ShapeToJavaName shapeToJavaName;
     private final ShapeToJavaType shapeToJavaType;

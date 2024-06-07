@@ -3,6 +3,8 @@ package mx.sugus.braid.core.plugin;
 import java.util.Collection;
 import java.util.logging.Logger;
 import mx.sugus.braid.traits.CodegenIgnoreTrait;
+import software.amazon.smithy.codegen.core.Symbol;
+import software.amazon.smithy.codegen.core.SymbolProvider;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.shapes.Shape;
 
@@ -58,6 +60,19 @@ public final class CodegenModule {
         for (var transformer : config.modelTransformers()) {
             LOG.fine(() -> String.format("Running model transformer `%s`", transformer.taskId()));
             result = transformer.transform(result);
+        }
+        return result;
+    }
+
+    /**
+     * Applies all the configured symbol provider decorators and returns the final decorated symbol provider.
+     * @param symbolProvider The source symbol provider
+     * @return the decorated symbol provider
+     */
+    public SymbolProvider decorateSymbolProvider(Model model, SymbolProvider symbolProvider) {
+        var result = symbolProvider;
+        for (var decorator : config.symbolProviderDecorators()) {
+            result = decorator.decorate(model, result);
         }
         return result;
     }
