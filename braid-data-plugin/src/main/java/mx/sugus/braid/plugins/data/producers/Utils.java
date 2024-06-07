@@ -3,7 +3,9 @@ package mx.sugus.braid.plugins.data.producers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import mx.sugus.braid.core.JavaSymbolProviderImpl;
+import java.util.Objects;
+import java.util.function.Function;
+import mx.sugus.braid.core.BraidCodegenPlugin;
 import mx.sugus.braid.core.SymbolConstants;
 import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.Identifier;
@@ -21,12 +23,15 @@ import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.TypeSyntax;
 import mx.sugus.braid.rt.util.annotations.Generated;
 import mx.sugus.braid.traits.ConstTrait;
+import software.amazon.smithy.codegen.core.ReservedWords;
+import software.amazon.smithy.codegen.core.ReservedWordsBuilder;
 import software.amazon.smithy.codegen.core.Symbol;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeType;
 
 public final class Utils {
+    public static final ReservedWords RESERVED_WORDS = buildReservedWords();
     private static final ClassName GENERATED = ClassName.from(Generated.class);
 
     public static TypeSyntax addGeneratedBy(TypeSyntax src, Identifier id) {
@@ -151,7 +156,7 @@ public final class Utils {
     }
 
     public static Name validateName(Name name, Shape shape) {
-        if (JavaSymbolProviderImpl.RESERVED_WORDS.isReserved(name.toString())) {
+        if (RESERVED_WORDS.isReserved(name.toString())) {
             var type = shape.getType();
             if (type == ShapeType.MEMBER ||
                 (type.getCategory() != ShapeType.Category.AGGREGATE && type.getCategory() != ShapeType.Category.SERVICE)) {
@@ -206,5 +211,15 @@ public final class Utils {
                          .orElse(SymbolConstants.AggregateType.NONE);
         }
         return symbol.getProperty(SymbolProperties.AGGREGATE_TYPE).orElse(SymbolConstants.AggregateType.NONE);
+    }
+
+    private static ReservedWords buildReservedWords() {
+        return
+            new ReservedWordsBuilder()
+                .loadWords(Objects.requireNonNull(BraidCodegenPlugin.class.getResource("java-reserved-words.txt")),
+                           Function.identity())
+                .loadWords(Objects.requireNonNull(BraidCodegenPlugin.class.getResource("java-system-type-names.txt")),
+                           Function.identity())
+                .build();
     }
 }

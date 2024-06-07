@@ -60,6 +60,13 @@
   builder.name(obj.expectMember("name")TypePrimitiveName.from(.expectStringNode().getValue()));
 ```
 
+### Plugins resolution
+
+If the data plugin is removed from the build then
+
+```
+Projection source failed: java.lang.NullPointerException: Cannot invoke "mx.sugus.braid.core.plugin.SmithyGeneratorPlugin.provides()" because "plugin" is null
+```
 
 ----
 ## Done
