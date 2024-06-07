@@ -1,4 +1,4 @@
-package mx.sugus.braid.core.transforms;
+package mx.sugus.braid.plugins.data.model;
 
 import java.util.Collections;
 import java.util.HashSet;

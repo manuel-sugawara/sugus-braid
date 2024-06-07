@@ -4,14 +4,13 @@ import mx.sugus.braid.core.plugin.CodegenModuleConfig;
 import mx.sugus.braid.core.plugin.DefaultModelTransformerTask;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.SmithyGeneratorPlugin;
-import mx.sugus.braid.plugins.data.model.FlattenInterfaceMembers;
-import mx.sugus.braid.core.transforms.SynthesizeServiceTransform;
+import mx.sugus.braid.plugins.data.model.AddOrderedToMapAndSets;
 import software.amazon.smithy.model.node.ObjectNode;
 
-public final class FlattenInterfaceMembersPlugin implements SmithyGeneratorPlugin {
-    public static final Identifier ID = Identifier.of(FlattenInterfaceMembersPlugin.class);
+public class OrderedCollectionsByDefaultPlugin implements SmithyGeneratorPlugin {
+    public static final Identifier ID = Identifier.of(OrderedCollectionsByDefaultPlugin.class);
 
-    public FlattenInterfaceMembersPlugin() {
+    public OrderedCollectionsByDefaultPlugin() {
     }
 
     @Override
@@ -29,8 +28,8 @@ public final class FlattenInterfaceMembersPlugin implements SmithyGeneratorPlugi
             .builder()
             .addModelTransformer(DefaultModelTransformerTask
                                      .builder()
-                                     .taskId(Identifier.of(SynthesizeServiceTransform.class))
-                                     .transform(FlattenInterfaceMembers::transform)
+                                     .taskId(Identifier.of(AddOrderedToMapAndSets.class))
+                                     .transform(AddOrderedToMapAndSets::transform)
                                      .build())
             .build();
     }

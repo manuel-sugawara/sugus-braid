@@ -12,6 +12,8 @@
                 },
                 "mx.sugus.braid.plugins.data#FlattenInterfaceMembersPlugin": {
                 },
+                "mx.sugus.braid.plugins.data#OrderedCollectionsByDefaultPlugin": {
+                },
                 "mx.sugus.braid.plugins.data#DataPlugin": {
                     "package": "mx.sugus.braid.jsyntax"
                 },

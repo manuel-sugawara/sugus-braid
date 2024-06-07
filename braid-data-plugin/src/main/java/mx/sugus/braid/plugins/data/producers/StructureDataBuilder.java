@@ -1,14 +1,11 @@
 package mx.sugus.braid.plugins.data.producers;
 
 import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.BUILDER_TYPE;
-import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.getTargetTrait;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import javax.lang.model.element.Modifier;
-import mx.sugus.braid.plugins.data.utils.SymbolConstants;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
@@ -19,12 +16,9 @@ import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
-import mx.sugus.braid.rt.util.BuilderReference;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.traits.ConstTrait;
-import mx.sugus.braid.traits.UseBuilderReferenceTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
-import software.amazon.smithy.model.traits.DefaultTrait;
 import software.amazon.smithy.model.traits.DocumentationTrait;
 
 public final class StructureDataBuilder implements DirectedClass {
@@ -47,7 +41,7 @@ public final class StructureDataBuilder implements DirectedClass {
     @Override
     public List<FieldSyntax> fieldsFor(ShapeCodegenState state, MemberShape member) {
         if (member.hasTrait(ConstTrait.class)) {
-            return Collections.emptyList();
+            return List.of();
         }
         return List.of(fieldFor(state, member));
     }
@@ -60,19 +54,13 @@ public final class StructureDataBuilder implements DirectedClass {
     @Override
     public List<MethodSyntax> methodsFor(ShapeCodegenState state, MemberShape member) {
         if (member.hasTrait(ConstTrait.class)) {
-            return Collections.emptyList();
-        }
-        var aggregateType = Utils.aggregateType(state, member);
-        if (aggregateType == SymbolConstants.AggregateType.NONE) {
-            if (usesBuilderReference(state, member)) {
-                return List.of(setter(state, member), builderReferenceMutator(state, member));
-            }
-            return setters(state, member);
+            return List.of();
         }
         var result = new ArrayList<MethodSyntax>();
+        result.addAll(mutators(state, member));
         result.addAll(setters(state, member));
         result.addAll(adder(state, member));
-        return Collections.unmodifiableList(result);
+        return result;
     }
 
     @Override
@@ -90,30 +78,31 @@ public final class StructureDataBuilder implements DirectedClass {
     }
 
     private FieldSyntax fieldFor(ShapeCodegenState state, MemberShape member) {
-        var type = Utils.toJavaTypeName(state, member);
-        var aggregateType = Utils.aggregateType(state, member);
-        var finalType = switch (aggregateType) {
-            case LIST, SET, MAP -> finalTypeForAggregate(type);
-            default -> typeForMember(state, member);
-        };
+        var symbolProvider = state.symbolProvider();
+        var symbol = symbolProvider.toSymbol(member);
+        var type = Utils.toBuilderTypeName(symbol);
         var name = Utils.toJavaName(state, member);
         return FieldSyntax.builder()
-                          .type(finalType)
+                          .type(type)
                           .name(name.toString())
                           .addModifier(Modifier.PRIVATE)
                           .build();
     }
 
-    private TypeName finalTypeForAggregate(TypeName innerType) {
-        return ParameterizedTypeName.from(CollectionBuilderReference.class, innerType);
+    private List<MethodSyntax> mutators(ShapeCodegenState state, MemberShape member) {
+        var symbolProvider = state.symbolProvider();
+        var symbol = symbolProvider.toSymbol(member);
+        if (Utils.builderReference(symbol) == null) {
+            return List.of();
+        }
+        return List.of(mutator(state, member));
     }
 
-    private MethodSyntax builderReferenceMutator(ShapeCodegenState state, MemberShape member) {
+    private MethodSyntax mutator(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
-        var target = state.model().expectShape(member.getTarget());
-        var useReferenceTrait = target.getTrait(UseBuilderReferenceTrait.class).orElseThrow();
-        var builderTypeId = useReferenceTrait.builderType();
-        var builderType = ClassName.from(builderTypeId.getNamespace(), builderTypeId.getName());
+        var symbol = symbolProvider.toSymbol(member);
+
+        var builderType = Utils.toRefrenceBuilderTypeName(symbol);
         var name = symbolProvider.toMemberName(member);
         return MethodSyntax.builder(name)
                            .addModifier(Modifier.PUBLIC)
@@ -128,20 +117,13 @@ public final class StructureDataBuilder implements DirectedClass {
 
     private ConstructorMethodSyntax constructor(ShapeCodegenState state) {
         var builder = ConstructorMethodSyntax.builder();
-        builder.body(b -> {
-            for (var member : state.shape().members()) {
-                var aggregateType = Utils.aggregateType(state, member);
-                if (usesBuilderReference(state, member)) {
-                    initializeBuilderReference(state, member, b, "null");
-                } else if (member.hasTrait(DefaultTrait.class)) {
-                    setDefaultValue(state, member, b);
-                } else {
-                    if (aggregateType != SymbolConstants.AggregateType.NONE) {
-                        setEmptyValue(state, member, b);
-                    }
-                }
+        var symbolProvider = state.symbolProvider();
+        for (var member : state.shape().members()) {
+            var symbol = symbolProvider.toSymbol(member);
+            for (var stmt : Utils.builderInitFromEmpty(symbol).statements()) {
+                builder.addStatement(stmt);
             }
-        });
+        }
         return builder.build();
     }
 
@@ -150,35 +132,13 @@ public final class StructureDataBuilder implements DirectedClass {
         var paramType = ClassName.toClassName(Utils.toJavaTypeName(state, state.shape()));
         var builder = ConstructorMethodSyntax.builder()
                                              .addParameter(paramType, "data");
-
-        builder.body(b -> {
-            for (var member : state.shape().members()) {
-                if (member.hasTrait(ConstTrait.class)) {
-                    continue;
-                }
-                var name = symbolProvider.toMemberName(member);
-                if (usesBuilderReference(state, member)) {
-                    initializeBuilderReference(state, member, b, "data." + name);
-                    continue;
-                }
-                var aggregateType = Utils.aggregateType(state, member);
-                if (aggregateType == SymbolConstants.AggregateType.NONE) {
-                    b.addStatement("this.$1L = data.$1L", name);
-                } else {
-                    setValueFromPersistent(state, member, b);
-                }
+        for (var member : state.shape().members()) {
+            var symbol = symbolProvider.toSymbol(member);
+            for (var stmt : Utils.builderInitFromData(symbol).statements()) {
+                builder.addStatement(stmt);
             }
-        });
+        }
         return builder.build();
-    }
-
-    private void setBuilderReferenceValue(
-        ShapeCodegenState state,
-        MemberShape member,
-        BodyBuilder bodyBuilder
-    ) {
-        var name = state.symbolProvider().toMemberName(member);
-        bodyBuilder.addStatement("this.$1L.setPersistent($1L)", name);
     }
 
     private List<MethodSyntax> setters(ShapeCodegenState state, MemberShape member) {
@@ -212,9 +172,10 @@ public final class StructureDataBuilder implements DirectedClass {
 
     private void setMemberValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
         var symbolProvider = state.symbolProvider();
+        var symbol = symbolProvider.toSymbol(member);
         var name = symbolProvider.toMemberName(member);
-        if (usesBuilderReference(state, member)) {
-            setBuilderReferenceValue(state, member, builder);
+        if (Utils.builderReference(symbol) != null) {
+            builder.addStatement("this.$1L.setPersistent($1L)", name);
         } else {
             builder.addStatement("this.$1L = $1L", name);
         }
@@ -233,12 +194,11 @@ public final class StructureDataBuilder implements DirectedClass {
     }
 
     private List<MethodSyntax> adder(ShapeCodegenState state, MemberShape member) {
-        var symbolProvider = state.symbolProvider();
         var aggregateType = Utils.aggregateType(state, member);
         return switch (aggregateType) {
             case LIST, SET -> collectionAdder(state, member);
             case MAP -> mapAdder(state, member);
-            default -> throw new IllegalArgumentException("cannot create adder for " + member);
+            default -> List.of();
         };
     }
 
@@ -322,77 +282,6 @@ public final class StructureDataBuilder implements DirectedClass {
         var name = Utils.toMemberJavaName(state, member);
         var paramName = Utils.toJavaSingularName(state, member).toString();
         builder.addStatement("this.$L.asTransient().put(key, $L)", name.toString(), paramName);
-    }
-
-    static TypeName typeForMember(ShapeCodegenState state, MemberShape member) {
-        var target = state.model().expectShape(member.getTarget());
-        var type = Utils.toJavaTypeName(state, member);
-        var useReferenceTraitOpt = target.getTrait(UseBuilderReferenceTrait.class);
-        if (useReferenceTraitOpt.isPresent()) {
-            var useReferenceTrait = useReferenceTraitOpt.orElseThrow();
-            var builderTypeId = useReferenceTrait.builderType();
-            var builderType = ClassName.from(builderTypeId.getNamespace(), builderTypeId.getName());
-            return ParameterizedTypeName.from(BuilderReference.class, type, builderType);
-        }
-        return type;
-    }
-
-    static boolean usesBuilderReference(ShapeCodegenState state, MemberShape member) {
-        return getTargetTrait(UseBuilderReferenceTrait.class, state, member) != null;
-    }
-
-    static void initializeBuilderReference(
-        ShapeCodegenState state,
-        MemberShape member,
-        BodyBuilder bodyBuilder,
-        String initializer
-    ) {
-        var target = state.model().expectShape(member.getTarget());
-        var useReferenceTrait = target.getTrait(UseBuilderReferenceTrait.class).orElseThrow();
-        var fromPersistent = useReferenceTrait.fromPersistent();
-
-        var implementingClass = ClassName.from(fromPersistent.getNamespace(), fromPersistent.getName());
-        var name = state.symbolProvider().toMemberName(member);
-        bodyBuilder.addStatement("this.$L = $T.$L($L)", name, implementingClass,
-                                 fromPersistent.getMember().orElseThrow(), initializer);
-    }
-
-    static void setDefaultValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
-        var defaultValue = member.expectTrait(DefaultTrait.class);
-        var defaultValueNode = defaultValue.toNode();
-        var symbolProvider = state.symbolProvider();
-        var name = symbolProvider.toMemberName(member);
-        var shapeType = state.model().expectShape(member.getTarget()).getType();
-        switch (shapeType) {
-            case BYTE, SHORT, INTEGER, LONG, FLOAT, DOUBLE:
-                builder.addStatement("this.$L = $L", name, defaultValueNode.expectNumberNode().getValue());
-                break;
-            case STRING:
-                builder.addStatement("this.$L = $S", name, defaultValueNode.expectStringNode().getValue());
-                break;
-            case BOOLEAN:
-                builder.addStatement("this.$L = $L", name, defaultValueNode.expectBooleanNode().getValue());
-                break;
-            default:
-                throw new UnsupportedOperationException("Unsupported type: " + shapeType + " for default value");
-        }
-    }
-
-    static void setEmptyValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
-        var symbolProvider = state.symbolProvider();
-        var name = symbolProvider.toMemberName(member);
-        var aggregateType = Utils.aggregateType(state, member);
-        var emptyReferenceBuilder = Utils.emptyReferenceBuilder(aggregateType);
-        builder.addStatement("this.$L = $T.$L()", name, CollectionBuilderReference.class, emptyReferenceBuilder);
-    }
-
-    static void setValueFromPersistent(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
-        var symbolProvider = state.symbolProvider();
-        var name = symbolProvider.toMemberName(member);
-        var aggregateType = Utils.aggregateType(state, member);
-        var init = Utils.initReferenceBuilder(aggregateType);
-        builder.addStatement("this.$1L = $2T.$3L(data.$1L)", name, CollectionBuilderReference.class,
-                             init);
     }
 
     static TypeName finalTypeForAggregate(ShapeCodegenState state, MemberShape member) {

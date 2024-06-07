@@ -134,12 +134,8 @@ public final class AbstractControlFlow implements Statement {
             return this;
         }
 
-        /**
-         * <p>Sets the value for <code>statement</code></p>
-         * <p>The body of the abstract control flow</p>
-         */
-        public Builder statement(Block statement) {
-            this.statement.setPersistent(statement);
+        public Builder statement(Consumer<BodyBuilder> mutator) {
+            mutator.accept(this.statement.asTransient());
             return this;
         }
 
@@ -188,8 +184,12 @@ public final class AbstractControlFlow implements Statement {
             return this;
         }
 
-        public Builder statement(Consumer<BodyBuilder> mutator) {
-            mutator.accept(this.statement.asTransient());
+        /**
+         * <p>Sets the value for <code>statement</code></p>
+         * <p>The body of the abstract control flow</p>
+         */
+        public Builder statement(Block statement) {
+            this.statement.setPersistent(statement);
             return this;
         }
 

@@ -88,28 +88,9 @@ public final class StructureData implements DirectedClass {
     private void constructorBody(ShapeCodegenState state, BodyBuilder builder) {
         var symbolProvider = state.symbolProvider();
         for (var member : state.shape().members()) {
-            if (member.hasTrait(ConstTrait.class)) {
-                continue;
-            }
-            var name = symbolProvider.toMemberName(member);
-            if (StructureDataBuilder.usesBuilderReference(state, member)) {
-                if (Utils.isMemberRequired(state, member)) {
-                    builder.addStatement("this.$1L = $2T.requireNonNull(builder.$1L.asPersistent(), $1S)", name, Objects.class);
-                } else {
-                    builder.addStatement("this.$1L = builder.$1L.asPersistent()", name);
-                }
-                continue;
-            }
-            var aggregateType = Utils.aggregateType(state, member);
-            switch (aggregateType) {
-                case LIST, SET, MAP -> memberValueFromBuilder(state, member, builder);
-                default -> {
-                    if (Utils.isMemberRequired(state, member)) {
-                        builder.addStatement("this.$L = $T.requireNonNull(builder.$L, $S)", name, Objects.class, name, name);
-                    } else {
-                        builder.addStatement("this.$1L = builder.$1L", name);
-                    }
-                }
+            var symbol = symbolProvider.toSymbol(member);
+            for (var stmt : Utils.dataInitFromBuilder(symbol).statements()) {
+                builder.addStatement(stmt);
             }
         }
     }
@@ -120,12 +101,6 @@ public final class StructureData implements DirectedClass {
             return List.of(constAccessor(state, member));
         }
         return List.of(accessor(state, member));
-    }
-
-    private void memberValueFromBuilder(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
-        var symbolProvider = state.symbolProvider();
-        var name = symbolProvider.toMemberName(member);
-        builder.addStatement("this.$1L = builder.$1L.asPersistent()", name);
     }
 
     private MethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
@@ -150,7 +125,7 @@ public final class StructureData implements DirectedClass {
         var builder = MethodSyntax.builder(name)
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(type);
-        var refId = member.getTrait(ConstTrait.class).map(ConstTrait::getValue).orElse("");
+        var refId = member.expectTrait(ConstTrait.class).getValue();
         var shapeId = ShapeId.from(refId);
         var constMember = state.model().expectShape(shapeId, MemberShape.class);
         var containingSymbol = state.model().expectShape(constMember.getContainer(), EnumShape.class);

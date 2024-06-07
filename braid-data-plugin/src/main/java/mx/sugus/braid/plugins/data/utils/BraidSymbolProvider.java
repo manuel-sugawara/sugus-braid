@@ -6,15 +6,18 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import mx.sugus.braid.plugins.data.utils.SymbolConstants.AggregateType;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.core.util.PathUtil;
-import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.jsyntax.ClassName;
-import mx.sugus.braid.jsyntax.block.BodyBuilder;
+import mx.sugus.braid.jsyntax.ParameterizedTypeName;
+import mx.sugus.braid.jsyntax.writer.CodeWriter;
+import mx.sugus.braid.plugins.data.utils.SymbolConstants.AggregateType;
+import mx.sugus.braid.rt.util.BuilderReference;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
+import mx.sugus.braid.traits.ConstTrait;
 import mx.sugus.braid.traits.JavaTrait;
 import mx.sugus.braid.traits.OrderedTrait;
+import mx.sugus.braid.traits.UseBuilderReferenceTrait;
 import software.amazon.smithy.codegen.core.Symbol;
 import software.amazon.smithy.codegen.core.SymbolProvider;
 import software.amazon.smithy.model.Model;
@@ -42,6 +45,7 @@ import software.amazon.smithy.model.shapes.StringShape;
 import software.amazon.smithy.model.shapes.StructureShape;
 import software.amazon.smithy.model.shapes.TimestampShape;
 import software.amazon.smithy.model.shapes.UnionShape;
+import software.amazon.smithy.model.traits.DefaultTrait;
 import software.amazon.smithy.model.traits.ErrorTrait;
 import software.amazon.smithy.model.traits.UniqueItemsTrait;
 
@@ -51,7 +55,8 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
     private final ShapeToJavaType shapeToJavaType;
     private final String packageName;
 
-    public BraidSymbolProvider(Model model, ShapeToJavaName shapeToJavaName, ShapeToJavaType shapeToJavaType, String packageName) {
+    public BraidSymbolProvider(Model model, ShapeToJavaName shapeToJavaName, ShapeToJavaType shapeToJavaType,
+                               String packageName) {
         this.model = model;
         this.shapeToJavaName = shapeToJavaName;
         this.shapeToJavaType = shapeToJavaType;
@@ -153,25 +158,40 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
     public Symbol memberShape(MemberShape shape) {
         var targetShape = model.expectShape(shape.getTarget());
         var targetSymbol = targetShape.accept(this);
+        var builderReference = targetShape.getTrait(UseBuilderReferenceTrait.class).orElse(null);
         var builder = targetSymbol
             .toBuilder()
             .putProperty(SymbolProperties.SIMPLE_NAME, shapeToJavaName.toJavaName(shape))
-            .putProperty(SymbolProperties.EMPTY_BUILDER_INIT, BraidSymbolProvider::emptyBuilderInitializer)
-            .putProperty(SymbolProperties.DATA_BUILDER_INIT, BraidSymbolProvider::dataBuilderInitializer);
-
+            .putProperty(SymbolProperties.IS_REQUIRED, shape.isRequired())
+            .putProperty(SymbolProperties.BUILDER_REFERENCE, builderReference)
+            .putProperty(SymbolProperties.IS_CONSTANT, shape.hasTrait(ConstTrait.class))
+            .putProperty(SymbolProperties.BUILDER_EMPTY_INIT, SymbolCodegen::builderEmptyInitializer)
+            .putProperty(SymbolProperties.BUILDER_DATA_INIT, SymbolCodegen::builderDataInitializer)
+            .putProperty(SymbolProperties.DATA_BUILDER_INIT, SymbolCodegen::dataBuilderInitializer)
+            .putProperty(SymbolProperties.DEFAULT_VALUE, getDefaultValue(shape, targetShape));
+        if (targetSymbol.getProperty(SymbolProperties.AGGREGATE_TYPE).orElse(AggregateType.NONE) != AggregateType.NONE) {
+            var targetType = targetSymbol.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
+            builder.putProperty(SymbolProperties.BUILDER_JAVA_TYPE,
+                                ParameterizedTypeName.from(CollectionBuilderReference.class, targetType));
+        } else if (builderReference != null) {
+            var targetType = targetSymbol.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
+            var builderTypeId = builderReference.builderType();
+            var builderType = ClassName.from(builderTypeId.getNamespace(), builderTypeId.getName());
+            builder.putProperty(SymbolProperties.BUILDER_JAVA_TYPE,
+                                ParameterizedTypeName.from(BuilderReference.class, targetType, builderType));
+            builder.putProperty(SymbolProperties.BUILDER_REFERENCE_JAVA_TYPE, builderType);
+        }
         return builder.build();
     }
 
     @Override
     public Symbol listShape(ListShape shape) {
-        var isOrdered = shape.hasTrait(OrderedTrait.class);
         if (shape.hasTrait(UniqueItemsTrait.class)) {
             return setShape(shape);
         }
         return fromClass(List.class)
             .addReference(shape.getMember().accept(this))
             .putProperty(SymbolProperties.AGGREGATE_TYPE, AggregateType.LIST)
-            .putProperty(SymbolProperties.ORDERED, isOrdered)
             .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.listShape(shape))
             .build();
     }
@@ -181,7 +201,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
         return fromClass(Set.class)
             .addReference(shape.getMember().accept(this))
             .putProperty(SymbolProperties.AGGREGATE_TYPE, AggregateType.SET)
-            .putProperty(SymbolProperties.ORDERED, isOrdered)
+            .putProperty(SymbolProperties.IS_ORDERED, isOrdered)
             .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.listShape(shape))
             .build();
     }
@@ -194,7 +214,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
             .addReference(shape.getKey().accept(this))
             .addReference(shape.getValue().accept(this))
             .putProperty(SymbolProperties.AGGREGATE_TYPE, AggregateType.MAP)
-            .putProperty(SymbolProperties.ORDERED, isOrdered)
+            .putProperty(SymbolProperties.IS_ORDERED, isOrdered)
             .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.mapShape(shape))
             .build();
     }
@@ -289,87 +309,33 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
             .build();
     }
 
-    private static Block emptyBuilderInitializer(Symbol symbol) {
-        var type = symbol.getProperty(SymbolProperties.AGGREGATE_TYPE).orElse(AggregateType.NONE);
-        var name = symbol.getProperty(SymbolProperties.SIMPLE_NAME);
-        if (type == AggregateType.NONE) {
-            var builderReference = symbol.getProperty(SymbolProperties.BUILDER_REFERENCE).orElse(null);
-            if (builderReference == null) {
-                return BodyBuilder.emptyBlock();
-            }
-            var fromPersistent = builderReference.fromPersistent();
-            var implementingClass = ClassName.from(fromPersistent.getNamespace(), fromPersistent.getName());
-            return BodyBuilder.create()
-                              .addStatement("this.$L = $T.$L($L)", name, implementingClass,
-                                            fromPersistent.getMember().orElseThrow(), "null")
-                              .build();
-        }
-        var builder = BodyBuilder.create();
-        var isOrdered = symbol.getProperty(SymbolProperties.ORDERED).orElse(false);
-        if (isOrdered) {
-            switch (type) {
-                case MAP -> builder.addStatement("this.$L = $T.forOrderedMap()", name, CollectionBuilderReference.class);
-                case SET -> builder.addStatement("this.$L = $T.forOrderedSet()", name, CollectionBuilderReference.class);
-                case LIST -> builder.addStatement("this.$L = $T.forList()", name, CollectionBuilderReference.class);
-                default -> throw new UnsupportedOperationException("unsupported aggregate type: " + type);
-            }
-        } else {
-            switch (type) {
-                case MAP -> builder.addStatement("this.$L = $T.forUnorderedMap()", name, CollectionBuilderReference.class);
-                case SET -> builder.addStatement("this.$L = $T.forUnorderedSet()", name, CollectionBuilderReference.class);
-                case LIST -> builder.addStatement("this.$L = $T.forList()", name, CollectionBuilderReference.class);
-                default -> throw new UnsupportedOperationException("unsupported aggregate type: " + type);
-            }
-        }
-        return BodyBuilder.emptyBlock();
-    }
-
-    private static Block dataBuilderInitializer(Symbol symbol) {
-        var type = symbol.getProperty(SymbolProperties.AGGREGATE_TYPE).orElse(AggregateType.NONE);
-        var name = symbol.getProperty(SymbolProperties.SIMPLE_NAME);
-        if (type == AggregateType.NONE) {
-            var builderReference = symbol.getProperty(SymbolProperties.BUILDER_REFERENCE).orElse(null);
-            if (builderReference == null) {
-                return BodyBuilder.create()
-                                  .addStatement("this.$1L = data.$1L", name)
-                                  .build();
-            }
-            var fromPersistent = builderReference.fromPersistent();
-            var implementingClass = ClassName.from(fromPersistent.getNamespace(), fromPersistent.getName());
-            return BodyBuilder.create()
-                              .addStatement("this.$L = $T.$L(data.$L)", name, implementingClass,
-                                            fromPersistent.getMember().orElseThrow(), name)
-                              .build();
-        }
-        var builder = BodyBuilder.create();
-        var isOrdered = symbol.getProperty(SymbolProperties.ORDERED).orElse(false);
-        if (isOrdered) {
-            switch (type) {
-                case MAP -> builder.addStatement("this.$1L = $2T.fromPersistentOrderedMap(data.$1L)",
-                                                 name, CollectionBuilderReference.class);
-                case SET -> builder.addStatement("this.$1L = $2T.fromPersistentOrderedSet(data.$1L)",
-                                                 name, CollectionBuilderReference.class);
-                case LIST -> builder.addStatement("this.$1L = $2T.fromPersistentList(data.$1L)",
-                                                  name, CollectionBuilderReference.class);
-                default -> throw new UnsupportedOperationException("unsupported aggregate type: " + type);
-            }
-        } else {
-            switch (type) {
-                case MAP -> builder.addStatement("this.$1L = $2T.fromPersistentUnorderedMap(data.$1L)",
-                                                 name, CollectionBuilderReference.class);
-                case SET -> builder.addStatement("this.$1L = $2T.fromPersistentUnorderedSet(data.$1L)",
-                                                 name, CollectionBuilderReference.class);
-                case LIST -> builder.addStatement("this.$1L = $2T.fromPersistentList(data.$1L)",
-                                                  name, CollectionBuilderReference.class);
-                default -> throw new UnsupportedOperationException("unsupported aggregate type: " + type);
-            }
-        }
-        return BodyBuilder.emptyBlock();
-    }
-
     private static Symbol.Builder fromClass(Class<?> clazz) {
         return Symbol.builder()
                      .name(clazz.getSimpleName())
                      .namespace(clazz.getPackageName(), ".");
     }
+
+    static String getDefaultValue(MemberShape member, Shape target) {
+        var defaultValue = member.getTrait(DefaultTrait.class).orElse(null);
+        if (defaultValue == null) {
+            return null;
+        }
+        var defaultValueNode = defaultValue.toNode();
+        var shapeType = target.getType();
+        switch (shapeType) {
+            case BYTE, SHORT, INTEGER, DOUBLE:
+                return defaultValueNode.expectNumberNode().getValue().toString();
+            case LONG:
+                return defaultValueNode.expectNumberNode().getValue().toString() + "L";
+            case FLOAT:
+                return defaultValueNode.expectNumberNode().getValue().toString() + "F";
+            case STRING:
+                return CodeWriter.escapeJavaString(defaultValueNode.expectStringNode().getValue());
+            case BOOLEAN:
+                return Boolean.toString(defaultValueNode.expectBooleanNode().getValue());
+            default:
+                throw new UnsupportedOperationException("Unsupported type: " + shapeType + " for default value");
+        }
+    }
+
 }

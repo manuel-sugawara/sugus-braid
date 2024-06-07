@@ -108,11 +108,8 @@ public final class CaseClause implements SyntaxNode {
             return this;
         }
 
-        /**
-         * <p>Sets the value for <code>body</code></p>
-         */
-        public Builder body(Block body) {
-            this.body.setPersistent(body);
+        public Builder body(Consumer<BodyBuilder> mutator) {
+            mutator.accept(this.body.asTransient());
             return this;
         }
 
@@ -161,8 +158,11 @@ public final class CaseClause implements SyntaxNode {
             return this;
         }
 
-        public Builder body(Consumer<BodyBuilder> mutator) {
-            mutator.accept(this.body.asTransient());
+        /**
+         * <p>Sets the value for <code>body</code></p>
+         */
+        public Builder body(Block body) {
+            this.body.setPersistent(body);
             return this;
         }
 

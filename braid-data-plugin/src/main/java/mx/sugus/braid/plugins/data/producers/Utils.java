@@ -6,12 +6,11 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Function;
 import mx.sugus.braid.core.BraidCodegenPlugin;
-import mx.sugus.braid.plugins.data.utils.SymbolConstants;
 import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.Identifier;
-import mx.sugus.braid.plugins.data.utils.SymbolProperties;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.Annotation;
+import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.CodeBlock;
@@ -21,8 +20,12 @@ import mx.sugus.braid.jsyntax.FormatterNode;
 import mx.sugus.braid.jsyntax.InterfaceSyntax;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.TypeSyntax;
+import mx.sugus.braid.jsyntax.block.BodyBuilder;
+import mx.sugus.braid.plugins.data.utils.SymbolConstants;
+import mx.sugus.braid.plugins.data.utils.SymbolProperties;
 import mx.sugus.braid.rt.util.annotations.Generated;
 import mx.sugus.braid.traits.ConstTrait;
+import mx.sugus.braid.traits.UseBuilderReferenceTrait;
 import software.amazon.smithy.codegen.core.ReservedWords;
 import software.amazon.smithy.codegen.core.ReservedWordsBuilder;
 import software.amazon.smithy.codegen.core.Symbol;
@@ -101,6 +104,10 @@ public final class Utils {
             newParts.add(part);
         }
         return CodeBlock.builder().parts(newParts).build();
+    }
+
+    public static Name toJavaName(Symbol symbol) {
+        return symbol.getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow(NoSuchElementException::new);
     }
 
     public static Name toJavaName(CodegenState state, Shape shape) {
@@ -188,6 +195,10 @@ public final class Utils {
         return shape.isRequired() || shape.hasTrait(ConstTrait.class);
     }
 
+    public static boolean isRequired(CodegenState state, MemberShape shape) {
+        return shape.isRequired() || shape.hasTrait(ConstTrait.class);
+    }
+
     public static String emptyReferenceBuilder(SymbolConstants.AggregateType type) {
         return SymbolConstants.emptyReferenceBuilder(type);
     }
@@ -206,7 +217,59 @@ public final class Utils {
 
     public static SymbolConstants.AggregateType aggregateType(CodegenState state, Shape shape) {
         var symbol = state.symbolProvider().toSymbol(shape);
+        return aggregateType(symbol);
+    }
+
+    public static SymbolConstants.AggregateType aggregateType(Symbol symbol) {
         return symbol.getProperty(SymbolProperties.AGGREGATE_TYPE).orElse(SymbolConstants.AggregateType.NONE);
+    }
+
+    public static boolean isRequired(Symbol symbol) {
+        return symbol.getProperty(SymbolProperties.IS_REQUIRED).orElse(false);
+    }
+
+    public static boolean isConstant(Symbol symbol) {
+        return symbol.getProperty(SymbolProperties.IS_CONSTANT).orElse(false);
+    }
+
+    public static boolean isOrdered(Symbol symbol) {
+        return symbol.getProperty(SymbolProperties.IS_ORDERED).orElse(false);
+    }
+
+    public static String defaultValue(Symbol symbol) {
+        return symbol.getProperty(SymbolProperties.DEFAULT_VALUE).orElse(null);
+    }
+
+    public static UseBuilderReferenceTrait builderReference(Symbol symbol) {
+        return symbol.getProperty(SymbolProperties.BUILDER_REFERENCE).orElse(null);
+    }
+
+    public static Block dataInitFromBuilder(Symbol symbol) {
+        var initFunction = symbol.getProperty(SymbolProperties.DATA_BUILDER_INIT).orElse(x -> BodyBuilder.emptyBlock());
+        return initFunction.apply(symbol);
+    }
+
+    public static Block builderInitFromEmpty(Symbol symbol) {
+        var initFunction = symbol.getProperty(SymbolProperties.BUILDER_EMPTY_INIT).orElse(x -> BodyBuilder.emptyBlock());
+        return initFunction.apply(symbol);
+    }
+
+    public static Block builderInitFromData(Symbol symbol) {
+        var initFunction = symbol.getProperty(SymbolProperties.BUILDER_DATA_INIT).orElse(x -> BodyBuilder.emptyBlock());
+        return initFunction.apply(symbol);
+    }
+
+    public static TypeName toJavaTypeName(Symbol symbol) {
+        return symbol.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
+    }
+
+    public static TypeName toBuilderTypeName(Symbol symbol) {
+        return symbol.getProperty(SymbolProperties.BUILDER_JAVA_TYPE).orElseGet(() -> toJavaTypeName(symbol));
+    }
+
+
+    public static TypeName toRefrenceBuilderTypeName(Symbol symbol) {
+        return symbol.getProperty(SymbolProperties.BUILDER_REFERENCE_JAVA_TYPE).orElseGet(() -> toJavaTypeName(symbol));
     }
 
     private static ReservedWords buildReservedWords() {

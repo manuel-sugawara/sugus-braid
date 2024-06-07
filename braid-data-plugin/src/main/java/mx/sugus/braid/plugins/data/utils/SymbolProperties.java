@@ -1,10 +1,10 @@
 package mx.sugus.braid.plugins.data.utils;
 
 import java.util.function.Function;
-import mx.sugus.braid.plugins.data.utils.SymbolConstants.AggregateType;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.jsyntax.TypeName;
+import mx.sugus.braid.plugins.data.utils.SymbolConstants.AggregateType;
 import mx.sugus.braid.traits.UseBuilderReferenceTrait;
 import software.amazon.smithy.codegen.core.Property;
 import software.amazon.smithy.codegen.core.Symbol;
@@ -19,9 +19,34 @@ public final class SymbolProperties {
     public static final Property<TypeName> JAVA_TYPE = from(TypeName.class);
 
     /**
+     * Property for the java type for members to be used in the builder.
+     */
+    public static final Property<TypeName> BUILDER_JAVA_TYPE = from(TypeName.class);
+
+    /**
+     * Property for the java type for members that use builder references to be used in the builder.
+     */
+    public static final Property<TypeName> BUILDER_REFERENCE_JAVA_TYPE = from(TypeName.class);
+
+    /**
      * Property for the java name for a given symbol.
      */
     public static final Property<Name> SIMPLE_NAME = from(Name.class);
+
+    /**
+     * Property to mark the symbol as required.
+     */
+    public static final Property<Boolean> IS_REQUIRED = Property.named("is-required?");
+
+    /**
+     * Property to mark the symbol as constant.
+     */
+    public static final Property<Boolean> IS_CONSTANT = Property.named("is-constant?");
+
+    /**
+     * Property for the default value of a member shape.
+     */
+    public static final Property<String> DEFAULT_VALUE = Property.named("default-value");
 
     /**
      * Property for the type of aggregate the symbol represents.
@@ -36,7 +61,7 @@ public final class SymbolProperties {
     /**
      * Property to flag if the shape has to preserve insertion order. Valid for sets and maps.
      */
-    public static final Property<Boolean> ORDERED = from(Boolean.class);
+    public static final Property<Boolean> IS_ORDERED = from(Boolean.class);
 
     /**
      * The method name in the class to get the value for the symbol.
@@ -61,10 +86,15 @@ public final class SymbolProperties {
     /**
      * The empty builder initializer code.
      */
-    public static final Property<Function<Symbol, Block>> EMPTY_BUILDER_INIT = Property.named("empty-builder-init");
+    public static final Property<Function<Symbol, Block>> BUILDER_EMPTY_INIT = Property.named("builder-empty-init");
 
     /**
      * From data builder initializer code.
+     */
+    public static final Property<Function<Symbol, Block>> BUILDER_DATA_INIT = Property.named("builder-data-init");
+
+    /**
+     * From builder data initializer code.
      */
     public static final Property<Function<Symbol, Block>> DATA_BUILDER_INIT = Property.named("data-builder-init");
 

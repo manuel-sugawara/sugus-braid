@@ -150,11 +150,8 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
             this.parameters = CollectionBuilderReference.fromPersistentList(data.parameters);
         }
 
-        /**
-         * <p>Sets the value for <code>body</code></p>
-         */
-        public Builder body(Block body) {
-            this.body.setPersistent(body);
+        public Builder body(Consumer<BodyBuilder> mutator) {
+            mutator.accept(this.body.asTransient());
             return this;
         }
 
@@ -203,8 +200,11 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
             return this;
         }
 
-        public Builder body(Consumer<BodyBuilder> mutator) {
-            mutator.accept(this.body.asTransient());
+        /**
+         * <p>Sets the value for <code>body</code></p>
+         */
+        public Builder body(Block body) {
+            this.body.setPersistent(body);
             return this;
         }
 
