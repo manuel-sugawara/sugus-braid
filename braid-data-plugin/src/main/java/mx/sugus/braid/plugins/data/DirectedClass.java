@@ -14,7 +14,7 @@ import software.amazon.smithy.model.shapes.MemberShape;
 
 public interface DirectedClass extends DirectiveToTypeSyntax {
     default ClassName className(ShapeCodegenState state) {
-        return ClassName.toClassName(state.symbolProvider().toJavaTypeName(state.shape()));
+        return ClassName.toClassName(Utils.toJavaTypeName(state, state.shape()));
     }
 
     ClassSyntax.Builder typeSpec(ShapeCodegenState state);

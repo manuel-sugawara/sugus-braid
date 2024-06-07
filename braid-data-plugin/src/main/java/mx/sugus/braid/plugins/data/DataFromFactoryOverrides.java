@@ -52,7 +52,7 @@ public final class DataFromFactoryOverrides implements DirectedClass {
 
     static MethodSyntax fromFactory(ShapeCodegenState state, BuilderOverride override) {
         var symbolProvider = state.symbolProvider();
-        var shapeType = symbolProvider.toJavaTypeName(state.shape());
+        var shapeType = Utils.toJavaTypeName(state, state.shape());
         var builder = MethodSyntax.builder(coalesce(override.getName(), "from"))
                                   .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                                   .returns(shapeType)

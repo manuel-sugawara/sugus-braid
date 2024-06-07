@@ -12,7 +12,7 @@ import mx.sugus.braid.jsyntax.TypeSyntax;
 
 public interface DirectedEnum extends DirectiveToTypeSyntax {
     default ClassName className(ShapeCodegenState state) {
-        return ClassName.toClassName(state.symbolProvider().toJavaTypeName(state.shape()));
+        return ClassName.toClassName(Utils.toJavaTypeName(state, state.shape()));
     }
 
     EnumSyntax.Builder typeSpec(ShapeCodegenState state);

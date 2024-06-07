@@ -1,7 +1,6 @@
 package mx.sugus.braid.jsyntax.block;
 
 import mx.sugus.braid.jsyntax.Block;
-import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.rt.util.AbstractBuilderReference;
 import mx.sugus.braid.rt.util.BuilderReference;
 
@@ -9,6 +8,8 @@ import mx.sugus.braid.rt.util.BuilderReference;
  * Builder class that allows to build java blocks, i.e., sequences of statements.
  */
 public final class BodyBuilder extends AbstractBlockBuilder<BodyBuilder, Block> {
+    private static final Block EMPTY = Block.builder().build();
+
     /**
      * Creates a new empty body builder.
      */
@@ -41,6 +42,15 @@ public final class BodyBuilder extends AbstractBlockBuilder<BodyBuilder, Block> 
     }
 
     /**
+     * Returns an empty block.
+     *
+     * @return an empty block.
+     */
+    public static Block emptyBlock() {
+        return EMPTY;
+    }
+
+    /**
      * Creates a new BodyBuilder builder reference using the given block as its persistent state.
      *
      * @param persistent the persistent state for the body builder
@@ -61,7 +71,7 @@ public final class BodyBuilder extends AbstractBlockBuilder<BodyBuilder, Block> 
      *}
      */
     static class BodyBuilderReference extends AbstractBuilderReference<Block, BodyBuilder> {
-        private static final Block EMPTY = Block.builder().build();
+
 
         BodyBuilderReference(Block persistent) {
             super(persistent);

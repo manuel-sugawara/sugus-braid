@@ -4,8 +4,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import mx.sugus.braid.jsyntax.ClassName;
-import mx.sugus.braid.traits.JavaTrait;
 import mx.sugus.braid.jsyntax.writer.CodeRenderer;
+import mx.sugus.braid.plugins.data.Utils;
+import mx.sugus.braid.traits.JavaTrait;
 import software.amazon.smithy.model.node.ObjectNode;
 import software.amazon.smithy.model.shapes.ShapeType;
 
@@ -90,8 +91,8 @@ public final class JavaSyntaxPlugin implements SmithyGeneratorPlugin {
         private final Map<String, ClassName> packageImports = new HashMap<>();
 
         @Override
-        public void consume(ShapeCodegenState directive) {
-            var shape = directive.shape();
+        public void consume(ShapeCodegenState state) {
+            var shape = state.shape();
             var type = shape.getType();
             if (type != ShapeType.ENUM
                 && type != ShapeType.INT_ENUM
@@ -102,7 +103,8 @@ public final class JavaSyntaxPlugin implements SmithyGeneratorPlugin {
             if (shape.hasTrait(JavaTrait.class)) {
                 return;
             }
-            var typeName = directive.symbolProvider().toJavaTypeName(directive.shape());
+
+            var typeName = Utils.toJavaTypeName(state, state.shape());
             var className = ClassName.toClassName(typeName);
             packageImports.put(className.name(), className);
         }

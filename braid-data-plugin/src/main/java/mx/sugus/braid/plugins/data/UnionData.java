@@ -84,7 +84,7 @@ public final class UnionData implements DirectedClass {
     private MethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
         var name = symbolProvider.toMemberName(member);
-        var type = symbolProvider.toJavaTypeName(member);
+        var type = Utils.toJavaTypeName(state, member);
         var memberName = member.getMemberName();
         var unionTypeName = Name.of(memberName, Name.Convention.SCREAM_CASE).toString();
         var result = MethodSyntax.builder(name)

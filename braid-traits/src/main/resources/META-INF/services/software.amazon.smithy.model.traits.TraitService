@@ -3,6 +3,7 @@ mx.sugus.braid.traits.CodegenIgnoreTrait$Provider
 mx.sugus.braid.traits.InterfaceTrait$Provider
 mx.sugus.braid.traits.JavaTrait$Provider
 mx.sugus.braid.traits.OptionalTrait$Provider
+mx.sugus.braid.traits.OrderedTrait$Provider
 mx.sugus.braid.traits.ImplementsTrait$Provider
 mx.sugus.braid.traits.NewBuilderOverridesTrait$Provider
 mx.sugus.braid.traits.AdderOverridesTrait$Provider

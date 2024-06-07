@@ -1,10 +1,14 @@
 package mx.sugus.braid.plugins.data;
 
+import static mx.sugus.braid.core.util.Utils.coalesce;
 import static mx.sugus.braid.plugins.data.StructureCodegenUtils.getTargetListMember;
 import static mx.sugus.braid.plugins.data.StructureCodegenUtils.getTargetListMemberTrait;
 import static mx.sugus.braid.plugins.data.StructureCodegenUtils.getTargetTrait;
 import static mx.sugus.braid.plugins.data.StructureCodegenUtils.toParameters;
-import static mx.sugus.braid.core.util.Utils.coalesce;
+import static mx.sugus.braid.plugins.data.Utils.toJavaName;
+import static mx.sugus.braid.plugins.data.Utils.toJavaSingularName;
+import static mx.sugus.braid.plugins.data.Utils.toJavaTypeName;
+import static mx.sugus.braid.plugins.data.Utils.toMemberJavaName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +53,7 @@ public final class BuilderAdderOverrides implements DirectedClass {
 
     @Override
     public List<MethodSyntax> methodsFor(ShapeCodegenState state, MemberShape member) {
-        var aggregateType = state.symbolProvider().aggregateType(member);
+        var aggregateType = Utils.aggregateType(state, member);
         if (aggregateType == SymbolConstants.AggregateType.NONE) {
             return List.of();
         }
@@ -79,11 +83,10 @@ public final class BuilderAdderOverrides implements DirectedClass {
         MemberShape member,
         List<BuilderOverride> builderOverrides
     ) {
-        var name = state.symbolProvider().toJavaName(member);
-        var symbolProvider = state.symbolProvider();
+        var name = toJavaName(state, member);
         for (var override : builderOverrides) {
             var adderName = coalesce(override.getName(),
-                                     () -> symbolProvider.toJavaSingularName(member, "add").toString());
+                                     () -> toJavaSingularName(state, member, "add").toString());
             var overrideBuilder = MethodSyntax.builder(adderName)
                                               .addModifier(Modifier.PUBLIC)
                                               .returns(className(state));
@@ -105,11 +108,10 @@ public final class BuilderAdderOverrides implements DirectedClass {
         MemberShape member,
         List<BuilderOverride> builderOverrides
     ) {
-        var name = state.symbolProvider().toJavaName(member);
-        var symbolProvider = state.symbolProvider();
+        var name = toJavaName(state, member);
         for (var override : builderOverrides) {
             var adderName = coalesce(override.getName(),
-                                     () -> symbolProvider.toJavaSingularName(member, "add").toString());
+                                     () -> toJavaSingularName(state, member, "add").toString());
             var overrideBuilder = MethodSyntax.builder(adderName)
                                               .addModifier(Modifier.PUBLIC)
                                               .returns(className(state));
@@ -131,11 +133,10 @@ public final class BuilderAdderOverrides implements DirectedClass {
         MemberShape member,
         AddAllOverridesTrait addAllOverrides
     ) {
-        var name = state.symbolProvider().toJavaName(member);
-        var symbolProvider = state.symbolProvider();
+        var name = toJavaName(state, member);
         for (var override : addAllOverrides.getValues()) {
             var adderName = coalesce(override.getName(),
-                                     () -> symbolProvider.toJavaSingularName(member, "add").toString());
+                                     () -> toJavaSingularName(state, member, "add").toString());
             var overrideBuilder = MethodSyntax.builder(adderName)
                                               .addModifier(Modifier.PUBLIC)
                                               .returns(className(state));
@@ -160,11 +161,10 @@ public final class BuilderAdderOverrides implements DirectedClass {
         if (multiAddOverrides == null) {
             return;
         }
-        var name = state.symbolProvider().toJavaName(member);
-        var symbolProvider = state.symbolProvider();
+        var name = toJavaName(state, member);
         for (var override : multiAddOverrides.getValues()) {
             var adderName = coalesce(override.getName(),
-                                     () -> symbolProvider.toJavaName(member, "add").toString());
+                                     () -> toJavaName(state, member, "add").toString());
             var overrideBuilder = MethodSyntax.builder(adderName)
                                               .addModifier(Modifier.PUBLIC)
                                               .returns(className(state));
@@ -180,8 +180,7 @@ public final class BuilderAdderOverrides implements DirectedClass {
     }
 
     private void addValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder, List<String> values) {
-        var symbolProvider = state.symbolProvider();
-        var name = symbolProvider.toMemberJavaName(member);
+        var name = toMemberJavaName(state, member);
         for (var value : values) {
             builder.addStatement("this.$L.asTransient().add($L)", name.toString(), value);
         }
@@ -189,11 +188,10 @@ public final class BuilderAdderOverrides implements DirectedClass {
 
     private void addValueFromImplicitOverride(ShapeCodegenState state, MemberShape member, BodyBuilder builder,
                                               BuilderOverride override) {
-        var symbolProvider = state.symbolProvider();
-        var name = symbolProvider.toMemberJavaName(member);
+        var name = toMemberJavaName(state, member);
         var block = CodeBlock.builder();
         var listMemberShape = getTargetListMember(state, member);
-        block.addCode("$T.", symbolProvider.toJavaTypeName(listMemberShape));
+        block.addCode("$T.", toJavaTypeName(state, listMemberShape));
         if (override.getName() == null) {
             block.addCode("from");
         } else {
@@ -214,8 +212,7 @@ public final class BuilderAdderOverrides implements DirectedClass {
     }
 
     private void addAllValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder, List<String> values) {
-        var symbolProvider = state.symbolProvider();
-        var name = symbolProvider.toMemberJavaName(member);
+        var name = toMemberJavaName(state, member);
         for (var value : values) {
             builder.addStatement("this.$L.asTransient().addAll($L)", name.toString(), value);
         }

@@ -1,6 +1,8 @@
 package mx.sugus.braid.plugins.data;
 
 import static mx.sugus.braid.plugins.data.DataFromFactoryOverrides.fromFactory;
+import static mx.sugus.braid.plugins.data.Utils.toJavaName;
+import static mx.sugus.braid.plugins.data.Utils.toJavaTypeName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +29,13 @@ public final class InterfaceData implements DirectedInterface {
 
     @Override
     public InterfaceSyntax.Builder typeSpec(ShapeCodegenState state) {
-        var result = InterfaceSyntax.builder(state.symbolProvider().toJavaName(state.shape()).toString())
+        var result = InterfaceSyntax.builder(toJavaName(state, state.shape()).toString())
                                     .addAnnotation(DataPlugin.generatedBy())
                                     .addModifier(Modifier.PUBLIC);
         var shape = state.shape().asStructureShape().orElseThrow();
         var superInterfaces = ImplementsKnowledgeIndex.of(state.model()).superInterfaces(shape);
         for (var superInterface : superInterfaces) {
-            var parentClass = state.symbolProvider().toJavaTypeName(superInterface);
+            var parentClass = Utils.toJavaTypeName(state, superInterface);
             result.addSuperInterface(parentClass);
         }
         if (shape.hasTrait(DocumentationTrait.class)) {
@@ -51,7 +53,7 @@ public final class InterfaceData implements DirectedInterface {
     private AbstractMethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
         var name = symbolProvider.toMemberName(member);
-        var type = symbolProvider.toJavaTypeName(member);
+        var type = toJavaTypeName(state, member);
         var result = AbstractMethodSyntax.builder()
                                          .name(name)
                                          .returns(type);

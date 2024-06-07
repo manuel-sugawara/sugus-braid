@@ -56,7 +56,7 @@ public final class EnumData implements DirectedEnum {
 
     @Override
     public ClassName className(ShapeCodegenState state) {
-        return ClassName.toClassName(state.symbolProvider().toJavaTypeName(state.shape()));
+        return ClassName.toClassName(Utils.toJavaTypeName(state, state.shape()));
     }
 
     @Override
@@ -79,7 +79,7 @@ public final class EnumData implements DirectedEnum {
     }
 
     private MethodSyntax fromValueMethod(ShapeCodegenState state) {
-        var shapeType = state.symbolProvider().toJavaTypeName(state.shape());
+        var shapeType = Utils.toJavaTypeName(state, state.shape());
         var javadoc = "Returns the corresponding enum constant from the given value.\n\n"
                       + "If the value is unknown it returns `UNKNOWN_TO_VERSION`.";
         var result = MethodSyntax.builder("from")

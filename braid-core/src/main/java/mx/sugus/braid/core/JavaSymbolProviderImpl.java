@@ -2,13 +2,13 @@ package mx.sugus.braid.core;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.nio.ByteBuffer;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
+import mx.sugus.braid.core.symbol.SymbolProvider2;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.core.util.PathUtil;
 import mx.sugus.braid.jsyntax.TypeName;
@@ -36,7 +36,6 @@ import software.amazon.smithy.model.shapes.OperationShape;
 import software.amazon.smithy.model.shapes.ResourceShape;
 import software.amazon.smithy.model.shapes.ServiceShape;
 import software.amazon.smithy.model.shapes.Shape;
-import software.amazon.smithy.model.shapes.ShapeId;
 import software.amazon.smithy.model.shapes.ShapeType;
 import software.amazon.smithy.model.shapes.ShapeVisitor;
 import software.amazon.smithy.model.shapes.ShortShape;
@@ -308,7 +307,13 @@ public final class JavaSymbolProviderImpl implements JavaSymbolProvider, ShapeVi
     }
 
     public static JavaSymbolProvider create(Model model, JavaCodegenSettings settings) {
-        return new JavaSymbolProviderImpl(model, settings);
+        var escaper = RESERVED_WORDS;
+        var shapeToJavaName = new ShapeToJavaName(model, escaper, settings.packageName());
+        var shapeToJavaType = new ShapeToJavaType(shapeToJavaName, model);
+        if (false) {
+            return new JavaSymbolProviderImpl(model, settings);
+        }
+        return new SymbolProvider2(model, shapeToJavaName, shapeToJavaType, settings.packageName());
     }
 
     private static Symbol.Builder createSymbolBuilder(String typeName, String namespace) {

@@ -12,6 +12,7 @@ import mx.sugus.braid.jsyntax.InterfaceSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeVariableTypeName;
 import mx.sugus.braid.traits.InterfaceTrait;
+import software.amazon.smithy.model.shapes.ShapeId;
 
 public final class InterfaceSyntaxAddAcceptVisitorTransformer implements ShapeTaskTransformer<TypeSyntaxResult> {
     private static final Identifier ID = Identifier.of(SyntaxAddAcceptVisitorTransformer.class);
@@ -32,13 +33,14 @@ public final class InterfaceSyntaxAddAcceptVisitorTransformer implements ShapeTa
     }
 
     @Override
-    public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState directive) {
-        var shape = directive.shape();
+    public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
+        var shape = state.shape();
         if (!shape.hasTrait(InterfaceTrait.class)) {
             return result;
         }
         if (shape.getId().toString().equals(syntaxNode)) {
-            var syntaxNodeClass = ClassName.toClassName(directive.toJavaTypeNameClass(syntaxNode()));
+            var syntaxShape = state.model().expectShape(ShapeId.from(syntaxNode));
+            var syntaxNodeClass = ClassName.toClassName(Utils.toJavaTypeName(state, syntaxShape));
             var visitorClass = ClassName.from(syntaxNodeClass.packageName(), syntaxNodeClass.name() +
                                                                              "Visitor");
             var visitorResultTypeVar = TypeVariableTypeName.builder()

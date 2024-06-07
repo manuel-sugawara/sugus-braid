@@ -1,5 +1,7 @@
 package mx.sugus.braid.core;
 
+import java.util.NoSuchElementException;
+import mx.sugus.braid.core.symbol.SymbolProperties;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.traits.ConstTrait;
@@ -11,38 +13,39 @@ import software.amazon.smithy.model.shapes.ShapeType;
 
 public interface JavaSymbolProvider extends SymbolProvider {
     default Name toJavaName(Shape shape) {
-        return toSymbol(shape).getProperty(Name.class.getName(), Name.class).orElseThrow(null);
+        return toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow(() -> new NoSuchElementException(shape.toString()));
+        //return toSymbol(shape).getProperty(Name.class.getName(), Name.class).orElseThrow();
     }
 
     default Name toJavaName(Shape shape, Name.Convention kind) {
-        var name = toSymbol(shape).getProperty(Name.class.getName(), Name.class).orElseThrow()
+        var name = toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
                                   .toNameConvention(kind);
         return validateName(name, shape);
     }
 
     default Name toJavaName(Shape shape, Name.Convention kind, String prefix) {
-        var name = toSymbol(shape).getProperty(Name.class.getName(), Name.class).orElseThrow()
+        var name = toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
                                   .toNameConvention(kind)
                                   .withPrefix(prefix);
         return validateName(name, shape);
     }
 
     default Name toJavaName(Shape shape, String prefix) {
-        var name = toSymbol(shape).getProperty(Name.class.getName(), Name.class).orElseThrow()
+        var name = toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
                                   .withPrefix(prefix);
         return validateName(name, shape);
 
     }
 
     default Name toJavaSingularName(Shape shape, Name.Convention kind) {
-        var name = toSymbol(shape).getProperty(Name.class.getName(), Name.class).orElseThrow()
+        var name = toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
                                   .toSingularSpelling()
                                   .toNameConvention(kind);
         return validateName(name, shape);
     }
 
     default Name toJavaSingularName(Shape shape, Name.Convention kind, String prefix) {
-        var name = toSymbol(shape).getProperty(Name.class.getName(), Name.class).orElseThrow()
+        var name = toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
                                   .toSingularSpelling()
                                   .withPrefix(prefix)
                                   .toNameConvention(kind);
@@ -50,13 +53,13 @@ public interface JavaSymbolProvider extends SymbolProvider {
     }
 
     default Name toJavaSingularName(Shape shape) {
-        var name = toSymbol(shape).getProperty(Name.class.getName(), Name.class).orElseThrow()
+        var name = toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
                                   .toSingularSpelling();
         return validateName(name, shape);
     }
 
     default Name toJavaSingularName(Shape shape, String prefix) {
-        var name = toSymbol(shape).getProperty(Name.class.getName(), Name.class).orElseThrow()
+        var name = toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
                                   .toSingularSpelling()
                                   .withPrefix(prefix);
         return validateName(name, shape);
@@ -76,15 +79,21 @@ public interface JavaSymbolProvider extends SymbolProvider {
     }
 
     default TypeName toJavaTypeName(Shape shape) {
-        return toSymbol(shape).getProperty(TypeName.class.getName(), TypeName.class).orElseThrow();
+        return toSymbol(shape).getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
     }
 
     default TypeName toJavaTypeName(Symbol shape) {
-        return shape.getProperty(TypeName.class.getName(), TypeName.class).orElseThrow();
+        try {
+            //return shape.getProperty(TypeName.class.getName(), TypeName.class).orElseThrow();
+            return shape.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
+        } catch (Exception e) {
+            System.out.printf("================>>>> failed type name for symbol: %s\n", shape);
+            throw e;
+        }
     }
 
     default boolean isMemberNullable(MemberShape shape) {
-        var aggregateType = SymbolConstants.aggregateType(toSymbol(shape));
+        var aggregateType = aggregateType(shape);
         if (aggregateType != SymbolConstants.AggregateType.NONE) {
             return false;
         }
@@ -111,14 +120,12 @@ public interface JavaSymbolProvider extends SymbolProvider {
         return toJavaName(shape);
     }
 
-    default Name toShapeJavaName(Shape shape) {
-        var name = shape.getId().getName();
-        return Name.of(name);
-    }
-
     default SymbolConstants.AggregateType aggregateType(Shape shape) {
         var symbol = toSymbol(shape);
-        return symbol.getProperty(SymbolConstants.AGGREGATE_TYPE, SymbolConstants.AggregateType.class)
-                     .orElse(SymbolConstants.AggregateType.NONE);
+        if (false) {
+            return symbol.getProperty(SymbolConstants.AGGREGATE_TYPE, SymbolConstants.AggregateType.class)
+                         .orElse(SymbolConstants.AggregateType.NONE);
+        }
+        return symbol.getProperty(SymbolProperties.AGGREGATE_TYPE).orElse(SymbolConstants.AggregateType.NONE);
     }
 }

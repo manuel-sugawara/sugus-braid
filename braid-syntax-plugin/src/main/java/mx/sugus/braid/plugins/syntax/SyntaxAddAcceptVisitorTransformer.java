@@ -5,8 +5,6 @@ import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
 import mx.sugus.braid.core.plugin.TypeSyntaxResult;
-import mx.sugus.braid.plugins.data.StructureJavaProducer;
-import mx.sugus.braid.plugins.data.Utils;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
@@ -14,7 +12,10 @@ import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeVariableTypeName;
 import mx.sugus.braid.jsyntax.ext.TypeNameExt;
+import mx.sugus.braid.plugins.data.StructureJavaProducer;
+import mx.sugus.braid.plugins.data.Utils;
 import mx.sugus.braid.traits.InterfaceTrait;
+import software.amazon.smithy.model.shapes.ShapeId;
 
 public final class SyntaxAddAcceptVisitorTransformer implements ShapeTaskTransformer<TypeSyntaxResult> {
     private static final Identifier ID = Identifier.of(SyntaxAddAcceptVisitorTransformer.class);
@@ -35,18 +36,19 @@ public final class SyntaxAddAcceptVisitorTransformer implements ShapeTaskTransfo
     }
 
     @Override
-    public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState directive) {
-        var shape = directive.shape();
+    public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
+        var shape = state.shape();
         if (shape.hasTrait(InterfaceTrait.class)) {
             return result;
         }
-        if (!SyntaxVisitorJavaProducer.shapeImplements(syntaxNode(), directive.model(), shape)) {
+        if (!SyntaxVisitorJavaProducer.shapeImplements(syntaxNode(), state.model(), shape)) {
             return result;
         }
-        var syntaxNodeClass = ClassName.toClassName(directive.toJavaTypeNameClass(syntaxNode()));
+        var syntaxShape = state.model().expectShape(ShapeId.from(syntaxNode));
+        var syntaxNodeClass = ClassName.toClassName(Utils.toJavaTypeName(state, syntaxShape));
         var visitorClass = ClassName.from(syntaxNodeClass.packageName(), syntaxNodeClass.name() + "Visitor");
         var visitor = ParameterizedTypeName.from(visitorClass, TypeVariableTypeName.from("VisitorR"));
-        var name = directive.symbolProvider().toJavaName(shape);
+        var name = Utils.toJavaName(state, shape);
         var syntax = ((ClassSyntax) result.syntax())
             .toBuilder()
             .addMethod(acceptMethod(visitor, name))

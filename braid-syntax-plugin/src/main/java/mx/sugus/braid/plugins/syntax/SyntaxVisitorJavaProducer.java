@@ -46,7 +46,8 @@ public final class SyntaxVisitorJavaProducer implements NonShapeProducerTask<Typ
     }
 
     InterfaceSyntax.Builder typeSyntax(CodegenState state) {
-        var syntaxNodeClass = ClassName.toClassName(state.toJavaTypeNameClass(syntaxNode));
+        var syntaxShape = state.model().expectShape(ShapeId.from(syntaxNode));
+        var syntaxNodeClass = ClassName.toClassName(Utils.toJavaTypeName(state, syntaxShape));
         return InterfaceSyntax.builder(syntaxNodeClass.name() + "Visitor")
                               .addAnnotation(Utils.generatedBy(SyntaxModelPlugin.ID))
                               .addModifier(Modifier.PUBLIC)
@@ -54,7 +55,8 @@ public final class SyntaxVisitorJavaProducer implements NonShapeProducerTask<Typ
     }
 
     ClassName visitorClass(CodegenState state) {
-        var syntaxNodeClass = ClassName.toClassName(state.toJavaTypeNameClass(syntaxNode));
+        var syntaxShape = state.model().expectShape(ShapeId.from(syntaxNode));
+        var syntaxNodeClass = ClassName.toClassName(Utils.toJavaTypeName(state, syntaxShape));
         return ClassName.from(syntaxNodeClass.packageName(), syntaxNodeClass.name() + "Visitor");
     }
 
@@ -79,10 +81,12 @@ public final class SyntaxVisitorJavaProducer implements NonShapeProducerTask<Typ
                                  .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.ABSTRACT)
                                  .addSuperInterface(superInterface)
                                  .addTypeParam(T_TYPE_ARG);
+        var syntaxShape = state.model().expectShape(ShapeId.from(syntaxNode));
+        var syntaxNodeClass = ClassName.toClassName(Utils.toJavaTypeName(state, syntaxShape));
         builder.addMethod(AbstractMethodSyntax.builder()
                                               .name("getDefault")
                                               .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
-                                              .addParameter(state.toJavaTypeNameClass(syntaxNode), "node")
+                                              .addParameter(syntaxNodeClass, "node")
                                               .returns(T_TYPE_ARG)
                                               .build());
         var isaKnowledgeIndex = ImplementsKnowledgeIndex.of(state.model());
@@ -100,7 +104,7 @@ public final class SyntaxVisitorJavaProducer implements NonShapeProducerTask<Typ
     AbstractMethodSyntax abstractVisitForStructure(CodegenState state, StructureShape shape) {
         var name = state.symbolProvider().toSymbol(shape).getName();
         var symbolProvider = state.symbolProvider();
-        var type = symbolProvider.toJavaTypeName(shape);
+        var type = Utils.toJavaTypeName(state, shape);
         return AbstractMethodSyntax.builder("visit" + name)
                                    .returns(T_TYPE_ARG)
                                    .addParameter(type, "node")
@@ -110,7 +114,7 @@ public final class SyntaxVisitorJavaProducer implements NonShapeProducerTask<Typ
     MethodSyntax concreteVisitForStructure(CodegenState state, StructureShape shape) {
         var name = state.symbolProvider().toSymbol(shape).getName();
         var symbolProvider = state.symbolProvider();
-        var type = symbolProvider.toJavaTypeName(shape);
+        var type = Utils.toJavaTypeName(state, shape);
         return MethodSyntax.builder("visit" + name)
                            .addModifier(Modifier.PUBLIC)
                            .addAnnotation(Override.class)

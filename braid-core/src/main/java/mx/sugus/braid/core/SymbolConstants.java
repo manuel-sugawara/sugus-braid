@@ -3,6 +3,7 @@ package mx.sugus.braid.core;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import mx.sugus.braid.core.symbol.SymbolProperties;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeName;
@@ -61,6 +62,7 @@ public class SymbolConstants {
                      .build();
     }
 
+    // XXX remove
     public static Symbol fromLiteralClassName(String className) {
         var lastDot = className.lastIndexOf('.');
         if (lastDot == -1) {

@@ -6,7 +6,6 @@ import java.util.Objects;
 import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.ImplementsKnowledgeIndex;
 import mx.sugus.braid.core.SensitiveKnowledgeIndex;
-import mx.sugus.braid.core.SymbolConstants;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
@@ -44,7 +43,7 @@ public final class StructureData implements DirectedClass {
         var shape = state.shape().asStructureShape().orElseThrow();
         var superInterfaces = ImplementsKnowledgeIndex.of(state.model()).superInterfaces(shape);
         for (var superInterface : superInterfaces) {
-            var superInterfaceClass = state.symbolProvider().toJavaTypeName(superInterface);
+            var superInterfaceClass = Utils.toJavaTypeName(state, superInterface);
             result.addSuperInterface(superInterfaceClass);
         }
         if (shape.hasTrait(DocumentationTrait.class)) {
@@ -63,9 +62,8 @@ public final class StructureData implements DirectedClass {
     }
 
     public FieldSyntax fieldFor(ShapeCodegenState state, MemberShape member) {
-        var symbolProvider = state.symbolProvider();
-        var name = symbolProvider.toJavaName(member);
-        var type = symbolProvider.toJavaTypeName(member);
+        var name = Utils.toJavaName(state, member);
+        var type = Utils.toJavaTypeName(state, member);
         return FieldSyntax.builder()
                           .name(name.toString())
                           .type(type)
@@ -94,18 +92,18 @@ public final class StructureData implements DirectedClass {
             }
             var name = symbolProvider.toMemberName(member);
             if (StructureDataBuilder.usesBuilderReference(state, member)) {
-                if (symbolProvider.isMemberRequired(member)) {
+                if (Utils.isMemberRequired(state, member)) {
                     builder.addStatement("this.$1L = $2T.requireNonNull(builder.$1L.asPersistent(), $1S)", name, Objects.class);
                 } else {
                     builder.addStatement("this.$1L = builder.$1L.asPersistent()", name);
                 }
                 continue;
             }
-            var aggregateType = state.symbolProvider().aggregateType(member);
+            var aggregateType = Utils.aggregateType(state, member);
             switch (aggregateType) {
                 case LIST, SET, MAP -> memberValueFromBuilder(state, member, builder);
                 default -> {
-                    if (symbolProvider.isMemberRequired(member)) {
+                    if (Utils.isMemberRequired(state, member)) {
                         builder.addStatement("this.$L = $T.requireNonNull(builder.$L, $S)", name, Objects.class, name, name);
                     } else {
                         builder.addStatement("this.$1L = builder.$1L", name);
@@ -132,7 +130,7 @@ public final class StructureData implements DirectedClass {
     private MethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
         var name = symbolProvider.toMemberName(member);
-        var type = symbolProvider.toJavaTypeName(member);
+        var type = Utils.toJavaTypeName(state, member);
         var result = MethodSyntax.builder(name)
                                  .addModifier(Modifier.PUBLIC)
                                  .returns(type)
@@ -147,7 +145,7 @@ public final class StructureData implements DirectedClass {
     private MethodSyntax constAccessor(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
         var name = symbolProvider.toMemberName(member);
-        var type = symbolProvider.toJavaTypeName(member);
+        var type = Utils.toJavaTypeName(state, member);
         var builder = MethodSyntax.builder(name)
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(type);
@@ -155,7 +153,7 @@ public final class StructureData implements DirectedClass {
         var shapeId = ShapeId.from(refId);
         var constMember = state.model().expectShape(shapeId, MemberShape.class);
         var containingSymbol = state.model().expectShape(constMember.getContainer(), EnumShape.class);
-        builder.addStatement("return $T.$L", symbolProvider.toJavaTypeName(containingSymbol),
+        builder.addStatement("return $T.$L", Utils.toJavaTypeName(state, containingSymbol),
                              symbolProvider.toMemberName(constMember));
         return builder.build();
     }
@@ -250,7 +248,7 @@ public final class StructureData implements DirectedClass {
                 if (!isFirst) {
                     expressionBuilder.addCode("\n&& ");
                 }
-                if (symbolProvider.isMemberNullable(member)) {
+                if (Utils.isMemberNullable(state, member)) {
                     expressionBuilder.addCode("$1T.equals(this.$2L, that.$2L)", Objects.class, name);
                 } else {
                     expressionBuilder.addCode("this.$1L.equals(that.$1L)", name);
@@ -295,7 +293,7 @@ public final class StructureData implements DirectedClass {
                 builder.addStatement("hashCode = 31 * hashCode + this.$L().hashCode()", name);
                 continue;
             }
-            if (symbolProvider.isMemberNullable(member)) {
+            if (Utils.isMemberNullable(state, member)) {
                 builder.addStatement("hashCode = 31 * hashCode + ($1L != null ? $1L.hashCode() : 0)", name);
             } else {
                 builder.addStatement("hashCode = 31 * hashCode + $L.hashCode()", name);
