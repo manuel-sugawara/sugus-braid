@@ -10,7 +10,6 @@ import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeReducer;
 import mx.sugus.braid.core.plugin.SmithyGeneratorPlugin;
-import mx.sugus.braid.core.plugin.TypeSyntaxResult;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.writer.CodeRenderer;
 import mx.sugus.braid.plugins.data.producers.Utils;

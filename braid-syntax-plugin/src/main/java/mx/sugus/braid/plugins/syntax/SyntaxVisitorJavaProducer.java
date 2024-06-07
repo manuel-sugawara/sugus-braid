@@ -5,7 +5,7 @@ import mx.sugus.braid.core.ImplementsKnowledgeIndex;
 import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.NonShapeProducerTask;
-import mx.sugus.braid.core.plugin.TypeSyntaxResult;
+import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.jsyntax.AbstractMethodSyntax;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;

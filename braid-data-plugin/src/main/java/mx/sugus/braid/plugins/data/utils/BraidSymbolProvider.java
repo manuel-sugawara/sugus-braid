@@ -1,4 +1,4 @@
-package mx.sugus.braid.core.symbol;
+package mx.sugus.braid.plugins.data.utils;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -6,9 +6,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import mx.sugus.braid.core.ShapeToJavaName;
-import mx.sugus.braid.core.ShapeToJavaType;
-import mx.sugus.braid.core.SymbolConstants.AggregateType;
+import mx.sugus.braid.plugins.data.utils.SymbolConstants.AggregateType;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.core.util.PathUtil;
 import mx.sugus.braid.jsyntax.Block;
@@ -64,7 +62,6 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
     public Symbol toSymbol(Shape shape) {
         var sym = shape.accept(this);
         if (sym == null) {
-            System.out.printf("===============>> cannot find symbol for shape: %s\n", shape);
             return null;
         }
         var builder = sym.toBuilder();

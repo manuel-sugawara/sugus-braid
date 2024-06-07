@@ -6,10 +6,10 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Function;
 import mx.sugus.braid.core.BraidCodegenPlugin;
-import mx.sugus.braid.core.SymbolConstants;
+import mx.sugus.braid.plugins.data.utils.SymbolConstants;
 import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.Identifier;
-import mx.sugus.braid.core.symbol.SymbolProperties;
+import mx.sugus.braid.plugins.data.utils.SymbolProperties;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.Annotation;
 import mx.sugus.braid.jsyntax.ClassName;
@@ -206,10 +206,6 @@ public final class Utils {
 
     public static SymbolConstants.AggregateType aggregateType(CodegenState state, Shape shape) {
         var symbol = state.symbolProvider().toSymbol(shape);
-        if (false) {
-            return symbol.getProperty(SymbolConstants.AGGREGATE_TYPE, SymbolConstants.AggregateType.class)
-                         .orElse(SymbolConstants.AggregateType.NONE);
-        }
         return symbol.getProperty(SymbolProperties.AGGREGATE_TYPE).orElse(SymbolConstants.AggregateType.NONE);
     }
 

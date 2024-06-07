@@ -17,7 +17,6 @@ buildscript {
 }
 
 dependencies {
-    implementation(project(":braid-java-syntax"))
     implementation(project(":braid-traits"))
     implementation(project(":braid-rt-util"))
     implementation("software.amazon.smithy:smithy-codegen-core:$smithyVersion")

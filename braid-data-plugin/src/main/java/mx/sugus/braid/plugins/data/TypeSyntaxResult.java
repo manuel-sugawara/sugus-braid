@@ -1,8 +1,7 @@
-package mx.sugus.braid.core.plugin;
+package mx.sugus.braid.plugins.data;
 
 import mx.sugus.braid.jsyntax.TypeSyntax;
 
-// TODO: move out of codegen into the syntax package alongside the plugin config.
 public final class TypeSyntaxResult {
     private final TypeSyntax syntax;
     private final String namespace;

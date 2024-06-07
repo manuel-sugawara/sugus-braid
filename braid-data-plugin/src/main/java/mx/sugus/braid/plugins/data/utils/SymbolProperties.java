@@ -1,7 +1,7 @@
-package mx.sugus.braid.core.symbol;
+package mx.sugus.braid.plugins.data.utils;
 
 import java.util.function.Function;
-import mx.sugus.braid.core.SymbolConstants.AggregateType;
+import mx.sugus.braid.plugins.data.utils.SymbolConstants.AggregateType;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.jsyntax.TypeName;

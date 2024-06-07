@@ -13,6 +13,7 @@
                 "mx.sugus.braid.plugins.data#FlattenInterfaceMembersPlugin": {
                 },
                 "mx.sugus.braid.plugins.data#DataPlugin": {
+                    "package": "mx.sugus.braid.jsyntax"
                 },
                 "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin": {
                     "syntaxNodes": ["mx.sugus.braid.jsyntax#SyntaxNode"]

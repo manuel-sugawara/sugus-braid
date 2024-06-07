@@ -3,7 +3,7 @@ package mx.sugus.braid.plugins.data.producers;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeProducerTask;
-import mx.sugus.braid.core.plugin.TypeSyntaxResult;
+import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.traits.InterfaceTrait;
 import mx.sugus.braid.traits.JavaTrait;
 import software.amazon.smithy.model.shapes.ShapeType;
@@ -30,15 +30,15 @@ public final class StructureInterfaceJavaProducer implements ShapeProducerTask<T
     }
 
     @Override
-    public TypeSyntaxResult produce(ShapeCodegenState directive) {
-        var shape = directive.shape();
+    public TypeSyntaxResult produce(ShapeCodegenState state) {
+        var shape = state.shape();
         if (shape.hasTrait(JavaTrait.class)) {
             return null;
         }
         if (!shape.hasTrait(InterfaceTrait.class)) {
             return null;
         }
-        var syntax = new InterfaceData().build(directive);
+        var syntax = new InterfaceData().build(state);
         return TypeSyntaxResult.builder()
                                .syntax(syntax)
                                .build();

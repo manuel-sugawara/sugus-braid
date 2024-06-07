@@ -8,7 +8,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import javax.lang.model.element.Modifier;
-import mx.sugus.braid.core.SymbolConstants;
+import mx.sugus.braid.plugins.data.utils.SymbolConstants;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
