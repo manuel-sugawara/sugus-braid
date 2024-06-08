@@ -40,6 +40,7 @@ public final class DataPlugin implements SmithyGeneratorPlugin {
             .addProducer(new EnumJavaProducer())
             .addProducer(new UnionJavaProducer())
             .addSymbolProviderDecorator(DataSymbolProviderDecorator.get())
+            //.addTransformer()
             .build();
     }
 

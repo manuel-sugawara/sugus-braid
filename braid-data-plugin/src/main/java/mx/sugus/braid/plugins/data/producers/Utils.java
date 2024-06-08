@@ -122,6 +122,16 @@ public final class Utils {
         return validateName(name, symbol);
     }
 
+    public static Name toAdderName(Symbol symbol) {
+        var name = symbol.getProperty(SymbolProperties.ADDER_NAME).orElseThrow();
+        return validateName(name, symbol);
+    }
+
+    public static Name toMultiAdderName(Symbol symbol) {
+        var name = symbol.getProperty(SymbolProperties.MULTI_ADDER_NAME).orElseThrow();
+        return validateName(name, symbol);
+    }
+
     public static Name toJavaName(CodegenState state, Shape shape) {
         return state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow(() -> new NoSuchElementException(shape.toString()));
     }
