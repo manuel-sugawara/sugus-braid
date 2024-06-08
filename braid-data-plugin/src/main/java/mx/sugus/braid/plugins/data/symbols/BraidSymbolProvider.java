@@ -1,4 +1,4 @@
-package mx.sugus.braid.plugins.data.utils;
+package mx.sugus.braid.plugins.data.symbols;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -11,7 +11,7 @@ import mx.sugus.braid.core.util.PathUtil;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.writer.CodeWriter;
-import mx.sugus.braid.plugins.data.utils.SymbolConstants.AggregateType;
+import mx.sugus.braid.plugins.data.symbols.SymbolConstants.AggregateType;
 import mx.sugus.braid.rt.util.BuilderReference;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.traits.ConstTrait;

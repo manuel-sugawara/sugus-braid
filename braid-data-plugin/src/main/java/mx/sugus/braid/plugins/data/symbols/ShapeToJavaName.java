@@ -1,4 +1,4 @@
-package mx.sugus.braid.plugins.data.utils;
+package mx.sugus.braid.plugins.data.symbols;
 
 import mx.sugus.braid.core.util.Name;
 import software.amazon.smithy.codegen.core.ReservedWords;

@@ -11,7 +11,7 @@ import mx.sugus.braid.plugins.data.producers.EnumJavaProducer;
 import mx.sugus.braid.plugins.data.producers.StructureInterfaceJavaProducer;
 import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
 import mx.sugus.braid.plugins.data.producers.UnionJavaProducer;
-import mx.sugus.braid.plugins.data.utils.DataSymbolProviderDecorator;
+import mx.sugus.braid.plugins.data.symbols.DataSymbolProviderDecorator;
 import mx.sugus.braid.rt.util.annotations.Generated;
 import software.amazon.smithy.model.node.ObjectNode;
 

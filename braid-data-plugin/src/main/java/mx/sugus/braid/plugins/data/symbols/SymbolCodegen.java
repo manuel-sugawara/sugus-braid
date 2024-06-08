@@ -1,4 +1,4 @@
-package mx.sugus.braid.plugins.data.utils;
+package mx.sugus.braid.plugins.data.symbols;
 
 import java.util.Objects;
 import mx.sugus.braid.jsyntax.Block;
