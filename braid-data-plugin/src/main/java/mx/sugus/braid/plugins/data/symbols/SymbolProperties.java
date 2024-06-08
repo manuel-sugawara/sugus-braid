@@ -1,10 +1,10 @@
-package mx.sugus.braid.plugins.data.utils;
+package mx.sugus.braid.plugins.data.symbols;
 
 import java.util.function.Function;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.jsyntax.TypeName;
-import mx.sugus.braid.plugins.data.utils.SymbolConstants.AggregateType;
+import mx.sugus.braid.plugins.data.symbols.SymbolConstants.AggregateType;
 import mx.sugus.braid.traits.UseBuilderReferenceTrait;
 import software.amazon.smithy.codegen.core.Property;
 import software.amazon.smithy.codegen.core.Symbol;

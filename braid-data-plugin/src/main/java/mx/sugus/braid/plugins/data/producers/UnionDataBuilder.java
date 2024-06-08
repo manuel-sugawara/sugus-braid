@@ -20,7 +20,7 @@ import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.SwitchStatement;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
-import mx.sugus.braid.plugins.data.utils.SymbolConstants;
+import mx.sugus.braid.plugins.data.symbols.SymbolConstants;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.traits.UseBuilderReferenceTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
