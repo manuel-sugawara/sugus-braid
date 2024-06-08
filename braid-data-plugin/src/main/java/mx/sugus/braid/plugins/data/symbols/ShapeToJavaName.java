@@ -6,18 +6,16 @@ import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeType;
 
-public class ShapeToJavaName {
-    private final Model model;
-    private final ReservedWords escaper;
+public final class ShapeToJavaName {
+    private final ReservedWords reservedWords;
     private final String packageOverride;
 
-    public ShapeToJavaName(Model model, ReservedWords escaper, String packageOverride) {
-        this.model = model;
-        this.escaper = escaper;
+    public ShapeToJavaName(ReservedWords reservedWords, String packageOverride) {
+        this.reservedWords = reservedWords;
         this.packageOverride = packageOverride;
     }
 
-    public Name toJavaName(Shape shape) {
+    public Name toJavaName(Shape shape, Model model) {
         var kind = Name.Convention.PASCAL_CASE;
         var simpleName = shape.getId().getName();
         if (shape.getType() == ShapeType.MEMBER) {
@@ -32,7 +30,7 @@ public class ShapeToJavaName {
         }
         var name = Name.of(simpleName, kind);
         var nameAsString = name.toString();
-        var escaped = escaper.escape(nameAsString);
+        var escaped = reservedWords.escape(nameAsString);
         if (escaped.equals(nameAsString)) {
             return name;
         }

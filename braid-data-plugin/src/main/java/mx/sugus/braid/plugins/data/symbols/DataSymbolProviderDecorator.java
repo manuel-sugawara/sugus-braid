@@ -25,9 +25,9 @@ public class DataSymbolProviderDecorator implements SymbolProviderDecorator {
 
     private static SymbolProvider createSymbolProvider(Model model, String packageName) {
         var escaper = RESERVED_WORDS;
-        var shapeToJavaName = new ShapeToJavaName(model, escaper, packageName);
+        var shapeToJavaName = new ShapeToJavaName(escaper, packageName);
         var shapeToJavaType = new ShapeToJavaType(shapeToJavaName, model);
-        return new BraidSymbolProvider(model, shapeToJavaName, shapeToJavaType, packageName);
+        return new BraidSymbolProvider(model, shapeToJavaName, shapeToJavaType);
     }
 
     private static ReservedWords buildReservedWords() {

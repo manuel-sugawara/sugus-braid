@@ -29,7 +29,7 @@ import software.amazon.smithy.model.shapes.TimestampShape;
 import software.amazon.smithy.model.shapes.UnionShape;
 import software.amazon.smithy.model.traits.UniqueItemsTrait;
 
-public class ShapeToJavaType extends ShapeVisitor.Default<TypeName> {
+public final class ShapeToJavaType extends ShapeVisitor.Default<TypeName> {
     private final ShapeToJavaName shapeToJavaName;
     private final Model model;
 
@@ -160,7 +160,7 @@ public class ShapeToJavaType extends ShapeVisitor.Default<TypeName> {
     }
 
     ClassName from(Shape shape) {
-        var simpleName = shapeToJavaName.toJavaName(shape);
+        var simpleName = shapeToJavaName.toJavaName(shape, model);
         var packageName = shapeToJavaName.toJavaPackage(shape);
         return ClassName.builder()
                         .name(simpleName.toString())
