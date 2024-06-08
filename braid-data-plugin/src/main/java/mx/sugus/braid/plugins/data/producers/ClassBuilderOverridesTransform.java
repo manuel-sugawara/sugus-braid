@@ -6,35 +6,51 @@ import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.toPara
 import java.util.ArrayList;
 import java.util.List;
 import javax.lang.model.element.Modifier;
+import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
+import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
 import mx.sugus.braid.jsyntax.ClassSyntax;
-import mx.sugus.braid.jsyntax.FieldSyntax;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
+import mx.sugus.braid.jsyntax.transforms.AddMethodsTransform;
+import mx.sugus.braid.jsyntax.transforms.MethodMatcher;
+import mx.sugus.braid.jsyntax.transforms.TypeMatcher;
+import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.traits.NewBuilderOverridesTrait;
-import software.amazon.smithy.model.shapes.MemberShape;
 
-public final class DataBuilderOverrides implements DirectedClass {
+public class ClassBuilderOverridesTransform implements ShapeTaskTransformer<TypeSyntaxResult> {
+    public static final Identifier ID = Identifier.of(ClassBuilderOverridesTransform.class);
 
-    static final DataBuilderOverrides INSTANCE = new DataBuilderOverrides();
-
-    private DataBuilderOverrides() {
+    @Override
+    public Identifier taskId() {
+        return ID;
     }
 
     @Override
-    public ClassSyntax.Builder typeSpec(ShapeCodegenState state) {
-        throw new UnsupportedOperationException();
+    public Identifier transformsId() {
+        return StructureJavaProducer.ID;
     }
 
     @Override
-    public List<FieldSyntax> fieldsFor(ShapeCodegenState state, MemberShape member) {
-        return List.of();
-    }
+    public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
+        var syntax = (ClassSyntax) result.syntax();
+        var symbolProvider = state.symbolProvider();
+        var symbol = symbolProvider.toSymbol(state.shape());
+        var methods = builderMethods(state);
+        if (methods.isEmpty()) {
+            return result;
+        }
+        syntax = (ClassSyntax)
+            AddMethodsTransform.builder()
+                               .addAfter()
+                               .methodMatcher(MethodMatcher.byName("builder"))
+                               .typeMatcher(TypeMatcher.byName(Utils.toJavaName(symbol).toString()))
+                               .methods(methods)
+                               .build()
+                               .transform(syntax);
+        return result.toBuilder().syntax(syntax).build();
 
-    @Override
-    public List<MethodSyntax> extraMethods(ShapeCodegenState state) {
-        return builderMethods(state);
     }
 
     private List<MethodSyntax> builderMethods(ShapeCodegenState state) {
@@ -60,4 +76,3 @@ public final class DataBuilderOverrides implements DirectedClass {
         return result;
     }
 }
-

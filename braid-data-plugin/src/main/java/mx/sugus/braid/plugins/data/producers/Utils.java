@@ -108,12 +108,12 @@ public final class Utils {
     }
 
     public static Name toJavaName(Symbol symbol) {
-        var name =  symbol.getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow();
+        var name = symbol.getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow();
         return validateName(name, symbol);
     }
 
     public static Name toSetterName(Symbol symbol) {
-        var name =  symbol.getProperty(SymbolProperties.SETTER_NAME).orElseThrow();
+        var name = symbol.getProperty(SymbolProperties.SETTER_NAME).orElseThrow();
         return validateName(name, symbol);
     }
 

@@ -13,15 +13,20 @@ import static mx.sugus.braid.plugins.data.producers.Utils.toMemberJavaName;
 import java.util.ArrayList;
 import java.util.List;
 import javax.lang.model.element.Modifier;
-import mx.sugus.braid.plugins.data.symbols.SymbolConstants;
+import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
+import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.CodeBlock;
-import mx.sugus.braid.jsyntax.FieldSyntax;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
+import mx.sugus.braid.jsyntax.transforms.AddMethodsTransform;
+import mx.sugus.braid.jsyntax.transforms.MethodMatcher;
+import mx.sugus.braid.jsyntax.transforms.TypeMatcher;
+import mx.sugus.braid.plugins.data.TypeSyntaxResult;
+import mx.sugus.braid.plugins.data.symbols.SymbolConstants;
 import mx.sugus.braid.traits.AddAllOverridesTrait;
 import mx.sugus.braid.traits.AdderOverridesTrait;
 import mx.sugus.braid.traits.BuilderOverride;
@@ -29,30 +34,43 @@ import mx.sugus.braid.traits.FromFactoriesTrait;
 import mx.sugus.braid.traits.MultiAddOverridesTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
 
-public final class BuilderAdderOverrides implements DirectedClass {
-    static final BuilderAdderOverrides INSTANCE = new BuilderAdderOverrides();
+public class BuilderAdderOverridesTransform implements ShapeTaskTransformer<TypeSyntaxResult> {
+    public static final Identifier ID = Identifier.of(BuilderAdderOverridesTransform.class);
 
-    private BuilderAdderOverrides() {
+    @Override
+    public Identifier taskId() {
+        return ID;
     }
 
     @Override
-    public ClassName className(ShapeCodegenState state) {
-        return StructureCodegenUtils.BUILDER_TYPE;
+    public Identifier transformsId() {
+        return StructureJavaProducer.ID;
     }
 
     @Override
-    public ClassSyntax.Builder typeSpec(ShapeCodegenState state) {
-        throw new UnsupportedOperationException();
+    public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
+        var syntax = (ClassSyntax) result.syntax();
+        var symbolProvider = state.symbolProvider();
+        for (var member : state.shape().asStructureShape().orElseThrow().members()) {
+            var symbol = symbolProvider.toSymbol(member);
+            if (Utils.aggregateType(symbol) != SymbolConstants.AggregateType.NONE) {
+                var methods = methodsFor(state, member);
+                if (!methods.isEmpty()) {
+                    syntax = (ClassSyntax)
+                        AddMethodsTransform.builder()
+                                           .addAfter()
+                                           .methodMatcher(MethodMatcher.byName(Utils.toAdderName(symbol).toString()))
+                                           .typeMatcher(TypeMatcher.byName("Builder"))
+                                           .methods(methods)
+                                           .build()
+                                           .transform(syntax);
+                }
+            }
+        }
+        return result.toBuilder().syntax(syntax).build();
     }
 
-    @Override
-    public List<FieldSyntax> fieldsFor(ShapeCodegenState state, MemberShape member) {
-        return List.of();
-    }
-
-
-    @Override
-    public List<MethodSyntax> methodsFor(ShapeCodegenState state, MemberShape member) {
+    private List<MethodSyntax> methodsFor(ShapeCodegenState state, MemberShape member) {
         var aggregateType = Utils.aggregateType(state, member);
         if (aggregateType == SymbolConstants.AggregateType.NONE) {
             return List.of();
@@ -86,6 +104,7 @@ public final class BuilderAdderOverrides implements DirectedClass {
         var name = toJavaName(state, member);
         for (var override : builderOverrides) {
             var adderName = coalesce(override.getName(),
+                                     // XXX replace by a symbol property that represents the "adder" name.
                                      () -> toJavaSingularName(state, member, "add").toString());
             var overrideBuilder = MethodSyntax.builder(adderName)
                                               .addModifier(Modifier.PUBLIC)
@@ -217,4 +236,9 @@ public final class BuilderAdderOverrides implements DirectedClass {
             builder.addStatement("this.$L.asTransient().addAll($L)", name.toString(), value);
         }
     }
+
+    private ClassName className(ShapeCodegenState state) {
+        return StructureCodegenUtils.BUILDER_TYPE;
+    }
+
 }

@@ -25,13 +25,10 @@ import software.amazon.smithy.model.shapes.ShapeType;
 import software.amazon.smithy.model.traits.DocumentationTrait;
 
 public final class StructureData implements DirectedClass {
-    static final DirectedClass INSTANCE = new CompositeDirectedClass(new StructureData(),
-                                                                     DataBuilderOverrides.INSTANCE,
-                                                                     DataFromFactoryOverrides.INSTANCE);
+    static final DirectedClass INSTANCE = new StructureData();
+
     private static final List<DirectiveToTypeSyntax> INNER_TYPES =
-        List.of(new CompositeDirectedClass(StructureDataBuilder.INSTANCE,
-                                           BuilderAdderOverrides.INSTANCE,
-                                           BuilderSetterOverrides.INSTANCE));
+        List.of(StructureDataBuilder.INSTANCE);
 
     private StructureData() {
     }
