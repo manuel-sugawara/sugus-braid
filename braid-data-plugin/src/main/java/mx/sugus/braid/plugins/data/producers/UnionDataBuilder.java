@@ -98,33 +98,31 @@ public class UnionDataBuilder implements DirectedClass {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
         var aggregateType = Utils.aggregateType(symbol);
-        if (Utils.builderReference(symbol) != null || aggregateType != SymbolConstants.AggregateType.NONE) {
-            var typeValue = Name.of(member.getMemberName(), Name.Convention.SCREAM_CASE).toString();
-            var name = Utils.toJavaName(symbol);
-            var type = Utils.toBuilderTypeName(symbol);
-            var accessor = MethodSyntax.builder(Utils.toGetterName(symbol).toString())
-                                       .addAnnotation(UnionData.SUPPRESS_UNCHECKED)
-                                       .addModifier(Modifier.PRIVATE)
-                                       .returns(type)
-                                       .body(b ->
-                                                 b.ifStatement("this.type != Type.$L", typeValue, then -> {
-                                                     then.addStatement("this.type = Type.$L", typeValue);
-                                                     var empty = Utils.emptyReferenceBuilder(aggregateType);
-                                                     then.addStatement("$T $L = $T.$L()",
-                                                                       type,
-                                                                       name,
-                                                                       CollectionBuilderReference.class,
-                                                                       empty);
-                                                     then.addStatement("this.value = $L", name);
-                                                     then.addStatement("return $L", name);
-                                                 }, otherwise -> {
-                                                     otherwise.addStatement("return ($T) this.value", type);
-                                                 })
-                                       )
-                                       .build();
-            return List.of(accessor);
+        if (Utils.builderReference(symbol) == null && aggregateType == SymbolConstants.AggregateType.NONE) {
+            return List.of();
         }
-        return List.of();
+        var unionVariant = Utils.toJavaName(symbol).toNameConvention(Name.Convention.SCREAM_CASE).toString();
+        var name = Utils.toJavaName(symbol);
+        var type = Utils.toBuilderTypeName(symbol);
+        var accessor = MethodSyntax.builder(Utils.toGetterName(symbol).toString())
+                                   .addAnnotation(UnionData.SUPPRESS_UNCHECKED)
+                                   .addModifier(Modifier.PRIVATE)
+                                   .returns(type)
+                                   .ifStatement("this.type != Type.$L", unionVariant, then -> {
+                                       then.addStatement("this.type = Type.$L", unionVariant);
+                                       var empty = Utils.emptyReferenceBuilder(aggregateType);
+                                       then.addStatement("$T $L = $T.$L()",
+                                                         type,
+                                                         name,
+                                                         CollectionBuilderReference.class,
+                                                         empty);
+                                       then.addStatement("this.value = $L", name);
+                                       then.addStatement("return $L", name);
+                                   }, otherwise -> {
+                                       otherwise.addStatement("return ($T) this.value", type);
+                                   })
+                                   .build();
+        return List.of(accessor);
     }
 
     private MethodSyntax setter(ShapeCodegenState state, MemberShape member) {

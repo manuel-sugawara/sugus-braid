@@ -27,10 +27,11 @@ public final class UnionTypeEnumData implements DirectedEnum {
         var shape = state.shape().asUnionShape().orElseThrow();
         var symbolProvider = state.symbolProvider();
         for (var member : shape.getAllMembers().values()) {
-            var enumName = Utils.toJavaName(state, member, Name.Convention.SCREAM_CASE).toString();
+            var symbol  = symbolProvider.toSymbol(member);
+            var unionVariant = Utils.toJavaName(symbol).toNameConvention(Name.Convention.SCREAM_CASE).toString();
             var name = member.getMemberName();
             typeEnum.addEnumConstant(EnumConstant.builder()
-                                                 .name(enumName)
+                                                 .name(unionVariant)
                                                  .body(CodeBlock.from("$S", name))
                                                  .build());
         }

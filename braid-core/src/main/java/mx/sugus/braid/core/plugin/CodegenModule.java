@@ -3,7 +3,6 @@ package mx.sugus.braid.core.plugin;
 import java.util.Collection;
 import java.util.logging.Logger;
 import mx.sugus.braid.traits.CodegenIgnoreTrait;
-import software.amazon.smithy.codegen.core.Symbol;
 import software.amazon.smithy.codegen.core.SymbolProvider;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.shapes.Shape;
@@ -66,6 +65,7 @@ public final class CodegenModule {
 
     /**
      * Applies all the configured symbol provider decorators and returns the final decorated symbol provider.
+     *
      * @param symbolProvider The source symbol provider
      * @return the decorated symbol provider
      */
@@ -85,7 +85,6 @@ public final class CodegenModule {
     public Collection<ShapeReducer<?>> shapeReducers() {
         return config.shapeReducers();
     }
-
 
     /**
      * Runs the generation pipeline for the given shape in the state by,

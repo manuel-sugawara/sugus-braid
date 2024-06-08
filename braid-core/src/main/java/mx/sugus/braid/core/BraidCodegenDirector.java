@@ -156,8 +156,10 @@ public class BraidCodegenDirector {
             LOG.fine("Running module configured model processors");
             newModel = module.preprocessModel(newModel);
             this.model = newModel;
+            LOG.fine("Running symbol provider decorators");
             var sourceSymbolProvider = symbolProviderFactory.apply(model, settings);
-            this.symbolProvider = module.decorateSymbolProvider(this.model, sourceSymbolProvider);
+            // For small models using the cache does not seem to add any measurable value.
+            this.symbolProvider = SymbolProvider.cache(module.decorateSymbolProvider(this.model, sourceSymbolProvider));
         }
     }
 }

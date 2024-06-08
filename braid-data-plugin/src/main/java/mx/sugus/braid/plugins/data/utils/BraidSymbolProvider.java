@@ -46,7 +46,6 @@ import software.amazon.smithy.model.shapes.StructureShape;
 import software.amazon.smithy.model.shapes.TimestampShape;
 import software.amazon.smithy.model.shapes.UnionShape;
 import software.amazon.smithy.model.traits.DefaultTrait;
-import software.amazon.smithy.model.traits.ErrorTrait;
 import software.amazon.smithy.model.traits.UniqueItemsTrait;
 
 public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol> {
@@ -115,9 +114,6 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
                             .namespace(packageName, ".")
                             .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.structureShape(shape))
                             .definitionFile(shapeClassPath(packageName, name));
-        if (shape.hasTrait(ErrorTrait.class)) {
-            builder.putProperty("extends", fromClass(RuntimeException.class));
-        }
         return builder.build();
     }
 
@@ -129,9 +125,6 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
                             .namespace(packageName, ".")
                             .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.unionShape(shape))
                             .definitionFile(shapeClassPath(packageName, name));
-        if (shape.hasTrait(ErrorTrait.class)) {
-            builder.putProperty("extends", fromClass(RuntimeException.class));
-        }
         return builder.build();
     }
 
@@ -143,11 +136,6 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
                             .namespace(packageName, ".")
                             .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.enumShape(shape))
                             .definitionFile(shapeClassPath(packageName, name));
-        if (shape.hasTrait(ErrorTrait.class)) {
-            // XXX legacy and unused, keeping here to remind me that this
-            //  needs to be fixed eventually.
-            builder.putProperty("extends", fromClass(RuntimeException.class));
-        }
         return builder.build();
     }
 
