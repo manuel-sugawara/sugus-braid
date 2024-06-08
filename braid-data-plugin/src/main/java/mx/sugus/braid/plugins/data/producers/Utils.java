@@ -34,6 +34,7 @@ import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeType;
 
 public final class Utils {
+    // XXX remove this from here and unify the logic as a dependency
     public static final ReservedWords RESERVED_WORDS = buildReservedWords();
     private static final ClassName GENERATED = ClassName.from(Generated.class);
 

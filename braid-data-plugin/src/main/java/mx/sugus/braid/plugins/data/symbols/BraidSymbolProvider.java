@@ -52,14 +52,11 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
     private final Model model;
     private final ShapeToJavaName shapeToJavaName;
     private final ShapeToJavaType shapeToJavaType;
-    private final String packageName;
 
-    public BraidSymbolProvider(Model model, ShapeToJavaName shapeToJavaName, ShapeToJavaType shapeToJavaType,
-                               String packageName) {
+    public BraidSymbolProvider(Model model, ShapeToJavaName shapeToJavaName, ShapeToJavaType shapeToJavaType) {
         this.model = model;
         this.shapeToJavaName = shapeToJavaName;
         this.shapeToJavaType = shapeToJavaType;
-        this.packageName = packageName;
     }
 
     @Override
@@ -69,7 +66,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
             return null;
         }
         var builder = sym.toBuilder();
-        builder.putProperty(SymbolProperties.SIMPLE_NAME, shapeToJavaName.toJavaName(shape));
+        builder.putProperty(SymbolProperties.SIMPLE_NAME, shapeToJavaName.toJavaName(shape, model));
         builder.putProperty(SymbolProperties.SHAPE_TYPE, shape.getType());
         return builder.build();
 
@@ -108,7 +105,8 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
                          .putProperty(SymbolProperties.JAVA_TYPE, typeName)
                          .build();
         }
-        var name = shapeToJavaName.toJavaName(shape);
+        var name = shapeToJavaName.toJavaName(shape, model);
+        var packageName = shapeToJavaName.toJavaPackage(shape);
         var builder = Symbol.builder()
                             .name(name.toString())
                             .namespace(packageName, ".")
@@ -119,7 +117,8 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
 
     @Override
     public Symbol unionShape(UnionShape shape) {
-        var name = shapeToJavaName.toJavaName(shape);
+        var name = shapeToJavaName.toJavaName(shape, model);
+        var packageName = shapeToJavaName.toJavaPackage(shape);
         var builder = Symbol.builder()
                             .name(name.toString())
                             .namespace(packageName, ".")
@@ -130,7 +129,8 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
 
     @Override
     public Symbol enumShape(EnumShape shape) {
-        var name = shapeToJavaName.toJavaName(shape);
+        var name = shapeToJavaName.toJavaName(shape, model);
+        var packageName = shapeToJavaName.toJavaPackage(shape);
         var builder = Symbol.builder()
                             .name(name.toString())
                             .namespace(packageName, ".")
@@ -148,7 +148,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
         var targetShape = model.expectShape(shape.getTarget());
         var targetSymbol = targetShape.accept(this);
         var builderReference = targetShape.getTrait(UseBuilderReferenceTrait.class).orElse(null);
-        var simpleName = shapeToJavaName.toJavaName(shape);
+        var simpleName = shapeToJavaName.toJavaName(shape, model);
         var builder = targetSymbol
             .toBuilder()
             .putProperty(SymbolProperties.SIMPLE_NAME, simpleName)

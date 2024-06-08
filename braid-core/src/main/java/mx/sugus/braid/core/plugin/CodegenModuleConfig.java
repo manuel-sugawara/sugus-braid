@@ -55,6 +55,7 @@ public final class CodegenModuleConfig {
     private final Map<Class<?>, Set<ConsumerTask<?>>> consumers;
     private final Set<ShapeReducer<?>> shapeReducers;
     private final List<SymbolProviderDecorator> symbolProviderDecorators;
+    private final Dependencies dependencies;
 
     CodegenModuleConfig(Builder builder) {
         // shape
@@ -90,6 +91,7 @@ public final class CodegenModuleConfig {
         this.modelTransformers = Collections.unmodifiableSet(builder.modelTransformers);
         this.earlyModelTransformers = Collections.unmodifiableSet(builder.earlyModelTransformers);
         this.symbolProviderDecorators = Collections.unmodifiableList(builder.symbolProviderDecorators);
+        this.dependencies = builder.dependencies.asPersistent();
     }
 
     /**
@@ -223,6 +225,15 @@ public final class CodegenModuleConfig {
     }
 
     /**
+     * Returns the configured set of keyed dependencies.
+     *
+     * @return the configured set of keyed dependencies.
+     */
+    public Dependencies dependencies() {
+        return dependencies;
+    }
+
+    /**
      * Creates a new {@link Builder} to build instances of {@link CodegenModuleConfig}.
      *
      * @return A new builder.
@@ -242,6 +253,7 @@ public final class CodegenModuleConfig {
         private final Map<Class<?>, Set<ConsumerTask<?>>> consumers = new LinkedHashMap<>();
         private final Set<ShapeReducer<?>> shapeReducers = new LinkedHashSet<>();
         private final List<SymbolProviderDecorator> symbolProviderDecorators = new ArrayList<>();
+        private final Dependencies.DependenciesReferenceBuilder dependencies = new Dependencies.DependenciesReferenceBuilder();
 
         Builder() {
         }
@@ -361,6 +373,19 @@ public final class CodegenModuleConfig {
         }
 
         /**
+         * Adds a keyed dependency to the builder.
+         *
+         * @param key   The key for the dependency
+         * @param value The value of the dependency
+         * @param <T>   The type of the dependency.
+         * @return This instance for method chaining.
+         */
+        public <T> Builder putDependency(DependencyKey<T> key, T value) {
+            dependencies.asTransient().put(key, value);
+            return this;
+        }
+
+        /**
          * Merges the given module configuration into this builder. The other configuration takes precedence over the already
          * configured settings in the builder.
          *
@@ -390,6 +415,7 @@ public final class CodegenModuleConfig {
             earlyModelTransformers.addAll(other.earlyModelTransformers);
             shapeReducers.addAll(other.shapeReducers);
             symbolProviderDecorators.addAll(other.symbolProviderDecorators);
+            dependencies.asTransient().putAll(other.dependencies);
             return this;
         }
 
