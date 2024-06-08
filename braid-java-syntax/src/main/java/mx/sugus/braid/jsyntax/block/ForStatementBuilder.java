@@ -2,8 +2,6 @@ package mx.sugus.braid.jsyntax.block;
 
 import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.ForStatement;
-import mx.sugus.braid.jsyntax.CodeBlock;
-import mx.sugus.braid.jsyntax.ForStatement;
 
 public class ForStatementBuilder extends AbstractBlockBuilder<ForStatementBuilder, ForStatement> {
 

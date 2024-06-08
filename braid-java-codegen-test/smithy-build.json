@@ -13,7 +13,12 @@
                 "mx.sugus.braid.plugins.data#FlattenInterfaceMembersPlugin": {
                 },
                 "mx.sugus.braid.plugins.data#DataPlugin": {
+                    "package": "mx.sugus.braid.test"
+                },
+                "mx.sugus.braid.plugins.serde.node#NodeSerdePlugin": {
+                    "package": "mx.sugus.braid.test"
                 }
+
             }
         }
     }

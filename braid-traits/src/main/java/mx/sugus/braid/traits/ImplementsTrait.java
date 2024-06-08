@@ -13,13 +13,13 @@ public final class ImplementsTrait extends StringListTrait implements ToSmithyBu
         super(ID, values, sourceLocation);
     }
 
-    public static ImplementsTrait.Builder builder() {
-        return new ImplementsTrait.Builder();
-    }
-
     @Override
     public ImplementsTrait.Builder toBuilder() {
         return builder().sourceLocation(getSourceLocation()).values(getValues());
+    }
+
+    public static ImplementsTrait.Builder builder() {
+        return new ImplementsTrait.Builder();
     }
 
     public static final class Provider extends StringListTrait.Provider<ImplementsTrait> {

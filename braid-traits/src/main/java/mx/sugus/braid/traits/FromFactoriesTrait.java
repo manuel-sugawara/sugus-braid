@@ -20,26 +20,6 @@ public final class FromFactoriesTrait extends AbstractTrait implements ToSmithyB
         this.values = builder.values.copy();
     }
 
-    /**
-     * Creates a {@link AdderOverridesTrait} from a {@link Node}.
-     *
-     * @param node Node to create the AdderOverridesTrait from.
-     * @return Returns the created AdderOverridesTrait.
-     * @throws software.amazon.smithy.model.node.ExpectationNotMetException if the given Node is invalid.
-     */
-    public static FromFactoriesTrait fromNode(Node node) {
-        Builder builder = builder();
-        node.expectArrayNode()
-            .getElements().stream()
-            .map(n -> BuilderOverride.fromNode(n))
-            .forEach(builder::addValues);
-        return builder.build();
-    }
-
-    public static Builder builder() {
-        return new Builder();
-    }
-
     @Override
     protected Node createNode() {
         return values.stream()
@@ -59,6 +39,26 @@ public final class FromFactoriesTrait extends AbstractTrait implements ToSmithyB
         return builder().sourceLocation(getSourceLocation())
                         .values(values);
 
+    }
+
+    /**
+     * Creates a {@link AdderOverridesTrait} from a {@link Node}.
+     *
+     * @param node Node to create the AdderOverridesTrait from.
+     * @return Returns the created AdderOverridesTrait.
+     * @throws software.amazon.smithy.model.node.ExpectationNotMetException if the given Node is invalid.
+     */
+    public static FromFactoriesTrait fromNode(Node node) {
+        Builder builder = builder();
+        node.expectArrayNode()
+            .getElements().stream()
+            .map(n -> BuilderOverride.fromNode(n))
+            .forEach(builder::addValues);
+        return builder.build();
+    }
+
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**

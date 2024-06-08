@@ -5,15 +5,15 @@ import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
-import mx.sugus.braid.core.plugin.TypeSyntaxResult;
-import mx.sugus.braid.plugins.data.StructureJavaProducer;
-import mx.sugus.braid.plugins.data.Utils;
+import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
+import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
+import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.traits.ConstTrait;
 import mx.sugus.braid.traits.JavaTrait;
 import software.amazon.smithy.model.node.ArrayNode;
@@ -84,8 +84,9 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
 
     private void addStructureMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var symbolProvider = state.symbolProvider();
-        var memberName = symbolProvider.toJavaName(member);
-        if (symbolProvider.isMemberRequired(member)) {
+        var symbol = symbolProvider.toSymbol(member);
+        var memberName = Utils.toJavaName(symbol);
+        if (Utils.isMemberRequired(state, member)) {
             body.addStatement("builder.withMember($S, this.$L.toNode())", member.getMemberName(), memberName);
         } else {
             body.ifStatement("$L != null", memberName, then ->
@@ -94,11 +95,10 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
     }
 
     private void addListMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
-        var symbolProvider = state.symbolProvider();
         var listShape = state.model().expectShape(member.getTarget()).asListShape().orElseThrow();
         var target = state.model().expectShape(listShape.getMember().getTarget());
-        var targetType = symbolProvider.toJavaTypeName(target);
-        var memberField = symbolProvider.toJavaName(member);
+        var targetType = Utils.toJavaTypeName(state, target);
+        var memberField = Utils.toJavaName(state, member);
         body.ifStatement("!this.$L.isEmpty()", memberField, then -> {
             then.addStatement("$1T.Builder $2LBuilder = $1T.builder()", ArrayNode.class, memberField);
             then.forStatement("$T item : this.$L", targetType, memberField, b -> {
@@ -109,11 +109,10 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
     }
 
     private void addMapMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
-        var symbolProvider = state.symbolProvider();
         var listShape = state.model().expectShape(member.getTarget()).asMapShape().orElseThrow();
         var target = state.model().expectShape(listShape.getValue().getTarget());
-        var targetType = symbolProvider.toJavaTypeName(target);
-        var memberField = symbolProvider.toJavaName(member);
+        var targetType = Utils.toJavaTypeName(state, target);
+        var memberField = Utils.toJavaName(state, member);
         body.addStatement("$1T.Builder $2LBuilder = $1T.builder()", ObjectNode.class, memberField);
         var forInit = CodeBlock.from("$T<$T, $T> kvp : this.$L.entrySet()",
                                      Map.Entry.class, String.class, targetType, memberField);
@@ -129,9 +128,9 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
     private void addSimpleMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var symbolProvider = state.symbolProvider();
         var target = state.model().expectShape(member.getTarget());
-        var memberField = "this." + symbolProvider.toJavaName(member);
+        var memberField = "this." + Utils.toJavaName(state, member);
 
-        if (symbolProvider.isMemberRequired(member)) {
+        if (Utils.isMemberRequired(state, member)) {
             if (member.hasTrait(ConstTrait.class)) {
                 body.addStatement("builder.withMember($S, $C)",
                                   member.getMemberName(), valueToNode(memberField + "()", state, target));
@@ -163,9 +162,8 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
     }
 
     private CodeBlock structureValueToNode(String source, ShapeCodegenState state, Shape target) {
-        var symbolProvider = state.symbolProvider();
         if (target.hasTrait(JavaTrait.class)) {
-            var targetType = ClassName.toClassName(symbolProvider.toJavaTypeName(target));
+            var targetType = ClassName.toClassName(Utils.toJavaTypeName(state, target));
             var actualClass = ClassAddFromNodeTransformer.toActualJavaClass(targetType);
             if (!actualClass.isEnum()) {
                 throw new RuntimeException("Node serde of non-enum types is not currently supported: " + actualClass);

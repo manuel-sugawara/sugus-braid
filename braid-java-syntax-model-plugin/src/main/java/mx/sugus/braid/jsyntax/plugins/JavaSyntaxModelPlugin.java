@@ -14,12 +14,6 @@ public class JavaSyntaxModelPlugin implements SmithyGeneratorPlugin {
     public JavaSyntaxModelPlugin() {
     }
 
-    static CodegenModuleConfig.Builder newBaseConfig() {
-        var builder = CodegenModuleConfig.builder()
-            .addTransformer(new BlockBuilderTransformer());
-        return builder;
-    }
-
     @Override
     public Identifier provides() {
         return ID;
@@ -33,5 +27,11 @@ public class JavaSyntaxModelPlugin implements SmithyGeneratorPlugin {
     @Override
     public CodegenModuleConfig moduleConfig(ObjectNode node) {
         return newBaseConfig().build();
+    }
+
+    static CodegenModuleConfig.Builder newBaseConfig() {
+        var builder = CodegenModuleConfig.builder()
+                                         .addTransformer(new BlockBuilderTransformer());
+        return builder;
     }
 }

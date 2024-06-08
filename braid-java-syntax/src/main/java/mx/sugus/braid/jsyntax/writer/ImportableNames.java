@@ -211,10 +211,7 @@ public final class ImportableNames {
             if (HIGHER_PRIORITY.contains(existing.packageName())) {
                 return false;
             }
-            if (HIGHER_PRIORITY.contains(candidate.packageName())) {
-                return true;
-            }
-            return false;
+            return HIGHER_PRIORITY.contains(candidate.packageName());
         }
 
     }

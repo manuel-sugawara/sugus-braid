@@ -3,9 +3,9 @@ package mx.sugus.braid.core.plugin;
 import java.util.Map;
 import java.util.Objects;
 import mx.sugus.braid.core.JavaCodegenSettings;
-import mx.sugus.braid.core.JavaSymbolProvider;
 import software.amazon.smithy.build.FileManifest;
 import software.amazon.smithy.codegen.core.Symbol;
+import software.amazon.smithy.codegen.core.SymbolProvider;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.shapes.Shape;
 
@@ -16,7 +16,7 @@ import software.amazon.smithy.model.shapes.Shape;
 public final class ShapeCodegenState implements CodegenState {
     private final Model model;
     private final Shape shape;
-    private final JavaSymbolProvider symbolProvider;
+    private final SymbolProvider symbolProvider;
     private final JavaCodegenSettings settings;
     private final FileManifest fileManifest;
     private final Map<Identifier, Object> properties;
@@ -36,7 +36,7 @@ public final class ShapeCodegenState implements CodegenState {
     }
 
     @Override
-    public JavaSymbolProvider symbolProvider() {
+    public SymbolProvider symbolProvider() {
         return symbolProvider;
     }
 
@@ -70,7 +70,7 @@ public final class ShapeCodegenState implements CodegenState {
     public static class Builder {
         private Model model;
         private Shape shape;
-        private JavaSymbolProvider symbolProvider;
+        private SymbolProvider symbolProvider;
         private JavaCodegenSettings settings;
         private FileManifest fileManifest;
         private Map<Identifier, Object> properties = Map.of();
@@ -86,7 +86,7 @@ public final class ShapeCodegenState implements CodegenState {
             return this;
         }
 
-        public Builder symbolProvider(JavaSymbolProvider symbolProvider) {
+        public Builder symbolProvider(SymbolProvider symbolProvider) {
             this.symbolProvider = symbolProvider;
             return this;
         }

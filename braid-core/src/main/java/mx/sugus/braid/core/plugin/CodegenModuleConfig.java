@@ -1,9 +1,11 @@
 package mx.sugus.braid.core.plugin;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -52,6 +54,7 @@ public final class CodegenModuleConfig {
     private final Map<Identifier, Set<NonShapeTaskTransformer<?>>> nonShapeTaskTransformers;
     private final Map<Class<?>, Set<ConsumerTask<?>>> consumers;
     private final Set<ShapeReducer<?>> shapeReducers;
+    private final List<SymbolProviderDecorator> symbolProviderDecorators;
 
     CodegenModuleConfig(Builder builder) {
         // shape
@@ -86,6 +89,16 @@ public final class CodegenModuleConfig {
         this.shapeSelectors = Collections.unmodifiableSet(new LinkedHashSet<>(builder.shapeSelectors));
         this.modelTransformers = Collections.unmodifiableSet(builder.modelTransformers);
         this.earlyModelTransformers = Collections.unmodifiableSet(builder.earlyModelTransformers);
+        this.symbolProviderDecorators = Collections.unmodifiableList(builder.symbolProviderDecorators);
+    }
+
+    /**
+     * Returns the configured symbol provider decorators.
+     *
+     * @return the configured symbol provider decorators.
+     */
+    public List<SymbolProviderDecorator> symbolProviderDecorators() {
+        return symbolProviderDecorators;
     }
 
     /**
@@ -176,7 +189,6 @@ public final class CodegenModuleConfig {
      * @return The collection of configured consumers for the type returned by the given task.
      */
     public <T> Collection<ConsumerTask<T>> nonShapeConsumers(NonShapeProducerTask<T> task) {
-        // TODO: unify with the method above.
         return consumers.getOrDefault(task.output(), Set.of())
                         .stream()
                         .map(x -> (ConsumerTask<T>) x)
@@ -229,6 +241,7 @@ public final class CodegenModuleConfig {
         private final Map<Identifier, Set<NonShapeTaskTransformer<?>>> nonShapeTaskTransformers = new LinkedHashMap<>();
         private final Map<Class<?>, Set<ConsumerTask<?>>> consumers = new LinkedHashMap<>();
         private final Set<ShapeReducer<?>> shapeReducers = new LinkedHashSet<>();
+        private final List<SymbolProviderDecorator> symbolProviderDecorators = new ArrayList<>();
 
         Builder() {
         }
@@ -337,6 +350,17 @@ public final class CodegenModuleConfig {
         }
 
         /**
+         * Adds a symbol provider decorator.
+         *
+         * @param decorator The symbol provider decorator to be added.
+         * @return This instance for method chaining.
+         */
+        public Builder addSymbolProviderDecorator(SymbolProviderDecorator decorator) {
+            this.symbolProviderDecorators.add(decorator);
+            return this;
+        }
+
+        /**
          * Merges the given module configuration into this builder. The other configuration takes precedence over the already
          * configured settings in the builder.
          *
@@ -365,6 +389,7 @@ public final class CodegenModuleConfig {
             modelTransformers.addAll(other.modelTransformers);
             earlyModelTransformers.addAll(other.earlyModelTransformers);
             shapeReducers.addAll(other.shapeReducers);
+            symbolProviderDecorators.addAll(other.symbolProviderDecorators);
             return this;
         }
 

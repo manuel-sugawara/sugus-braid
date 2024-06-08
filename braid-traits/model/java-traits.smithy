@@ -18,6 +18,10 @@ string java
 @trait(selector: "structure > member")
 structure optional {}
 
+/// Marks a member as optional.
+@trait(selector: ":is(list, map)")
+structure ordered {}
+
 /// Marks any structure with a java type name.
 @trait(selector: ":is(structure, union)")
 list implements {

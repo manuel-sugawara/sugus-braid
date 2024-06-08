@@ -4,7 +4,7 @@ import mx.sugus.braid.core.plugin.CodegenModuleConfig;
 import mx.sugus.braid.core.plugin.DefaultModelTransformerTask;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.SmithyGeneratorPlugin;
-import mx.sugus.braid.core.transforms.FlattenInterfaceMembers;
+import mx.sugus.braid.plugins.data.model.FlattenInterfaceMembers;
 import mx.sugus.braid.core.transforms.SynthesizeServiceTransform;
 import software.amazon.smithy.model.node.ObjectNode;
 

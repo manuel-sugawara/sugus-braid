@@ -2,17 +2,17 @@ package mx.sugus.braid.plugins.syntax;
 
 import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.ImplementsKnowledgeIndex;
-import mx.sugus.braid.core.SymbolConstants;
+import mx.sugus.braid.plugins.data.utils.SymbolConstants;
 import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.NonShapeProducerTask;
-import mx.sugus.braid.core.plugin.TypeSyntaxResult;
-import mx.sugus.braid.plugins.data.Utils;
+import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
+import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.traits.InterfaceTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.shapes.Shape;
@@ -40,11 +40,10 @@ public final class SyntaxWalkVisitorJavaProducer implements NonShapeProducerTask
     @Override
     public TypeSyntaxResult produce(CodegenState state) {
         var builder = typeSyntax(state);
-        var symbolProvider = state.symbolProvider();
         var isaKnowledgeIndex = ImplementsKnowledgeIndex.of(state.model());
         var syntaxNodeShapeId = ShapeId.from(syntaxNode);
         var syntaxNodeShape = state.model().expectShape(syntaxNodeShapeId).asStructureShape().orElseThrow();
-        var syntaxNodeType = symbolProvider.toJavaTypeName(syntaxNodeShape);
+        var syntaxNodeType = Utils.toJavaTypeName(state, syntaxNodeShape);
         var shapes = isaKnowledgeIndex.recursiveImplementers(syntaxNodeShape);
         for (var shape : shapes) {
             if (!shape.hasTrait(InterfaceTrait.class)) {
@@ -59,7 +58,8 @@ public final class SyntaxWalkVisitorJavaProducer implements NonShapeProducerTask
     }
 
     ClassSyntax.Builder typeSyntax(CodegenState state) {
-        var syntaxNodeClass = state.toJavaTypeNameClass(syntaxNode);
+        var syntaxShape = state.model().expectShape(ShapeId.from(syntaxNode));
+        var syntaxNodeClass = ClassName.toClassName(Utils.toJavaTypeName(state, syntaxShape));
         var syntaxNodeRawClass = ClassName.toClassName(syntaxNodeClass);
         var walkVisitorClass = ClassName.from(syntaxNodeRawClass.packageName(),
                                               syntaxNodeRawClass.name() + "WalkVisitor");
@@ -77,8 +77,10 @@ public final class SyntaxWalkVisitorJavaProducer implements NonShapeProducerTask
     MethodSyntax.Builder visitForStructure(CodegenState state, StructureShape shape) {
         var name = shape.getId().getName();
         var symbolProvider = state.symbolProvider();
-        var type = symbolProvider.toJavaTypeName(shape);
-        var syntaxNodeClass = state.toJavaTypeNameClass(syntaxNode);
+        var symbol = symbolProvider.toSymbol(shape);
+        var type = Utils.toJavaTypeName(symbol);
+        var syntaxShape = state.model().expectShape(ShapeId.from(syntaxNode));
+        var syntaxNodeClass = ClassName.toClassName(Utils.toJavaTypeName(state, syntaxShape));
         var builder = MethodSyntax.builder("visit" + name)
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(syntaxNodeClass)
@@ -102,12 +104,13 @@ public final class SyntaxWalkVisitorJavaProducer implements NonShapeProducerTask
 
     void addCollectionOfSyntaxNode(CodegenState state, MemberShape member, BodyBuilder builder) {
         var symbolProvider = state.symbolProvider();
-        var memberName = symbolProvider.toMemberJavaName(member);
+        var symbol = symbolProvider.toSymbol(member);
+        var memberName = Utils.toJavaName(symbol);
         var memberInnerTypeShape = memberInnerType(state, member);
-        var memberInnerType = symbolProvider.toJavaTypeName(memberInnerTypeShape);
-        var memberType = symbolProvider.toJavaTypeName(member);
-        builder.addStatement("$T $L = node.$L()", memberType, memberName, memberName);
-        var type = symbolProvider.aggregateType(member);
+        var memberInnerType = Utils.toJavaTypeName(symbolProvider.toSymbol(memberInnerTypeShape));
+        var memberType = Utils.toJavaTypeName(state, member);
+        builder.addStatement("$T $L = node.$L()", memberType, memberName, Utils.toGetterName(symbol));
+        var type = Utils.aggregateType(state, member);
         if (type == SymbolConstants.AggregateType.LIST) {
             builder.forStatement("int idx = 0; idx < $L.size(); idx++", memberName, b -> {
                 b.addStatement("$T value = $L.get(idx)", memberInnerType, memberName);
@@ -131,11 +134,11 @@ public final class SyntaxWalkVisitorJavaProducer implements NonShapeProducerTask
     }
 
     boolean isCollectionOfSyntaxNode(CodegenState state, MemberShape member) {
-        var targetId = member.getTarget();
-        var target = state.model().expectShape(targetId);
         var symbolProvider = state.symbolProvider();
-        var type = symbolProvider.aggregateType(member);
+        var symbol = symbolProvider.toSymbol(member);
+        var type = Utils.aggregateType(symbol);
         if (type == SymbolConstants.AggregateType.LIST || type == SymbolConstants.AggregateType.SET) {
+            var target = state.model().expectShape(member.getTarget());
             var listShape = target.asListShape().orElseThrow();
             var targetShape = state.model().expectShape(listShape.getMember().getTarget());
             if (SyntaxVisitorJavaProducer.shapeImplements(syntaxNode, state.model(), targetShape)) {
@@ -148,14 +151,15 @@ public final class SyntaxWalkVisitorJavaProducer implements NonShapeProducerTask
 
     void addSingleSyntaxNode(CodegenState state, MemberShape member, BodyBuilder builder) {
         var symbolProvider = state.symbolProvider();
-        var memberName = symbolProvider.toMemberJavaName(member);
-        var memberType = symbolProvider.toJavaTypeName(member);
+        var symbol = symbolProvider.toSymbol(member);
+        var memberName = Utils.toJavaName(symbol);
+        var memberType = Utils.toJavaTypeName(symbol);
 
-        if (symbolProvider.isMemberNullable(member)) {
-            builder.addStatement("$1T $2L = node.$2L()", memberType, memberName);
+        if (Utils.isMemberNullable(state, member)) {
+            builder.addStatement("$T $L = node.$L()", memberType, memberName, Utils.toGetterName(symbol));
             builder.ifStatement("$L != null", memberName, b -> b.addStatement("$L.accept(this)", memberName));
         } else {
-            builder.addStatement("node.$L().accept(this)", memberName);
+            builder.addStatement("node.$L().accept(this)", Utils.toGetterName(symbol));
         }
     }
 }

@@ -5,9 +5,6 @@ import java.util.Deque;
 import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.jsyntax.Expression;
 import mx.sugus.braid.jsyntax.IfStatement;
-import mx.sugus.braid.jsyntax.Block;
-import mx.sugus.braid.jsyntax.Expression;
-import mx.sugus.braid.jsyntax.IfStatement;
 
 public class IfStatementBuilder extends AbstractBlockBuilder<IfStatementBuilder, IfStatement> {
 

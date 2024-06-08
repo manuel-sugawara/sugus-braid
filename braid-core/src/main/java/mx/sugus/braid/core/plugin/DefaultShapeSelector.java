@@ -1,7 +1,6 @@
 package mx.sugus.braid.core.plugin;
 
 import java.util.Collection;
-import java.util.List;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.loader.Prelude;
 import software.amazon.smithy.model.shapes.Shape;

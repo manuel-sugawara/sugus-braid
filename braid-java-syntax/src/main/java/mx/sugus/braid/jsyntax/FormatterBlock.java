@@ -75,11 +75,8 @@ public final class FormatterBlock implements FormatterNode {
             this.value = BodyBuilder.fromPersistent(data.value);
         }
 
-        /**
-         * <p>Sets the value for <code>value</code></p>
-         */
-        public Builder value(Block value) {
-            this.value.setPersistent(value);
+        public Builder value(Consumer<BodyBuilder> mutator) {
+            mutator.accept(this.value.asTransient());
             return this;
         }
 
@@ -128,8 +125,11 @@ public final class FormatterBlock implements FormatterNode {
             return this;
         }
 
-        public Builder value(Consumer<BodyBuilder> mutator) {
-            mutator.accept(this.value.asTransient());
+        /**
+         * <p>Sets the value for <code>value</code></p>
+         */
+        public Builder value(Block value) {
+            this.value.setPersistent(value);
             return this;
         }
 
