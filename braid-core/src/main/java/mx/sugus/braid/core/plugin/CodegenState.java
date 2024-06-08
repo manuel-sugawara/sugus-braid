@@ -1,7 +1,7 @@
 package mx.sugus.braid.core.plugin;
 
 import java.util.Map;
-import mx.sugus.braid.core.JavaCodegenSettings;
+import mx.sugus.braid.core.BrideCodegenSettings;
 import software.amazon.smithy.build.FileManifest;
 import software.amazon.smithy.codegen.core.SymbolProvider;
 import software.amazon.smithy.model.Model;
@@ -13,7 +13,7 @@ public interface CodegenState {
 
     FileManifest fileManifest();
 
-    JavaCodegenSettings settings();
+    BrideCodegenSettings settings();
 
     Map<Identifier, Object> properties();
 

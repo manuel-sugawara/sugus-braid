@@ -15,5 +15,5 @@ public interface SymbolProviderDecorator {
      * @param decorated the symbol provider to decorate
      * @return the decorated symbol provider
      */
-    SymbolProvider decorate(Model model, SymbolProvider decorated);
+    SymbolProvider decorate(Model model, SymbolProvider decorated, Dependencies dependencies);
 }

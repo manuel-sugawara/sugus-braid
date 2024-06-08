@@ -72,7 +72,7 @@ public final class CodegenModule {
     public SymbolProvider decorateSymbolProvider(Model model, SymbolProvider symbolProvider) {
         var result = symbolProvider;
         for (var decorator : config.symbolProviderDecorators()) {
-            result = decorator.decorate(model, result);
+            result = decorator.decorate(model, result, config.dependencies());
         }
         return result;
     }

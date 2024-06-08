@@ -4,7 +4,7 @@ import software.amazon.smithy.model.node.ObjectNode;
 import software.amazon.smithy.model.node.StringNode;
 import software.amazon.smithy.model.shapes.ShapeId;
 
-public record JavaCodegenSettings(
+public record BrideCodegenSettings(
     ObjectNode settingsNode,
     ShapeId service,
     String shortName,
@@ -22,8 +22,8 @@ public record JavaCodegenSettings(
         return packageName.split("\\.");
     }
 
-    public static JavaCodegenSettings from(ObjectNode node) {
-        return new JavaCodegenSettings(
+    public static BrideCodegenSettings from(ObjectNode node) {
+        return new BrideCodegenSettings(
             node,
             node.expectStringMember("service").expectShapeId(),
             node.expectStringMember("shortName").asStringNode().map(StringNode::getValue).orElse(null),
