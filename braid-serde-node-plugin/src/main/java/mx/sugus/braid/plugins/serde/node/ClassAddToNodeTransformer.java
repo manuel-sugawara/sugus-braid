@@ -84,7 +84,8 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
 
     private void addStructureMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var symbolProvider = state.symbolProvider();
-        var memberName = Utils.toJavaName(state, member);
+        var symbol = symbolProvider.toSymbol(member);
+        var memberName = Utils.toJavaName(symbol);
         if (Utils.isMemberRequired(state, member)) {
             body.addStatement("builder.withMember($S, this.$L.toNode())", member.getMemberName(), memberName);
         } else {

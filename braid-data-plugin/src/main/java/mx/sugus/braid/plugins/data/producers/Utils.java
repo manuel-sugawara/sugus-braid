@@ -107,7 +107,18 @@ public final class Utils {
     }
 
     public static Name toJavaName(Symbol symbol) {
-        return symbol.getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow(NoSuchElementException::new);
+        var name =  symbol.getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow();
+        return validateName(name, symbol);
+    }
+
+    public static Name toSetterName(Symbol symbol) {
+        var name =  symbol.getProperty(SymbolProperties.SETTER_NAME).orElseThrow();
+        return validateName(name, symbol);
+    }
+
+    public static Name toGetterName(Symbol symbol) {
+        var name = symbol.getProperty(SymbolProperties.GETTER_NAME).orElseThrow();
+        return validateName(name, symbol);
     }
 
     public static Name toJavaName(CodegenState state, Shape shape) {
@@ -131,7 +142,6 @@ public final class Utils {
         var name = state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
                         .withPrefix(prefix);
         return validateName(name, shape);
-
     }
 
     public static Name toJavaSingularName(CodegenState state, Shape shape, Name.Convention kind) {
@@ -175,6 +185,23 @@ public final class Utils {
         return name;
     }
 
+    public static ShapeType toShapeType(Symbol symbol) {
+        return symbol.getProperty(SymbolProperties.SHAPE_TYPE).orElseThrow();
+    }
+
+    public static Name validateName(Name name, Symbol symbol) {
+        if (RESERVED_WORDS.isReserved(name.toString())) {
+            var type = toShapeType(symbol);
+            if (type == ShapeType.MEMBER ||
+                (type.getCategory() != ShapeType.Category.AGGREGATE && type.getCategory() != ShapeType.Category.SERVICE)) {
+                name = name.prefixWithArticle();
+            } else {
+                name = name.withSuffix(type.name());
+            }
+        }
+        return name;
+    }
+
     public static TypeName toJavaTypeName(CodegenState state, Shape shape) {
         return state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
     }
@@ -182,6 +209,7 @@ public final class Utils {
     public static TypeName toJavaTypeName(CodegenState state, Symbol shape) {
         return shape.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
     }
+
 
     public static boolean isMemberNullable(CodegenState state, MemberShape shape) {
         var aggregateType = aggregateType(state, shape);
@@ -256,6 +284,11 @@ public final class Utils {
 
     public static Block builderInitFromData(Symbol symbol) {
         var initFunction = symbol.getProperty(SymbolProperties.BUILDER_DATA_INIT).orElse(x -> BodyBuilder.emptyBlock());
+        return initFunction.apply(symbol);
+    }
+
+    public static Block builderSetter(Symbol symbol) {
+        var initFunction = symbol.getProperty(SymbolProperties.BUILDER_SETTER_FOR_MEMBER).orElse(x -> BodyBuilder.emptyBlock());
         return initFunction.apply(symbol);
     }
 

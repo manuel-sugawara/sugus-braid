@@ -6,7 +6,6 @@ import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
-import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.CodeBlock;
@@ -14,6 +13,7 @@ import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
+import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
 import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.traits.ConstTrait;
@@ -88,27 +88,28 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
     }
 
     private void addStructureMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
-        var symbolProvider = state.symbolProvider();
         var target = state.model().expectShape(member.getTarget());
         if (target.hasTrait(JavaTrait.class)) {
             addJavaMember(state, member, body);
             return;
         }
-        var targetType = Utils.toJavaTypeName(state, target);
+        var symbolProvider = state.symbolProvider();
+        var targetType = Utils.toJavaTypeName(symbolProvider.toSymbol(target));
+        var symbol = symbolProvider.toSymbol(member);
         if (Utils.isMemberRequired(state, member)) {
             body.addStatement("builder.$L($T.fromNode(obj.expectMember($S).expectObjectNode()))",
-                              Utils.toJavaName(state, member), targetType, member.getMemberName());
+                              Utils.toSetterName(symbol), targetType, member.getMemberName());
         } else {
             body.addStatement("obj.getMember($S).map($T::fromNode).ifPresent(builder::$L)",
-                              member.getMemberName(), targetType, Utils.toJavaName(state, member));
+                              member.getMemberName(), targetType, Utils.toSetterName(symbol));
         }
     }
 
     private void addJavaMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
-        var symbolProvider = state.symbolProvider();
         var target = state.model().expectShape(member.getTarget());
-        var targetType = ClassName.toClassName(Utils.toJavaTypeName(state, target));
-        var actualClass = toActualJavaClass(targetType);
+        var symbolProvider = state.symbolProvider();
+        var targetType = Utils.toJavaTypeName(symbolProvider.toSymbol(target));
+        var actualClass = toActualJavaClass(ClassName.toClassName(targetType));
         if (!actualClass.isEnum()) {
             throw new RuntimeException("Node serde of non-enum types is not currently supported: " + actualClass);
         }
@@ -118,10 +119,11 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
                               Utils.toJavaTypeName(state, target),
                               member.getMemberName());
         } else {
+            var symbol = symbolProvider.toSymbol(member);
             body.addStatement("obj.getMember($S)"
                               + ".map(n -> n.expectStringNode().getValue())"
                               + ".map($T::valueOf).ifPresent(builder::$L)",
-                              member.getMemberName(), targetType, Utils.toJavaName(state, member));
+                              member.getMemberName(), targetType, Utils.toSetterName(symbol));
         }
     }
 
@@ -155,30 +157,33 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
     }
 
     private void addSimpleMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
-        var symbolProvider = state.symbolProvider();
         var target = state.model().expectShape(member.getTarget());
-        if (Utils.isMemberRequired(state, member)) {
+        var symbolProvider = state.symbolProvider();
+        var symbol = symbolProvider.toSymbol(member);
+        if (Utils.isRequired(symbol)) {
             if (target.isEnumShape()) {
                 addRequiredEnumMember(state, member, body);
                 return;
             }
             body.addStatement("builder.$L(obj.expectMember($S)$C)",
-                              Utils.toJavaName(state, member),
+                              Utils.toSetterName(symbol),
                               member.getMemberName(),
                               valueFromNode("", state, target));
         } else {
             body.addStatement("obj.getMember($S).map(n -> $C).ifPresent(builder::$L)",
                               member.getMemberName(),
                               valueFromNode("n", state, target),
-                              Utils.toJavaName(state, member));
+                              Utils.toSetterName(symbol));
         }
     }
 
     private void addRequiredEnumMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var target = state.model().expectShape(member.getTarget());
+        var symbolProvider = state.symbolProvider();
+        var symbol = symbolProvider.toSymbol(member);
         body.addStatement("builder.$L($T.from(obj.expectMember($S).expectStringNode().getValue()))",
-                          Utils.toJavaName(state, member),
-                          Utils.toJavaTypeName(state, target),
+                          Utils.toSetterName(symbol),
+                          Utils.toJavaTypeName(symbolProvider.toSymbol(target)),
                           member.getMemberName());
     }
 

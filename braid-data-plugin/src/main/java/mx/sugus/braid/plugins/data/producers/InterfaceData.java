@@ -53,10 +53,10 @@ public final class InterfaceData implements DirectedInterface {
 
     private AbstractMethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
-        var name = symbolProvider.toMemberName(member);
+        var symbol = symbolProvider.toSymbol(member);
         var type = toJavaTypeName(state, member);
         var result = AbstractMethodSyntax.builder()
-                                         .name(name)
+                                         .name(Utils.toGetterName(symbol).toString())
                                          .returns(type);
         if (member.hasTrait(DocumentationTrait.class)) {
             var doc = member.getTrait(DocumentationTrait.class).orElseThrow().getValue();

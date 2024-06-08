@@ -111,12 +111,14 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
 
     void addCollectionOfSyntaxNode(CodegenState state, MemberShape member, BodyBuilder builder, boolean isBuilderNull) {
         var symbolProvider = state.symbolProvider();
-        var memberName = Utils.toMemberJavaName(state, member);
+        var symbol = symbolProvider.toSymbol(member);
+        var memberName = Utils.toJavaName(symbol);
         var memberNameNew = memberName.withPrefix("new");
         var memberInnerTypeShape = memberInnerType(state, member);
         var memberInnerType = Utils.toJavaTypeName(state, memberInnerTypeShape);
         var memberType = Utils.toJavaTypeName(state, member);
-        builder.addStatement("$T $L = node.$L()", memberType, memberName, memberName);
+        var getterName = Utils.toGetterName(symbol);
+        builder.addStatement("$T $L = node.$L()", memberType, memberName, getterName);
         var type = Utils.aggregateType(state, member);
         builder.addStatement("$T $L = null", memberType, memberNameNew);
         if (type == SymbolConstants.AggregateType.LIST) {
@@ -163,7 +165,8 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
             } else {
                 then.ifStatement("builder == null", builderIsNull -> builderIsNull.addStatement("builder = node.toBuilder()"));
             }
-            then.addStatement("builder.$L($L)", memberName, memberNameNew);
+            var setterName = Utils.toSetterName(symbol);
+            then.addStatement("builder.$L($L)", setterName, memberNameNew);
         });
     }
 
@@ -193,10 +196,11 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
 
     void addSingleSyntaxNode(CodegenState state, MemberShape member, BodyBuilder builder, boolean isBuilderNull) {
         var symbolProvider = state.symbolProvider();
-        var memberName = Utils.toMemberJavaName(state, member);
+        var symbol = symbolProvider.toSymbol(member);
+        var memberName = Utils.toJavaName(symbol);
         var memberNameNew = memberName.withSuffix("new");
         var memberType = Utils.toJavaTypeName(state, member);
-        builder.addStatement("$1T $2L = node.$2L()", memberType, memberName.toString());
+        builder.addStatement("$T $L = node.$L()", memberType, memberName, Utils.toGetterName(symbol));
         var targetShape = state.model().expectShape(member.getTarget());
         var acceptBlock = acceptBlock(state, targetShape, memberName.toString());
         if (Utils.isMemberNullable(state, member)) {
@@ -214,7 +218,8 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
                 notEqual.ifStatement("builder == null",
                                      builderIsNull -> builderIsNull.addStatement("builder = node.toBuilder()"));
             }
-            notEqual.addStatement("builder.$L($L)", memberName, memberNameNew);
+            var setterName = Utils.toSetterName(symbol);
+            notEqual.addStatement("builder.$L($L)", setterName, memberNameNew);
         });
     }
 

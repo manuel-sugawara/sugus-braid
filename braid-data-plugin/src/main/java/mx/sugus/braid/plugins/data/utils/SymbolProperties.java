@@ -8,6 +8,7 @@ import mx.sugus.braid.plugins.data.utils.SymbolConstants.AggregateType;
 import mx.sugus.braid.traits.UseBuilderReferenceTrait;
 import software.amazon.smithy.codegen.core.Property;
 import software.amazon.smithy.codegen.core.Symbol;
+import software.amazon.smithy.model.shapes.ShapeType;
 
 /**
  * Symbol properties.
@@ -32,6 +33,21 @@ public final class SymbolProperties {
      * Property for the java name for a given symbol.
      */
     public static final Property<Name> SIMPLE_NAME = from(Name.class);
+
+    /**
+     * Property for the setter name for a given symbol.
+     */
+    public static final Property<Name> SETTER_NAME = Property.named("setter-name");
+
+    /**
+     * Property for the setter name for a given symbol.
+     */
+    public static final Property<Name> GETTER_NAME = Property.named("getter-name");
+
+    /**
+     * Property for the shape type for the symbol.
+     */
+    public static final Property<ShapeType> SHAPE_TYPE = Property.named("shape-type");
 
     /**
      * Property to mark the symbol as required.
@@ -92,6 +108,11 @@ public final class SymbolProperties {
      * From data builder initializer code.
      */
     public static final Property<Function<Symbol, Block>> BUILDER_DATA_INIT = Property.named("builder-data-init");
+
+    /**
+     * From data builder code for setting a member.
+     */
+    public static final Property<Function<Symbol, Block>> BUILDER_SETTER_FOR_MEMBER = Property.named("builder-setter");
 
     /**
      * From builder data initializer code.

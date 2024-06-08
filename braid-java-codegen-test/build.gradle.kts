@@ -42,5 +42,5 @@ tasks.withType<JavaCompile> {
 }
 
 java.sourceSets["main"].java {
-    srcDirs("model", "$buildDir/smithyprojections/braid-java-codegen-test/source/sugus-java-codegen")
+    srcDirs("model", "$buildDir/smithyprojections/braid-java-codegen-test/source/braid-codegen")
 }

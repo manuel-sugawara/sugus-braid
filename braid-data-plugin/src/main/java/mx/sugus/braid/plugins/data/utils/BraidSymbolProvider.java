@@ -71,6 +71,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
         }
         var builder = sym.toBuilder();
         builder.putProperty(SymbolProperties.SIMPLE_NAME, shapeToJavaName.toJavaName(shape));
+        builder.putProperty(SymbolProperties.SHAPE_TYPE, shape.getType());
         return builder.build();
 
     }
@@ -159,15 +160,19 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
         var targetShape = model.expectShape(shape.getTarget());
         var targetSymbol = targetShape.accept(this);
         var builderReference = targetShape.getTrait(UseBuilderReferenceTrait.class).orElse(null);
+        var simpleName = shapeToJavaName.toJavaName(shape);
         var builder = targetSymbol
             .toBuilder()
-            .putProperty(SymbolProperties.SIMPLE_NAME, shapeToJavaName.toJavaName(shape))
+            .putProperty(SymbolProperties.SIMPLE_NAME, simpleName)
+            .putProperty(SymbolProperties.SETTER_NAME, simpleName)
+            .putProperty(SymbolProperties.GETTER_NAME, simpleName)
             .putProperty(SymbolProperties.IS_REQUIRED, shape.isRequired())
             .putProperty(SymbolProperties.BUILDER_REFERENCE, builderReference)
             .putProperty(SymbolProperties.IS_CONSTANT, shape.hasTrait(ConstTrait.class))
             .putProperty(SymbolProperties.BUILDER_EMPTY_INIT, SymbolCodegen::builderEmptyInitializer)
             .putProperty(SymbolProperties.BUILDER_DATA_INIT, SymbolCodegen::builderDataInitializer)
             .putProperty(SymbolProperties.DATA_BUILDER_INIT, SymbolCodegen::dataBuilderInitializer)
+            .putProperty(SymbolProperties.BUILDER_SETTER_FOR_MEMBER, SymbolCodegen::builderSetterForMember)
             .putProperty(SymbolProperties.DEFAULT_VALUE, getDefaultValue(shape, targetShape));
         if (targetSymbol.getProperty(SymbolProperties.AGGREGATE_TYPE).orElse(AggregateType.NONE) != AggregateType.NONE) {
             var targetType = targetSymbol.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();

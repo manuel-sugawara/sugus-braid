@@ -106,8 +106,8 @@ public final class SymbolCodegen {
         }
         var name = Utils.toJavaName(symbol);
         var builderReference = Utils.builderReference(symbol);
-        var builderProperty = CodeBlock.builder().addCode("builder.$1L", name);
         var type = Utils.aggregateType(symbol);
+        var builderProperty = CodeBlock.builder().addCode("builder.$L", name);
         if (type != SymbolConstants.AggregateType.NONE) {
             builderProperty.addCode(".asPersistent()");
         }
@@ -121,8 +121,30 @@ public final class SymbolCodegen {
                               .build();
         }
         return BodyBuilder.create()
-                          .addStatement("this.$1L = $2C",
-                                        name, builderProperty.build())
+                          .addStatement("this.$L = $C", name, builderProperty.build())
                           .build();
+    }
+
+    static Block builderSetterForMember(Symbol symbol) {
+        var name = Utils.toJavaName(symbol);
+        var type = Utils.aggregateType(symbol);
+        var builder = BodyBuilder.create();
+        if (type == SymbolConstants.AggregateType.MAP) {
+            return builder.addStatement("this.$L.clear()", name)
+                          .addStatement("this.$1L.asTransient().putAll($1L)", name)
+                          .build();
+        }
+        if (type != SymbolConstants.AggregateType.NONE) {
+            return builder.addStatement("this.$L.clear()", name)
+                          .addStatement("this.$1L.asTransient().addAll($1L)", name)
+                          .build();
+        }
+        var builderReference = Utils.builderReference(symbol);
+        if (builderReference != null) {
+            return builder.addStatement("this.$1L.setPersistent($1L)", name)
+                          .build();
+        }
+        return builder.addStatement("this.$1L = $1L", name)
+                      .build();
     }
 }

@@ -147,50 +147,22 @@ public final class StructureDataBuilder implements DirectedClass {
 
     private MethodSyntax setter(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
+        var symbol = symbolProvider.toSymbol(member);
         var name = symbolProvider.toMemberName(member);
-        var builder = MethodSyntax.builder(name)
+        var builder = MethodSyntax.builder(Utils.toSetterName(symbol).toString())
                                   .addModifier(Modifier.PUBLIC)
-                                  .addParameter(Utils.toJavaTypeName(state, member), name)
+                                  .addParameter(Utils.toJavaTypeName(symbol), name)
                                   .returns(className(state));
-        builder.body(b -> {
-            var aggregateType = Utils.aggregateType(state, member);
-            switch (aggregateType) {
-                case LIST, SET -> setListValue(state, member, b);
-                case MAP -> setMapValue(state, member, b);
-                default -> setMemberValue(state, member, b);
-            }
-            b.addStatement("return this");
-        });
-
+        for (var stmt : Utils.builderSetter(symbol).statements()) {
+            builder.addStatement(stmt);
+        }
+        builder.addStatement("return this");
         var doc = "Sets the value for `" + name + "`";
         if (member.hasTrait(DocumentationTrait.class)) {
             doc += "\n\n" + member.getTrait(DocumentationTrait.class).orElseThrow().getValue();
         }
         builder.javadoc("$L", JavadocExt.document(doc));
         return builder.build();
-    }
-
-    private void setMemberValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
-        var name = symbolProvider.toMemberName(member);
-        if (Utils.builderReference(symbol) != null) {
-            builder.addStatement("this.$1L.setPersistent($1L)", name);
-        } else {
-            builder.addStatement("this.$1L = $1L", name);
-        }
-    }
-
-    private void setListValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
-        var name = Utils.toMemberJavaName(state, member);
-        builder.addStatement("this.$L.clear()", name);
-        builder.addStatement("this.$1L.asTransient().addAll($1L)", name);
-    }
-
-    private void setMapValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
-        var name = Utils.toMemberJavaName(state, member);
-        builder.addStatement("this.$L.clear()", name);
-        builder.addStatement("this.$1L.asTransient().putAll($1L)", name);
     }
 
     private List<MethodSyntax> adder(ShapeCodegenState state, MemberShape member) {
