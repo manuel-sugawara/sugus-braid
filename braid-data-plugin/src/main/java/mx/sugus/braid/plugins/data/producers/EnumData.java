@@ -2,6 +2,7 @@ package mx.sugus.braid.plugins.data.producers;
 
 import java.util.List;
 import javax.lang.model.element.Modifier;
+import mx.sugus.braid.core.SensitiveKnowledgeIndex;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.jsyntax.CaseClause;
 import mx.sugus.braid.jsyntax.ClassName;
@@ -26,9 +27,9 @@ public final class EnumData implements DirectedEnum {
 
     @Override
     public EnumSyntax.Builder typeSpec(ShapeCodegenState state) {
-        var result = EnumSyntax.builder(state.symbol().getName())
-                               .addAnnotation(DataPlugin.generatedBy())
-                               .addModifier(Modifier.PUBLIC);
+        var builder = EnumSyntax.builder(state.symbol().getName())
+                                .addAnnotation(DataPlugin.generatedBy())
+                                .addModifier(Modifier.PUBLIC);
         var shape = state.shape().asEnumShape().orElseThrow();
         for (var kvp : shape.getAllMembers().entrySet()) {
             var enumMember = kvp.getValue();
@@ -36,23 +37,22 @@ public final class EnumData implements DirectedEnum {
                                                .name(state.symbolProvider().toMemberName(enumMember))
                                                .body(CodeBlock.from("$S",
                                                                     shape.getEnumValues().get(kvp.getKey())));
-            if (enumMember.hasTrait(DocumentationTrait.class)) {
-                var doc = enumMember.getTrait(DocumentationTrait.class).orElseThrow().getValue();
-                enumValueBuilder.javadoc("$L", JavadocExt.document(doc));
-            }
-            result.addEnumConstant(enumValueBuilder.build());
+            enumMember.getTrait(DocumentationTrait.class)
+                      .map(DocumentationTrait::getValue)
+                      .map(JavadocExt::document)
+                      .map(enumValueBuilder::javadoc);
+            builder.addEnumConstant(enumValueBuilder.build());
         }
         var unknownValueBuilder = EnumConstant.builder()
                                               .body(CodeBlock.from("$L", "null"))
                                               .name("UNKNOWN_TO_VERSION");
         unknownValueBuilder.javadoc("$L", JavadocExt.document("Unknown enum constant"));
-        result.addEnumConstant(unknownValueBuilder.build());
-
-        if (shape.hasTrait(DocumentationTrait.class)) {
-            var doc = shape.getTrait(DocumentationTrait.class).orElseThrow().getValue();
-            result.javadoc("$L", JavadocExt.document(doc));
-        }
-        return result;
+        builder.addEnumConstant(unknownValueBuilder.build());
+        shape.getTrait(DocumentationTrait.class)
+             .map(DocumentationTrait::getValue)
+             .map(JavadocExt::document)
+             .map(builder::javadoc);
+        return builder;
     }
 
     @Override
@@ -77,8 +77,10 @@ public final class EnumData implements DirectedEnum {
 
     private MethodSyntax fromValueMethod(ShapeCodegenState state) {
         var shapeType = Utils.toJavaTypeName(state, state.shape());
-        var javadoc = "Returns the corresponding enum constant from the given value.\n\n"
-                      + "If the value is unknown it returns `UNKNOWN_TO_VERSION`.";
+        var javadoc = """
+            Returns the corresponding enum constant from the given value.
+
+            If the value is unknown it returns `UNKNOWN_TO_VERSION`.""";
         var result = MethodSyntax.builder("from")
                                  .javadoc(JavadocExt.document(javadoc))
                                  .returns(shapeType)
@@ -107,11 +109,12 @@ public final class EnumData implements DirectedEnum {
     }
 
     private MethodSyntax toStringMethod(ShapeCodegenState state) {
-        var result = MethodSyntax.builder("toString")
-                                 .addAnnotation(Override.class)
-                                 .returns(String.class)
-                                 .addModifier(Modifier.PUBLIC);
-        result.addStatement("return value");
-        return result.build();
+        var sensitiveIndex = SensitiveKnowledgeIndex.of(state.model());
+        if (sensitiveIndex.isSensitive(state.shape())) {
+            return CodegenUtils.toStringForSensitive();
+        }
+        return CodegenUtils.toStringTemplate()
+                           .addStatement("return value")
+                           .build();
     }
 }

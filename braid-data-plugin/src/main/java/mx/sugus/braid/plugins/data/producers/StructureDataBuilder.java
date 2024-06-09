@@ -1,6 +1,6 @@
 package mx.sugus.braid.plugins.data.producers;
 
-import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.BUILDER_TYPE;
+import static mx.sugus.braid.plugins.data.producers.CodegenUtils.BUILDER_TYPE;
 
 import java.util.ArrayList;
 import java.util.List;

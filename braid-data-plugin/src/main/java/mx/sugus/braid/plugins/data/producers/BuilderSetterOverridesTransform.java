@@ -1,7 +1,7 @@
 package mx.sugus.braid.plugins.data.producers;
 
-import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.getTargetTrait;
-import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.toParameters;
+import static mx.sugus.braid.plugins.data.producers.CodegenUtils.getTargetTrait;
+import static mx.sugus.braid.plugins.data.producers.CodegenUtils.toParameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +80,6 @@ public final class BuilderSetterOverridesTransform implements ShapeTaskTransform
     }
 
     private ClassName className(ShapeCodegenState state) {
-        return StructureCodegenUtils.BUILDER_TYPE;
+        return CodegenUtils.BUILDER_TYPE;
     }
 }

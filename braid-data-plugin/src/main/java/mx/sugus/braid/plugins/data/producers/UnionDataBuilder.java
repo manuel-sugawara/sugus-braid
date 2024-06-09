@@ -31,7 +31,7 @@ public class UnionDataBuilder implements DirectedClass {
 
     @Override
     public ClassName className(ShapeCodegenState state) {
-        return StructureCodegenUtils.BUILDER_TYPE;
+        return CodegenUtils.BUILDER_TYPE;
     }
 
     @Override
@@ -142,11 +142,12 @@ public class UnionDataBuilder implements DirectedClass {
             b.addStatement("return this");
         });
 
-        var doc = "Sets the value for `" + name + "`";
-        if (member.hasTrait(DocumentationTrait.class)) {
-            doc += "\n\n" + member.expectTrait(DocumentationTrait.class).getValue();
-        }
-        builder.javadoc(CodeBlock.from("$L", JavadocExt.document(doc)));
+        var prefix = "Sets the value for `" + name + "`";
+        var doc = member.getTrait(DocumentationTrait.class)
+                        .map(DocumentationTrait::getValue)
+                        .map(value -> prefix + "\n\n" + value)
+                        .orElse(prefix);
+        builder.javadoc(JavadocExt.document(doc));
         return builder.build();
     }
 
@@ -176,7 +177,6 @@ public class UnionDataBuilder implements DirectedClass {
     }
 
     private List<MethodSyntax> collectionAdder(ShapeCodegenState state, MemberShape member) {
-        var symbolProvider = state.symbolProvider();
         var name = Utils.toJavaName(state, member);
         var methodName = Utils.toJavaSingularName(state, member, "add").toString();
         var builder = MethodSyntax.builder(methodName)
@@ -195,7 +195,7 @@ public class UnionDataBuilder implements DirectedClass {
             body.addStatement("return this");
         });
         var doc = "Adds a single value for `" + name + "`";
-        builder.javadoc(CodeBlock.from("$L", JavadocExt.document(doc)));
+        builder.javadoc(JavadocExt.document(doc));
         var defaultAdder = builder.build();
         var result = new ArrayList<MethodSyntax>();
         result.add(defaultAdder);
@@ -250,16 +250,14 @@ public class UnionDataBuilder implements DirectedClass {
         var builderTypeId = useReferenceTrait.builderType();
         var builderType = ClassName.from(builderTypeId.getNamespace(), builderTypeId.getName());
         var name = symbolProvider.toMemberName(member);
-        var builder = MethodSyntax.builder(name)
-                                  .addModifier(Modifier.PUBLIC)
-                                  .addParameter(
-                                      ParameterizedTypeName.from(Consumer.class, builderType),
-                                      "mutator")
-                                  .returns(className(state));
-        builder.body(b -> {
-            b.addStatement("mutator.accept(this.$L.asTransient())", name);
-            b.addStatement("return this");
-        });
+        var builder = MethodSyntax.builder(name);
+        builder.addModifier(Modifier.PUBLIC)
+               .addParameter(
+                   ParameterizedTypeName.from(Consumer.class, builderType),
+                   "mutator")
+               .returns(className(state));
+        builder.addStatement("mutator.accept(this.$L.asTransient())", name);
+        builder.addStatement("return this");
         return builder.build();
     }
 
@@ -337,7 +335,6 @@ public class UnionDataBuilder implements DirectedClass {
     }
 
     private List<MemberShape> membersUsingBuilderReference(ShapeCodegenState state) {
-        var symbolProvider = state.symbolProvider();
         var shape = state.shape().asUnionShape().orElseThrow();
         List<MemberShape> result = new ArrayList<>();
         for (var member : shape.getAllMembers().values()) {

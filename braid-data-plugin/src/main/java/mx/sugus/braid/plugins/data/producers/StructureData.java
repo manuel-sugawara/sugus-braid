@@ -35,20 +35,20 @@ public final class StructureData implements DirectedClass {
 
     @Override
     public ClassSyntax.Builder typeSpec(ShapeCodegenState state) {
-        var result = ClassSyntax.builder(state.symbol().getName())
-                                .addAnnotation(DataPlugin.generatedBy())
-                                .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
+        var builder = ClassSyntax.builder(state.symbol().getName())
+                                 .addAnnotation(DataPlugin.generatedBy())
+                                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         var shape = state.shape().asStructureShape().orElseThrow();
         var superInterfaces = ImplementsKnowledgeIndex.of(state.model()).superInterfaces(shape);
         for (var superInterface : superInterfaces) {
             var superInterfaceClass = Utils.toJavaTypeName(state, superInterface);
-            result.addSuperInterface(superInterfaceClass);
+            builder.addSuperInterface(superInterfaceClass);
         }
-        if (shape.hasTrait(DocumentationTrait.class)) {
-            var doc = shape.expectTrait(DocumentationTrait.class).getValue();
-            result.javadoc("$L", JavadocExt.document(doc));
-        }
-        return result;
+        shape.getTrait(DocumentationTrait.class)
+             .map(DocumentationTrait::getValue)
+             .map(JavadocExt::document)
+             .map(builder::javadoc);
+        return builder;
     }
 
     @Override
@@ -101,15 +101,15 @@ public final class StructureData implements DirectedClass {
         var symbol = symbolProvider.toSymbol(member);
         var name = Utils.toJavaName(symbol);
         var type = Utils.toJavaTypeName(symbol);
-        var result = MethodSyntax.builder(Utils.toGetterName(symbol).toString())
-                                 .addModifier(Modifier.PUBLIC)
-                                 .returns(type)
-                                 .addStatement("return this.$L", name);
-        if (member.hasTrait(DocumentationTrait.class)) {
-            var doc = member.expectTrait(DocumentationTrait.class).getValue();
-            result.javadoc("$L", JavadocExt.document(doc));
-        }
-        return result.build();
+        var builder = MethodSyntax.builder(Utils.toGetterName(symbol).toString())
+                                  .addModifier(Modifier.PUBLIC)
+                                  .returns(type)
+                                  .addStatement("return this.$L", name);
+        member.getTrait(DocumentationTrait.class)
+              .map(DocumentationTrait::getValue)
+              .map(JavadocExt::document)
+              .map(builder::javadoc);
+        return builder.build();
     }
 
     private MethodSyntax constAccessor(ShapeCodegenState state, MemberShape member) {
@@ -129,7 +129,7 @@ public final class StructureData implements DirectedClass {
     }
 
     public ClassName builderJavaClassName() {
-        return StructureCodegenUtils.BUILDER_TYPE;
+        return CodegenUtils.BUILDER_TYPE;
     }
 
     @Override
@@ -144,8 +144,7 @@ public final class StructureData implements DirectedClass {
                                   // values are immutable the computation will be
                                   // idempotent, and integer assignment is atomic.
                                   // Worst case the hash value will be computed more than
-                                  // once but that's OK compared to having to add memory
-                                  // barriers and messing the processors caches.
+                                  // once but that's OK.
                                   .addModifier(Modifier.PRIVATE)
                                   .initializer(CodeBlock.from("0"))
                                   .build());
@@ -167,7 +166,7 @@ public final class StructureData implements DirectedClass {
             }
             memberCount++;
         }
-        // Totally made up but as a heuristic skips some trivial cases.
+        // Totally made up, but as a heuristic skips some trivial cases.
         return (aggregateCount > 0 && memberCount > 2) || memberCount >= 5;
     }
 
@@ -186,7 +185,7 @@ public final class StructureData implements DirectedClass {
         var dataType = builderJavaClassName();
         return MethodSyntax.builder("toBuilder")
                            .addModifier(Modifier.PUBLIC)
-                           .javadoc("Returns a new builder to modify a copy of this instance")
+                           .javadoc(JavadocExt.document("Returns a new builder to modify a copy of this instance"))
                            .returns(dataType)
                            .addStatement("return new $T(this)", dataType)
                            .build();
@@ -224,6 +223,7 @@ public final class StructureData implements DirectedClass {
                 isFirst = false;
             }
             if (isFirst) {
+                // structure without members, just return true.
                 expressionBuilder.addCode("true");
             }
             body.addStatement(expressionBuilder.build());
@@ -272,13 +272,16 @@ public final class StructureData implements DirectedClass {
     }
 
     MethodSyntax toStringMethod(ShapeCodegenState state) {
-        var symbolProvider = state.symbolProvider();
-        var methodBuilder = MethodSyntax.builder("toString")
-                                        .addAnnotation(Override.class)
-                                        .addModifier(Modifier.PUBLIC)
-                                        .returns(String.class);
-        var isFirst = true;
         var sensitiveIndex = SensitiveKnowledgeIndex.of(state.model());
+        if (sensitiveIndex.isSensitive(state.shape())) {
+            return CodegenUtils.toStringForSensitive();
+        }
+        var symbolProvider = state.symbolProvider();
+        var builder = MethodSyntax.builder("toString")
+                                  .addAnnotation(Override.class)
+                                  .addModifier(Modifier.PUBLIC)
+                                  .returns(String.class);
+        var isFirst = true;
         var toStringReturn = CodeBlock.builder();
         toStringReturn.addCode("return $S", state.shape().getId().getName() + "{");
         for (var member : state.shape().members()) {
@@ -303,20 +306,20 @@ public final class StructureData implements DirectedClass {
             }
         }
         toStringReturn.addCode(" + $S", "}");
-        methodBuilder.body(b -> b.addStatement(toStringReturn.build()));
-        return methodBuilder.build();
+        builder.body(b -> b.addStatement(toStringReturn.build()));
+        return builder.build();
     }
 
     List<MethodSyntax> builderMethods(ShapeCodegenState state) {
         var dataType = builderJavaClassName();
-        var javadoc = CodeBlock.from("$L", JavadocExt.document("Creates a new builder"));
-        var defaultBuilder = MethodSyntax.builder("builder")
-                                         .javadoc(javadoc)
-                                         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                                         .returns(dataType)
-                                         .addStatement("return new $T()", dataType)
-                                         .build();
-        return List.of(defaultBuilder);
+        var javadoc = JavadocExt.document("Creates a new builder");
+        var builder = MethodSyntax.builder("builder")
+                                  .javadoc(javadoc)
+                                  .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                                  .returns(dataType)
+                                  .addStatement("return new $T()", dataType)
+                                  .build();
+        return List.of(builder);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package mx.sugus.braid.plugins.data.producers;
 
 import static mx.sugus.braid.core.util.Utils.coalesce;
-import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.toParameters;
+import static mx.sugus.braid.plugins.data.producers.CodegenUtils.toParameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +64,7 @@ public final class ClassBuilderOverridesTransform implements ShapeTaskTransforme
             var overrideBuilder = MethodSyntax.builder("builder")
                                               .javadoc(JavadocExt.document(javadoc))
                                               .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                                              .returns(StructureCodegenUtils.BUILDER_TYPE);
+                                              .returns(CodegenUtils.BUILDER_TYPE);
             overrideBuilder.parameters(toParameters(override.getArgs()));
             var body = new BodyBuilder();
             for (var value : override.getBody()) {

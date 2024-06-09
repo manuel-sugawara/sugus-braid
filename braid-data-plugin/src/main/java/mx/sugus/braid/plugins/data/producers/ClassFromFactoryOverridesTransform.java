@@ -1,7 +1,7 @@
 package mx.sugus.braid.plugins.data.producers;
 
 import static mx.sugus.braid.core.util.Utils.coalesce;
-import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.toParameters;
+import static mx.sugus.braid.plugins.data.producers.CodegenUtils.toParameters;
 
 import java.util.ArrayList;
 import java.util.List;

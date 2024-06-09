@@ -44,11 +44,7 @@ public final class UnionTypeEnumData implements DirectedEnum {
 
     @Override
     public List<FieldSyntax> extraFields(ShapeCodegenState state) {
-        return List.of(FieldSyntax.builder()
-                                  .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
-                                  .name("value")
-                                  .type(String.class)
-                                  .build());
+        return List.of(FieldSyntax.from(String.class, "value"));
     }
 
     @Override

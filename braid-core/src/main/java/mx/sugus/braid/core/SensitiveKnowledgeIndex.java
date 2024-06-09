@@ -92,7 +92,7 @@ public class SensitiveKnowledgeIndex implements KnowledgeIndex {
 
         @Override
         public Boolean memberShape(MemberShape shape) {
-            return hasSensitiveTrait(shape) || model.getShape(shape.getTarget()).map(s -> s.accept(this)).orElse(false);
+            return hasSensitiveTrait(shape) || model.expectShape(shape.getTarget()).accept(this);
         }
 
         private static boolean hasSensitiveTrait(Shape shape) {
