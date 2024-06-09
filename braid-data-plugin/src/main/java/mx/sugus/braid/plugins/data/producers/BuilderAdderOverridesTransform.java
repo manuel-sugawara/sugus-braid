@@ -129,8 +129,12 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
     ) {
         var name = toJavaName(state, member);
         for (var override : builderOverrides) {
-            var adderName = coalesce(override.getName(),
-                                     () -> toJavaSingularName(state, member, "add").toString());
+            // XXX This needs review, the logic over-enthusiastically adds overrides across the
+            //   board.
+            if (override.getName() != null) {
+                continue;
+            }
+            var adderName = toJavaSingularName(state, member, "add").toString();
             var overrideBuilder = MethodSyntax.builder(adderName)
                                               .addModifier(Modifier.PUBLIC)
                                               .returns(className(state));

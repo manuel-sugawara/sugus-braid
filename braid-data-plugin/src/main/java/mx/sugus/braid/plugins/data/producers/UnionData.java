@@ -51,16 +51,8 @@ public final class UnionData implements DirectedClass {
 
     @Override
     public List<FieldSyntax> extraFields(ShapeCodegenState state) {
-        return List.of(FieldSyntax.builder()
-                                  .name("value")
-                                  .type(Object.class)
-                                  .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
-                                  .build(),
-                       FieldSyntax.builder()
-                                  .name("type")
-                                  .type(ClassName.from("Type"))
-                                  .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
-                                  .build());
+        return List.of(FieldSyntax.from(Object.class, "value"),
+                       FieldSyntax.from(ClassName.from("Type"), "type"));
     }
 
     @Override

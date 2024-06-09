@@ -164,25 +164,6 @@ public final class CompilationUnit implements SyntaxNode {
         }
 
         /**
-         * <p>Parses the given name as qualified java type. Recognizes <code>#</code> as package separator to
-         * distinguish the package name from the class name. If not uses dots and takes the last
-         * segment as a class name and the previous ones as package name.</p>
-         */
-        public Builder parse(String name) {
-            this.imports.asTransient().add(ClassName.parse(name));
-            return this;
-        }
-
-        /**
-         * <p>Returns the type name as class name. If the given type name is a parametrized type name it
-         * returns its base class, if this is an array type, the compoonent class.</p>
-         */
-        public Builder toClassName(TypeName type) {
-            this.imports.asTransient().add(ClassName.toClassName(type));
-            return this;
-        }
-
-        /**
          * <p>Sets the value for <code>type</code></p>
          */
         public Builder type(TypeSyntax type) {

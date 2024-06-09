@@ -62,11 +62,7 @@ public final class StructureData implements DirectedClass {
     public FieldSyntax fieldFor(ShapeCodegenState state, MemberShape member) {
         var name = Utils.toJavaName(state, member);
         var type = Utils.toJavaTypeName(state, member);
-        return FieldSyntax.builder()
-                          .name(name.toString())
-                          .type(type)
-                          .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
-                          .build();
+        return FieldSyntax.from(type, name.toString());
     }
 
     @Override

@@ -68,25 +68,12 @@ public final class StructureDataBuilder implements DirectedClass {
         return List.of(buildMethod(state));
     }
 
-    private MethodSyntax buildMethod(ShapeCodegenState state) {
-        var shapeType = Utils.toJavaTypeName(state, state.shape());
-        return MethodSyntax.builder("build")
-                           .addModifier(Modifier.PUBLIC)
-                           .returns(shapeType)
-                           .body(b -> b.addStatement("return new $T(this)", shapeType))
-                           .build();
-    }
-
     private FieldSyntax fieldFor(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
         var type = Utils.toBuilderTypeName(symbol);
         var name = Utils.toJavaName(state, member);
-        return FieldSyntax.builder()
-                          .type(type)
-                          .name(name.toString())
-                          .addModifier(Modifier.PRIVATE)
-                          .build();
+        return FieldSyntax.mutableFrom(type, name.toString());
     }
 
     private ConstructorMethodSyntax constructor(ShapeCodegenState state) {
@@ -115,6 +102,15 @@ public final class StructureDataBuilder implements DirectedClass {
         return builder.build();
     }
 
+    private MethodSyntax buildMethod(ShapeCodegenState state) {
+        var shapeType = Utils.toJavaTypeName(state, state.shape());
+        return MethodSyntax.builder("build")
+                           .addModifier(Modifier.PUBLIC)
+                           .returns(shapeType)
+                           .body(b -> b.addStatement("return new $T(this)", shapeType))
+                           .build();
+    }
+
     private List<MethodSyntax> setters(ShapeCodegenState state, MemberShape member) {
         return List.of(setter(state, member));
     }
@@ -124,7 +120,7 @@ public final class StructureDataBuilder implements DirectedClass {
         var symbol = symbolProvider.toSymbol(member);
         var name = symbolProvider.toMemberName(member);
         var builder = methodBuilder(Utils.toSetterName(symbol).toString())
-                                  .addParameter(Utils.toJavaTypeName(symbol), name);
+            .addParameter(Utils.toJavaTypeName(symbol), name);
         for (var stmt : Utils.builderSetter(symbol).statements()) {
             builder.addStatement(stmt);
         }

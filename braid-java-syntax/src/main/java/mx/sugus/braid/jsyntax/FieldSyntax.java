@@ -133,6 +133,30 @@ public final class FieldSyntax implements SyntaxNode {
         return new Builder();
     }
 
+    public static FieldSyntax from(TypeName type, String name) {
+        return FieldSyntax.builder()
+                       .addModifiers(javax.lang.model.element.Modifier.PRIVATE, javax.lang.model.element.Modifier.FINAL)
+                       .name(name)
+                       .type(type)
+                       .build();
+    }
+
+    public static FieldSyntax from(Class<?> kclass, String name) {
+        return FieldSyntax.builder()
+                       .addModifiers(javax.lang.model.element.Modifier.PRIVATE, javax.lang.model.element.Modifier.FINAL)
+                       .name(name)
+                       .type(ClassName.from(kclass))
+                       .build();
+    }
+
+    public static FieldSyntax mutableFrom(TypeName type, String name) {
+        return FieldSyntax.builder()
+                       .addModifier(javax.lang.model.element.Modifier.PRIVATE)
+                       .name(name)
+                       .type(type)
+                       .build();
+    }
+
     public static final class Builder {
         private Javadoc javadoc;
         private String name;
