@@ -34,7 +34,7 @@ import mx.sugus.braid.traits.FromFactoriesTrait;
 import mx.sugus.braid.traits.MultiAddOverridesTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
 
-public class BuilderAdderOverridesTransform implements ShapeTaskTransformer<TypeSyntaxResult> {
+public final class BuilderAdderOverridesTransform implements ShapeTaskTransformer<TypeSyntaxResult> {
     public static final Identifier ID = Identifier.of(BuilderAdderOverridesTransform.class);
 
     @Override

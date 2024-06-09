@@ -20,7 +20,7 @@ import mx.sugus.braid.traits.SetterOverride;
 import mx.sugus.braid.traits.SetterOverridesTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
 
-public class BuilderSetterOverridesTransform implements ShapeTaskTransformer<TypeSyntaxResult> {
+public final class BuilderSetterOverridesTransform implements ShapeTaskTransformer<TypeSyntaxResult> {
     public static final Identifier ID = Identifier.of(BuilderSetterOverridesTransform.class);
 
     @Override

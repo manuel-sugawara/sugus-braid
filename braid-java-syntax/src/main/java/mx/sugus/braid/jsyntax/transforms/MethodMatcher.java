@@ -21,6 +21,13 @@ public interface MethodMatcher {
     boolean matches(BaseMethodSyntax node);
 
     /**
+     * Returns true if the matcher matches when no methods are present.
+     */
+    default boolean matchesOnEmpty() {
+        return false;
+    }
+
+    /**
      * Returns a new method matcher by name.
      *
      * @param name the name to match against
@@ -44,7 +51,7 @@ public interface MethodMatcher {
      * Returns a new method matcher that matches any method.
      */
     static MethodMatcher any() {
-        return m -> true;
+        return AnyMatcher.INSTANCE;
     }
 
     /**
@@ -112,6 +119,23 @@ public interface MethodMatcher {
                     return false;
                 }
             }
+            return true;
+        }
+    }
+
+    /**
+     * Matches any method or matches when there are no methods
+     */
+    class AnyMatcher implements MethodMatcher {
+        static final AnyMatcher INSTANCE = new AnyMatcher();
+
+        @Override
+        public boolean matches(BaseMethodSyntax node) {
+            return true;
+        }
+
+        @Override
+        public boolean matchesOnEmpty() {
             return true;
         }
     }

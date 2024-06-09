@@ -92,6 +92,11 @@ public final class AbstractMethodSyntax implements BaseMethodSyntax {
     }
 
     @Override
+    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
+        return visitor.visitAbstractMethodSyntax(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -151,11 +156,6 @@ public final class AbstractMethodSyntax implements BaseMethodSyntax {
      */
     public static Builder builder(String name) {
         return builder().name(name);
-    }
-
-    @Override
-    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
-        return visitor.visitAbstractMethodSyntax(this);
     }
 
     public static final class Builder {

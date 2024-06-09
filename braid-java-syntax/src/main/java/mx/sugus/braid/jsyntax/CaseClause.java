@@ -38,6 +38,11 @@ public final class CaseClause implements SyntaxNode {
     }
 
     @Override
+    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
+        return visitor.visitCaseClause(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -70,11 +75,6 @@ public final class CaseClause implements SyntaxNode {
      */
     public static Builder builder() {
         return new Builder();
-    }
-
-    @Override
-    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
-        return visitor.visitCaseClause(this);
     }
 
     public static final class Builder {

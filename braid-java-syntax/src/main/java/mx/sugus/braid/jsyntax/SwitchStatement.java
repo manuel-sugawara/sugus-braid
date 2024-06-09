@@ -45,6 +45,11 @@ public final class SwitchStatement implements Statement {
     }
 
     @Override
+    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
+        return visitor.visitSwitchStatement(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -85,11 +90,6 @@ public final class SwitchStatement implements Statement {
      */
     public static Builder builder() {
         return new Builder();
-    }
-
-    @Override
-    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
-        return visitor.visitSwitchStatement(this);
     }
 
     public static final class Builder {

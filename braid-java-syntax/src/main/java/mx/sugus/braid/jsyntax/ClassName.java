@@ -36,6 +36,11 @@ public final class ClassName implements TypeName {
     }
 
     @Override
+    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
+        return visitor.visitClassName(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -152,11 +157,6 @@ public final class ClassName implements TypeName {
                 break;
             }
             throw new IllegalArgumentException("Cannot convert type: " + type.kind() + ", to java class");
-    }
-
-    @Override
-    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
-        return visitor.visitClassName(this);
     }
 
     public static final class Builder {

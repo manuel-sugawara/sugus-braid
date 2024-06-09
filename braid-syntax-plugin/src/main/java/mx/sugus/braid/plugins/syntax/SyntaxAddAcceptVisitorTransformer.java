@@ -1,29 +1,28 @@
 package mx.sugus.braid.plugins.syntax;
 
+import java.util.List;
 import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
-import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeVariableTypeName;
+import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.jsyntax.ext.TypeNameExt;
+import mx.sugus.braid.jsyntax.transforms.AddMethodsTransform;
+import mx.sugus.braid.jsyntax.transforms.MethodMatcher;
+import mx.sugus.braid.jsyntax.transforms.TypeMatcher;
+import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
 import mx.sugus.braid.plugins.data.producers.Utils;
-import mx.sugus.braid.traits.InterfaceTrait;
 import software.amazon.smithy.model.shapes.ShapeId;
 
-public final class SyntaxAddAcceptVisitorTransformer implements ShapeTaskTransformer<TypeSyntaxResult> {
+public record SyntaxAddAcceptVisitorTransformer(String syntaxNode) implements ShapeTaskTransformer<TypeSyntaxResult> {
     private static final Identifier ID = Identifier.of(SyntaxAddAcceptVisitorTransformer.class);
-    private final String syntaxNode;
-
-    public SyntaxAddAcceptVisitorTransformer(String syntaxNode) {
-        this.syntaxNode = syntaxNode;
-    }
 
     @Override
     public Identifier taskId() {
@@ -37,29 +36,37 @@ public final class SyntaxAddAcceptVisitorTransformer implements ShapeTaskTransfo
 
     @Override
     public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
-        var shape = state.shape();
-        if (shape.hasTrait(InterfaceTrait.class)) {
+        var methods = acceptMethods(state);
+        if (methods.isEmpty()) {
             return result;
         }
+        var shape = state.shape();
+        var symbolProvider = state.symbolProvider();
+        var symbol = symbolProvider.toSymbol(shape);
+        var syntax = (ClassSyntax)
+            AddMethodsTransform.builder()
+                               .addBefore()
+                               .methodMatcher(MethodMatcher.byName("equals"))
+                               .typeMatcher(TypeMatcher.byName(Utils.toJavaName(symbol).toString()))
+                               .methods(methods)
+                               .build()
+                               .transform(result.syntax());
+        return result.toBuilder()
+                     .syntax(Utils.addGeneratedBy(syntax, SyntaxModelPlugin.ID))
+                     .build();
+    }
+
+    private List<MethodSyntax> acceptMethods(ShapeCodegenState state) {
+        var shape = state.shape();
         if (!SyntaxVisitorJavaProducer.shapeImplements(syntaxNode(), state.model(), shape)) {
-            return result;
+            return List.of();
         }
         var syntaxShape = state.model().expectShape(ShapeId.from(syntaxNode));
         var syntaxNodeClass = ClassName.toClassName(Utils.toJavaTypeName(state, syntaxShape));
         var visitorClass = ClassName.from(syntaxNodeClass.packageName(), syntaxNodeClass.name() + "Visitor");
         var visitor = ParameterizedTypeName.from(visitorClass, TypeVariableTypeName.from("VisitorR"));
         var name = Utils.toJavaName(state, shape);
-        var syntax = ((ClassSyntax) result.syntax())
-            .toBuilder()
-            .addMethod(acceptMethod(visitor, name))
-            .build();
-        return result.toBuilder()
-                     .syntax(Utils.addGeneratedBy(syntax, SyntaxModelPlugin.ID))
-                     .build();
-    }
-
-    public String syntaxNode() {
-        return syntaxNode;
+        return List.of(acceptMethod(visitor, name));
     }
 
     private MethodSyntax acceptMethod(ParameterizedTypeName visitor, Name name) {

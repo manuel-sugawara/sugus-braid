@@ -38,6 +38,11 @@ public final class TypeVariableTypeName implements TypeName {
     }
 
     @Override
+    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
+        return visitor.visitTypeVariableTypeName(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -76,11 +81,6 @@ public final class TypeVariableTypeName implements TypeName {
 
     public static TypeVariableTypeName from(String name) {
         return TypeVariableTypeName.builder().name(name).build();
-    }
-
-    @Override
-    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
-        return visitor.visitTypeVariableTypeName(this);
     }
 
     public static final class Builder {

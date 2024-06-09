@@ -105,6 +105,11 @@ public final class MethodSyntax implements BaseMethodSyntax {
     }
 
     @Override
+    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
+        return visitor.visitMethodSyntax(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -167,11 +172,6 @@ public final class MethodSyntax implements BaseMethodSyntax {
      */
     public static Builder builder(String name) {
         return builder().name(name);
-    }
-
-    @Override
-    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
-        return visitor.visitMethodSyntax(this);
     }
 
     public static final class Builder {

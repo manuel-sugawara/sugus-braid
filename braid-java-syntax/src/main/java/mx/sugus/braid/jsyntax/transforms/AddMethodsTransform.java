@@ -36,7 +36,8 @@ public final class AddMethodsTransform implements SyntaxNodeTransformer {
         var visitor = new TransformVisitor();
         var result = node.accept(visitor);
         if (!visitor.added) {
-            throw new IllegalArgumentException("The given type does not match any of the constraints, methods not added");
+            throw new IllegalArgumentException("The given type does not match any of the constraints, methods not added."
+            + " node: " + node);
         }
         return result;
     }
@@ -124,11 +125,17 @@ public final class AddMethodsTransform implements SyntaxNodeTransformer {
             var done = false;
             if (position == Position.BEFORE) {
                 for (var method : typeSyntax.methods()) {
-                    if (methodMatcher.matches(method)) {
+                    if (!done && methodMatcher.matches(method)) {
                         methods.addAll(methods());
                         done = true;
                     }
                     methods.add(method);
+                }
+                if (!done) {
+                    if (typeSyntax.methods().isEmpty() && methodMatcher.matchesOnEmpty()) {
+                        methods.addAll(methods());
+                        done = true;
+                    }
                 }
             } else if (position == Position.AFTER) {
                 var foundFirstMatch = false;
@@ -144,9 +151,11 @@ public final class AddMethodsTransform implements SyntaxNodeTransformer {
                         methods.add(method);
                     }
                 }
-                if (foundFirstMatch && !done) {
-                    methods.addAll(methods());
-                    done = true;
+                if (!done) {
+                    if (foundFirstMatch || (typeSyntax.methods().isEmpty() && methodMatcher.matchesOnEmpty())) {
+                        methods.addAll(methods());
+                        done = true;
+                    }
                 }
             }
             added = done;

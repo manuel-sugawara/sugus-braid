@@ -19,7 +19,7 @@ import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.traits.BuilderOverride;
 import mx.sugus.braid.traits.FromFactoriesTrait;
 
-public class ClassFromFactoryOverridesTransform implements ShapeTaskTransformer<TypeSyntaxResult> {
+public final class ClassFromFactoryOverridesTransform implements ShapeTaskTransformer<TypeSyntaxResult> {
 
     public static final Identifier ID = Identifier.of(ClassFromFactoryOverridesTransform.class);
 

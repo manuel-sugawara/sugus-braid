@@ -63,6 +63,11 @@ public final class AbstractControlFlow implements Statement {
     }
 
     @Override
+    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
+        return visitor.visitAbstractControlFlow(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -103,11 +108,6 @@ public final class AbstractControlFlow implements Statement {
      */
     public static Builder builder() {
         return new Builder();
-    }
-
-    @Override
-    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
-        return visitor.visitAbstractControlFlow(this);
     }
 
     public static final class Builder {
