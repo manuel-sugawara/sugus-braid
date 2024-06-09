@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import mx.sugus.braid.core.util.TopologicalSort;
 import software.amazon.smithy.build.SmithyBuildException;
 import software.amazon.smithy.model.node.ObjectNode;
@@ -50,7 +51,7 @@ public final class DefaultBaseModuleConfig {
         var result = new ArrayList<SmithyGeneratorPlugin>();
         for (var pluginId : sortedIds) {
             var plugin = pluginsLoaded.get(pluginId);
-            result.add(plugin);
+            result.add(Objects.requireNonNull(plugin));
         }
         return result;
     }

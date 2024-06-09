@@ -31,12 +31,9 @@ public interface PluginLoader {
         while (!allRequired.isEmpty()) {
             result = loadPlugins(allRequired).merge(result);
             var newAllRequired = requiredButNotLoaded(result);
-            // We are done.
-            if (result.isFullyResolved()) {
-                break;
-            }
-            // Ww are not done and didn't make any progress, bail out.
-            if (newAllRequired.size() == allRequired.size()) {
+
+            // Ww are not done and didn't make progress, bail out.
+            if (newAllRequired.equals(allRequired)) {
                 break;
             }
             // Refresh requirements and try again.
