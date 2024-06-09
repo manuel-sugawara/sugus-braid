@@ -79,6 +79,11 @@ public final class FieldSyntax implements SyntaxNode {
     }
 
     @Override
+    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
+        return visitor.visitFieldSyntax(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -126,11 +131,6 @@ public final class FieldSyntax implements SyntaxNode {
      */
     public static Builder builder() {
         return new Builder();
-    }
-
-    @Override
-    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
-        return visitor.visitFieldSyntax(this);
     }
 
     public static final class Builder {

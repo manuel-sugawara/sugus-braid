@@ -110,6 +110,11 @@ public final class EnumSyntax implements TypeSyntax {
     }
 
     @Override
+    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
+        return visitor.visitEnumSyntax(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -175,11 +180,6 @@ public final class EnumSyntax implements TypeSyntax {
      */
     public static Builder builder(String name) {
         return builder().name(name);
-    }
-
-    @Override
-    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
-        return visitor.visitEnumSyntax(this);
     }
 
     public static final class Builder {

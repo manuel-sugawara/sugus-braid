@@ -39,6 +39,11 @@ public final class Annotation implements SyntaxNode {
     }
 
     @Override
+    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
+        return visitor.visitAnnotation(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -91,11 +96,6 @@ public final class Annotation implements SyntaxNode {
      */
     public static Builder builder(Class<?> kclass) {
         return builder().type(ClassName.from(kclass));
-    }
-
-    @Override
-    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
-        return visitor.visitAnnotation(this);
     }
 
     public static final class Builder {

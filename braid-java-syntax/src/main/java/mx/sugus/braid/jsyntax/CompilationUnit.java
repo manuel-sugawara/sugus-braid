@@ -48,6 +48,11 @@ public final class CompilationUnit implements SyntaxNode {
     }
 
     @Override
+    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
+        return visitor.visitCompilationUnit(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -89,11 +94,6 @@ public final class CompilationUnit implements SyntaxNode {
      */
     public static Builder builder() {
         return new Builder();
-    }
-
-    @Override
-    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
-        return visitor.visitCompilationUnit(this);
     }
 
     public static final class Builder {

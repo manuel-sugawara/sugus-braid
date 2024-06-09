@@ -108,17 +108,27 @@ public final class Utils {
     }
 
     public static Name toJavaName(Symbol symbol) {
-        var name =  symbol.getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow();
+        var name = symbol.getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow();
         return validateName(name, symbol);
     }
 
     public static Name toSetterName(Symbol symbol) {
-        var name =  symbol.getProperty(SymbolProperties.SETTER_NAME).orElseThrow();
+        var name = symbol.getProperty(SymbolProperties.SETTER_NAME).orElseThrow();
         return validateName(name, symbol);
     }
 
     public static Name toGetterName(Symbol symbol) {
         var name = symbol.getProperty(SymbolProperties.GETTER_NAME).orElseThrow();
+        return validateName(name, symbol);
+    }
+
+    public static Name toAdderName(Symbol symbol) {
+        var name = symbol.getProperty(SymbolProperties.ADDER_NAME).orElseThrow();
+        return validateName(name, symbol);
+    }
+
+    public static Name toMultiAdderName(Symbol symbol) {
+        var name = symbol.getProperty(SymbolProperties.MULTI_ADDER_NAME).orElseThrow();
         return validateName(name, symbol);
     }
 

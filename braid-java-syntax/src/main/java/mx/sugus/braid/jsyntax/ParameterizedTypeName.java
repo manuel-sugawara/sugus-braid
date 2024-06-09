@@ -38,6 +38,11 @@ public final class ParameterizedTypeName implements TypeName {
     }
 
     @Override
+    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
+        return visitor.visitParameterizedTypeName(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -99,11 +104,6 @@ public final class ParameterizedTypeName implements TypeName {
                 builder.addTypeArgument(TypeName.from(param));
             }
             return builder.build();
-    }
-
-    @Override
-    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
-        return visitor.visitParameterizedTypeName(this);
     }
 
     public static final class Builder {

@@ -30,6 +30,11 @@ public final class PrimitiveTypeName implements TypeName {
     }
 
     @Override
+    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
+        return visitor.visitPrimitiveTypeName(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -61,11 +66,6 @@ public final class PrimitiveTypeName implements TypeName {
      */
     public static Builder builder() {
         return new Builder();
-    }
-
-    @Override
-    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
-        return visitor.visitPrimitiveTypeName(this);
     }
 
     public static final class Builder {

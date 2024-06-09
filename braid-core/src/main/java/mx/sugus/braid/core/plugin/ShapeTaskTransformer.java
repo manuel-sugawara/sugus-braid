@@ -23,11 +23,11 @@ public interface ShapeTaskTransformer<T> {
     Identifier transformsId();
 
     /**
-     * Transforms the give type and returns the transformed instance.
+     * Transforms the give result and returns the transformed instance.
      *
-     * @param type      The type to transform.
-     * @param directive The directive containing all the data needed for the transformer.
-     * @return The transformed type.
+     * @param result      The result to transform.
+     * @param state The state containing all the data needed for the transformer.
+     * @return The transformed result.
      */
-    T transform(T type, ShapeCodegenState directive);
+    T transform(T result, ShapeCodegenState state);
 }

@@ -42,13 +42,13 @@ public final class BlockBuilderTransformer implements ShapeTaskTransformer<TypeS
     }
 
     @Override
-    public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState directive) {
+    public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
         var type = result.syntax();
-        var blockMemberName = blockMemberName(directive, directive.shape().asStructureShape().orElseThrow());
+        var blockMemberName = blockMemberName(state, state.shape().asStructureShape().orElseThrow());
         if (blockMemberName == null) {
             return result;
         }
-        var enhanced = enhanceType((ClassSyntax) type, blockMemberName, directive);
+        var enhanced = enhanceType((ClassSyntax) type, blockMemberName, state);
         return result.toBuilder().syntax(enhanced).build();
     }
 

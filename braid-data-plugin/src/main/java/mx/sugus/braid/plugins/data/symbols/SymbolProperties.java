@@ -45,6 +45,16 @@ public final class SymbolProperties {
     public static final Property<Name> GETTER_NAME = Property.named("getter-name");
 
     /**
+     * Property for the adder name for a given symbol.
+     */
+    public static final Property<Name> ADDER_NAME = Property.named("adder-name");
+
+    /**
+     * Property for the adder name for a given symbol.
+     */
+    public static final Property<Name> MULTI_ADDER_NAME = Property.named("multi-adder-name");
+
+    /**
      * Property for the shape type for the symbol.
      */
     public static final Property<ShapeType> SHAPE_TYPE = Property.named("shape-type");

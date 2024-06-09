@@ -28,6 +28,11 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
     }
 
     @Override
+    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
+        return visitor.visitCodeBlock(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -63,11 +68,6 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
 
     public static CodeBlock from(String format, Object... args) {
         return builder().parts(FormatParser.parseFormat(format, args)).build();
-    }
-
-    @Override
-    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
-        return visitor.visitCodeBlock(this);
     }
 
     public static final class Builder {

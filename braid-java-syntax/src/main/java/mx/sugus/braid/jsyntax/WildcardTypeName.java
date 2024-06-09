@@ -45,6 +45,11 @@ public final class WildcardTypeName implements TypeName {
     }
 
     @Override
+    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
+        return visitor.visitWildcardTypeName(this);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -85,11 +90,6 @@ public final class WildcardTypeName implements TypeName {
      */
     public static Builder builder() {
         return new Builder();
-    }
-
-    @Override
-    public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
-        return visitor.visitWildcardTypeName(this);
     }
 
     public static final class Builder {

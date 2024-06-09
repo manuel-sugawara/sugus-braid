@@ -7,7 +7,12 @@ import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.SmithyGeneratorPlugin;
 import mx.sugus.braid.jsyntax.Annotation;
 import mx.sugus.braid.jsyntax.CodeBlock;
+import mx.sugus.braid.plugins.data.producers.BuilderAdderOverridesTransform;
+import mx.sugus.braid.plugins.data.producers.BuilderSetterOverridesTransform;
+import mx.sugus.braid.plugins.data.producers.ClassBuilderOverridesTransform;
+import mx.sugus.braid.plugins.data.producers.ClassFromFactoryOverridesTransform;
 import mx.sugus.braid.plugins.data.producers.EnumJavaProducer;
+import mx.sugus.braid.plugins.data.producers.InterfaceFromFactoryOverridesTransform;
 import mx.sugus.braid.plugins.data.producers.StructureInterfaceJavaProducer;
 import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
 import mx.sugus.braid.plugins.data.producers.UnionJavaProducer;
@@ -39,6 +44,11 @@ public final class DataPlugin implements SmithyGeneratorPlugin {
             .addProducer(new StructureInterfaceJavaProducer())
             .addProducer(new EnumJavaProducer())
             .addProducer(new UnionJavaProducer())
+            .addTransformer(new BuilderSetterOverridesTransform())
+            .addTransformer(new BuilderAdderOverridesTransform())
+            .addTransformer(new ClassBuilderOverridesTransform())
+            .addTransformer(new ClassFromFactoryOverridesTransform())
+            .addTransformer(new InterfaceFromFactoryOverridesTransform())
             .addSymbolProviderDecorator(DataSymbolProviderDecorator.get())
             .build();
     }

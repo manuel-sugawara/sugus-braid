@@ -162,10 +162,14 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
             .putProperty(SymbolProperties.DATA_BUILDER_INIT, SymbolCodegen::dataBuilderInitializer)
             .putProperty(SymbolProperties.BUILDER_SETTER_FOR_MEMBER, SymbolCodegen::builderSetterForMember)
             .putProperty(SymbolProperties.DEFAULT_VALUE, getDefaultValue(shape, targetShape));
-        if (targetSymbol.getProperty(SymbolProperties.AGGREGATE_TYPE).orElse(AggregateType.NONE) != AggregateType.NONE) {
+        var aggregateType = targetSymbol.getProperty(SymbolProperties.AGGREGATE_TYPE).orElse(AggregateType.NONE);
+        if (aggregateType != AggregateType.NONE) {
             var targetType = targetSymbol.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
             builder.putProperty(SymbolProperties.BUILDER_JAVA_TYPE,
                                 ParameterizedTypeName.from(CollectionBuilderReference.class, targetType));
+            var prefix = aggregateType == AggregateType.MAP ? "put" : "add";
+            builder.putProperty(SymbolProperties.ADDER_NAME, simpleName.toSingularSpelling().withPrefix(prefix));
+            builder.putProperty(SymbolProperties.MULTI_ADDER_NAME, simpleName.withPrefix(prefix));
         } else if (builderReference != null) {
             var targetType = targetSymbol.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
             var builderTypeId = builderReference.builderType();

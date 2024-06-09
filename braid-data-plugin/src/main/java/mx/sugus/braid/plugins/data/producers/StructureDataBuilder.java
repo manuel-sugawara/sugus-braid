@@ -176,26 +176,16 @@ public final class StructureDataBuilder implements DirectedClass {
 
     private List<MethodSyntax> collectionAdder(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
-        var methodName = Utils.toJavaSingularName(state, member, "add");
+        var symbol = symbolProvider.toSymbol(member);
+        var methodName = Utils.toAdderName(symbol);
         var builder = MethodSyntax.builder(methodName.toString())
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(className(state));
         addValueParam(state, member, builder);
         var name = symbolProvider.toMemberName(member);
-        if (member.hasTrait(ConstTrait.class)) {
-            builder.body(b -> b.addStatement("throw new $T($S)", UnsupportedOperationException.class,
-                                             "Member " + name + " value is constant"));
-            return List.of(builder.build());
-        }
-        var aggregateType = Utils.aggregateType(state, member);
         builder.body(body -> {
-            switch (aggregateType) {
-                case LIST, SET -> {
-                    var valueArgument = Utils.toJavaSingularName(state, member).toString();
-                    addValue(state, member, body, List.of(valueArgument));
-                }
-                default -> throw new IllegalArgumentException("cannot create adder for " + member);
-            }
+            var valueArgument = Utils.toJavaSingularName(state, member).toString();
+            addValue(state, member, body, List.of(valueArgument));
             body.addStatement("return this");
         });
         var doc = "Adds a single value for `" + name + "`";
@@ -207,18 +197,13 @@ public final class StructureDataBuilder implements DirectedClass {
     }
 
     private List<MethodSyntax> mapAdder(ShapeCodegenState state, MemberShape member) {
-        var name = Utils.toMemberJavaName(state, member);
-        var methodName = Utils.toJavaSingularName(state, member, "put").toString();
+        var symbolProvider = state.symbolProvider();
+        var symbol = symbolProvider.toSymbol(member);
+        var methodName = Utils.toAdderName(symbol).toString();
         var builder = MethodSyntax.builder(methodName)
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(className(state));
         addKeyValueParam(state, member, builder);
-        if (member.hasTrait(ConstTrait.class)) {
-            builder.addStatement("throw new $T($S)", UnsupportedOperationException.class,
-                                 "Member `" + name + "` value is constant");
-            return List.of(builder.build());
-
-        }
         builder.body(body -> {
             addKeyValue(state, member, body);
             body.addStatement("return this");
