@@ -72,7 +72,7 @@ public final class FieldSyntax implements SyntaxNode {
     }
 
     /**
-     * Returns a new builder to modify a copy of this instance
+     * <p>Returns a new builder to modify a copy of this instance</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -154,6 +154,14 @@ public final class FieldSyntax implements SyntaxNode {
                        .addModifier(javax.lang.model.element.Modifier.PRIVATE)
                        .name(name)
                        .type(type)
+                       .build();
+    }
+
+    public static FieldSyntax mutableFrom(Class<?> kclass, String name) {
+        return FieldSyntax.builder()
+                       .addModifier(javax.lang.model.element.Modifier.PRIVATE)
+                       .name(name)
+                       .type(ClassName.from(kclass))
                        .build();
     }
 

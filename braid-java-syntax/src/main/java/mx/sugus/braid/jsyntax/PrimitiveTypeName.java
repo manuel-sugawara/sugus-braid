@@ -23,7 +23,7 @@ public final class PrimitiveTypeName implements TypeName {
     }
 
     /**
-     * Returns a new builder to modify a copy of this instance
+     * <p>Returns a new builder to modify a copy of this instance</p>
      */
     public Builder toBuilder() {
         return new Builder(this);

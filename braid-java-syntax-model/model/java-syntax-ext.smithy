@@ -134,6 +134,25 @@ apply FieldSyntax @fromFactories([
                        .type(type)
                        .build()"""]
     }
+    {
+        name: "mutableFrom"
+        args: [
+            {
+                type: "java.lang#Class<?>"
+                name: "kclass"
+            }
+            {
+                type: "java.lang#String"
+                name: "name"
+            }
+        ]
+        body: ["""
+            return FieldSyntax.builder()
+                       .addModifier(javax.lang.model.element.Modifier.PRIVATE)
+                       .name(name)
+                       .type(ClassName.from(kclass))
+                       .build()"""]
+    }
 ])
 
 apply Annotation @newBuilderOverrides([

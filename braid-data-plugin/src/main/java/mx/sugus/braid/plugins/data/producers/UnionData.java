@@ -64,8 +64,8 @@ public final class UnionData implements DirectedClass {
         return ConstructorMethodSyntax.builder()
                                       .addModifier(Modifier.PRIVATE)
                                       .addParameter(builderJavaClassName(), "builder")
-                                      .body(b -> b.addStatement("this.value = builder.value")
-                                                  .addStatement("this.type = builder.type"))
+                                      .addStatement("this.value = builder.value")
+                                      .addStatement("this.type = builder.type")
                                       .build();
     }
 
@@ -76,15 +76,17 @@ public final class UnionData implements DirectedClass {
 
     private MethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
-        var name = symbolProvider.toMemberName(member);
+        var symbol = symbolProvider.toSymbol(member);
+        var getterName = Utils.toGetterName(symbol);
         var type = Utils.toJavaTypeName(state, member);
         var memberName = member.getMemberName();
         var unionTypeName = Name.of(memberName, Name.Convention.SCREAM_CASE).toString();
-        var builder = MethodSyntax.builder(name)
+        var builder = MethodSyntax.builder(getterName.toString())
+                                  .addAnnotation(SUPPRESS_UNCHECKED)
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(type);
         builder.ifStatement("this.type == Type.$L", unionTypeName, then -> {
-            then.addStatement("return $T.class.cast(this.value)", type);
+            then.addStatement("return ($T) this.value", type);
         });
         builder.addStatement("throw new $T($S + this.type + $S)", NoSuchElementException.class,
                              "Union element `" + memberName + "` not set, currently set `", "`");
@@ -113,22 +115,22 @@ public final class UnionData implements DirectedClass {
     }
 
     private MethodSyntax accessorForType() {
-        var doc = "Retrieve an enum value representing which member of this object is populated.\n\n"
+        var doc = "Returns an enum value representing which member of this object is populated.\n\n"
                   + "This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.";
         return MethodSyntax.builder("type")
-                           .javadoc(CodeBlock.from("$L", JavadocExt.document(doc)))
+                           .javadoc(JavadocExt.document(doc))
                            .addModifier(Modifier.PUBLIC)
                            .returns(UnionTypeEnumData.TYPE_NAME)
-                           .body(b -> b.addStatement("return this.type"))
+                           .addStatement("return this.type")
                            .build();
     }
 
     private MethodSyntax accessorForValue() {
-        var doc = "Retrieve the untyped value of the union.\n\n"
+        var doc = "Returns the untyped value of the union.\n\n"
                   + "Use {@link #type()} to get the member currently set.";
 
         return MethodSyntax.builder("value")
-                           .javadoc(CodeBlock.from("$L", JavadocExt.document(doc)))
+                           .javadoc(JavadocExt.document(doc))
                            .addModifier(Modifier.PUBLIC)
                            .returns(Object.class)
                            .body(b -> b.addStatement("return this.value"))
@@ -146,19 +148,17 @@ public final class UnionData implements DirectedClass {
     }
 
     public MethodSyntax equalsMethod(ShapeCodegenState state) {
-        var result = MethodSyntax.builder("equals")
-                                 .addAnnotation(Override.class)
-                                 .addModifier(Modifier.PUBLIC)
-                                 .returns(boolean.class)
-                                 .addParameter(Object.class, "other");
-        result.body(body -> {
-            body.ifStatement("this == other", b -> b.addStatement("return true"));
-            var className = className(state);
-            body.ifStatement("!(other instanceof $T)", className, b -> b.addStatement("return false"));
-            body.addStatement("$1T that = ($1T) other", className);
-            body.addStatement("return this.type == that.type && this.value.equals(that.value)");
-        });
-        return result.build();
+        var builder = MethodSyntax.builder("equals")
+                                  .addAnnotation(Override.class)
+                                  .addModifier(Modifier.PUBLIC)
+                                  .returns(boolean.class)
+                                  .addParameter(Object.class, "other");
+        builder.ifStatement("this == other", b -> b.addStatement("return true"));
+        var className = className(state);
+        builder.ifStatement("!(other instanceof $T)", className, b -> b.addStatement("return false"));
+        builder.addStatement("$1T that = ($1T) other", className);
+        builder.addStatement("return this.type == that.type && this.value.equals(that.value)");
+        return builder.build();
     }
 
     MethodSyntax hashCodeMethod(ShapeCodegenState state) {
@@ -209,7 +209,7 @@ public final class UnionData implements DirectedClass {
     List<MethodSyntax> builderMethods(ShapeCodegenState state) {
         var dataType = builderJavaClassName();
         var defaultBuilder = MethodSyntax.builder("builder")
-                                         .javadoc("$L", JavadocExt.document("Creates a new builder"))
+                                         .javadoc(JavadocExt.document("Creates a new builder"))
                                          .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                                          .returns(dataType)
                                          .body(b -> b.addStatement("return new $T()", dataType))
