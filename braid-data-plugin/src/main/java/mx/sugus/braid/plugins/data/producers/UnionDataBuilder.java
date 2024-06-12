@@ -26,8 +26,7 @@ import mx.sugus.braid.traits.UseBuilderReferenceTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.traits.DocumentationTrait;
 
-// TODO: split using CompositeDirectedClass
-public class UnionDataBuilder implements DirectedClass {
+public final class UnionDataBuilder implements DirectedClass {
 
     @Override
     public ClassName className(ShapeCodegenState state) {
@@ -47,16 +46,8 @@ public class UnionDataBuilder implements DirectedClass {
 
     @Override
     public List<FieldSyntax> extraFields(ShapeCodegenState state) {
-        return List.of(FieldSyntax.builder()
-                                  .name("value")
-                                  .type(Object.class)
-                                  .addModifier(Modifier.PRIVATE)
-                                  .build(),
-                       FieldSyntax.builder()
-                                  .name("type")
-                                  .type(ClassName.from("Type"))
-                                  .addModifier(Modifier.PRIVATE)
-                                  .build());
+        return List.of(FieldSyntax.mutableFrom(Object.class, "value"),
+                       FieldSyntax.mutableFrom(ClassName.from("Type"), "type"));
     }
 
     @Override
@@ -74,7 +65,7 @@ public class UnionDataBuilder implements DirectedClass {
         return MethodSyntax.builder("build")
                            .addModifier(Modifier.PUBLIC)
                            .returns(shapeType)
-                           .body(b -> b.addStatement("return new $T(this)", shapeType))
+                           .addStatement("return new $T(this)", shapeType)
                            .build();
     }
 

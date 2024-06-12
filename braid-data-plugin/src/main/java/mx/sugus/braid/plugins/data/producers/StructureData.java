@@ -60,8 +60,10 @@ public final class StructureData implements DirectedClass {
     }
 
     public FieldSyntax fieldFor(ShapeCodegenState state, MemberShape member) {
-        var name = Utils.toJavaName(state, member);
-        var type = Utils.toJavaTypeName(state, member);
+        var symbolProvider = state.symbolProvider();
+        var symbol = symbolProvider.toSymbol(member);
+        var name = Utils.toJavaName(symbol);
+        var type = Utils.toJavaTypeName(symbol);
         return FieldSyntax.from(type, name.toString());
     }
 
@@ -211,7 +213,8 @@ public final class StructureData implements DirectedClass {
                 if (member.hasTrait(ConstTrait.class)) {
                     continue;
                 }
-                var name = symbolProvider.toMemberName(member);
+                var memberSymbol = symbolProvider.toSymbol(member);
+                var name = Utils.toJavaName(memberSymbol);
                 if (!isFirst) {
                     expressionBuilder.addCode("\n&& ");
                 }
