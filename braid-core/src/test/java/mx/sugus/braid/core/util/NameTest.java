@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 class NameTest {
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "[{index}] => {0}")
     @MethodSource("testCases")
     public void testCase(TestCase testCase) {
         var name = Name.of(testCase.sourceName, Name.Convention.CAMEL_CASE);
@@ -38,6 +38,21 @@ class NameTest {
         var name = Name.of("non_alpha-num@last");
         assertEquals("nonalphanumlast", name.toString());
         assertEquals(Name.Convention.UNKNOWN, name.convention());
+    }
+
+    public static Collection<TestCase> testCases2() {
+        return Arrays.asList(
+            TestCase.builder()
+                    .sourceName("SimpleAndSimple")
+                    .expectedPascalCase("SimpleAndSimple")
+                    .expectedCamelCase("simpleAndSimple")
+                    .expectedScramCase("SIMPLE_AND_SIMPLE")
+                    .expectSingularSpelling("simpleAndSimple")
+                    .expectPrefixWithArticle("aSimpleAndSimple")
+                    .expectedWithPrefix("fooSimpleAndSimple")
+                    .expectedWithSuffix("simpleAndSimpleBar")
+                    .build()
+        );
     }
 
     public static Collection<TestCase> testCases() {
@@ -181,6 +196,11 @@ class NameTest {
 
         static TestCaseBuilder builder() {
             return new TestCaseBuilder();
+        }
+
+        @Override
+        public String toString() {
+            return sourceName;
         }
     }
 
