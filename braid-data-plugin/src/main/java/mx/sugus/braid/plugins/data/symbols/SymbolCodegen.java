@@ -1,5 +1,8 @@
 package mx.sugus.braid.plugins.data.symbols;
 
+import static mx.sugus.braid.plugins.data.symbols.SymbolProperties.BUILDER_REFERENCE_FROM_PERSISTENT;
+import static mx.sugus.braid.plugins.data.symbols.SymbolProperties.BUILDER_REFERENCE_JAVA_TYPE;
+
 import java.util.Objects;
 import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.jsyntax.ClassName;
@@ -27,11 +30,11 @@ public final class SymbolCodegen {
                 }
                 return BodyBuilder.emptyBlock();
             }
-            var fromPersistent = builderReference.fromPersistent();
-            var implementingClass = ClassName.from(fromPersistent.getNamespace(), fromPersistent.getName());
+            var implementingClass = symbol.getProperty(BUILDER_REFERENCE_JAVA_TYPE).orElseThrow();
+            var fromPersistent = symbol.getProperty(BUILDER_REFERENCE_FROM_PERSISTENT).orElseThrow();
             return BodyBuilder.create()
                               .addStatement("this.$L = $T.$L($L)", name, implementingClass,
-                                            fromPersistent.getMember().orElseThrow(), "null")
+                                            fromPersistent, "null")
                               .build();
         }
         var builder = BodyBuilder.create();
@@ -67,11 +70,11 @@ public final class SymbolCodegen {
                                   .addStatement("this.$1L = data.$1L", name)
                                   .build();
             }
-            var fromPersistent = builderReference.fromPersistent();
-            var implementingClass = ClassName.from(fromPersistent.getNamespace(), fromPersistent.getName());
+            var implementingClass = symbol.getProperty(BUILDER_REFERENCE_JAVA_TYPE).orElseThrow();
+            var fromPersistent = symbol.getProperty(BUILDER_REFERENCE_FROM_PERSISTENT).orElseThrow();
             return BodyBuilder.create()
                               .addStatement("this.$L = $T.$L(data.$L)", name, implementingClass,
-                                            fromPersistent.getMember().orElseThrow(), name)
+                                            fromPersistent, name)
                               .build();
         }
         var builder = BodyBuilder.create();

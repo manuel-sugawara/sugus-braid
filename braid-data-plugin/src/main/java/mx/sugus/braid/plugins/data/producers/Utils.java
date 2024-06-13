@@ -316,6 +316,10 @@ public final class Utils {
         return symbol.getProperty(SymbolProperties.BUILDER_REFERENCE_JAVA_TYPE).orElseGet(() -> toJavaTypeName(symbol));
     }
 
+    public static TypeName toRefrenceBuilderBuilderTypeName(Symbol symbol) {
+        return symbol.getProperty(SymbolProperties.BUILDER_REFERENCE_BUILDER_JAVA_TYPE).orElseGet(() -> toJavaTypeName(symbol));
+    }
+
     private static ReservedWords buildReservedWords() {
         return
             new ReservedWordsBuilder()

@@ -22,6 +22,10 @@ public final class CodegenUtils {
             .build()
     );
 
+    public static ClassName builderType() {
+        return BUILDER_TYPE;
+    }
+
     public static <T extends Trait> T getTargetTrait(Class<T> kclass, ShapeCodegenState state, MemberShape member) {
         var target = state.model().expectShape(member.getTarget());
         return target.getTrait(kclass).orElse(null);

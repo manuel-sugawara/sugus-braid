@@ -5,7 +5,6 @@ import software.amazon.smithy.model.node.ObjectNode;
 import software.amazon.smithy.model.shapes.ShapeId;
 import software.amazon.smithy.model.traits.AnnotationTrait;
 
-// nterfaceTrait.java CodegenIgnoreTrait.jav
 
 public final class CodegenIgnoreTrait extends AnnotationTrait {
 

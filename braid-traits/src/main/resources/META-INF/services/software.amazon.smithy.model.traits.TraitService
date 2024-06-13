@@ -12,4 +12,4 @@ mx.sugus.braid.traits.MultiAddOverridesTrait$Provider
 mx.sugus.braid.traits.UseBuilderReferenceTrait$Provider
 mx.sugus.braid.traits.FromFactoriesTrait$Provider
 mx.sugus.braid.traits.SetterOverridesTrait$Provider
-
+mx.sugus.braid.traits.AddBuilderReference$Provider

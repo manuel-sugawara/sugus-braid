@@ -49,8 +49,8 @@ public final class UseBuilderReferenceTrait extends AbstractTrait implements ToS
     public static UseBuilderReferenceTrait fromNode(Node node) {
         Builder builder = builder();
         node.expectObjectNode()
-            .expectStringMember("builderType", builder::builderType)
-            .expectStringMember("fromPersistent", builder::fromPersistent);
+            .getStringMember("builderType", builder::builderType)
+            .getStringMember("fromPersistent", builder::fromPersistent);
         return builder.build();
     }
 

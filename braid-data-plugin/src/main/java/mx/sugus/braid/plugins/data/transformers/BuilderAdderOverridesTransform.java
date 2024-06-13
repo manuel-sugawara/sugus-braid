@@ -1,4 +1,4 @@
-package mx.sugus.braid.plugins.data.producers;
+package mx.sugus.braid.plugins.data.transformers;
 
 import static mx.sugus.braid.core.util.Utils.coalesce;
 import static mx.sugus.braid.plugins.data.producers.CodegenUtils.getTargetListMember;
@@ -26,6 +26,9 @@ import mx.sugus.braid.jsyntax.transforms.AddMethodsTransform;
 import mx.sugus.braid.jsyntax.transforms.MethodMatcher;
 import mx.sugus.braid.jsyntax.transforms.TypeMatcher;
 import mx.sugus.braid.plugins.data.TypeSyntaxResult;
+import mx.sugus.braid.plugins.data.producers.CodegenUtils;
+import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
+import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants;
 import mx.sugus.braid.traits.AddAllOverridesTrait;
 import mx.sugus.braid.traits.AdderOverridesTrait;
@@ -242,7 +245,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
     }
 
     private ClassName className(ShapeCodegenState state) {
-        return CodegenUtils.BUILDER_TYPE;
+        return CodegenUtils.builderType();
     }
 
 }

@@ -28,6 +28,13 @@ public final class SymbolProperties {
      * Property for the java type for members that use builder references to be used in the builder.
      */
     public static final Property<TypeName> BUILDER_REFERENCE_JAVA_TYPE = from(TypeName.class);
+    public static final Property<TypeName> BUILDER_REFERENCE_BUILDER_JAVA_TYPE = from(TypeName.class);
+
+    /**
+     * Property for the name of the method in the {@link #BUILDER_REFERENCE_JAVA_TYPE} that creates the builder from a
+     * persistent value.
+     */
+    public static final Property<String> BUILDER_REFERENCE_FROM_PERSISTENT = from(String.class);
 
     /**
      * Property for the java name for a given symbol.
