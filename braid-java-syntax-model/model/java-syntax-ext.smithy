@@ -78,7 +78,25 @@ apply ModifierList @multiAddOverrides([
     }
 ])
 
-apply FieldSyntaxList @adderOverrides([
+apply FieldSyntax @fromFactories([
+    {
+        args: [
+            {
+                type: "TypeName"
+                name: "type"
+            }
+            {
+                type: "java.lang#String"
+                name: "name"
+            }
+        ]
+        body: ["""
+            return FieldSyntax.builder()
+                       .addModifiers(javax.lang.model.element.Modifier.PRIVATE, javax.lang.model.element.Modifier.FINAL)
+                       .name(name)
+                       .type(type)
+                       .build()"""]
+    }
     {
         args: [
             {
@@ -90,7 +108,50 @@ apply FieldSyntaxList @adderOverrides([
                 name: "name"
             }
         ]
-        body: ["FieldSyntax.builder().name(name).type(TypeName.from(kclass)).build()"]
+        body: ["""
+            return FieldSyntax.builder()
+                       .addModifiers(javax.lang.model.element.Modifier.PRIVATE, javax.lang.model.element.Modifier.FINAL)
+                       .name(name)
+                       .type(ClassName.from(kclass))
+                       .build()"""]
+    }
+    {
+        name: "mutableFrom"
+        args: [
+            {
+                type: "TypeName"
+                name: "type"
+            }
+            {
+                type: "java.lang#String"
+                name: "name"
+            }
+        ]
+        body: ["""
+            return FieldSyntax.builder()
+                       .addModifier(javax.lang.model.element.Modifier.PRIVATE)
+                       .name(name)
+                       .type(type)
+                       .build()"""]
+    }
+    {
+        name: "mutableFrom"
+        args: [
+            {
+                type: "java.lang#Class<?>"
+                name: "kclass"
+            }
+            {
+                type: "java.lang#String"
+                name: "name"
+            }
+        ]
+        body: ["""
+            return FieldSyntax.builder()
+                       .addModifier(javax.lang.model.element.Modifier.PRIVATE)
+                       .name(name)
+                       .type(ClassName.from(kclass))
+                       .build()"""]
     }
 ])
 
@@ -433,7 +494,7 @@ apply TypeVariableTypeName @fromFactories([
         ]
     }
 ])
-// mx.sugus.braid.jsyntax.ext
+
 apply TypeName @fromFactories([
     {
         javadoc: """

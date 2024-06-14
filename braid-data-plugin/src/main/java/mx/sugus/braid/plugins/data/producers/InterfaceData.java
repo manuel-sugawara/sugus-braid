@@ -23,20 +23,20 @@ public final class InterfaceData implements DirectedInterface {
 
     @Override
     public InterfaceSyntax.Builder typeSpec(ShapeCodegenState state) {
-        var result = InterfaceSyntax.builder(Utils.toJavaName(state, state.shape()).toString())
-                                    .addAnnotation(DataPlugin.generatedBy())
-                                    .addModifier(Modifier.PUBLIC);
+        var builder = InterfaceSyntax.builder(Utils.toJavaName(state, state.shape()).toString())
+                                     .addAnnotation(DataPlugin.generatedBy())
+                                     .addModifier(Modifier.PUBLIC);
         var shape = state.shape().asStructureShape().orElseThrow();
         var superInterfaces = ImplementsKnowledgeIndex.of(state.model()).superInterfaces(shape);
         for (var superInterface : superInterfaces) {
             var parentClass = Utils.toJavaTypeName(state, superInterface);
-            result.addSuperInterface(parentClass);
+            builder.addSuperInterface(parentClass);
         }
-        if (shape.hasTrait(DocumentationTrait.class)) {
-            var doc = shape.getTrait(DocumentationTrait.class).orElseThrow().getValue();
-            result.javadoc("$L", JavadocExt.document(doc));
-        }
-        return result;
+        shape.getTrait(DocumentationTrait.class)
+             .map(DocumentationTrait::getValue)
+             .map(JavadocExt::document)
+             .map(builder::javadoc);
+        return builder;
     }
 
     @Override
@@ -48,13 +48,13 @@ public final class InterfaceData implements DirectedInterface {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
         var type = Utils.toJavaTypeName(symbol);
-        var result = AbstractMethodSyntax.builder()
-                                         .name(Utils.toGetterName(symbol).toString())
-                                         .returns(type);
-        if (member.hasTrait(DocumentationTrait.class)) {
-            var doc = member.getTrait(DocumentationTrait.class).orElseThrow().getValue();
-            result.javadoc("$L", JavadocExt.document(doc));
-        }
-        return result.build();
+        var builder = AbstractMethodSyntax.builder()
+                                          .name(Utils.toGetterName(symbol).toString())
+                                          .returns(type);
+        member.getTrait(DocumentationTrait.class)
+              .map(DocumentationTrait::getValue)
+              .map(JavadocExt::document)
+              .map(builder::javadoc);
+        return builder.build();
     }
 }

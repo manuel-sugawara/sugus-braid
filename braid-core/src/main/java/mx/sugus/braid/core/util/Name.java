@@ -95,6 +95,13 @@ public final class Name {
         return new Name(parts.clone(), newKind);
     }
 
+    public Name concat(Name other) {
+        var newParts = new String[parts.length + other.parts.length];
+        System.arraycopy(parts, 0, newParts, 0, parts.length);
+        System.arraycopy(other.parts, 0, newParts, parts.length, other.parts.length);
+        return new Name(newParts, convention);
+    }
+
     /**
      * Naively transforms the name to "singular" spelling by removing a leading 's' character.
      */
@@ -126,17 +133,13 @@ public final class Name {
     }
 
     public Name withPrefix(String prefix) {
-        var newParts = new String[parts.length + 1];
-        System.arraycopy(parts, 0, newParts, 1, parts.length);
-        newParts[0] = prefix;
-        return new Name(newParts, convention);
+        var prefixName = of(prefix, this.convention);
+        return prefixName.concat(this);
     }
 
     public Name withSuffix(String suffix) {
-        var newParts = new String[parts.length + 1];
-        System.arraycopy(parts, 0, newParts, 0, parts.length);
-        newParts[parts.length] = suffix;
-        return new Name(newParts, convention);
+        var suffixName = of(suffix);
+        return concat(suffixName);
     }
 
     public static Name of(String value) {

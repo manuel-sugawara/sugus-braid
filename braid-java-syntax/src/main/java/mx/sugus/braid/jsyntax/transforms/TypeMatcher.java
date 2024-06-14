@@ -20,6 +20,13 @@ public interface TypeMatcher {
     boolean matches(TypeSyntax node);
 
     /**
+     * Returns true if the matcher matches when no types are present.
+     */
+    default boolean matchesOnEmpty() {
+        return false;
+    }
+
+    /**
      * Returns a new type matcher by name.
      *
      * @param name the name to match against
@@ -47,6 +54,18 @@ public interface TypeMatcher {
      */
     static TypeMatcher byAllMatch(TypeMatcher... matchers) {
         return new AndMatcher(Arrays.asList(matchers));
+    }
+
+    /**
+     * Returns an inner type matcher that matches the inner type. Callers need to also validate the parent type using
+     * {@link InnerTypeMatcher#parentMatcher}.
+     *
+     * @param parentMatcher The parent type matcher
+     * @param childMatcher  The child type matcher
+     * @return An inner type matcher
+     */
+    static InnerTypeMatcher innerTypeMatcher(TypeMatcher parentMatcher, TypeMatcher childMatcher) {
+        return new InnerTypeMatcher(parentMatcher, childMatcher);
     }
 
     /**
@@ -78,6 +97,29 @@ public interface TypeMatcher {
         @Override
         public boolean matches(TypeSyntax node) {
             return node.modifiers().containsAll(modifiers);
+        }
+    }
+
+    /**
+     * Matches an inner type within a parent type. The parent type MUST be matched first using
+     * {@link #parentMatches(TypeSyntax)}.
+     */
+    class InnerTypeMatcher implements TypeMatcher {
+        private final TypeMatcher parentMatcher;
+        private final TypeMatcher childMatcher;
+
+        InnerTypeMatcher(TypeMatcher parentMatcher, TypeMatcher childMatcher) {
+            this.parentMatcher = Objects.requireNonNull(parentMatcher, "parentMatcher");
+            this.childMatcher = Objects.requireNonNull(childMatcher, "childMatcher");
+        }
+
+        @Override
+        public boolean matches(TypeSyntax node) {
+            return childMatcher.matches(node);
+        }
+
+        public boolean parentMatches(TypeSyntax node) {
+            return parentMatcher.matches(node);
         }
     }
 

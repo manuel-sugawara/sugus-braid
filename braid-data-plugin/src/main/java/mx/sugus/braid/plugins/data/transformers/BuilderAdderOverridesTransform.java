@@ -1,10 +1,10 @@
-package mx.sugus.braid.plugins.data.producers;
+package mx.sugus.braid.plugins.data.transformers;
 
 import static mx.sugus.braid.core.util.Utils.coalesce;
-import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.getTargetListMember;
-import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.getTargetListMemberTrait;
-import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.getTargetTrait;
-import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.toParameters;
+import static mx.sugus.braid.plugins.data.producers.CodegenUtils.getTargetListMember;
+import static mx.sugus.braid.plugins.data.producers.CodegenUtils.getTargetListMemberTrait;
+import static mx.sugus.braid.plugins.data.producers.CodegenUtils.getTargetTrait;
+import static mx.sugus.braid.plugins.data.producers.CodegenUtils.toParameters;
 import static mx.sugus.braid.plugins.data.producers.Utils.toJavaName;
 import static mx.sugus.braid.plugins.data.producers.Utils.toJavaSingularName;
 import static mx.sugus.braid.plugins.data.producers.Utils.toJavaTypeName;
@@ -26,6 +26,9 @@ import mx.sugus.braid.jsyntax.transforms.AddMethodsTransform;
 import mx.sugus.braid.jsyntax.transforms.MethodMatcher;
 import mx.sugus.braid.jsyntax.transforms.TypeMatcher;
 import mx.sugus.braid.plugins.data.TypeSyntaxResult;
+import mx.sugus.braid.plugins.data.producers.CodegenUtils;
+import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
+import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants;
 import mx.sugus.braid.traits.AddAllOverridesTrait;
 import mx.sugus.braid.traits.AdderOverridesTrait;
@@ -129,8 +132,12 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
     ) {
         var name = toJavaName(state, member);
         for (var override : builderOverrides) {
-            var adderName = coalesce(override.getName(),
-                                     () -> toJavaSingularName(state, member, "add").toString());
+            // XXX This needs review, the logic over-enthusiastically adds overrides across the
+            //   board.
+            if (override.getName() != null) {
+                continue;
+            }
+            var adderName = toJavaSingularName(state, member, "add").toString();
             var overrideBuilder = MethodSyntax.builder(adderName)
                                               .addModifier(Modifier.PUBLIC)
                                               .returns(className(state));
@@ -238,7 +245,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
     }
 
     private ClassName className(ShapeCodegenState state) {
-        return StructureCodegenUtils.BUILDER_TYPE;
+        return CodegenUtils.builderType();
     }
 
 }

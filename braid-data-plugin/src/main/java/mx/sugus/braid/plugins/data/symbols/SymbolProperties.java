@@ -3,6 +3,7 @@ package mx.sugus.braid.plugins.data.symbols;
 import java.util.function.Function;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.Block;
+import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants.AggregateType;
 import mx.sugus.braid.traits.UseBuilderReferenceTrait;
@@ -28,6 +29,13 @@ public final class SymbolProperties {
      * Property for the java type for members that use builder references to be used in the builder.
      */
     public static final Property<TypeName> BUILDER_REFERENCE_JAVA_TYPE = from(TypeName.class);
+    public static final Property<TypeName> BUILDER_REFERENCE_BUILDER_JAVA_TYPE = from(TypeName.class);
+
+    /**
+     * Property for the name of the method in the {@link #BUILDER_REFERENCE_JAVA_TYPE} that creates the builder from a persistent
+     * value.
+     */
+    public static final Property<String> BUILDER_REFERENCE_FROM_PERSISTENT = from(String.class);
 
     /**
      * Property for the java name for a given symbol.
@@ -114,10 +122,25 @@ public final class SymbolProperties {
      */
     public static final Property<Function<Symbol, Block>> BUILDER_EMPTY_INIT = Property.named("builder-empty-init");
 
+    public static final Property<Function<Symbol, CodeBlock>> BUILDER_EMPTY_INIT_EXPRESSION
+        = Property.named("builder-empty-init-expression");
+
     /**
      * From data builder initializer code.
      */
     public static final Property<Function<Symbol, Block>> BUILDER_DATA_INIT = Property.named("builder-data-init");
+
+    /**
+     * From data builder initializer expression.
+     */
+    public static final Property<Function<Symbol, CodeBlock>> BUILDER_DATA_INIT_EXPRESSION
+        = Property.named("builder-data-init-expression");
+
+    /**
+     * From data builder initializer expression.
+     */
+    public static final Property<Function<Symbol, CodeBlock>> BUILDER_UNION_DATA_INIT_EXPRESSION
+        = Property.named("builder-union-data-init-expression");
 
     /**
      * From data builder code for setting a member.

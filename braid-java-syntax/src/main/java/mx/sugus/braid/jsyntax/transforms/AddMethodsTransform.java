@@ -17,7 +17,7 @@ import mx.sugus.braid.jsyntax.TypeSyntax;
 public final class AddMethodsTransform implements SyntaxNodeTransformer {
     private final TypeMatcher typeMatcher;
     private final MethodMatcher methodMatcher;
-    private final Position position;
+    private final AddPosition position;
     private final List<BaseMethodSyntax> methods;
 
     AddMethodsTransform(Builder builder) {
@@ -51,14 +51,10 @@ public final class AddMethodsTransform implements SyntaxNodeTransformer {
         return new Builder();
     }
 
-    public enum Position {
-        BEFORE, AFTER
-    }
-
     public static class Builder {
         private TypeMatcher typeMatcher;
         private MethodMatcher methodMatcher;
-        private Position position = Position.AFTER;
+        private AddPosition position = AddPosition.AFTER;
         private List<BaseMethodSyntax> methods = new ArrayList<>();
 
         public Builder methods(List<? extends BaseMethodSyntax> methods) {
@@ -66,18 +62,18 @@ public final class AddMethodsTransform implements SyntaxNodeTransformer {
             return this;
         }
 
-        public Builder position(Position position) {
+        public Builder position(AddPosition position) {
             this.position = position;
             return this;
         }
 
         public Builder addAfter() {
-            this.position = Position.AFTER;
+            this.position = AddPosition.AFTER;
             return this;
         }
 
         public Builder addBefore() {
-            this.position = Position.BEFORE;
+            this.position = AddPosition.BEFORE;
             return this;
         }
 
@@ -123,7 +119,7 @@ public final class AddMethodsTransform implements SyntaxNodeTransformer {
             }
             var methods = new ArrayList<BaseMethodSyntax>();
             var done = false;
-            if (position == Position.BEFORE) {
+            if (position == AddPosition.BEFORE) {
                 for (var method : typeSyntax.methods()) {
                     if (!done && methodMatcher.matches(method)) {
                         methods.addAll(methods());
@@ -137,7 +133,7 @@ public final class AddMethodsTransform implements SyntaxNodeTransformer {
                         done = true;
                     }
                 }
-            } else if (position == Position.AFTER) {
+            } else if (position == AddPosition.AFTER) {
                 var foundFirstMatch = false;
                 for (var method : typeSyntax.methods()) {
                     if (methodMatcher.matches(method) && !done) {
@@ -166,7 +162,6 @@ public final class AddMethodsTransform implements SyntaxNodeTransformer {
         }
 
         private TypeSyntax addMethods(TypeSyntax typeSyntax, List<BaseMethodSyntax> methods) {
-            var name = typeSyntax.name();
             if (typeSyntax instanceof InterfaceSyntax node) {
                 return node.toBuilder().methods(methods).build();
             }

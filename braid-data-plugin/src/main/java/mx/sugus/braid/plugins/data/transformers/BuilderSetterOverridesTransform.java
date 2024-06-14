@@ -1,7 +1,7 @@
-package mx.sugus.braid.plugins.data.producers;
+package mx.sugus.braid.plugins.data.transformers;
 
-import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.getTargetTrait;
-import static mx.sugus.braid.plugins.data.producers.StructureCodegenUtils.toParameters;
+import static mx.sugus.braid.plugins.data.producers.CodegenUtils.getTargetTrait;
+import static mx.sugus.braid.plugins.data.producers.CodegenUtils.toParameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +16,9 @@ import mx.sugus.braid.jsyntax.transforms.AddMethodsTransform;
 import mx.sugus.braid.jsyntax.transforms.MethodMatcher;
 import mx.sugus.braid.jsyntax.transforms.TypeMatcher;
 import mx.sugus.braid.plugins.data.TypeSyntaxResult;
+import mx.sugus.braid.plugins.data.producers.CodegenUtils;
+import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
+import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.traits.SetterOverride;
 import mx.sugus.braid.traits.SetterOverridesTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
@@ -80,6 +83,6 @@ public final class BuilderSetterOverridesTransform implements ShapeTaskTransform
     }
 
     private ClassName className(ShapeCodegenState state) {
-        return StructureCodegenUtils.BUILDER_TYPE;
+        return CodegenUtils.builderType();
     }
 }

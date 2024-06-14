@@ -10,6 +10,7 @@ import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.core.util.PathUtil;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
+import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.writer.CodeWriter;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants.AggregateType;
 import mx.sugus.braid.rt.util.BuilderReference;
@@ -158,7 +159,11 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
             .putProperty(SymbolProperties.BUILDER_REFERENCE, builderReference)
             .putProperty(SymbolProperties.IS_CONSTANT, shape.hasTrait(ConstTrait.class))
             .putProperty(SymbolProperties.BUILDER_EMPTY_INIT, SymbolCodegen::builderEmptyInitializer)
+            .putProperty(SymbolProperties.BUILDER_EMPTY_INIT_EXPRESSION, SymbolCodegen::builderEmptyInitializerExpression)
             .putProperty(SymbolProperties.BUILDER_DATA_INIT, SymbolCodegen::builderDataInitializer)
+            .putProperty(SymbolProperties.BUILDER_DATA_INIT_EXPRESSION, SymbolCodegen::builderDataInitializerExpression)
+            .putProperty(SymbolProperties.BUILDER_UNION_DATA_INIT_EXPRESSION,
+                         SymbolCodegen::builderUnionDataInitializerExpression)
             .putProperty(SymbolProperties.DATA_BUILDER_INIT, SymbolCodegen::dataBuilderInitializer)
             .putProperty(SymbolProperties.BUILDER_SETTER_FOR_MEMBER, SymbolCodegen::builderSetterForMember)
             .putProperty(SymbolProperties.DEFAULT_VALUE, getDefaultValue(shape, targetShape));
@@ -172,13 +177,43 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
             builder.putProperty(SymbolProperties.MULTI_ADDER_NAME, simpleName.withPrefix(prefix));
         } else if (builderReference != null) {
             var targetType = targetSymbol.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
-            var builderTypeId = builderReference.builderType();
-            var builderType = ClassName.from(builderTypeId.getNamespace(), builderTypeId.getName());
+            var targetTypeClass = ClassName.toClassName(targetType);
+            var builderType = targetTypeClass.toBuilder().name(targetTypeClass.name() + ".Builder").build();
+            builderType = builderReferenceBuilderType(builderReference, builderType);
+            var builderReferenceType = builderReferenceType(builderReference, targetType);
+            var fromPersistent = fromPersistent(builderReference);
             builder.putProperty(SymbolProperties.BUILDER_JAVA_TYPE,
                                 ParameterizedTypeName.from(BuilderReference.class, targetType, builderType));
-            builder.putProperty(SymbolProperties.BUILDER_REFERENCE_JAVA_TYPE, builderType);
+            builder.putProperty(SymbolProperties.BUILDER_REFERENCE_JAVA_TYPE, builderReferenceType);
+            builder.putProperty(SymbolProperties.BUILDER_REFERENCE_BUILDER_JAVA_TYPE, builderType);
+            builder.putProperty(SymbolProperties.BUILDER_REFERENCE_FROM_PERSISTENT, fromPersistent);
         }
         return builder.build();
+    }
+
+    private ClassName builderReferenceType(UseBuilderReferenceTrait trait, TypeName targetType) {
+        var builderTypeId = trait.builderType();
+        if (builderTypeId != null) {
+            return ClassName.from(builderTypeId.getNamespace(), builderTypeId.getName());
+        }
+        var targetClass = ClassName.toClassName(targetType);
+        return targetClass.toBuilder().name(targetClass.name() + "." + targetClass.name() + "BuilderReference").build();
+    }
+
+    private ClassName builderReferenceBuilderType(UseBuilderReferenceTrait trait, ClassName defaultBuilderType) {
+        var builderTypeId = trait.builderType();
+        if (builderTypeId != null) {
+            return ClassName.from(builderTypeId.getNamespace(), builderTypeId.getName());
+        }
+        return defaultBuilderType;
+    }
+
+    private String fromPersistent(UseBuilderReferenceTrait trait) {
+        var fromPersistentId = trait.fromPersistent();
+        if (fromPersistentId != null) {
+            return fromPersistentId.getMember().orElseThrow();
+        }
+        return "from";
     }
 
     @Override

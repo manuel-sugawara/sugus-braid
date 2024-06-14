@@ -103,7 +103,7 @@ public final class EnumSyntax implements TypeSyntax {
     }
 
     /**
-     * Returns a new builder to modify a copy of this instance
+     * <p>Returns a new builder to modify a copy of this instance</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -366,8 +366,16 @@ public final class EnumSyntax implements TypeSyntax {
         /**
          * <p>Adds to <code>fields</code> building the value using the given arguments</p>
          */
+        public Builder addField(TypeName type, String name) {
+            this.fields.asTransient().add(FieldSyntax.from(type, name));
+            return this;
+        }
+
+        /**
+         * <p>Adds to <code>fields</code> building the value using the given arguments</p>
+         */
         public Builder addField(Class<?> kclass, String name) {
-            this.fields.asTransient().add(FieldSyntax.builder().name(name).type(TypeName.from(kclass)).build());
+            this.fields.asTransient().add(FieldSyntax.from(kclass, name));
             return this;
         }
 

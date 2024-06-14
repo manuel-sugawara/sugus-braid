@@ -2,17 +2,29 @@ package mx.sugus.braid.plugins.data.producers;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
+import mx.sugus.braid.core.util.Lazy;
 import mx.sugus.braid.jsyntax.ClassName;
+import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.Parameter;
 import mx.sugus.braid.traits.Argument;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.traits.Trait;
 
-public class StructureCodegenUtils {
+public final class CodegenUtils {
 
     static final ClassName BUILDER_TYPE = ClassName.from("Builder");
+    static final Lazy<MethodSyntax> TO_STRING_FOR_SENSITIVE = new Lazy<>(
+        () -> toStringTemplate()
+            .addStatement("return $S", "<*** REDACTED ***>")
+            .build()
+    );
+
+    public static ClassName builderType() {
+        return BUILDER_TYPE;
+    }
 
     public static <T extends Trait> T getTargetTrait(Class<T> kclass, ShapeCodegenState state, MemberShape member) {
         var target = state.model().expectShape(member.getTarget());
@@ -54,5 +66,16 @@ public class StructureCodegenUtils {
             }
         }
         return result;
+    }
+
+    public static MethodSyntax toStringForSensitive() {
+        return TO_STRING_FOR_SENSITIVE.get();
+    }
+
+    public static MethodSyntax.Builder toStringTemplate() {
+        return MethodSyntax.builder("toString")
+                           .addAnnotation(Override.class)
+                           .addModifier(Modifier.PUBLIC)
+                           .returns(String.class);
     }
 }

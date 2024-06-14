@@ -112,6 +112,11 @@ public final class Utils {
         return validateName(name, symbol);
     }
 
+    public static Name toJavaName(Symbol symbol, Name.Convention convention) {
+        var name = symbol.getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow();
+        return validateName(name.toNameConvention(convention), symbol);
+    }
+
     public static Name toSetterName(Symbol symbol) {
         var name = symbol.getProperty(SymbolProperties.SETTER_NAME).orElseThrow();
         return validateName(name, symbol);
@@ -238,10 +243,6 @@ public final class Utils {
         return shape.isRequired() || shape.hasTrait(ConstTrait.class);
     }
 
-    public static String emptyReferenceBuilder(SymbolConstants.AggregateType type) {
-        return SymbolConstants.emptyReferenceBuilder(type);
-    }
-
     public static String initReferenceBuilder(SymbolConstants.AggregateType type) {
         return SymbolConstants.initReferenceBuilder(type);
     }
@@ -298,8 +299,23 @@ public final class Utils {
         return initFunction.apply(symbol);
     }
 
+    public static CodeBlock builderInitFromDataExpression(Symbol symbol) {
+        var initFunction = symbol.getProperty(SymbolProperties.BUILDER_DATA_INIT_EXPRESSION).orElseThrow();
+        return initFunction.apply(symbol);
+    }
+
+    public static CodeBlock builderUnionInitFromDataExpression(Symbol symbol) {
+        var initFunction = symbol.getProperty(SymbolProperties.BUILDER_UNION_DATA_INIT_EXPRESSION).orElseThrow();
+        return initFunction.apply(symbol);
+    }
+
     public static Block builderSetter(Symbol symbol) {
         var initFunction = symbol.getProperty(SymbolProperties.BUILDER_SETTER_FOR_MEMBER).orElse(x -> BodyBuilder.emptyBlock());
+        return initFunction.apply(symbol);
+    }
+
+    public static CodeBlock toBuilderInitExpression(Symbol symbol) {
+        var initFunction = symbol.getProperty(SymbolProperties.BUILDER_EMPTY_INIT_EXPRESSION).orElseThrow();
         return initFunction.apply(symbol);
     }
 
@@ -311,9 +327,12 @@ public final class Utils {
         return symbol.getProperty(SymbolProperties.BUILDER_JAVA_TYPE).orElseGet(() -> toJavaTypeName(symbol));
     }
 
-
     public static TypeName toRefrenceBuilderTypeName(Symbol symbol) {
         return symbol.getProperty(SymbolProperties.BUILDER_REFERENCE_JAVA_TYPE).orElseGet(() -> toJavaTypeName(symbol));
+    }
+
+    public static TypeName toRefrenceBuilderBuilderTypeName(Symbol symbol) {
+        return symbol.getProperty(SymbolProperties.BUILDER_REFERENCE_BUILDER_JAVA_TYPE).orElseGet(() -> toJavaTypeName(symbol));
     }
 
     private static ReservedWords buildReservedWords() {
