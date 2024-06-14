@@ -10,6 +10,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Builder reference for collections.
+ *
+ * @param <T> The collection type.
+ */
 public interface CollectionBuilderReference<T> extends BuilderReference<T, T> {
 
     /**
@@ -116,6 +121,12 @@ public interface CollectionBuilderReference<T> extends BuilderReference<T, T> {
         return new OrderedSetBuilderReference<>(persistent);
     }
 
+    /**
+     * A builder reference for maps.
+     *
+     * @param <K> The type of the key.
+     * @param <V> The type of the value.
+     */
     class UnorderedMapBuilderReference<K, V>
         extends AbstractBuilderReference<Map<K, V>, Map<K, V>>
         implements CollectionBuilderReference<Map<K, V>> {
@@ -156,7 +167,12 @@ public interface CollectionBuilderReference<T> extends BuilderReference<T, T> {
         }
     }
 
-
+    /**
+     * A builder reference for maps that keep insert order as iteration order, backed up by {@link LinkedHashMap}.
+     *
+     * @param <K> The type of the key.
+     * @param <V> The type of the value.
+     */
     class OrderedMapBuilderReference<K, V>
         extends AbstractBuilderReference<Map<K, V>, Map<K, V>>
         implements CollectionBuilderReference<Map<K, V>> {
@@ -197,6 +213,11 @@ public interface CollectionBuilderReference<T> extends BuilderReference<T, T> {
         }
     }
 
+    /**
+     * A builder reference for lists.
+     *
+     * @param <T> The type of the list member.
+     */
     class ListBuilderReference<T>
         extends AbstractBuilderReference<List<T>, List<T>>
         implements CollectionBuilderReference<List<T>> {
@@ -237,6 +258,11 @@ public interface CollectionBuilderReference<T> extends BuilderReference<T, T> {
         }
     }
 
+    /**
+     * A builder reference for sets.
+     *
+     * @param <T> The type of the set member.
+     */
     class UnorderedSetBuilderReference<T>
         extends AbstractBuilderReference<Set<T>, Set<T>>
         implements CollectionBuilderReference<Set<T>> {
@@ -277,6 +303,11 @@ public interface CollectionBuilderReference<T> extends BuilderReference<T, T> {
         }
     }
 
+    /**
+     * A builder reference for sets that keep insert order as iteration order, backed up by {@link LinkedHashSet}.
+     *
+     * @param <T> The type of the set member.
+     */
     class OrderedSetBuilderReference<T>
         extends AbstractBuilderReference<Set<T>, Set<T>>
         implements CollectionBuilderReference<Set<T>> {
