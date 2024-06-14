@@ -77,94 +77,28 @@ public final class SymbolCodegen {
         if (Utils.isConstant(symbol)) {
             return BodyBuilder.emptyBlock();
         }
-        var type = Utils.aggregateType(symbol);
         var name = Utils.toJavaName(symbol);
-        if (type == SymbolConstants.AggregateType.NONE) {
-            var builderReference = Utils.builderReference(symbol);
-            if (builderReference == null) {
-                return BodyBuilder.create()
-                                  .addStatement("this.$1L = data.$1L", name)
-                                  .build();
-            }
-            var implementingClass = symbol.getProperty(BUILDER_REFERENCE_JAVA_TYPE).orElseThrow();
-            var fromPersistent = symbol.getProperty(BUILDER_REFERENCE_FROM_PERSISTENT).orElseThrow();
-            return BodyBuilder.create()
-                              .addStatement("this.$L = $T.$L(data.$L)", name, implementingClass,
-                                            fromPersistent, name)
-                              .build();
-        }
-        var builder = BodyBuilder.create();
-        var isOrdered = Utils.isOrdered(symbol);
-        if (isOrdered) {
-            switch (type) {
-                case MAP -> builder.addStatement("this.$1L = $2T.fromPersistentOrderedMap(data.$1L)",
-                                                 name, CollectionBuilderReference.class);
-                case SET -> builder.addStatement("this.$1L = $2T.fromPersistentOrderedSet(data.$1L)",
-                                                 name, CollectionBuilderReference.class);
-                case LIST -> builder.addStatement("this.$1L = $2T.fromPersistentList(data.$1L)",
-                                                  name, CollectionBuilderReference.class);
-                default -> throw new UnsupportedOperationException("unsupported aggregate type: " + type);
-            }
-        } else {
-            switch (type) {
-                case MAP -> builder.addStatement("this.$1L = $2T.fromPersistentUnorderedMap(data.$1L)",
-                                                 name, CollectionBuilderReference.class);
-                case SET -> builder.addStatement("this.$1L = $2T.fromPersistentUnorderedSet(data.$1L)",
-                                                 name, CollectionBuilderReference.class);
-                case LIST -> builder.addStatement("this.$1L = $2T.fromPersistentList(data.$1L)",
-                                                  name, CollectionBuilderReference.class);
-                default -> throw new UnsupportedOperationException("unsupported aggregate type: " + type);
-            }
-        }
-        return builder.build();
+        return BodyBuilder.create()
+                          .addStatement("this.$L = $C", name, builderDataInitializerExpression(symbol))
+                          .build();
     }
 
     static CodeBlock builderDataInitializerExpression(Symbol symbol) {
-        var type = Utils.aggregateType(symbol);
-        var name = Utils.toJavaName(symbol);
-        if (type == SymbolConstants.AggregateType.NONE) {
-            var builderReference = Utils.builderReference(symbol);
-            if (builderReference == null) {
-                return CodeBlock.builder()
-                                .addCode("data.$L", name)
-                                .build();
-            }
-            var implementingClass = symbol.getProperty(BUILDER_REFERENCE_JAVA_TYPE).orElseThrow();
-            var fromPersistent = symbol.getProperty(BUILDER_REFERENCE_FROM_PERSISTENT).orElseThrow();
-            return CodeBlock.builder()
-                            .addCode("$T.$L(data.$L)", implementingClass,
-                                     fromPersistent, name)
-                            .build();
-        }
-        var builder = CodeBlock.builder();
-        var isOrdered = Utils.isOrdered(symbol);
-        if (isOrdered) {
-            switch (type) {
-                case MAP -> builder.addCode("$T.fromPersistentOrderedMap(data.$L)",
-                                            CollectionBuilderReference.class, name);
-                case SET -> builder.addCode("$T.fromPersistentOrderedSet(data.$L)",
-                                            CollectionBuilderReference.class, name);
-                case LIST -> builder.addCode("$T.fromPersistentList(data.$L)",
-                                             CollectionBuilderReference.class, name);
-                default -> throw new UnsupportedOperationException("unsupported aggregate type: " + type);
-            }
-        } else {
-            switch (type) {
-                case MAP -> builder.addCode("$T.fromPersistentUnorderedMap(data.$L)",
-                                            CollectionBuilderReference.class, name);
-                case SET -> builder.addCode("$T.fromPersistentUnorderedSet(data.$L)",
-                                            CollectionBuilderReference.class, name);
-                case LIST -> builder.addCode("$T.fromPersistentList(data.$L)",
-                                             CollectionBuilderReference.class, name);
-                default -> throw new UnsupportedOperationException("unsupported aggregate type: " + type);
-            }
-        }
-        return builder.build();
+        return builderDataInitializerExpression(symbol, false);
     }
 
     static CodeBlock builderUnionDataInitializerExpression(Symbol symbol) {
+        return builderDataInitializerExpression(symbol, true);
+    }
+
+    static CodeBlock builderDataInitializerExpression(Symbol symbol, boolean useGetters) {
         var type = Utils.aggregateType(symbol);
-        var name = Utils.toGetterName(symbol).toString() + "()";
+        String name;
+        if (useGetters) {
+            name = Utils.toGetterName(symbol).toString() + "()";
+        } else {
+            name = Utils.toJavaName(symbol).toString();
+        }
         if (type == SymbolConstants.AggregateType.NONE) {
             var builderReference = Utils.builderReference(symbol);
             if (builderReference == null) {
