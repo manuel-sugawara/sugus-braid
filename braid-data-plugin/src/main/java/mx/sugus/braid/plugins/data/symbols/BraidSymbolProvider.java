@@ -162,7 +162,8 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
             .putProperty(SymbolProperties.BUILDER_EMPTY_INIT_EXPRESSION, SymbolCodegen::builderEmptyInitializerExpression)
             .putProperty(SymbolProperties.BUILDER_DATA_INIT, SymbolCodegen::builderDataInitializer)
             .putProperty(SymbolProperties.BUILDER_DATA_INIT_EXPRESSION, SymbolCodegen::builderDataInitializerExpression)
-            .putProperty(SymbolProperties.BUILDER_UNION_DATA_INIT_EXPRESSION, SymbolCodegen::builderUnionDataInitializerExpression)
+            .putProperty(SymbolProperties.BUILDER_UNION_DATA_INIT_EXPRESSION,
+                         SymbolCodegen::builderUnionDataInitializerExpression)
             .putProperty(SymbolProperties.DATA_BUILDER_INIT, SymbolCodegen::dataBuilderInitializer)
             .putProperty(SymbolProperties.BUILDER_SETTER_FOR_MEMBER, SymbolCodegen::builderSetterForMember)
             .putProperty(SymbolProperties.DEFAULT_VALUE, getDefaultValue(shape, targetShape));

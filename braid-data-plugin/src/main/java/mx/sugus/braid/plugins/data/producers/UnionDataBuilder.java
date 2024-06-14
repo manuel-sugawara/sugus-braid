@@ -21,7 +21,6 @@ import mx.sugus.braid.jsyntax.SwitchStatement;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants;
-import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.traits.UseBuilderReferenceTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.traits.DocumentationTrait;
@@ -87,7 +86,6 @@ public final class UnionDataBuilder implements DirectedClass {
                                                   .addStatement("return this.value")
                                                   .build());
         body.addStatement(memberSwitch.build());
-        ;
     }
 
     private CodeBlock getValueForMember(ShapeCodegenState state, MemberShape member) {
