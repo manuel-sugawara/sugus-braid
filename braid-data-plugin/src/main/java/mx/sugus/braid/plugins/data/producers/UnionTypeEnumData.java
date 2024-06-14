@@ -28,7 +28,7 @@ public final class UnionTypeEnumData implements DirectedEnum {
         var symbolProvider = state.symbolProvider();
         for (var member : shape.getAllMembers().values()) {
             var symbol = symbolProvider.toSymbol(member);
-            var unionVariant = Utils.toJavaName(symbol).toNameConvention(Name.Convention.SCREAM_CASE).toString();
+            var unionVariant = Utils.toJavaName(symbol, Name.Convention.SCREAM_CASE).toString();
             var name = member.getMemberName();
             typeEnum.addEnumConstant(EnumConstant.builder()
                                                  .name(unionVariant)
@@ -62,7 +62,7 @@ public final class UnionTypeEnumData implements DirectedEnum {
                            .addAnnotation(Override.class)
                            .addModifier(Modifier.PUBLIC)
                            .returns(String.class)
-                           .body(b -> b.addStatement("return value"))
+                           .addStatement("return value")
                            .build();
     }
 }

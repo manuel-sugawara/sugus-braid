@@ -35,6 +35,7 @@ public final class UnionData implements DirectedClass {
     public ClassSyntax.Builder typeSpec(ShapeCodegenState state) {
         var builder = ClassSyntax.builder(state.symbol().getName())
                                  .addAnnotation(DataPlugin.generatedBy())
+                                 .addAnnotation(SUPPRESS_UNCHECKED)
                                  .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         var shape = state.shape();
         shape.getTrait(DocumentationTrait.class)
@@ -64,7 +65,7 @@ public final class UnionData implements DirectedClass {
         return ConstructorMethodSyntax.builder()
                                       .addModifier(Modifier.PRIVATE)
                                       .addParameter(builderJavaClassName(), "builder")
-                                      .addStatement("this.value = builder.value")
+                                      .addStatement("this.value = builder.getValue()")
                                       .addStatement("this.type = builder.type")
                                       .build();
     }
@@ -82,7 +83,6 @@ public final class UnionData implements DirectedClass {
         var memberName = member.getMemberName();
         var unionTypeName = Name.of(memberName, Name.Convention.SCREAM_CASE).toString();
         var builder = MethodSyntax.builder(getterName.toString())
-                                  .addAnnotation(SUPPRESS_UNCHECKED)
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(type);
         builder.ifStatement("this.type == Type.$L", unionTypeName, then -> {
@@ -186,10 +186,12 @@ public final class UnionData implements DirectedClass {
         body.addStatement("buf.append($L)", "this.type");
         var memberSwitch = SwitchStatement.builder()
                                           .expression(CodeBlock.from("this.type"));
+        var symbolProvider = state.symbolProvider();
         for (var member : state.shape().members()) {
+            var symbol = symbolProvider.toSymbol(member);
             var memberName = member.getMemberName();
             var literalName = ", " + memberName + ": ";
-            var unionTypeName = Name.of(memberName, Name.Convention.SCREAM_CASE).toString();
+            var unionTypeName = Utils.toJavaName(symbol, Name.Convention.SCREAM_CASE).toString();
             memberSwitch.addCase(CaseClause.builder()
                                            .addLabel(CodeBlock.from("$L", unionTypeName))
                                            .body(b -> {
@@ -217,7 +219,7 @@ public final class UnionData implements DirectedClass {
         if (state.shape().hasTrait(NewBuilderOverridesTrait.class)) {
             var result = new ArrayList<MethodSyntax>();
             result.add(defaultBuilder);
-            var builderOverrides = state.shape().getTrait(NewBuilderOverridesTrait.class).orElseThrow();
+            var builderOverrides = state.shape().expectTrait(NewBuilderOverridesTrait.class);
             for (var override : builderOverrides.getValues()) {
                 var overrideBuilder = defaultBuilder.toBuilder();
                 overrideBuilder.parameters(toParameters(override.getArgs()));

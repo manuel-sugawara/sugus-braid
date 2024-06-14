@@ -36,7 +36,7 @@ import software.amazon.smithy.model.Model;
 
 public class DataPluginTest {
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "[{index}] => {0}")
     @MethodSource("testCases")
     public void runTestCase(TestCase test) {
         test.builder.build();
@@ -126,6 +126,7 @@ public class DataPluginTest {
         }
         var expectedToContents = getExpectedContents(expectedDir, javaFiles);
         return builder()
+            .name(dir.toPath().getFileName().toString())
             .builder(builder)
             .manifests(manifests)
             .expectedToContents(expectedToContents)
@@ -153,24 +154,37 @@ public class DataPluginTest {
     }
 
     static class TestCase {
+        private final String name;
         private final SmithyBuild builder;
         private final List<MockManifest> manifests;
         private final Map<String, String> expectedToContents;
         private final List<Path> expected;
 
         TestCase(TestCaseBuilder builder) {
+            this.name = Objects.requireNonNull(builder.name, "name");
             this.builder = Objects.requireNonNull(builder.builder, "builder");
             this.manifests = Objects.requireNonNull(builder.manifests, "manifest");
             this.expectedToContents = Objects.requireNonNull(builder.expectedToContents, "expectedToContents");
             this.expected = Objects.requireNonNull(builder.expected, "expected");
         }
+
+        @Override
+        public String toString() {
+            return name;
+        }
     }
 
     static class TestCaseBuilder {
+        private String name;
         private SmithyBuild builder;
         private List<MockManifest> manifests;
         private List<Path> expected;
         private Map<String, String> expectedToContents;
+
+        public TestCaseBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
 
         public TestCaseBuilder expected(List<Path> expected) {
             this.expected = expected;
