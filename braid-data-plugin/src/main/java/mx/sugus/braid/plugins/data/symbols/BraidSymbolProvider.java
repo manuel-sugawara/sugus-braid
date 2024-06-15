@@ -12,6 +12,7 @@ import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.writer.CodeWriter;
+import mx.sugus.braid.plugins.data.dependencies.DefaultShapeToJavaName;
 import mx.sugus.braid.plugins.data.dependencies.ShapeToJavaName;
 import mx.sugus.braid.plugins.data.dependencies.ShapeToJavaType;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants.AggregateType;
@@ -116,7 +117,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
         var builder = Symbol.builder()
                             .name(name.toString())
                             .namespace(packageName, ".")
-                            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.structureShape(shape))
+                            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
                             .definitionFile(shapeClassPath(packageName, name));
         return builder.build();
     }
@@ -128,7 +129,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
         var builder = Symbol.builder()
                             .name(name.toString())
                             .namespace(packageName, ".")
-                            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.unionShape(shape))
+                            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
                             .definitionFile(shapeClassPath(packageName, name));
         return builder.build();
     }
@@ -140,7 +141,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
         var builder = Symbol.builder()
                             .name(name.toString())
                             .namespace(packageName, ".")
-                            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.enumShape(shape))
+                            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
                             .definitionFile(shapeClassPath(packageName, name));
         return builder.build();
     }
@@ -230,7 +231,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
         return fromClass(List.class)
             .addReference(shape.getMember().accept(this))
             .putProperty(SymbolProperties.AGGREGATE_TYPE, AggregateType.LIST)
-            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.listShape(shape))
+            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
             .build();
     }
 
@@ -240,7 +241,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
             .addReference(shape.getMember().accept(this))
             .putProperty(SymbolProperties.AGGREGATE_TYPE, AggregateType.SET)
             .putProperty(SymbolProperties.IS_ORDERED, isOrdered)
-            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.listShape(shape))
+            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
             .build();
     }
 
@@ -253,7 +254,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
             .addReference(shape.getValue().accept(this))
             .putProperty(SymbolProperties.AGGREGATE_TYPE, AggregateType.MAP)
             .putProperty(SymbolProperties.IS_ORDERED, isOrdered)
-            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.mapShape(shape))
+            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
             .build();
     }
 
@@ -273,77 +274,77 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
     @Override
     public Symbol booleanShape(BooleanShape shape) {
         return fromClass(Boolean.class)
-            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.booleanShape(shape))
+            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
             .build();
     }
 
     @Override
     public Symbol byteShape(ByteShape shape) {
         return fromClass(Byte.class)
-            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.byteShape(shape))
+            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
             .build();
     }
 
     @Override
     public Symbol shortShape(ShortShape shape) {
         return fromClass(Short.class)
-            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.shortShape(shape))
+            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
             .build();
     }
 
     @Override
     public Symbol integerShape(IntegerShape shape) {
         return fromClass(Integer.class)
-            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.integerShape(shape))
+            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
             .build();
     }
 
     @Override
     public Symbol longShape(LongShape shape) {
         return fromClass(Long.class)
-            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.longShape(shape))
+            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
             .build();
     }
 
     @Override
     public Symbol floatShape(FloatShape shape) {
         return fromClass(Float.class)
-            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.floatShape(shape))
+            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
             .build();
     }
 
     @Override
     public Symbol doubleShape(DoubleShape shape) {
         return fromClass(Double.class)
-            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.doubleShape(shape))
+            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
             .build();
     }
 
     @Override
     public Symbol bigIntegerShape(BigIntegerShape shape) {
         return fromClass(BigInteger.class)
-            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.bigIntegerShape(shape))
+            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
             .build();
     }
 
     @Override
     public Symbol bigDecimalShape(BigDecimalShape shape) {
         return fromClass(BigDecimal.class)
-            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.bigDecimalShape(shape))
+            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
             .build();
     }
 
     @Override
     public Symbol stringShape(StringShape shape) {
         return fromClass(String.class)
-            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.stringShape(shape))
+            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
             .build();
     }
 
     @Override
     public Symbol timestampShape(TimestampShape shape) {
         return fromClass(Instant.class)
-            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.timestampShape(shape))
+            .putProperty(SymbolProperties.JAVA_TYPE, shapeToJavaType.toJavaType(shape))
             .build();
     }
 

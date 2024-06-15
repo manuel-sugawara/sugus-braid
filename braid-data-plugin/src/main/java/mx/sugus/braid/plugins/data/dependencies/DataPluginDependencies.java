@@ -36,7 +36,7 @@ public final class DataPluginDependencies {
      * The class to escape reserved words.
      */
     public static final DependencyKey<ReservedWordsEscaper> RESERVED_WORDS_ESCAPER =
-        DependencyKey.from("shape->java-name", DataPluginDependencies::buildReservedWordsEscaper);
+        DependencyKey.from("java-name->escaped-java-name", DataPluginDependencies::buildReservedWordsEscaper);
 
 
     static ShapeToJavaName buildShapeToJavaName(Dependencies dependencies) {
@@ -44,7 +44,7 @@ public final class DataPluginDependencies {
                                       .map(BrideCodegenSettings::packageName)
                                       .orElse(null);
         var escaper = dependencies.expect(RESERVED_WORDS_ESCAPER);
-        return new ShapeToJavaName(packageName, escaper);
+        return new DefaultShapeToJavaName(packageName, escaper);
     }
 
     static ReservedWordsEscaper buildReservedWordsEscaper(Dependencies dependencies) {
