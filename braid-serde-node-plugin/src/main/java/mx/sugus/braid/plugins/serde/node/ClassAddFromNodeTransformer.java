@@ -126,7 +126,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
     private void addListMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var listShape = state.model().expectShape(member.getTarget()).asListShape().orElseThrow();
         var target = state.model().expectShape(listShape.getMember().getTarget());
-        var adder = Utils.toJavaSingularName(state, member, "add");
+        var adder = Utils.toAdderName(state, member);
         body.addStatement("obj.getArrayMember($S, nodes -> $B)",
                           member.getMemberName(),
                           BodyBuilder.create()
@@ -138,7 +138,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
     private void addMapMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var listShape = state.model().expectShape(member.getTarget()).asMapShape().orElseThrow();
         var target = state.model().expectShape(listShape.getValue().getTarget());
-        var putter = Utils.toJavaSingularName(state, member, "put");
+        var putter = Utils.toAdderName(state, member);
         var forInit = CodeBlock.from("$T kvp : objectNode.getMembers().entrySet()",
                                      ParameterizedTypeName.from(Map.Entry.class, StringNode.class, Node.class));
         body.addStatement("obj.getObjectMember($S, objectNode -> $B)",

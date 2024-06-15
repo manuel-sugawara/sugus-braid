@@ -1,4 +1,4 @@
-package mx.sugus.braid.plugins.data.symbols;
+package mx.sugus.braid.plugins.data.dependencies;
 
 import mx.sugus.braid.core.util.Name;
 import software.amazon.smithy.model.Model;
@@ -7,12 +7,14 @@ import software.amazon.smithy.model.shapes.ShapeType;
 
 public final class ShapeToJavaName {
     private final String packageOverride;
+    private final ReservedWordsEscaper escaper;
 
-    public ShapeToJavaName(String packageOverride) {
+    public ShapeToJavaName(String packageOverride, ReservedWordsEscaper escaper) {
         this.packageOverride = packageOverride;
+        this.escaper = escaper;
     }
 
-    public Name toJavaName(Shape shape, Model model) {
+    public Name toName(Shape shape, Model model) {
         var kind = Name.Convention.PASCAL_CASE;
         var simpleName = shape.getId().getName();
         if (shape.getType() == ShapeType.MEMBER) {
@@ -28,10 +30,18 @@ public final class ShapeToJavaName {
         return Name.of(simpleName, kind);
     }
 
+    public Name toJavaName(Shape shape, Model model) {
+        return escape(toName(shape, model), shape);
+    }
+
     public String toJavaPackage(Shape shape) {
         if (packageOverride != null) {
             return packageOverride;
         }
         return shape.getId().getNamespace();
+    }
+
+    private Name escape(Name name, Shape shape) {
+        return escaper.escape(name, shape);
     }
 }

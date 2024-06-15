@@ -70,6 +70,7 @@ public final class BraidCodegenDirector {
             .symbolProvider(symbolProvider)
             .fileManifest(fileManifest)
             .settings(settings)
+            .dependencies(module.dependencies())
             .build();
     }
 
@@ -82,6 +83,7 @@ public final class BraidCodegenDirector {
             .fileManifest(fileManifest)
             .settings(settings)
             .properties(properties)
+            .dependencies(module.dependencies())
             .build();
     }
 
@@ -93,6 +95,7 @@ public final class BraidCodegenDirector {
             .fileManifest(fileManifest)
             .settings(settings)
             .properties(properties)
+            .dependencies(module.dependencies())
             .build();
     }
 

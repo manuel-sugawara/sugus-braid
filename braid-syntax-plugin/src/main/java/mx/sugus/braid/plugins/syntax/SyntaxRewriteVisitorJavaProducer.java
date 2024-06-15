@@ -180,7 +180,6 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
     boolean isCollectionOfSyntaxNode(CodegenState state, MemberShape member) {
         var targetId = member.getTarget();
         var target = state.model().expectShape(targetId);
-        var symbolProvider = state.symbolProvider();
         var type = Utils.aggregateType(state, member);
         if (type == SymbolConstants.AggregateType.LIST || type == SymbolConstants.AggregateType.SET) {
             var listShape = target.asListShape().orElseThrow();
@@ -226,7 +225,7 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
         if (targetShape.hasTrait(InterfaceTrait.class)) {
             acceptBlock = CodeBlock.from("($T) $L.accept(this)", memberType, memberName);
         } else {
-            var targetVisitName = Utils.toJavaName(state, targetShape, Name.Convention.CAMEL_CASE, "visit");
+            var targetVisitName = Utils.toJavaName(state, targetShape).withPrefix("visit").toCamelCase();
             acceptBlock = CodeBlock.from("$L($L)", targetVisitName, memberName);
         }
         return acceptBlock;

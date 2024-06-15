@@ -1,6 +1,7 @@
 package mx.sugus.braid.core.plugin;
 
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
 import mx.sugus.braid.rt.util.AbstractBuilderReference;
@@ -18,7 +19,8 @@ public final class Dependencies {
     }
 
     /**
-     * Returns the configured dependency for the given key.
+     * Returns the configured dependency for the given key. It might return a null value if not found and not default value is
+     * configured.
      *
      * @param key The key for the dependency
      * @param <T> The type of the dependency
@@ -29,6 +31,26 @@ public final class Dependencies {
         T result = (T) map.get(key);
         if (result == null) {
             return key.computeDefault(this);
+        }
+        return result;
+    }
+
+    /**
+     * Returns the configured dependency for the given key. Throws if the key is not present or if there's not default value for
+     * it.
+     *
+     * @param key The key for the dependency
+     * @param <T> The type of the dependency
+     * @return The configured dependency for the given key.
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T expect(DependencyKey<T> key) {
+        T result = (T) map.get(key);
+        if (result == null) {
+            result = key.computeDefault(this);
+        }
+        if (result == null) {
+            throw new NoSuchElementException(key.toString());
         }
         return result;
     }

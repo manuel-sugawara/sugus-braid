@@ -20,6 +20,7 @@ public final class ShapeCodegenState implements CodegenState {
     private final BrideCodegenSettings settings;
     private final FileManifest fileManifest;
     private final Map<Identifier, Object> properties;
+    private final Dependencies dependencies;
 
     ShapeCodegenState(Builder builder) {
         this.model = Objects.requireNonNull(builder.model, "model");
@@ -28,6 +29,7 @@ public final class ShapeCodegenState implements CodegenState {
         this.settings = Objects.requireNonNull(builder.settings, "settings");
         this.fileManifest = Objects.requireNonNull(builder.fileManifest, "fileManifest");
         this.properties = Objects.requireNonNull(builder.properties, "properties");
+        this.dependencies = Objects.requireNonNull(builder.dependencies, "dependencies");
     }
 
     @Override
@@ -55,6 +57,11 @@ public final class ShapeCodegenState implements CodegenState {
         return properties;
     }
 
+    @Override
+    public Dependencies dependencies() {
+        return dependencies;
+    }
+
     public Symbol symbol() {
         return symbolProvider.toSymbol(shape);
     }
@@ -74,7 +81,7 @@ public final class ShapeCodegenState implements CodegenState {
         private BrideCodegenSettings settings;
         private FileManifest fileManifest;
         private Map<Identifier, Object> properties = Map.of();
-
+        private Dependencies dependencies;
 
         public Builder model(Model model) {
             this.model = model;
@@ -103,6 +110,11 @@ public final class ShapeCodegenState implements CodegenState {
 
         public Builder properties(Map<Identifier, Object> properties) {
             this.properties = Map.copyOf(properties);
+            return this;
+        }
+
+        public Builder dependencies(Dependencies dependencies) {
+            this.dependencies = dependencies;
             return this;
         }
 

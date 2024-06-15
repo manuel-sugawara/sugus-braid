@@ -5,9 +5,6 @@ import static mx.sugus.braid.plugins.data.producers.CodegenUtils.getTargetListMe
 import static mx.sugus.braid.plugins.data.producers.CodegenUtils.getTargetListMemberTrait;
 import static mx.sugus.braid.plugins.data.producers.CodegenUtils.getTargetTrait;
 import static mx.sugus.braid.plugins.data.producers.CodegenUtils.toParameters;
-import static mx.sugus.braid.plugins.data.producers.Utils.toJavaSingularName;
-import static mx.sugus.braid.plugins.data.producers.Utils.toJavaTypeName;
-import static mx.sugus.braid.plugins.data.producers.Utils.toMemberJavaName;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,8 +103,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
         var name = Utils.toJavaName(state, member);
         for (var override : builderOverrides) {
             var adderName = coalesce(override.getName(),
-                                     // XXX replace by a symbol property that represents the "adder" name.
-                                     () -> toJavaSingularName(state, member, "add").toString());
+                                     () -> Utils.toAdderName(state, member).toString());
             var overrideBuilder = MethodSyntax.builder(adderName)
                                               .addModifier(Modifier.PUBLIC)
                                               .returns(className(state));
@@ -136,7 +132,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
             if (override.getName() != null) {
                 continue;
             }
-            var adderName = toJavaSingularName(state, member, "add").toString();
+            var adderName = Utils.toAdderName(state, member).toString();
             var overrideBuilder = MethodSyntax.builder(adderName)
                                               .addModifier(Modifier.PUBLIC)
                                               .returns(className(state));
@@ -161,7 +157,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
         var name = Utils.toJavaName(state, member);
         for (var override : addAllOverrides.getValues()) {
             var adderName = coalesce(override.getName(),
-                                     () -> toJavaSingularName(state, member, "add").toString());
+                                     () -> Utils.toAdderName(state, member).toString());
             var overrideBuilder = MethodSyntax.builder(adderName)
                                               .addModifier(Modifier.PUBLIC)
                                               .returns(className(state));
@@ -189,7 +185,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
         var name = Utils.toJavaName(state, member);
         for (var override : multiAddOverrides.getValues()) {
             var adderName = coalesce(override.getName(),
-                                     () -> Utils.toJavaName(state, member, "add").toString());
+                                     () -> Utils.toMultiAdderName(state, member).toString());
             var overrideBuilder = MethodSyntax.builder(adderName)
                                               .addModifier(Modifier.PUBLIC)
                                               .returns(className(state));
@@ -205,7 +201,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
     }
 
     private void addValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder, List<String> values) {
-        var name = toMemberJavaName(state, member);
+        var name = Utils.toMemberJavaName(state, member);
         for (var value : values) {
             builder.addStatement("this.$L.asTransient().add($L)", name.toString(), value);
         }
@@ -213,10 +209,10 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
 
     private void addValueFromImplicitOverride(ShapeCodegenState state, MemberShape member, BodyBuilder builder,
                                               BuilderOverride override) {
-        var name = toMemberJavaName(state, member);
+        var name = Utils.toMemberJavaName(state, member);
         var block = CodeBlock.builder();
         var listMemberShape = getTargetListMember(state, member);
-        block.addCode("$T.", toJavaTypeName(state, listMemberShape));
+        block.addCode("$T.", Utils.toJavaTypeName(state, listMemberShape));
         if (override.getName() == null) {
             block.addCode("from");
         } else {
@@ -237,7 +233,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
     }
 
     private void addAllValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder, List<String> values) {
-        var name = toMemberJavaName(state, member);
+        var name = Utils.toMemberJavaName(state, member);
         for (var value : values) {
             builder.addStatement("this.$L.asTransient().addAll($L)", name.toString(), value);
         }

@@ -1,11 +1,10 @@
 package mx.sugus.braid.plugins.data.producers;
 
+import static mx.sugus.braid.plugins.data.dependencies.DataPluginDependencies.RESERVED_WORDS_ESCAPER;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.function.Function;
-import mx.sugus.braid.core.BraidCodegenPlugin;
 import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
@@ -26,17 +25,15 @@ import mx.sugus.braid.plugins.data.symbols.SymbolProperties;
 import mx.sugus.braid.rt.util.annotations.Generated;
 import mx.sugus.braid.traits.ConstTrait;
 import mx.sugus.braid.traits.UseBuilderReferenceTrait;
-import software.amazon.smithy.codegen.core.ReservedWords;
-import software.amazon.smithy.codegen.core.ReservedWordsBuilder;
 import software.amazon.smithy.codegen.core.Symbol;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.shapes.Shape;
-import software.amazon.smithy.model.shapes.ShapeType;
 
 public final class Utils {
-    // XXX remove this from here and unify the logic as a dependency
-    public static final ReservedWords RESERVED_WORDS = buildReservedWords();
     private static final ClassName GENERATED = ClassName.from(Generated.class);
+
+    private Utils() {
+    }
 
     public static TypeSyntax addGeneratedBy(TypeSyntax src, Identifier id) {
         var generatedBy = findGeneratedAnnotation(src);
@@ -109,97 +106,54 @@ public final class Utils {
 
     public static Name toSetterName(CodegenState state, MemberShape member) {
         var symbol = state.symbolProvider().toSymbol(member);
-        var name = symbol.getProperty(SymbolProperties.SETTER_NAME).orElseThrow();
-        return validateName(state, name, member);
+        return symbol.getProperty(SymbolProperties.SETTER_NAME).orElseThrow();
     }
 
     public static Name toGetterName(CodegenState state, MemberShape member) {
         var symbol = state.symbolProvider().toSymbol(member);
-        var name = symbol.getProperty(SymbolProperties.GETTER_NAME).orElseThrow();
-        return validateName(state, name, member);
+        return symbol.getProperty(SymbolProperties.GETTER_NAME).orElseThrow();
     }
 
     public static Name toAdderName(CodegenState state, MemberShape member) {
         var symbol = state.symbolProvider().toSymbol(member);
-        var name = symbol.getProperty(SymbolProperties.ADDER_NAME).orElseThrow();
-        return validateName(state, name, member);
+        return symbol.getProperty(SymbolProperties.ADDER_NAME).orElseThrow();
     }
 
     public static Name toMultiAdderName(CodegenState state, MemberShape member) {
         var symbol = state.symbolProvider().toSymbol(member);
-        var name = symbol.getProperty(SymbolProperties.MULTI_ADDER_NAME).orElseThrow();
-        return validateName(state, name, member);
+        return symbol.getProperty(SymbolProperties.MULTI_ADDER_NAME).orElseThrow();
     }
 
     public static Name toJavaName(CodegenState state, Shape shape) {
-        var name = state.symbolProvider()
-                        .toSymbol(shape)
-                        .getProperty(SymbolProperties.SIMPLE_NAME)
-                        .orElseThrow(() -> new NoSuchElementException(shape.toString()));
-        return validateName(state, name, shape);
+        return state.symbolProvider()
+                    .toSymbol(shape)
+                    .getProperty(SymbolProperties.JAVA_NAME)
+                    .orElseThrow(() -> new NoSuchElementException(shape.toString()));
+    }
+
+    public static Name toRawName(CodegenState state, Shape shape) {
+        var symbol = state.symbolProvider().toSymbol(shape);
+        return symbol.getProperty(SymbolProperties.SIMPLE_NAME)
+                     .orElseThrow(() -> new NoSuchElementException(shape.toString()));
+    }
+
+    public static Name toRawName(CodegenState state, Shape shape, Name.Convention kind) {
+        return toRawName(state, shape)
+            .toNameConvention(kind);
     }
 
     public static Name toJavaName(CodegenState state, Shape shape, Name.Convention kind) {
-        var name = state.symbolProvider()
-                        .toSymbol(shape)
-                        .getProperty(SymbolProperties.SIMPLE_NAME)
-                        .orElseThrow(() -> new NoSuchElementException(shape.toString()))
-                        .toNameConvention(kind);
-        return validateName(state, name, shape);
-    }
-
-    public static Name toJavaName(CodegenState state, Shape shape, Name.Convention kind, String prefix) {
-        var name = state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
-                        .toNameConvention(kind)
-                        .withPrefix(prefix);
-        return validateName(state, name, shape);
-    }
-
-    public static Name toJavaName(CodegenState state, Shape shape, String prefix) {
-        var name = state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
-                        .withPrefix(prefix);
-        return validateName(state, name, shape);
-    }
-
-    public static Name toJavaSingularName(CodegenState state, Shape shape, Name.Convention kind) {
-        var name = state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
-                        .toSingularSpelling()
-                        .toNameConvention(kind);
-        return validateName(state, name, shape);
-    }
-
-    public static Name toJavaSingularName(CodegenState state, Shape shape, Name.Convention kind, String prefix) {
-        var name = state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
-                        .toSingularSpelling()
-                        .withPrefix(prefix)
-                        .toNameConvention(kind);
-        return validateName(state, name, shape);
+        return state.symbolProvider()
+                    .toSymbol(shape)
+                    .getProperty(SymbolProperties.JAVA_NAME)
+                    .orElseThrow(() -> new NoSuchElementException(shape.toString()))
+                    .toNameConvention(kind);
     }
 
     public static Name toJavaSingularName(CodegenState state, Shape shape) {
-        var name = state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
-                        .toSingularSpelling();
-        return validateName(state, name, shape);
-    }
-
-    public static Name toJavaSingularName(CodegenState state, Shape shape, String prefix) {
-        var name = state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
-                        .toSingularSpelling()
-                        .withPrefix(prefix);
-        return validateName(state, name, shape);
-    }
-
-    public static Name validateName(CodegenState state, Name name, Shape shape) {
-        if (RESERVED_WORDS.isReserved(name.toString())) {
-            var type = shape.getType();
-            if (type == ShapeType.MEMBER ||
-                (type.getCategory() != ShapeType.Category.AGGREGATE && type.getCategory() != ShapeType.Category.SERVICE)) {
-                name = name.prefixWithArticle();
-            } else {
-                name = name.withSuffix(type.name());
-            }
-        }
-        return name;
+        return state.dependencies()
+                    .expect(RESERVED_WORDS_ESCAPER)
+                    .escape(toJavaName(state, shape).toSingularSpelling(), shape);
     }
 
     public static TypeName toJavaTypeName(CodegenState state, Shape shape) {
@@ -209,7 +163,6 @@ public final class Utils {
     public static TypeName toJavaTypeName(CodegenState state, Symbol shape) {
         return shape.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
     }
-
 
     public static boolean isMemberNullable(CodegenState state, MemberShape shape) {
         var aggregateType = aggregateType(state, shape);
@@ -320,15 +273,5 @@ public final class Utils {
 
     public static TypeName toRefrenceBuilderBuilderTypeName(Symbol symbol) {
         return symbol.getProperty(SymbolProperties.BUILDER_REFERENCE_BUILDER_JAVA_TYPE).orElseGet(() -> toJavaTypeName(symbol));
-    }
-
-    private static ReservedWords buildReservedWords() {
-        return
-            new ReservedWordsBuilder()
-                .loadWords(Objects.requireNonNull(BraidCodegenPlugin.class.getResource("java-reserved-words.txt")),
-                           Function.identity())
-                .loadWords(Objects.requireNonNull(BraidCodegenPlugin.class.getResource("java-system-type-names.txt")),
-                           Function.identity())
-                .build();
     }
 }

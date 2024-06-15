@@ -1,7 +1,6 @@
 package mx.sugus.braid.plugins.data.symbols;
 
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.Block;
@@ -10,9 +9,7 @@ import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants.AggregateType;
 import mx.sugus.braid.traits.UseBuilderReferenceTrait;
 import software.amazon.smithy.codegen.core.Property;
-import software.amazon.smithy.codegen.core.Symbol;
 import software.amazon.smithy.model.shapes.MemberShape;
-import software.amazon.smithy.model.shapes.ShapeType;
 
 /**
  * Symbol properties.
@@ -43,7 +40,17 @@ public final class SymbolProperties {
     /**
      * Property for the java name for a given symbol.
      */
+    public static final Property<Name> RAW_NAME = from(Name.class);
+
+    /**
+     * Property for the unescaped name for a given symbol.
+     */
     public static final Property<Name> SIMPLE_NAME = from(Name.class);
+
+    /**
+     * Property for the java name for a given symbol.
+     */
+    public static final Property<Name> JAVA_NAME = from(Name.class);
 
     /**
      * Property for the setter name for a given symbol.
