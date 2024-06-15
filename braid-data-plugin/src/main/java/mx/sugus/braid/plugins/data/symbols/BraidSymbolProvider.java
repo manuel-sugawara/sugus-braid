@@ -68,7 +68,6 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
         }
         var builder = sym.toBuilder();
         builder.putProperty(SymbolProperties.SIMPLE_NAME, shapeToJavaName.toJavaName(shape, model));
-        builder.putProperty(SymbolProperties.SHAPE_TYPE, shape.getType());
         return builder.build();
 
     }

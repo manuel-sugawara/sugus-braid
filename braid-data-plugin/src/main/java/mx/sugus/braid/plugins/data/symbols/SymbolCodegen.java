@@ -4,20 +4,23 @@ import static mx.sugus.braid.plugins.data.symbols.SymbolProperties.BUILDER_REFER
 import static mx.sugus.braid.plugins.data.symbols.SymbolProperties.BUILDER_REFERENCE_JAVA_TYPE;
 
 import java.util.Objects;
+import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import software.amazon.smithy.codegen.core.Symbol;
+import software.amazon.smithy.model.shapes.MemberShape;
 
 public final class SymbolCodegen {
     private SymbolCodegen() {
     }
 
-    static Block builderEmptyInitializer(Symbol symbol) {
+    static Block builderEmptyInitializer(ShapeCodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
         var type = symbol.getProperty(SymbolProperties.AGGREGATE_TYPE).orElse(SymbolConstants.AggregateType.NONE);
-        var name = Utils.toJavaName(symbol);
+        var name = Utils.toJavaName(state, member);
         if (type == SymbolConstants.AggregateType.NONE) {
             var builderReference = symbol.getProperty(SymbolProperties.BUILDER_REFERENCE).orElse(null);
             if (builderReference == null) {
@@ -27,13 +30,14 @@ public final class SymbolCodegen {
                 }
             }
         }
-        var initExpression = builderEmptyInitializerExpression(symbol);
+        var initExpression = builderEmptyInitializerExpression(state, member);
         return BodyBuilder.create()
                           .addStatement("this.$L = $C", name, initExpression)
                           .build();
     }
 
-    static CodeBlock builderEmptyInitializerExpression(Symbol symbol) {
+    static CodeBlock builderEmptyInitializerExpression(ShapeCodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
         var type = symbol.getProperty(SymbolProperties.AGGREGATE_TYPE).orElse(SymbolConstants.AggregateType.NONE);
         if (type == SymbolConstants.AggregateType.NONE) {
             var builderReference = symbol.getProperty(SymbolProperties.BUILDER_REFERENCE).orElse(null);
@@ -73,31 +77,33 @@ public final class SymbolCodegen {
         return builder.build();
     }
 
-    static Block builderDataInitializer(Symbol symbol) {
+    static Block builderDataInitializer(ShapeCodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
         if (Utils.isConstant(symbol)) {
             return BodyBuilder.emptyBlock();
         }
-        var name = Utils.toJavaName(symbol);
+        var name = Utils.toJavaName(state, member);
         return BodyBuilder.create()
-                          .addStatement("this.$L = $C", name, builderDataInitializerExpression(symbol))
+                          .addStatement("this.$L = $C", name, builderDataInitializerExpression(state, member))
                           .build();
     }
 
-    static CodeBlock builderDataInitializerExpression(Symbol symbol) {
-        return builderDataInitializerExpression(symbol, false);
+    static CodeBlock builderDataInitializerExpression(ShapeCodegenState state, MemberShape member) {
+        return builderDataInitializerExpression(state, member, false);
     }
 
-    static CodeBlock builderUnionDataInitializerExpression(Symbol symbol) {
-        return builderDataInitializerExpression(symbol, true);
+    static CodeBlock builderUnionDataInitializerExpression(ShapeCodegenState state, MemberShape member) {
+        return builderDataInitializerExpression(state, member, true);
     }
 
-    static CodeBlock builderDataInitializerExpression(Symbol symbol, boolean useGetters) {
+    static CodeBlock builderDataInitializerExpression(ShapeCodegenState state, MemberShape member, boolean useGetters) {
+        var symbol = state.symbolProvider().toSymbol(member);
         var type = Utils.aggregateType(symbol);
         String name;
         if (useGetters) {
-            name = Utils.toGetterName(symbol).toString() + "()";
+            name = Utils.toGetterName(state, member).toString() + "()";
         } else {
-            name = Utils.toJavaName(symbol).toString();
+            name = Utils.toJavaName(state, member).toString();
         }
         if (type == SymbolConstants.AggregateType.NONE) {
             var builderReference = Utils.builderReference(symbol);
@@ -139,11 +145,12 @@ public final class SymbolCodegen {
         return builder.build();
     }
 
-    static Block dataBuilderInitializer(Symbol symbol) {
+    static Block dataBuilderInitializer(ShapeCodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
         if (Utils.isConstant(symbol)) {
             return BodyBuilder.emptyBlock();
         }
-        var name = Utils.toJavaName(symbol);
+        var name = Utils.toJavaName(state, member);
         var builderReference = Utils.builderReference(symbol);
         var type = Utils.aggregateType(symbol);
         var builderProperty = CodeBlock.builder().addCode("builder.$L", name);
@@ -164,8 +171,9 @@ public final class SymbolCodegen {
                           .build();
     }
 
-    static Block builderSetterForMember(Symbol symbol) {
-        var name = Utils.toJavaName(symbol);
+    static Block builderSetterForMember(ShapeCodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
+        var name = Utils.toJavaName(state, member);
         var type = Utils.aggregateType(symbol);
         var builder = BodyBuilder.create();
         if (type == SymbolConstants.AggregateType.MAP) {

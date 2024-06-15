@@ -8,6 +8,7 @@ import java.util.function.Function;
 import mx.sugus.braid.core.BraidCodegenPlugin;
 import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.Identifier;
+import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.Annotation;
 import mx.sugus.braid.jsyntax.Block;
@@ -20,7 +21,6 @@ import mx.sugus.braid.jsyntax.FormatterNode;
 import mx.sugus.braid.jsyntax.InterfaceSyntax;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.TypeSyntax;
-import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants;
 import mx.sugus.braid.plugins.data.symbols.SymbolProperties;
 import mx.sugus.braid.rt.util.annotations.Generated;
@@ -107,34 +107,28 @@ public final class Utils {
         return CodeBlock.builder().parts(newParts).build();
     }
 
-    public static Name toJavaName(Symbol symbol) {
-        var name = symbol.getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow();
-        return validateName(name, symbol);
-    }
-
-    public static Name toJavaName(Symbol symbol, Name.Convention convention) {
-        var name = symbol.getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow();
-        return validateName(name.toNameConvention(convention), symbol);
-    }
-
-    public static Name toSetterName(Symbol symbol) {
+    public static Name toSetterName(CodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
         var name = symbol.getProperty(SymbolProperties.SETTER_NAME).orElseThrow();
-        return validateName(name, symbol);
+        return validateName(state, name, member);
     }
 
-    public static Name toGetterName(Symbol symbol) {
+    public static Name toGetterName(CodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
         var name = symbol.getProperty(SymbolProperties.GETTER_NAME).orElseThrow();
-        return validateName(name, symbol);
+        return validateName(state, name, member);
     }
 
-    public static Name toAdderName(Symbol symbol) {
+    public static Name toAdderName(CodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
         var name = symbol.getProperty(SymbolProperties.ADDER_NAME).orElseThrow();
-        return validateName(name, symbol);
+        return validateName(state, name, member);
     }
 
-    public static Name toMultiAdderName(Symbol symbol) {
+    public static Name toMultiAdderName(CodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
         var name = symbol.getProperty(SymbolProperties.MULTI_ADDER_NAME).orElseThrow();
-        return validateName(name, symbol);
+        return validateName(state, name, member);
     }
 
     public static Name toJavaName(CodegenState state, Shape shape) {
@@ -142,7 +136,7 @@ public final class Utils {
                         .toSymbol(shape)
                         .getProperty(SymbolProperties.SIMPLE_NAME)
                         .orElseThrow(() -> new NoSuchElementException(shape.toString()));
-        return validateName(name, shape);
+        return validateName(state, name, shape);
     }
 
     public static Name toJavaName(CodegenState state, Shape shape, Name.Convention kind) {
@@ -151,27 +145,27 @@ public final class Utils {
                         .getProperty(SymbolProperties.SIMPLE_NAME)
                         .orElseThrow(() -> new NoSuchElementException(shape.toString()))
                         .toNameConvention(kind);
-        return validateName(name, shape);
+        return validateName(state, name, shape);
     }
 
     public static Name toJavaName(CodegenState state, Shape shape, Name.Convention kind, String prefix) {
         var name = state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
                         .toNameConvention(kind)
                         .withPrefix(prefix);
-        return validateName(name, shape);
+        return validateName(state, name, shape);
     }
 
     public static Name toJavaName(CodegenState state, Shape shape, String prefix) {
         var name = state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
                         .withPrefix(prefix);
-        return validateName(name, shape);
+        return validateName(state, name, shape);
     }
 
     public static Name toJavaSingularName(CodegenState state, Shape shape, Name.Convention kind) {
         var name = state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
                         .toSingularSpelling()
                         .toNameConvention(kind);
-        return validateName(name, shape);
+        return validateName(state, name, shape);
     }
 
     public static Name toJavaSingularName(CodegenState state, Shape shape, Name.Convention kind, String prefix) {
@@ -179,42 +173,25 @@ public final class Utils {
                         .toSingularSpelling()
                         .withPrefix(prefix)
                         .toNameConvention(kind);
-        return validateName(name, shape);
+        return validateName(state, name, shape);
     }
 
     public static Name toJavaSingularName(CodegenState state, Shape shape) {
         var name = state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
                         .toSingularSpelling();
-        return validateName(name, shape);
+        return validateName(state, name, shape);
     }
 
     public static Name toJavaSingularName(CodegenState state, Shape shape, String prefix) {
         var name = state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
                         .toSingularSpelling()
                         .withPrefix(prefix);
-        return validateName(name, shape);
+        return validateName(state, name, shape);
     }
 
-    public static Name validateName(Name name, Shape shape) {
+    public static Name validateName(CodegenState state, Name name, Shape shape) {
         if (RESERVED_WORDS.isReserved(name.toString())) {
             var type = shape.getType();
-            if (type == ShapeType.MEMBER ||
-                (type.getCategory() != ShapeType.Category.AGGREGATE && type.getCategory() != ShapeType.Category.SERVICE)) {
-                name = name.prefixWithArticle();
-            } else {
-                name = name.withSuffix(type.name());
-            }
-        }
-        return name;
-    }
-
-    public static ShapeType toShapeType(Symbol symbol) {
-        return symbol.getProperty(SymbolProperties.SHAPE_TYPE).orElseThrow();
-    }
-
-    public static Name validateName(Name name, Symbol symbol) {
-        if (RESERVED_WORDS.isReserved(name.toString())) {
-            var type = toShapeType(symbol);
             if (type == ShapeType.MEMBER ||
                 (type.getCategory() != ShapeType.Category.AGGREGATE && type.getCategory() != ShapeType.Category.SERVICE)) {
                 name = name.prefixWithArticle();
@@ -248,10 +225,6 @@ public final class Utils {
 
     public static boolean isRequired(CodegenState state, MemberShape shape) {
         return shape.isRequired() || shape.hasTrait(ConstTrait.class);
-    }
-
-    public static String initReferenceBuilder(SymbolConstants.AggregateType type) {
-        return SymbolConstants.initReferenceBuilder(type);
     }
 
     public static TypeName concreteClassFor(SymbolConstants.AggregateType type) {
@@ -291,39 +264,46 @@ public final class Utils {
         return symbol.getProperty(SymbolProperties.BUILDER_REFERENCE).orElse(null);
     }
 
-    public static Block dataInitFromBuilder(Symbol symbol) {
-        var initFunction = symbol.getProperty(SymbolProperties.DATA_BUILDER_INIT).orElse(x -> BodyBuilder.emptyBlock());
-        return initFunction.apply(symbol);
+    public static Block dataInitFromBuilder(ShapeCodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
+        var initFunction = symbol.getProperty(SymbolProperties.DATA_BUILDER_INIT).orElseThrow();
+        return initFunction.apply(state, member);
     }
 
-    public static Block builderInitFromEmpty(Symbol symbol) {
-        var initFunction = symbol.getProperty(SymbolProperties.BUILDER_EMPTY_INIT).orElse(x -> BodyBuilder.emptyBlock());
-        return initFunction.apply(symbol);
+    public static Block builderInitFromEmpty(ShapeCodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
+        var initFunction = symbol.getProperty(SymbolProperties.BUILDER_EMPTY_INIT).orElseThrow();
+        return initFunction.apply(state, member);
     }
 
-    public static Block builderInitFromData(Symbol symbol) {
-        var initFunction = symbol.getProperty(SymbolProperties.BUILDER_DATA_INIT).orElse(x -> BodyBuilder.emptyBlock());
-        return initFunction.apply(symbol);
+    public static Block builderInitFromData(ShapeCodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
+        var initFunction = symbol.getProperty(SymbolProperties.BUILDER_DATA_INIT).orElseThrow();
+        return initFunction.apply(state, member);
     }
 
-    public static CodeBlock builderInitFromDataExpression(Symbol symbol) {
+    public static CodeBlock builderInitFromDataExpression(ShapeCodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
         var initFunction = symbol.getProperty(SymbolProperties.BUILDER_DATA_INIT_EXPRESSION).orElseThrow();
-        return initFunction.apply(symbol);
+        return initFunction.apply(state, member);
     }
 
-    public static CodeBlock builderUnionInitFromDataExpression(Symbol symbol) {
+    public static CodeBlock builderUnionInitFromDataExpression(ShapeCodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
         var initFunction = symbol.getProperty(SymbolProperties.BUILDER_UNION_DATA_INIT_EXPRESSION).orElseThrow();
-        return initFunction.apply(symbol);
+        return initFunction.apply(state, member);
     }
 
-    public static Block builderSetter(Symbol symbol) {
-        var initFunction = symbol.getProperty(SymbolProperties.BUILDER_SETTER_FOR_MEMBER).orElse(x -> BodyBuilder.emptyBlock());
-        return initFunction.apply(symbol);
+    public static Block builderSetter(ShapeCodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
+        var initFunction = symbol.getProperty(SymbolProperties.BUILDER_SETTER_FOR_MEMBER).orElseThrow();
+        return initFunction.apply(state, member);
     }
 
-    public static CodeBlock toBuilderInitExpression(Symbol symbol) {
+    public static CodeBlock toBuilderInitExpression(ShapeCodegenState state, MemberShape member) {
+        var symbol = state.symbolProvider().toSymbol(member);
         var initFunction = symbol.getProperty(SymbolProperties.BUILDER_EMPTY_INIT_EXPRESSION).orElseThrow();
-        return initFunction.apply(symbol);
+        return initFunction.apply(state, member);
     }
 
     public static TypeName toJavaTypeName(Symbol symbol) {

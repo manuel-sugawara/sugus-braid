@@ -1,17 +1,14 @@
 package mx.sugus.braid.plugins.data.symbols;
 
 import mx.sugus.braid.core.util.Name;
-import software.amazon.smithy.codegen.core.ReservedWords;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeType;
 
 public final class ShapeToJavaName {
-    private final ReservedWords reservedWords;
     private final String packageOverride;
 
-    public ShapeToJavaName(ReservedWords reservedWords, String packageOverride) {
-        this.reservedWords = reservedWords;
+    public ShapeToJavaName(String packageOverride) {
         this.packageOverride = packageOverride;
     }
 
@@ -28,13 +25,7 @@ public final class ShapeToJavaName {
             }
             simpleName = member.getMemberName();
         }
-        var name = Name.of(simpleName, kind);
-        var nameAsString = name.toString();
-        var escaped = reservedWords.escape(nameAsString);
-        if (escaped.equals(nameAsString)) {
-            return name;
-        }
-        return Name.of(escaped, kind);
+        return Name.of(simpleName, kind);
     }
 
     public String toJavaPackage(Shape shape) {

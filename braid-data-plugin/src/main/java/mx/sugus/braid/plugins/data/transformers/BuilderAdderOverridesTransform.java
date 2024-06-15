@@ -61,7 +61,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
                     syntax = (ClassSyntax)
                         AddMethodsTransform.builder()
                                            .addAfter()
-                                           .methodMatcher(MethodMatcher.byName(Utils.toAdderName(symbol).toString()))
+                                           .methodMatcher(MethodMatcher.byName(Utils.toAdderName(state, member).toString()))
                                            .typeMatcher(TypeMatcher.byName("Builder"))
                                            .methods(methods)
                                            .build()

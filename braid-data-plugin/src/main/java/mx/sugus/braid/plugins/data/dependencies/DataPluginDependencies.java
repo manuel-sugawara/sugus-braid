@@ -40,11 +40,10 @@ public final class DataPluginDependencies {
     }
 
     static ShapeToJavaName buildShapeToJavaName(Dependencies dependencies) {
-        var reservedWords = dependencies.get(RESERVED_WORDS);
         var packageName = dependencies.getOptional(DefaultDependencies.SETTINGS)
                                       .map(BrideCodegenSettings::packageName)
                                       .orElse(null);
-        return new ShapeToJavaName(reservedWords, packageName);
+        return new ShapeToJavaName(packageName);
     }
 
     static ReservedWords buildReservedWords() {
