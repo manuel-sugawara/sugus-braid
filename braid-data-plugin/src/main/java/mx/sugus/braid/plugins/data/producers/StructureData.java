@@ -186,7 +186,6 @@ public final class StructureData implements DirectedClass {
     }
 
     public MethodSyntax equalsMethod(ShapeCodegenState state) {
-        var symbolProvider = state.symbolProvider();
         var result = MethodSyntax.builder("equals")
                                  .addAnnotation(Override.class)
                                  .addModifier(Modifier.PUBLIC)
