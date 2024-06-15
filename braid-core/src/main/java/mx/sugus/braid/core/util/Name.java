@@ -178,12 +178,14 @@ public final class Name {
     }
 
     public enum Convention {
+        // PascalCase
         PASCAL_CASE {
             @Override
             public String processRest(String name) {
                 return StringUtils.capitalize(name.toLowerCase(Locale.US));
             }
         },
+        // camelCase
         CAMEL_CASE {
             @Override
             public String processFirst(String name) {
@@ -195,6 +197,7 @@ public final class Name {
                 return StringUtils.capitalize(name.toLowerCase(Locale.US));
             }
         },
+        // SCREAM_CASE
         SCREAM_CASE {
             @Override
             public String delimiter() {
