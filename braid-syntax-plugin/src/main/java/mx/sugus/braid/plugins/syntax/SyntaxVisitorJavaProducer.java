@@ -5,6 +5,7 @@ import mx.sugus.braid.core.ImplementsKnowledgeIndex;
 import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.NonShapeProducerTask;
+import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.jsyntax.AbstractMethodSyntax;
 import mx.sugus.braid.jsyntax.ClassName;
@@ -102,18 +103,18 @@ public final class SyntaxVisitorJavaProducer implements NonShapeProducerTask<Typ
     }
 
     AbstractMethodSyntax abstractVisitForStructure(CodegenState state, StructureShape shape) {
-        var name = state.symbolProvider().toSymbol(shape).getName();
+        var name = Utils.toSourceName(state, shape, Name.Convention.CAMEL_CASE).withPrefix("visit");
         var type = Utils.toJavaTypeName(state, shape);
-        return AbstractMethodSyntax.builder("visit" + name)
+        return AbstractMethodSyntax.builder(name.toString())
                                    .returns(T_TYPE_ARG)
                                    .addParameter(type, "node")
                                    .build();
     }
 
     MethodSyntax concreteVisitForStructure(CodegenState state, StructureShape shape) {
-        var name = state.symbolProvider().toSymbol(shape).getName();
+        var name = Utils.toSourceName(state, shape, Name.Convention.CAMEL_CASE).withPrefix("visit");
         var type = Utils.toJavaTypeName(state, shape);
-        return MethodSyntax.builder("visit" + name)
+        return MethodSyntax.builder(name.toString())
                            .addModifier(Modifier.PUBLIC)
                            .addAnnotation(Override.class)
                            .returns(T_TYPE_ARG)
