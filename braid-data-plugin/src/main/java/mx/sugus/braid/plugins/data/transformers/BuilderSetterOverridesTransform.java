@@ -39,15 +39,13 @@ public final class BuilderSetterOverridesTransform implements ShapeTaskTransform
     @Override
     public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
         var syntax = (ClassSyntax) result.syntax();
-        var symbolProvider = state.symbolProvider();
         for (var member : state.shape().asStructureShape().orElseThrow().members()) {
-            var symbol = symbolProvider.toSymbol(member);
             var methods = methodsFor(state, member);
             if (!methods.isEmpty()) {
                 syntax = (ClassSyntax)
                     AddMethodsTransform.builder()
                                        .addAfter()
-                                       .methodMatcher(MethodMatcher.byName(Utils.toSetterName(symbol).toString()))
+                                       .methodMatcher(MethodMatcher.byName(Utils.toSetterName(state, member).toString()))
                                        .typeMatcher(TypeMatcher.byName("Builder"))
                                        .methods(methods)
                                        .build()
@@ -72,12 +70,12 @@ public final class BuilderSetterOverridesTransform implements ShapeTaskTransform
     private MethodSyntax settersOverride(ShapeCodegenState state, MemberShape member, SetterOverride override) {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
-        var setterName = Utils.toSetterName(symbol);
+        var setterName = Utils.toSetterName(state, member);
         var builder = MethodSyntax.builder(setterName.toString())
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(className(state));
         builder.parameters(toParameters(override.getArgs()));
-        return builder.addStatement("this.$1L = $2L", Utils.toJavaName(symbol), override.getBody())
+        return builder.addStatement("this.$1L = $2L", Utils.toJavaName(state, member), override.getBody())
                       .addStatement("return this")
                       .build();
     }

@@ -17,4 +17,5 @@ public interface CodegenState {
 
     Map<Identifier, Object> properties();
 
+    Dependencies dependencies();
 }

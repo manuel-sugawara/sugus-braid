@@ -70,6 +70,7 @@ public final class BraidCodegenDirector {
             .symbolProvider(symbolProvider)
             .fileManifest(fileManifest)
             .settings(settings)
+            .dependencies(module.dependencies())
             .build();
     }
 
@@ -82,6 +83,7 @@ public final class BraidCodegenDirector {
             .fileManifest(fileManifest)
             .settings(settings)
             .properties(properties)
+            .dependencies(module.dependencies())
             .build();
     }
 
@@ -93,6 +95,7 @@ public final class BraidCodegenDirector {
             .fileManifest(fileManifest)
             .settings(settings)
             .properties(properties)
+            .dependencies(module.dependencies())
             .build();
     }
 
@@ -156,6 +159,7 @@ public final class BraidCodegenDirector {
             LOG.fine("Running module configured model processors");
             newModel = module.preprocessModel(newModel);
             this.model = newModel;
+            //this.module.
             LOG.fine("Running symbol provider decorators");
             var sourceSymbolProvider = symbolProviderFactory.apply(model, settings);
             // For small models using the cache does not seem to add any measurable value.

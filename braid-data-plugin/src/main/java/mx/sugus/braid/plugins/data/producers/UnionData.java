@@ -76,16 +76,14 @@ public final class UnionData implements DirectedClass {
     }
 
     private MethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
-        var getterName = Utils.toGetterName(symbol);
+        var getterName = Utils.toGetterName(state, member);
         var type = Utils.toJavaTypeName(state, member);
         var memberName = member.getMemberName();
-        var unionTypeName = Name.of(memberName, Name.Convention.SCREAM_CASE).toString();
+        var unionVariant = Utils.toRawName(state, member, Name.Convention.SCREAM_CASE).toString();
         var builder = MethodSyntax.builder(getterName.toString())
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(type);
-        builder.ifStatement("this.type == Type.$L", unionTypeName, then -> {
+        builder.ifStatement("this.type == Type.$L", unionVariant, then -> {
             then.addStatement("return ($T) this.value", type);
         });
         builder.addStatement("throw new $T($S + this.type + $S)", NoSuchElementException.class,
@@ -186,14 +184,12 @@ public final class UnionData implements DirectedClass {
         body.addStatement("buf.append($L)", "this.type");
         var memberSwitch = SwitchStatement.builder()
                                           .expression(CodeBlock.from("this.type"));
-        var symbolProvider = state.symbolProvider();
         for (var member : state.shape().members()) {
-            var symbol = symbolProvider.toSymbol(member);
             var memberName = member.getMemberName();
             var literalName = ", " + memberName + ": ";
-            var unionTypeName = Utils.toJavaName(symbol, Name.Convention.SCREAM_CASE).toString();
+            var unionVariant = Utils.toRawName(state, member, Name.Convention.SCREAM_CASE).toString();
             memberSwitch.addCase(CaseClause.builder()
-                                           .addLabel(CodeBlock.from("$L", unionTypeName))
+                                           .addLabel(CodeBlock.from("$L", unionVariant))
                                            .body(b -> {
                                                if (sensitiveIndex.isSensitive(member.getTarget())) {
                                                    b.addStatement("buf.append($S)", literalName + "<*** REDACTED ***>");

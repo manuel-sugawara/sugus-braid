@@ -62,7 +62,7 @@ public final class StructureData implements DirectedClass {
     public FieldSyntax fieldFor(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
-        var name = Utils.toJavaName(symbol);
+        var name = Utils.toJavaName(state, member);
         var type = Utils.toJavaTypeName(symbol);
         return FieldSyntax.from(type, name.toString());
     }
@@ -81,10 +81,8 @@ public final class StructureData implements DirectedClass {
     }
 
     private void constructorBody(ShapeCodegenState state, BodyBuilder builder) {
-        var symbolProvider = state.symbolProvider();
         for (var member : state.shape().members()) {
-            var symbol = symbolProvider.toSymbol(member);
-            for (var stmt : Utils.dataInitFromBuilder(symbol).statements()) {
+            for (var stmt : Utils.dataInitFromBuilder(state, member).statements()) {
                 builder.addStatement(stmt);
             }
         }
@@ -101,9 +99,9 @@ public final class StructureData implements DirectedClass {
     private MethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
-        var name = Utils.toJavaName(symbol);
+        var name = Utils.toJavaName(state, member);
         var type = Utils.toJavaTypeName(symbol);
-        var builder = MethodSyntax.builder(Utils.toGetterName(symbol).toString())
+        var builder = MethodSyntax.builder(Utils.toGetterName(state, member).toString())
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(type)
                                   .addStatement("return this.$L", name);
@@ -118,7 +116,7 @@ public final class StructureData implements DirectedClass {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
         var type = Utils.toJavaTypeName(symbol);
-        var builder = MethodSyntax.builder(Utils.toGetterName(symbol).toString())
+        var builder = MethodSyntax.builder(Utils.toGetterName(state, member).toString())
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(type);
         var refId = member.expectTrait(ConstTrait.class).getValue();
@@ -213,8 +211,7 @@ public final class StructureData implements DirectedClass {
                 if (member.hasTrait(ConstTrait.class)) {
                     continue;
                 }
-                var memberSymbol = symbolProvider.toSymbol(member);
-                var name = Utils.toJavaName(memberSymbol);
+                var name = Utils.toJavaName(state, member);
                 if (!isFirst) {
                     expressionBuilder.addCode("\n&& ");
                 }
@@ -260,9 +257,9 @@ public final class StructureData implements DirectedClass {
         builder.addStatement("int hashCode = 17");
         for (var member : state.shape().members()) {
             var symbol = symbolProvider.toSymbol(member);
-            var name = Utils.toJavaName(symbol);
+            var name = Utils.toJavaName(state, member);
             if (member.hasTrait(ConstTrait.class)) {
-                builder.addStatement("hashCode = 31 * hashCode + this.$L().hashCode()", Utils.toGetterName(symbol));
+                builder.addStatement("hashCode = 31 * hashCode + this.$L().hashCode()", Utils.toGetterName(state, member));
                 continue;
             }
             if (Utils.isMemberNullable(state, member)) {
@@ -279,7 +276,6 @@ public final class StructureData implements DirectedClass {
         if (sensitiveIndex.isSensitive(state.shape())) {
             return CodegenUtils.toStringForSensitive();
         }
-        var symbolProvider = state.symbolProvider();
         var builder = MethodSyntax.builder("toString")
                                   .addAnnotation(Override.class)
                                   .addModifier(Modifier.PUBLIC)
@@ -289,8 +285,7 @@ public final class StructureData implements DirectedClass {
         toStringReturn.addCode("return $S", state.shape().getId().getName() + "{");
         for (var member : state.shape().members()) {
             var literalName = new StringBuilder();
-            var symbol = symbolProvider.toSymbol(member);
-            var name = Utils.toJavaName(symbol);
+            var name = Utils.toJavaName(state, member);
             toStringReturn.addCode("\n+ ");
             if (!isFirst) {
                 literalName.append(", ");
@@ -301,7 +296,7 @@ public final class StructureData implements DirectedClass {
                 toStringReturn.addCode("$S", literalName);
             } else {
                 if (member.hasTrait(ConstTrait.class)) {
-                    toStringReturn.addCode("$S + $L()", literalName, Utils.toGetterName(symbol));
+                    toStringReturn.addCode("$S + $L()", literalName, Utils.toGetterName(state, member));
                 } else {
                     toStringReturn.addCode("$S + $L", literalName, name);
                 }

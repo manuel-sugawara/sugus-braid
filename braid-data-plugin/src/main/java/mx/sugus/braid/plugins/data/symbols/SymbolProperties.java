@@ -1,6 +1,7 @@
 package mx.sugus.braid.plugins.data.symbols;
 
-import java.util.function.Function;
+import java.util.function.BiFunction;
+import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.jsyntax.CodeBlock;
@@ -8,8 +9,7 @@ import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants.AggregateType;
 import mx.sugus.braid.traits.UseBuilderReferenceTrait;
 import software.amazon.smithy.codegen.core.Property;
-import software.amazon.smithy.codegen.core.Symbol;
-import software.amazon.smithy.model.shapes.ShapeType;
+import software.amazon.smithy.model.shapes.MemberShape;
 
 /**
  * Symbol properties.
@@ -40,7 +40,17 @@ public final class SymbolProperties {
     /**
      * Property for the java name for a given symbol.
      */
+    public static final Property<Name> RAW_NAME = from(Name.class);
+
+    /**
+     * Property for the unescaped name for a given symbol.
+     */
     public static final Property<Name> SIMPLE_NAME = from(Name.class);
+
+    /**
+     * Property for the java name for a given symbol.
+     */
+    public static final Property<Name> JAVA_NAME = from(Name.class);
 
     /**
      * Property for the setter name for a given symbol.
@@ -61,11 +71,6 @@ public final class SymbolProperties {
      * Property for the adder name for a given symbol.
      */
     public static final Property<Name> MULTI_ADDER_NAME = Property.named("multi-adder-name");
-
-    /**
-     * Property for the shape type for the symbol.
-     */
-    public static final Property<ShapeType> SHAPE_TYPE = Property.named("shape-type");
 
     /**
      * Property to mark the symbol as required.
@@ -120,37 +125,38 @@ public final class SymbolProperties {
     /**
      * The empty builder initializer code.
      */
-    public static final Property<Function<Symbol, Block>> BUILDER_EMPTY_INIT = Property.named("builder-empty-init");
+    public static final Property<BiFunction<ShapeCodegenState, MemberShape, Block>> BUILDER_EMPTY_INIT
+        = Property.named("builder-empty-init");
 
-    public static final Property<Function<Symbol, CodeBlock>> BUILDER_EMPTY_INIT_EXPRESSION
+    public static final Property<BiFunction<ShapeCodegenState, MemberShape, CodeBlock>> BUILDER_EMPTY_INIT_EXPRESSION
         = Property.named("builder-empty-init-expression");
 
     /**
      * From data builder initializer code.
      */
-    public static final Property<Function<Symbol, Block>> BUILDER_DATA_INIT = Property.named("builder-data-init");
+    public static final Property<BiFunction<ShapeCodegenState, MemberShape, Block>> BUILDER_DATA_INIT = Property.named("builder-data-init");
 
     /**
      * From data builder initializer expression.
      */
-    public static final Property<Function<Symbol, CodeBlock>> BUILDER_DATA_INIT_EXPRESSION
+    public static final Property<BiFunction<ShapeCodegenState, MemberShape, CodeBlock>> BUILDER_DATA_INIT_EXPRESSION
         = Property.named("builder-data-init-expression");
 
     /**
      * From data builder initializer expression.
      */
-    public static final Property<Function<Symbol, CodeBlock>> BUILDER_UNION_DATA_INIT_EXPRESSION
+    public static final Property<BiFunction<ShapeCodegenState, MemberShape, CodeBlock>> BUILDER_UNION_DATA_INIT_EXPRESSION
         = Property.named("builder-union-data-init-expression");
 
     /**
      * From data builder code for setting a member.
      */
-    public static final Property<Function<Symbol, Block>> BUILDER_SETTER_FOR_MEMBER = Property.named("builder-setter");
+    public static final Property<BiFunction<ShapeCodegenState, MemberShape, Block>> BUILDER_SETTER_FOR_MEMBER = Property.named("builder-setter");
 
     /**
      * From builder data initializer code.
      */
-    public static final Property<Function<Symbol, Block>> DATA_BUILDER_INIT = Property.named("data-builder-init");
+    public static final Property<BiFunction<ShapeCodegenState, MemberShape, Block>> DATA_BUILDER_INIT = Property.named("data-builder-init");
 
     private SymbolProperties() {
     }

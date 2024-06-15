@@ -11,7 +11,6 @@ import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeVariableTypeName;
-import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.jsyntax.ext.TypeNameExt;
 import mx.sugus.braid.jsyntax.transforms.AddMethodsTransform;
 import mx.sugus.braid.jsyntax.transforms.MethodMatcher;
@@ -41,13 +40,11 @@ public record SyntaxAddAcceptVisitorTransformer(String syntaxNode) implements Sh
             return result;
         }
         var shape = state.shape();
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(shape);
         var syntax = (ClassSyntax)
             AddMethodsTransform.builder()
                                .addBefore()
                                .methodMatcher(MethodMatcher.byName("equals"))
-                               .typeMatcher(TypeMatcher.byName(Utils.toJavaName(symbol).toString()))
+                               .typeMatcher(TypeMatcher.byName(Utils.toJavaName(state, shape).toString()))
                                .methods(methods)
                                .build()
                                .transform(result.syntax());

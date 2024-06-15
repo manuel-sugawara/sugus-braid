@@ -12,6 +12,8 @@ import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.writer.CodeWriter;
+import mx.sugus.braid.plugins.data.dependencies.ShapeToJavaName;
+import mx.sugus.braid.plugins.data.dependencies.ShapeToJavaType;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants.AggregateType;
 import mx.sugus.braid.rt.util.BuilderReference;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
@@ -54,7 +56,11 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
     private final ShapeToJavaName shapeToJavaName;
     private final ShapeToJavaType shapeToJavaType;
 
-    public BraidSymbolProvider(Model model, ShapeToJavaName shapeToJavaName, ShapeToJavaType shapeToJavaType) {
+    public BraidSymbolProvider(
+        Model model,
+        ShapeToJavaName shapeToJavaName,
+        ShapeToJavaType shapeToJavaType
+    ) {
         this.model = model;
         this.shapeToJavaName = shapeToJavaName;
         this.shapeToJavaType = shapeToJavaType;
@@ -67,15 +73,14 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
             return null;
         }
         var builder = sym.toBuilder();
-        builder.putProperty(SymbolProperties.SIMPLE_NAME, shapeToJavaName.toJavaName(shape, model));
-        builder.putProperty(SymbolProperties.SHAPE_TYPE, shape.getType());
+        builder.putProperty(SymbolProperties.JAVA_NAME, shapeToJavaName.toJavaName(shape, model));
+        builder.putProperty(SymbolProperties.SIMPLE_NAME, shapeToJavaName.toName(shape, model));
         return builder.build();
-
     }
 
     @Override
     public String toMemberName(MemberShape shape) {
-        return shape.accept(this).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow().toString();
+        return shape.accept(this).getProperty(SymbolProperties.JAVA_NAME).orElseThrow().toString();
     }
 
     // --- Service ---
@@ -149,12 +154,12 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
         var targetShape = model.expectShape(shape.getTarget());
         var targetSymbol = targetShape.accept(this);
         var builderReference = targetShape.getTrait(UseBuilderReferenceTrait.class).orElse(null);
-        var simpleName = shapeToJavaName.toJavaName(shape, model);
+        var javaName = shapeToJavaName.toJavaName(shape, model);
         var builder = targetSymbol
             .toBuilder()
-            .putProperty(SymbolProperties.SIMPLE_NAME, simpleName)
-            .putProperty(SymbolProperties.SETTER_NAME, simpleName)
-            .putProperty(SymbolProperties.GETTER_NAME, simpleName)
+            .putProperty(SymbolProperties.JAVA_NAME, javaName)
+            .putProperty(SymbolProperties.SETTER_NAME, javaName)
+            .putProperty(SymbolProperties.GETTER_NAME, javaName)
             .putProperty(SymbolProperties.IS_REQUIRED, shape.isRequired())
             .putProperty(SymbolProperties.BUILDER_REFERENCE, builderReference)
             .putProperty(SymbolProperties.IS_CONSTANT, shape.hasTrait(ConstTrait.class))
@@ -164,14 +169,15 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
             .putProperty(SymbolProperties.BUILDER_DATA_INIT_EXPRESSION, SymbolCodegen::builderDataInitializerExpression)
             .putProperty(SymbolProperties.BUILDER_UNION_DATA_INIT_EXPRESSION,
                          SymbolCodegen::builderUnionDataInitializerExpression)
-            .putProperty(SymbolProperties.DATA_BUILDER_INIT, SymbolCodegen::dataBuilderInitializer)
             .putProperty(SymbolProperties.BUILDER_SETTER_FOR_MEMBER, SymbolCodegen::builderSetterForMember)
+            .putProperty(SymbolProperties.DATA_BUILDER_INIT, SymbolCodegen::dataBuilderInitializer)
             .putProperty(SymbolProperties.DEFAULT_VALUE, getDefaultValue(shape, targetShape));
         var aggregateType = targetSymbol.getProperty(SymbolProperties.AGGREGATE_TYPE).orElse(AggregateType.NONE);
         if (aggregateType != AggregateType.NONE) {
             var targetType = targetSymbol.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
             builder.putProperty(SymbolProperties.BUILDER_JAVA_TYPE,
                                 ParameterizedTypeName.from(CollectionBuilderReference.class, targetType));
+            var simpleName = shapeToJavaName.toName(shape, model);
             var prefix = aggregateType == AggregateType.MAP ? "put" : "add";
             builder.putProperty(SymbolProperties.ADDER_NAME, simpleName.toSingularSpelling().withPrefix(prefix));
             builder.putProperty(SymbolProperties.MULTI_ADDER_NAME, simpleName.withPrefix(prefix));

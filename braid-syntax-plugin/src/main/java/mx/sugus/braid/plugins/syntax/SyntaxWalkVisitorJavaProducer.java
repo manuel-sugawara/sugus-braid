@@ -103,13 +103,11 @@ public final class SyntaxWalkVisitorJavaProducer implements NonShapeProducerTask
     }
 
     void addCollectionOfSyntaxNode(CodegenState state, MemberShape member, BodyBuilder builder) {
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
-        var memberName = Utils.toJavaName(symbol);
+        var memberName = Utils.toJavaName(state, member);
         var memberInnerTypeShape = memberInnerType(state, member);
-        var memberInnerType = Utils.toJavaTypeName(symbolProvider.toSymbol(memberInnerTypeShape));
+        var memberInnerType = Utils.toJavaTypeName(state, memberInnerTypeShape);
         var memberType = Utils.toJavaTypeName(state, member);
-        builder.addStatement("$T $L = node.$L()", memberType, memberName, Utils.toGetterName(symbol));
+        builder.addStatement("$T $L = node.$L()", memberType, memberName, Utils.toGetterName(state, member));
         var type = Utils.aggregateType(state, member);
         if (type == SymbolConstants.AggregateType.LIST) {
             builder.forStatement("int idx = 0; idx < $L.size(); idx++", memberName, b -> {
@@ -150,16 +148,13 @@ public final class SyntaxWalkVisitorJavaProducer implements NonShapeProducerTask
     }
 
     void addSingleSyntaxNode(CodegenState state, MemberShape member, BodyBuilder builder) {
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
-        var memberName = Utils.toJavaName(symbol);
-        var memberType = Utils.toJavaTypeName(symbol);
-
+        var memberName = Utils.toJavaName(state, member);
+        var memberType = Utils.toJavaTypeName(state, member);
         if (Utils.isMemberNullable(state, member)) {
-            builder.addStatement("$T $L = node.$L()", memberType, memberName, Utils.toGetterName(symbol));
+            builder.addStatement("$T $L = node.$L()", memberType, memberName, Utils.toGetterName(state, member));
             builder.ifStatement("$L != null", memberName, b -> b.addStatement("$L.accept(this)", memberName));
         } else {
-            builder.addStatement("node.$L().accept(this)", Utils.toGetterName(symbol));
+            builder.addStatement("node.$L().accept(this)", Utils.toGetterName(state, member));
         }
     }
 }

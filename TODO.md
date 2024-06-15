@@ -5,6 +5,9 @@
 * Add testing, almost nothing is unit-tested. Device a strategy
   tackling one module at the time.
 
+  * Added testing for most of the generators, still lacking for the
+    transformers.
+
 * Some stuff such as the suffix for input/output structures should be
   a configuration setting.
 
@@ -27,53 +30,26 @@
   adjacent project to define the serde logic and then a plugin to
   codegen for it.
 
-### Node Serde
-
-* Bring back the plugin that reads/writes using smithy-node. That will
-  be useful to projects that already take a dependency on smithy such
-  as
-
-  * This codegen plugin settings for this project
-
-  * AWS Java SDK codegen, e.g., all the mapping from/to C2J models,
-    including endpoints and other nuances.
-
-  * Trait codegen (alternative to what smithy already has)
-
 ### Syntax Visitors
-
-* Rewrite visitor disappeared along the way, consider adding it back,
-  to make it useful we need to keep the parent along the way.
-
-  * We can add helper methods along the lines of `enclosingMethod` and
-    `enclosingType`, that'd be cool.
 
 * Walk Visitor traversing order is not correct for interfaces &
   inheritors: inheritors members should go *after* (??)
 
+### Non-Categorized
+
+* Put back builders for interfaces without type params and then fix
+  the Add transformers to use that instead of if + cast for each type.
+
 ## Known Issues
 
-### Node Serde
+* Missing support for intEnums
 
-* fromNode is incorrect for enums, e.g.,
-```
-  builder.name(obj.expectMember("name")TypePrimitiveName.from(.expectStringNode().getValue()));
-```
+* Support for nullability is wacky, we need to convert it into a
+  dependency from a configuration that takes the "mode" (as in mode
+  from smithy's NullableIndex)
 
-### Plugins resolution
-
-If the data plugin is removed from the build then
-
-```
-Projection source failed: java.lang.NullPointerException: Cannot invoke "mx.sugus.braid.core.plugin.SmithyGeneratorPlugin.provides()" because "plugin" is null
-
-```
-
-### Data Codgen
-
-* The package is duplicated, we need to find a place for this,
-  probably returning a CompilationUnit instead of a generic
-  TypeSyntax.
+* No support for primitive types, should be not that hard but might
+  require presence tracking.
 
 ----
 ## Done
@@ -109,3 +85,46 @@ import java.util.Map;
 import java.util.Set;
 import javax.lang.model.element.Modifier;
 ```
+
+### Node Serde
+
+* Bring back the plugin that reads/writes using smithy-node. That will
+  be useful to projects that already take a dependency on smithy such
+  as
+
+  * This codegen plugin settings for this project
+
+  * AWS Java SDK codegen, e.g., all the mapping from/to C2J models,
+    including endpoints and other nuances.
+
+  * Trait codegen (alternative to what smithy already has)
+
+### Syntax Visitors
+
+* Rewrite visitor disappeared along the way, consider adding it back,
+  to make it useful we need to keep the parent along the way.
+
+  * We can add helper methods along the lines of `enclosingMethod` and
+    `enclosingType`, that'd be cool.
+
+### Node Serde
+
+* fromNode is incorrect for enums, e.g.,
+```
+  builder.name(obj.expectMember("name")TypePrimitiveName.from(.expectStringNode().getValue()));
+```
+
+### Plugins resolution
+
+If the data plugin is removed from the build then
+
+```
+Projection source failed: java.lang.NullPointerException: Cannot invoke "mx.sugus.braid.core.plugin.SmithyGeneratorPlugin.provides()" because "plugin" is null
+
+```
+
+### Data Codgen
+
+* The package is duplicated, we need to find a place for this,
+  probably returning a CompilationUnit instead of a generic
+  TypeSyntax.

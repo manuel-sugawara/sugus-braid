@@ -1,4 +1,4 @@
-package mx.sugus.braid.plugins.data.symbols;
+package mx.sugus.braid.plugins.data.dependencies;
 
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.TypeName;

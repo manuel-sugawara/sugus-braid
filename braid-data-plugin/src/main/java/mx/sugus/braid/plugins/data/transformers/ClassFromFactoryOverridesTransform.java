@@ -48,7 +48,7 @@ public final class ClassFromFactoryOverridesTransform implements ShapeTaskTransf
             AddMethodsTransform.builder()
                                .addAfter()
                                .methodMatcher(MethodMatcher.byName("builder"))
-                               .typeMatcher(TypeMatcher.byName(Utils.toJavaName(symbol).toString()))
+                               .typeMatcher(TypeMatcher.byName(Utils.toJavaName(state, state.shape()).toString()))
                                .methods(methods)
                                .build()
                                .transform(syntax);

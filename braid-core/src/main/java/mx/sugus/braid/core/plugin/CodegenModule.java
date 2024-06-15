@@ -131,6 +131,15 @@ public final class CodegenModule {
         }
     }
 
+    /**
+     * Returns the configured dependencies.
+     *
+     * @return The configured dependencies.
+     */
+    public Dependencies dependencies() {
+        return config.dependencies();
+    }
+
     private <T> T runShapeTask(ShapeCodegenState state, ShapeProducerTask<T> task) {
         LOG.fine(() -> String.format("Running producer `%s` on shape `%s",
                                      task.taskId(), state.shape().getId()));

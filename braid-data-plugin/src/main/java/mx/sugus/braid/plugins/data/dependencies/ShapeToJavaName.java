@@ -1,21 +1,20 @@
-package mx.sugus.braid.plugins.data.symbols;
+package mx.sugus.braid.plugins.data.dependencies;
 
 import mx.sugus.braid.core.util.Name;
-import software.amazon.smithy.codegen.core.ReservedWords;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeType;
 
 public final class ShapeToJavaName {
-    private final ReservedWords reservedWords;
     private final String packageOverride;
+    private final ReservedWordsEscaper escaper;
 
-    public ShapeToJavaName(ReservedWords reservedWords, String packageOverride) {
-        this.reservedWords = reservedWords;
+    public ShapeToJavaName(String packageOverride, ReservedWordsEscaper escaper) {
         this.packageOverride = packageOverride;
+        this.escaper = escaper;
     }
 
-    public Name toJavaName(Shape shape, Model model) {
+    public Name toName(Shape shape, Model model) {
         var kind = Name.Convention.PASCAL_CASE;
         var simpleName = shape.getId().getName();
         if (shape.getType() == ShapeType.MEMBER) {
@@ -28,13 +27,11 @@ public final class ShapeToJavaName {
             }
             simpleName = member.getMemberName();
         }
-        var name = Name.of(simpleName, kind);
-        var nameAsString = name.toString();
-        var escaped = reservedWords.escape(nameAsString);
-        if (escaped.equals(nameAsString)) {
-            return name;
-        }
-        return Name.of(escaped, kind);
+        return Name.of(simpleName, kind);
+    }
+
+    public Name toJavaName(Shape shape, Model model) {
+        return escape(toName(shape, model), shape);
     }
 
     public String toJavaPackage(Shape shape) {
@@ -42,5 +39,9 @@ public final class ShapeToJavaName {
             return packageOverride;
         }
         return shape.getId().getNamespace();
+    }
+
+    private Name escape(Name name, Shape shape) {
+        return escaper.escape(name, shape);
     }
 }

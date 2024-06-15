@@ -32,13 +32,11 @@ public class InterfaceFromFactoryOverridesTransform implements ShapeTaskTransfor
         if (methods.isEmpty()) {
             return result;
         }
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(state.shape());
         syntax = (InterfaceSyntax)
             AddMethodsTransform.builder()
                                .addAfter()
                                .methodMatcher(MethodMatcher.any())
-                               .typeMatcher(TypeMatcher.byName(Utils.toJavaName(symbol).toString()))
+                               .typeMatcher(TypeMatcher.byName(Utils.toJavaName(state, state.shape()).toString()))
                                .methods(methods)
                                .build()
                                .transform(syntax);
