@@ -138,11 +138,18 @@ public final class Utils {
     }
 
     public static Name toJavaName(CodegenState state, Shape shape) {
-        return state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow(() -> new NoSuchElementException(shape.toString()));
+        var name = state.symbolProvider()
+                        .toSymbol(shape)
+                        .getProperty(SymbolProperties.SIMPLE_NAME)
+                        .orElseThrow(() -> new NoSuchElementException(shape.toString()));
+        return validateName(name, shape);
     }
 
     public static Name toJavaName(CodegenState state, Shape shape, Name.Convention kind) {
-        var name = state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.SIMPLE_NAME).orElseThrow()
+        var name = state.symbolProvider()
+                        .toSymbol(shape)
+                        .getProperty(SymbolProperties.SIMPLE_NAME)
+                        .orElseThrow(() -> new NoSuchElementException(shape.toString()))
                         .toNameConvention(kind);
         return validateName(name, shape);
     }

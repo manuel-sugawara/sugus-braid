@@ -77,7 +77,7 @@ public final class BuilderSetterOverridesTransform implements ShapeTaskTransform
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(className(state));
         builder.parameters(toParameters(override.getArgs()));
-        return builder.addStatement("this.$1L = $2L", Utils.toJavaName(symbol), override.getBody())
+        return builder.addStatement("this.$1L = $2L", Utils.toJavaName(state, member), override.getBody())
                       .addStatement("return this")
                       .build();
     }

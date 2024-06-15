@@ -30,6 +30,11 @@ public final class DataPluginDependencies {
     public static final DependencyKey<ShapeToJavaName> SHAPE_TO_JAVA_NAME =
         DependencyKey.from("shape->java-name", DataPluginDependencies::buildShapeToJavaName);
 
+    /**
+     *
+     */
+    //public static final DependencyKey<>
+
 
     private DataPluginDependencies() {
     }

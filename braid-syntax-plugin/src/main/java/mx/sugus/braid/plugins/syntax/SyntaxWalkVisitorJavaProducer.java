@@ -105,7 +105,7 @@ public final class SyntaxWalkVisitorJavaProducer implements NonShapeProducerTask
     void addCollectionOfSyntaxNode(CodegenState state, MemberShape member, BodyBuilder builder) {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
-        var memberName = Utils.toJavaName(symbol);
+        var memberName = Utils.toJavaName(state, member);
         var memberInnerTypeShape = memberInnerType(state, member);
         var memberInnerType = Utils.toJavaTypeName(symbolProvider.toSymbol(memberInnerTypeShape));
         var memberType = Utils.toJavaTypeName(state, member);
@@ -152,7 +152,7 @@ public final class SyntaxWalkVisitorJavaProducer implements NonShapeProducerTask
     void addSingleSyntaxNode(CodegenState state, MemberShape member, BodyBuilder builder) {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
-        var memberName = Utils.toJavaName(symbol);
+        var memberName = Utils.toJavaName(state, member);
         var memberType = Utils.toJavaTypeName(symbol);
 
         if (Utils.isMemberNullable(state, member)) {

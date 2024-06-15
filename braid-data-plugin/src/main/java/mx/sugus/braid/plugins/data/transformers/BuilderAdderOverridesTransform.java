@@ -5,7 +5,6 @@ import static mx.sugus.braid.plugins.data.producers.CodegenUtils.getTargetListMe
 import static mx.sugus.braid.plugins.data.producers.CodegenUtils.getTargetListMemberTrait;
 import static mx.sugus.braid.plugins.data.producers.CodegenUtils.getTargetTrait;
 import static mx.sugus.braid.plugins.data.producers.CodegenUtils.toParameters;
-import static mx.sugus.braid.plugins.data.producers.Utils.toJavaName;
 import static mx.sugus.braid.plugins.data.producers.Utils.toJavaSingularName;
 import static mx.sugus.braid.plugins.data.producers.Utils.toJavaTypeName;
 import static mx.sugus.braid.plugins.data.producers.Utils.toMemberJavaName;
@@ -104,7 +103,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
         MemberShape member,
         List<BuilderOverride> builderOverrides
     ) {
-        var name = toJavaName(state, member);
+        var name = Utils.toJavaName(state, member);
         for (var override : builderOverrides) {
             var adderName = coalesce(override.getName(),
                                      // XXX replace by a symbol property that represents the "adder" name.
@@ -130,7 +129,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
         MemberShape member,
         List<BuilderOverride> builderOverrides
     ) {
-        var name = toJavaName(state, member);
+        var name = Utils.toJavaName(state, member);
         for (var override : builderOverrides) {
             // XXX This needs review, the logic over-enthusiastically adds overrides across the
             //   board.
@@ -159,7 +158,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
         MemberShape member,
         AddAllOverridesTrait addAllOverrides
     ) {
-        var name = toJavaName(state, member);
+        var name = Utils.toJavaName(state, member);
         for (var override : addAllOverrides.getValues()) {
             var adderName = coalesce(override.getName(),
                                      () -> toJavaSingularName(state, member, "add").toString());
@@ -187,10 +186,10 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
         if (multiAddOverrides == null) {
             return;
         }
-        var name = toJavaName(state, member);
+        var name = Utils.toJavaName(state, member);
         for (var override : multiAddOverrides.getValues()) {
             var adderName = coalesce(override.getName(),
-                                     () -> toJavaName(state, member, "add").toString());
+                                     () -> Utils.toJavaName(state, member, "add").toString());
             var overrideBuilder = MethodSyntax.builder(adderName)
                                               .addModifier(Modifier.PUBLIC)
                                               .returns(className(state));

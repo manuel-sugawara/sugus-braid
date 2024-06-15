@@ -62,7 +62,7 @@ public final class StructureData implements DirectedClass {
     public FieldSyntax fieldFor(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
-        var name = Utils.toJavaName(symbol);
+        var name = Utils.toJavaName(state, member);
         var type = Utils.toJavaTypeName(symbol);
         return FieldSyntax.from(type, name.toString());
     }
@@ -101,7 +101,7 @@ public final class StructureData implements DirectedClass {
     private MethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
-        var name = Utils.toJavaName(symbol);
+        var name = Utils.toJavaName(state, member);
         var type = Utils.toJavaTypeName(symbol);
         var builder = MethodSyntax.builder(Utils.toGetterName(symbol).toString())
                                   .addModifier(Modifier.PUBLIC)
@@ -213,8 +213,7 @@ public final class StructureData implements DirectedClass {
                 if (member.hasTrait(ConstTrait.class)) {
                     continue;
                 }
-                var memberSymbol = symbolProvider.toSymbol(member);
-                var name = Utils.toJavaName(memberSymbol);
+                var name = Utils.toJavaName(state, member);
                 if (!isFirst) {
                     expressionBuilder.addCode("\n&& ");
                 }
@@ -260,7 +259,7 @@ public final class StructureData implements DirectedClass {
         builder.addStatement("int hashCode = 17");
         for (var member : state.shape().members()) {
             var symbol = symbolProvider.toSymbol(member);
-            var name = Utils.toJavaName(symbol);
+            var name = Utils.toJavaName(state, member);
             if (member.hasTrait(ConstTrait.class)) {
                 builder.addStatement("hashCode = 31 * hashCode + this.$L().hashCode()", Utils.toGetterName(symbol));
                 continue;
@@ -290,7 +289,7 @@ public final class StructureData implements DirectedClass {
         for (var member : state.shape().members()) {
             var literalName = new StringBuilder();
             var symbol = symbolProvider.toSymbol(member);
-            var name = Utils.toJavaName(symbol);
+            var name = Utils.toJavaName(state, member);
             toStringReturn.addCode("\n+ ");
             if (!isFirst) {
                 literalName.append(", ");

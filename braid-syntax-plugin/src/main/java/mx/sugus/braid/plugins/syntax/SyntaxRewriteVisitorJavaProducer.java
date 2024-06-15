@@ -112,7 +112,7 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
     void addCollectionOfSyntaxNode(CodegenState state, MemberShape member, BodyBuilder builder, boolean isBuilderNull) {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
-        var memberName = Utils.toJavaName(symbol);
+        var memberName = Utils.toJavaName(state, member);
         var memberNameNew = memberName.withPrefix("new");
         var memberInnerTypeShape = memberInnerType(state, member);
         var memberInnerType = Utils.toJavaTypeName(state, memberInnerTypeShape);
@@ -197,7 +197,7 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
     void addSingleSyntaxNode(CodegenState state, MemberShape member, BodyBuilder builder, boolean isBuilderNull) {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
-        var memberName = Utils.toJavaName(symbol);
+        var memberName = Utils.toJavaName(state, member);
         var memberNameNew = memberName.withSuffix("new");
         var memberType = Utils.toJavaTypeName(state, member);
         builder.addStatement("$T $L = node.$L()", memberType, memberName, Utils.toGetterName(symbol));

@@ -72,7 +72,7 @@ public final class StructureDataBuilder implements DirectedClass {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
         var type = Utils.toBuilderTypeName(symbol);
-        var name = Utils.toJavaName(symbol);
+        var name = Utils.toJavaName(state, member);
         return FieldSyntax.mutableFrom(type, name.toString());
     }
 
@@ -118,7 +118,7 @@ public final class StructureDataBuilder implements DirectedClass {
     private MethodSyntax setter(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
-        var name = Utils.toJavaName(symbol);
+        var name = Utils.toJavaName(state, member);
         var builder = methodBuilder(Utils.toSetterName(symbol).toString())
             .addParameter(Utils.toJavaTypeName(symbol), name.toString());
 

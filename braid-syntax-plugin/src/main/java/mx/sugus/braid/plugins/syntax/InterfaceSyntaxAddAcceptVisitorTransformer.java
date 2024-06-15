@@ -43,13 +43,11 @@ public final class InterfaceSyntaxAddAcceptVisitorTransformer implements ShapeTa
             return result;
         }
         var shape = state.shape();
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(shape);
         var syntax = (InterfaceSyntax)
             AddMethodsTransform.builder()
                                .addAfter()
                                .methodMatcher(MethodMatcher.any())
-                               .typeMatcher(TypeMatcher.byName(Utils.toJavaName(symbol).toString()))
+                               .typeMatcher(TypeMatcher.byName(Utils.toJavaName(state, shape).toString()))
                                .methods(methods)
                                .build()
                                .transform(result.syntax());

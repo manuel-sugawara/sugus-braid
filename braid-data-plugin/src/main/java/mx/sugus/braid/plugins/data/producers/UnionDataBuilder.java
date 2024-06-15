@@ -91,7 +91,7 @@ public final class UnionDataBuilder implements DirectedClass {
     private CodeBlock getValueForMember(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
-        var name = Utils.toJavaName(symbol);
+        var name = Utils.toJavaName(state, member);
         var aggregateType = Utils.aggregateType(state, member);
         var usesReference = aggregateType != SymbolConstants.AggregateType.NONE || usesBuilderReference(state, member);
         if (usesReference) {
@@ -138,8 +138,8 @@ public final class UnionDataBuilder implements DirectedClass {
     private MethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
-        var unionVariant = Utils.toJavaName(symbol).toNameConvention(Name.Convention.SCREAM_CASE).toString();
-        var name = Utils.toJavaName(symbol);
+        var unionVariant = Utils.toJavaName(state, member).toNameConvention(Name.Convention.SCREAM_CASE).toString();
+        var name = Utils.toJavaName(state, member);
         var type = Utils.toBuilderTypeName(symbol);
         var accessor = MethodSyntax.builder(Utils.toGetterName(symbol).toString())
                                    .addModifier(Modifier.PRIVATE)
@@ -163,7 +163,7 @@ public final class UnionDataBuilder implements DirectedClass {
     private MethodSyntax setter(ShapeCodegenState state, MemberShape member) {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
-        var name = Utils.toJavaName(symbol);
+        var name = Utils.toJavaName(state, member);
         var builder = MethodSyntax.builder(name.toString())
                                   .addModifier(Modifier.PUBLIC)
                                   .addParameter(Utils.toJavaTypeName(symbol), name.toString())
@@ -283,7 +283,7 @@ public final class UnionDataBuilder implements DirectedClass {
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
         var builderType = Utils.toRefrenceBuilderBuilderTypeName(symbol);
-        var name = Utils.toJavaName(symbol);
+        var name = Utils.toJavaName(state, member);
         var builder = MethodSyntax.builder(name.toString());
         builder.addModifier(Modifier.PUBLIC)
                .addParameter(
@@ -297,8 +297,7 @@ public final class UnionDataBuilder implements DirectedClass {
 
     private void setMemberValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
         var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
-        var name = Utils.toJavaName(symbol);
+        var name = Utils.toJavaName(state, member);
         if (usesBuilderReference(state, member)) {
             setBuilderReferenceValue(state, member, builder);
         } else {
@@ -314,7 +313,7 @@ public final class UnionDataBuilder implements DirectedClass {
         BodyBuilder bodyBuilder
     ) {
         var symbol = state.symbolProvider().toSymbol(member);
-        var name = Utils.toJavaName(symbol);
+        var name = Utils.toJavaName(state, member);
         bodyBuilder.addStatement("$1L().setPersistent($1L)", name);
     }
 
