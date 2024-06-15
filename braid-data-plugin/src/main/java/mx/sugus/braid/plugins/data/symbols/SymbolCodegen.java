@@ -24,7 +24,7 @@ public final class SymbolCodegen {
         if (type == SymbolConstants.AggregateType.NONE) {
             var builderReference = symbol.getProperty(SymbolProperties.BUILDER_REFERENCE).orElse(null);
             if (builderReference == null) {
-                var defaultValue = Utils.defaultValue(symbol);
+                var defaultValue = Utils.defaultValue(state, member);
                 if (defaultValue == null) {
                     return BodyBuilder.emptyBlock();
                 }
@@ -42,7 +42,7 @@ public final class SymbolCodegen {
         if (type == SymbolConstants.AggregateType.NONE) {
             var builderReference = symbol.getProperty(SymbolProperties.BUILDER_REFERENCE).orElse(null);
             if (builderReference == null) {
-                var defaultValue = Utils.defaultValue(symbol);
+                var defaultValue = Utils.defaultValue(state, member);
                 if (defaultValue != null) {
                     return CodeBlock.builder()
                                     .addCode("$L", defaultValue)
@@ -58,7 +58,7 @@ public final class SymbolCodegen {
                             .build();
         }
         var builder = CodeBlock.builder();
-        var isOrdered = Utils.isOrdered(symbol);
+        var isOrdered = Utils.isOrdered(state, member);
         if (isOrdered) {
             switch (type) {
                 case MAP -> builder.addCode("$T.forOrderedMap()", CollectionBuilderReference.class);
@@ -78,8 +78,7 @@ public final class SymbolCodegen {
     }
 
     static Block builderDataInitializer(ShapeCodegenState state, MemberShape member) {
-        var symbol = state.symbolProvider().toSymbol(member);
-        if (Utils.isConstant(symbol)) {
+        if (Utils.isConstant(state, member)) {
             return BodyBuilder.emptyBlock();
         }
         var name = Utils.toJavaName(state, member);
@@ -98,7 +97,7 @@ public final class SymbolCodegen {
 
     static CodeBlock builderDataInitializerExpression(ShapeCodegenState state, MemberShape member, boolean useGetters) {
         var symbol = state.symbolProvider().toSymbol(member);
-        var type = Utils.aggregateType(symbol);
+        var type = Utils.aggregateType(state, member);
         String name;
         if (useGetters) {
             name = Utils.toGetterName(state, member).toString() + "()";
@@ -106,7 +105,7 @@ public final class SymbolCodegen {
             name = Utils.toJavaName(state, member).toString();
         }
         if (type == SymbolConstants.AggregateType.NONE) {
-            var builderReference = Utils.builderReference(symbol);
+            var builderReference = Utils.builderReference(state, member);
             if (builderReference == null) {
                 return CodeBlock.builder()
                                 .addCode("data.$L", name)
@@ -120,7 +119,7 @@ public final class SymbolCodegen {
                             .build();
         }
         var builder = CodeBlock.builder();
-        var isOrdered = Utils.isOrdered(symbol);
+        var isOrdered = Utils.isOrdered(state, member);
         if (isOrdered) {
             switch (type) {
                 case MAP -> builder.addCode("$T.fromPersistentOrderedMap(data.$L)",
@@ -146,13 +145,12 @@ public final class SymbolCodegen {
     }
 
     static Block dataBuilderInitializer(ShapeCodegenState state, MemberShape member) {
-        var symbol = state.symbolProvider().toSymbol(member);
-        if (Utils.isConstant(symbol)) {
+        if (Utils.isConstant(state, member)) {
             return BodyBuilder.emptyBlock();
         }
         var name = Utils.toJavaName(state, member);
-        var builderReference = Utils.builderReference(symbol);
-        var type = Utils.aggregateType(symbol);
+        var builderReference = Utils.builderReference(state, member);
+        var type = Utils.aggregateType(state, member);
         var builderProperty = CodeBlock.builder().addCode("builder.$L", name);
         if (type != SymbolConstants.AggregateType.NONE) {
             builderProperty.addCode(".asPersistent()");
@@ -160,7 +158,7 @@ public final class SymbolCodegen {
         if (builderReference != null) {
             builderProperty.addCode(".asPersistent()");
         }
-        if (Utils.isRequired(symbol)) {
+        if (Utils.isRequired(state, member)) {
             return BodyBuilder.create()
                               .addStatement("this.$1L = $2T.requireNonNull($3C, $1S)",
                                             name, Objects.class, builderProperty.build())
@@ -172,9 +170,8 @@ public final class SymbolCodegen {
     }
 
     static Block builderSetterForMember(ShapeCodegenState state, MemberShape member) {
-        var symbol = state.symbolProvider().toSymbol(member);
         var name = Utils.toJavaName(state, member);
-        var type = Utils.aggregateType(symbol);
+        var type = Utils.aggregateType(state, member);
         var builder = BodyBuilder.create();
         if (type == SymbolConstants.AggregateType.MAP) {
             return builder.addStatement("this.$L.clear()", name)
@@ -186,7 +183,7 @@ public final class SymbolCodegen {
                           .addStatement("this.$1L.asTransient().addAll($1L)", name)
                           .build();
         }
-        var builderReference = Utils.builderReference(symbol);
+        var builderReference = Utils.builderReference(state, member);
         if (builderReference != null) {
             return builder.addStatement("this.$1L.setPersistent($1L)", name)
                           .build();

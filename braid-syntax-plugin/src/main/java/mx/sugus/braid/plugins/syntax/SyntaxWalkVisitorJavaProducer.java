@@ -76,9 +76,7 @@ public final class SyntaxWalkVisitorJavaProducer implements NonShapeProducerTask
 
     MethodSyntax.Builder visitForStructure(CodegenState state, StructureShape shape) {
         var name = shape.getId().getName();
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(shape);
-        var type = Utils.toJavaTypeName(symbol);
+        var type = Utils.toJavaTypeName(state, shape);
         var syntaxShape = state.model().expectShape(ShapeId.from(syntaxNode));
         var syntaxNodeClass = ClassName.toClassName(Utils.toJavaTypeName(state, syntaxShape));
         var builder = MethodSyntax.builder("visit" + name)
@@ -132,9 +130,7 @@ public final class SyntaxWalkVisitorJavaProducer implements NonShapeProducerTask
     }
 
     boolean isCollectionOfSyntaxNode(CodegenState state, MemberShape member) {
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
-        var type = Utils.aggregateType(symbol);
+        var type = Utils.aggregateType(state, member);
         if (type == SymbolConstants.AggregateType.LIST || type == SymbolConstants.AggregateType.SET) {
             var target = state.model().expectShape(member.getTarget());
             var listShape = target.asListShape().orElseThrow();
@@ -150,7 +146,7 @@ public final class SyntaxWalkVisitorJavaProducer implements NonShapeProducerTask
     void addSingleSyntaxNode(CodegenState state, MemberShape member, BodyBuilder builder) {
         var memberName = Utils.toJavaName(state, member);
         var memberType = Utils.toJavaTypeName(state, member);
-        if (Utils.isMemberNullable(state, member)) {
+        if (Utils.isNullable(state, member)) {
             builder.addStatement("$T $L = node.$L()", memberType, memberName, Utils.toGetterName(state, member));
             builder.ifStatement("$L != null", memberName, b -> b.addStatement("$L.accept(this)", memberName));
         } else {

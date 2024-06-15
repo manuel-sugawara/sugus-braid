@@ -61,12 +61,10 @@ public class ClassAddBuilderReferenceTransform implements ShapeTaskTransformer<T
     }
 
     private TypeSyntax builderReferenceType(ShapeCodegenState state) {
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(state.shape());
         var className = ClassName.from(Utils.toJavaName(state, state.shape()).withSuffix("BuilderReference").toString());
         var builder = ClassSyntax.builder(className.name())
                                  .addModifiers(Modifier.PUBLIC, Modifier.STATIC);
-        var shapeType = Utils.toJavaTypeName(symbol);
+        var shapeType = Utils.toJavaTypeName(state, state.shape());
         var builderType = CodegenUtils.builderType();
         builder.superClass(ParameterizedTypeName.from(AbstractBuilderReference.class,
                                                       shapeType,

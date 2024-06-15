@@ -199,7 +199,7 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
         builder.addStatement("$T $L = node.$L()", memberType, memberName, Utils.toGetterName(state, member));
         var targetShape = state.model().expectShape(member.getTarget());
         var acceptBlock = acceptBlock(state, targetShape, memberName.toString());
-        if (Utils.isMemberNullable(state, member)) {
+        if (Utils.isNullable(state, member)) {
             builder.addStatement("$T $L = null", memberType, memberNameNew);
             builder.ifStatement("$L != null", memberName, b -> b.addStatement("$L = $C",
                                                                               memberNameNew,
