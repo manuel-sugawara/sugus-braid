@@ -22,7 +22,7 @@ import software.amazon.smithy.model.shapes.ShapeId;
 
 public final class InterfaceAddFromNodeTransformer implements ShapeTaskTransformer<TypeSyntaxResult> {
 
-    public static Identifier ID = Identifier.of(ClassAddFromNodeTransformer.class);
+    public static final Identifier ID = Identifier.of(ClassAddFromNodeTransformer.class);
 
     @Override
     public Identifier taskId() {

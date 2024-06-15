@@ -103,7 +103,6 @@ public final class SyntaxVisitorJavaProducer implements NonShapeProducerTask<Typ
 
     AbstractMethodSyntax abstractVisitForStructure(CodegenState state, StructureShape shape) {
         var name = state.symbolProvider().toSymbol(shape).getName();
-        var symbolProvider = state.symbolProvider();
         var type = Utils.toJavaTypeName(state, shape);
         return AbstractMethodSyntax.builder("visit" + name)
                                    .returns(T_TYPE_ARG)
@@ -113,7 +112,6 @@ public final class SyntaxVisitorJavaProducer implements NonShapeProducerTask<Typ
 
     MethodSyntax concreteVisitForStructure(CodegenState state, StructureShape shape) {
         var name = state.symbolProvider().toSymbol(shape).getName();
-        var symbolProvider = state.symbolProvider();
         var type = Utils.toJavaTypeName(state, shape);
         return MethodSyntax.builder("visit" + name)
                            .addModifier(Modifier.PUBLIC)

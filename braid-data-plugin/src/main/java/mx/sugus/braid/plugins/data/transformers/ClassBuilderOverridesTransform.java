@@ -38,7 +38,6 @@ public final class ClassBuilderOverridesTransform implements ShapeTaskTransforme
     @Override
     public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
         var syntax = (ClassSyntax) result.syntax();
-        var symbolProvider = state.symbolProvider();
         var methods = builderMethods(state);
         if (methods.isEmpty()) {
             return result;

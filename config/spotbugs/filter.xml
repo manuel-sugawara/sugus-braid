@@ -1,13 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <FindBugsFilter>
-    <!-- Ignore all test files. -->
-    <Match>
-        <Class name="~mx.sugus.syntax.java.*"/>
-        <Bug pattern="EI_EXPOSE_REP"/>
-    </Match>
-    <Match>
-        <Class name="mx.sugus.codegen.plugin.data.StructureDataBuilder"/>
-        <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
-    </Match>
+  <Match>
+    <Class name="~mx.sugus.braid.core.BraidCodegenDirector\$Builder.*"/>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+  </Match>
+  <Match>
+    <Class name="~mx.sugus.braid.core.BraidCodegenDirector\$Builder.*"/>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+  </Match>
+  <Match>
+    <Class name="~mx.sugus.braid.core.plugin.*"/>
+    <Bug pattern="EI_EXPOSE_REP2,EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="~mx.sugus.braid.traits.*"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="~mx.sugus.braid.jsyntax.*"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="~mx.sugus.braid.jsyntax.writer.*"/>
+    <Bug pattern="EI_EXPOSE_REP2"/>
+  </Match>
+  <Match>
+    <Class name="~mx.sugus.braid.test.*"/>
+    <Bug pattern="EI_EXPOSE_REP"/>
+  </Match>
+  <Match>
+    <Class name="~mx.sugus.braid.test.*"/>
+    <Bug pattern="SF_SWITCH_NO_DEFAULT"/>
+  </Match>
+
 </FindBugsFilter>

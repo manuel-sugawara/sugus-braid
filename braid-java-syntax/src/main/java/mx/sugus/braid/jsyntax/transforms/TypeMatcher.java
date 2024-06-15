@@ -2,6 +2,7 @@ package mx.sugus.braid.jsyntax.transforms;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Objects;
 import javax.lang.model.element.Modifier;
 import mx.sugus.braid.jsyntax.TypeSyntax;
@@ -130,7 +131,7 @@ public interface TypeMatcher {
         private final Collection<TypeMatcher> matchers;
 
         public AndMatcher(Collection<TypeMatcher> matchers) {
-            this.matchers = matchers;
+            this.matchers = Collections.unmodifiableCollection(matchers);
         }
 
         @Override
