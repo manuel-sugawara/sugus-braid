@@ -84,7 +84,7 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
 
     private void addStructureMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var memberName = Utils.toJavaName(state, member);
-        if (Utils.isMemberRequired(state, member)) {
+        if (Utils.isRequired(state, member)) {
             body.addStatement("builder.withMember($S, this.$L.toNode())", member.getMemberName(), memberName);
         } else {
             body.ifStatement("$L != null", memberName, then ->
@@ -124,11 +124,9 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
     }
 
     private void addSimpleMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
-        var symbolProvider = state.symbolProvider();
         var target = state.model().expectShape(member.getTarget());
         var memberField = "this." + Utils.toJavaName(state, member);
-
-        if (Utils.isMemberRequired(state, member)) {
+        if (Utils.isRequired(state, member)) {
             if (member.hasTrait(ConstTrait.class)) {
                 body.addStatement("builder.withMember($S, $C)",
                                   member.getMemberName(), valueToNode(memberField + "()", state, target));

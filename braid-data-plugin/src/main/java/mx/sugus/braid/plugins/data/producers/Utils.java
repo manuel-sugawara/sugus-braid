@@ -164,56 +164,52 @@ public final class Utils {
         return shape.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
     }
 
-    public static boolean isMemberNullable(CodegenState state, MemberShape shape) {
-        var aggregateType = aggregateType(state, shape);
-        if (aggregateType != SymbolConstants.AggregateType.NONE) {
-            return false;
-        }
-        return shape.isOptional();
-    }
-
-    public static boolean isMemberRequired(CodegenState state, MemberShape shape) {
-        return shape.isRequired() || shape.hasTrait(ConstTrait.class);
+    public static boolean isNullable(CodegenState state, MemberShape shape) {
+        return !isRequired(state, shape);
     }
 
     public static boolean isRequired(CodegenState state, MemberShape shape) {
-        return shape.isRequired() || shape.hasTrait(ConstTrait.class);
+        var symbol = state.symbolProvider().toSymbol(shape);
+        return symbol.getProperty(SymbolProperties.IS_REQUIRED).orElseGet(() -> shape.hasTrait(ConstTrait.class));
     }
 
     public static TypeName concreteClassFor(SymbolConstants.AggregateType type) {
         return SymbolConstants.concreteClassFor(type);
     }
 
-    public static Name toMemberJavaName(CodegenState state, MemberShape shape) {
-        return toJavaName(state, shape);
-    }
-
     public static SymbolConstants.AggregateType aggregateType(CodegenState state, Shape shape) {
         var symbol = state.symbolProvider().toSymbol(shape);
-        return aggregateType(symbol);
-    }
-
-    public static SymbolConstants.AggregateType aggregateType(Symbol symbol) {
         return symbol.getProperty(SymbolProperties.AGGREGATE_TYPE).orElse(SymbolConstants.AggregateType.NONE);
     }
 
-    public static boolean isRequired(Symbol symbol) {
-        return symbol.getProperty(SymbolProperties.IS_REQUIRED).orElse(false);
+    public static TypeName toBuilderTypeName(ShapeCodegenState state, Shape shape) {
+        var symbol = state.symbolProvider().toSymbol(shape);
+        return symbol.getProperty(SymbolProperties.BUILDER_JAVA_TYPE).orElseGet(() -> toJavaTypeName(state, shape));
     }
 
-    public static boolean isConstant(Symbol symbol) {
+    public static TypeName toRefrenceBuilderBuilderTypeName(ShapeCodegenState state, Shape shape) {
+        var symbol = state.symbolProvider().toSymbol(shape);
+        return symbol.getProperty(SymbolProperties.BUILDER_REFERENCE_BUILDER_JAVA_TYPE)
+                     .orElseGet(() -> toJavaTypeName(state, shape));
+    }
+
+    public static boolean isConstant(CodegenState state, Shape shape) {
+        var symbol = state.symbolProvider().toSymbol(shape);
         return symbol.getProperty(SymbolProperties.IS_CONSTANT).orElse(false);
     }
 
-    public static boolean isOrdered(Symbol symbol) {
+    public static boolean isOrdered(CodegenState state, Shape shape) {
+        var symbol = state.symbolProvider().toSymbol(shape);
         return symbol.getProperty(SymbolProperties.IS_ORDERED).orElse(false);
     }
 
-    public static String defaultValue(Symbol symbol) {
+    public static String defaultValue(CodegenState state, Shape shape) {
+        var symbol = state.symbolProvider().toSymbol(shape);
         return symbol.getProperty(SymbolProperties.DEFAULT_VALUE).orElse(null);
     }
 
-    public static UseBuilderReferenceTrait builderReference(Symbol symbol) {
+    public static UseBuilderReferenceTrait builderReference(ShapeCodegenState state, Shape shape) {
+        var symbol = state.symbolProvider().toSymbol(shape);
         return symbol.getProperty(SymbolProperties.BUILDER_REFERENCE).orElse(null);
     }
 
@@ -257,21 +253,5 @@ public final class Utils {
         var symbol = state.symbolProvider().toSymbol(member);
         var initFunction = symbol.getProperty(SymbolProperties.BUILDER_EMPTY_INIT_EXPRESSION).orElseThrow();
         return initFunction.apply(state, member);
-    }
-
-    public static TypeName toJavaTypeName(Symbol symbol) {
-        return symbol.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
-    }
-
-    public static TypeName toBuilderTypeName(Symbol symbol) {
-        return symbol.getProperty(SymbolProperties.BUILDER_JAVA_TYPE).orElseGet(() -> toJavaTypeName(symbol));
-    }
-
-    public static TypeName toRefrenceBuilderTypeName(Symbol symbol) {
-        return symbol.getProperty(SymbolProperties.BUILDER_REFERENCE_JAVA_TYPE).orElseGet(() -> toJavaTypeName(symbol));
-    }
-
-    public static TypeName toRefrenceBuilderBuilderTypeName(Symbol symbol) {
-        return symbol.getProperty(SymbolProperties.BUILDER_REFERENCE_BUILDER_JAVA_TYPE).orElseGet(() -> toJavaTypeName(symbol));
     }
 }

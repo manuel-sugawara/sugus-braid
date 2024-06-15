@@ -69,9 +69,7 @@ public final class ClassFromFactoryOverridesTransform implements ShapeTaskTransf
     }
 
     static MethodSyntax fromFactory(ShapeCodegenState state, BuilderOverride override) {
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(state.shape());
-        var shapeType = Utils.toJavaTypeName(symbol);
+        var shapeType = Utils.toJavaTypeName(state, state.shape());
         var builder = MethodSyntax.builder(coalesce(override.getName(), "from"))
                                   .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                                   .returns(shapeType)

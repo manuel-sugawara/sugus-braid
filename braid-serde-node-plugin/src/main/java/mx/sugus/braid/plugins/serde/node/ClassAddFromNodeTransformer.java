@@ -94,7 +94,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
             return;
         }
         var targetType = Utils.toJavaTypeName(state, target);
-        if (Utils.isMemberRequired(state, member)) {
+        if (Utils.isRequired(state, member)) {
             body.addStatement("builder.$L($T.fromNode(obj.expectMember($S).expectObjectNode()))",
                               Utils.toSetterName(state, member), targetType, member.getMemberName());
         } else {
@@ -110,7 +110,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
         if (!actualClass.isEnum()) {
             throw new RuntimeException("Node serde of non-enum types is not currently supported: " + actualClass);
         }
-        if (Utils.isMemberRequired(state, member)) {
+        if (Utils.isRequired(state, member)) {
             body.addStatement("builder.$L($T.valueOf(obj.expectMember($S).expectStringNode().getValue()))",
                               Utils.toJavaName(state, member),
                               Utils.toJavaTypeName(state, target),
@@ -156,7 +156,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
         var target = state.model().expectShape(member.getTarget());
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
-        if (Utils.isRequired(symbol)) {
+        if (Utils.isRequired(state, member)) {
             if (target.isEnumShape()) {
                 addRequiredEnumMember(state, member, body);
                 return;

@@ -132,11 +132,9 @@ public final class UnionDataBuilder implements DirectedClass {
     }
 
     private MethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
         var unionVariant = Utils.toRawName(state, member, Name.Convention.SCREAM_CASE).toString();
         var name = Utils.toJavaName(state, member);
-        var type = Utils.toBuilderTypeName(symbol);
+        var type = Utils.toBuilderTypeName(state, member);
         var accessor = MethodSyntax.builder(Utils.toGetterName(state, member).toString())
                                    .addModifier(Modifier.PRIVATE)
                                    .returns(type)
@@ -157,12 +155,10 @@ public final class UnionDataBuilder implements DirectedClass {
     }
 
     private MethodSyntax setter(ShapeCodegenState state, MemberShape member) {
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
         var name = Utils.toJavaName(state, member);
         var builder = MethodSyntax.builder(name.toString())
                                   .addModifier(Modifier.PUBLIC)
-                                  .addParameter(Utils.toJavaTypeName(symbol), name.toString())
+                                  .addParameter(Utils.toJavaTypeName(state, member), name.toString())
                                   .returns(className(state));
         builder.body(b -> {
             var aggregateType = Utils.aggregateType(state, member);
@@ -184,7 +180,7 @@ public final class UnionDataBuilder implements DirectedClass {
     }
 
     private void setListValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
-        var name = Utils.toMemberJavaName(state, member);
+        var name = Utils.toJavaName(state, member);
         var type = StructureDataBuilder.finalTypeForAggregate(state, member);
         builder.addStatement("$T tmp = $L()", type, name);
         builder.addStatement("tmp.clear()");
@@ -192,7 +188,7 @@ public final class UnionDataBuilder implements DirectedClass {
     }
 
     private void setMapValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
-        var name = Utils.toMemberJavaName(state, member);
+        var name = Utils.toJavaName(state, member);
         var type = StructureDataBuilder.finalTypeForAggregate(state, member);
         builder.addStatement("$T tmp = $L()", type, name);
         builder.addStatement("tmp.clear()");
@@ -249,15 +245,13 @@ public final class UnionDataBuilder implements DirectedClass {
     }
 
     private void addValueParam(ShapeCodegenState state, MemberShape member, MethodSyntax.Builder builder) {
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member).getReferences().get(0).getSymbol();
         var paramName = Utils.toJavaSingularName(state, member).toString();
-        var paramType = Utils.toJavaTypeName(state, symbol);
+        var paramType = Utils.toJavaTypeName(state, member);
         builder.addParameter(paramType, paramName);
     }
 
     private void addKeyValueParam(ShapeCodegenState state, MemberShape member, MethodSyntax.Builder builder) {
-        var name = Utils.toMemberJavaName(state, member);
+        var name = Utils.toJavaName(state, member);
         var paramName = name.toSingularSpelling().toString();
         var symbolProvider = state.symbolProvider();
         var symbol = symbolProvider.toSymbol(member);
@@ -269,16 +263,14 @@ public final class UnionDataBuilder implements DirectedClass {
     }
 
     private void addValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder, List<String> values) {
-        var name = Utils.toMemberJavaName(state, member);
+        var name = Utils.toJavaName(state, member);
         for (var value : values) {
             builder.addStatement("$L().asTransient().add($L)", name, value);
         }
     }
 
     private MethodSyntax builderReferenceMutator(ShapeCodegenState state, MemberShape member) {
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
-        var builderType = Utils.toRefrenceBuilderBuilderTypeName(symbol);
+        var builderType = Utils.toRefrenceBuilderBuilderTypeName(state, member);
         var name = Utils.toJavaName(state, member);
         var builder = MethodSyntax.builder(name.toString());
         builder.addModifier(Modifier.PUBLIC)
@@ -312,7 +304,7 @@ public final class UnionDataBuilder implements DirectedClass {
     }
 
     private void addKeyValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
-        var name = Utils.toMemberJavaName(state, member);
+        var name = Utils.toJavaName(state, member);
         var paramName = name.toSingularSpelling().toString();
         builder.addStatement("$L().asTransient().put(key, $L)", name.toString(), paramName);
     }

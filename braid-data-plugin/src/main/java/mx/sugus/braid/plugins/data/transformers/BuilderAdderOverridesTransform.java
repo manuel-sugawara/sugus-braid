@@ -49,10 +49,8 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
     @Override
     public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
         var syntax = (ClassSyntax) result.syntax();
-        var symbolProvider = state.symbolProvider();
         for (var member : state.shape().asStructureShape().orElseThrow().members()) {
-            var symbol = symbolProvider.toSymbol(member);
-            if (Utils.aggregateType(symbol) != SymbolConstants.AggregateType.NONE) {
+            if (Utils.aggregateType(state, member) != SymbolConstants.AggregateType.NONE) {
                 var methods = methodsFor(state, member);
                 if (!methods.isEmpty()) {
                     syntax = (ClassSyntax)
@@ -201,7 +199,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
     }
 
     private void addValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder, List<String> values) {
-        var name = Utils.toMemberJavaName(state, member);
+        var name = Utils.toJavaName(state, member);
         for (var value : values) {
             builder.addStatement("this.$L.asTransient().add($L)", name.toString(), value);
         }
@@ -209,7 +207,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
 
     private void addValueFromImplicitOverride(ShapeCodegenState state, MemberShape member, BodyBuilder builder,
                                               BuilderOverride override) {
-        var name = Utils.toMemberJavaName(state, member);
+        var name = Utils.toJavaName(state, member);
         var block = CodeBlock.builder();
         var listMemberShape = getTargetListMember(state, member);
         block.addCode("$T.", Utils.toJavaTypeName(state, listMemberShape));
@@ -233,7 +231,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
     }
 
     private void addAllValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder, List<String> values) {
-        var name = Utils.toMemberJavaName(state, member);
+        var name = Utils.toJavaName(state, member);
         for (var value : values) {
             builder.addStatement("this.$L.asTransient().addAll($L)", name.toString(), value);
         }

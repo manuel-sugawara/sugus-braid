@@ -60,10 +60,8 @@ public final class StructureData implements DirectedClass {
     }
 
     public FieldSyntax fieldFor(ShapeCodegenState state, MemberShape member) {
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
         var name = Utils.toJavaName(state, member);
-        var type = Utils.toJavaTypeName(symbol);
+        var type = Utils.toJavaTypeName(state, member);
         return FieldSyntax.from(type, name.toString());
     }
 
@@ -97,10 +95,8 @@ public final class StructureData implements DirectedClass {
     }
 
     private MethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
         var name = Utils.toJavaName(state, member);
-        var type = Utils.toJavaTypeName(symbol);
+        var type = Utils.toJavaTypeName(state, member);
         var builder = MethodSyntax.builder(Utils.toGetterName(state, member).toString())
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(type)
@@ -113,9 +109,7 @@ public final class StructureData implements DirectedClass {
     }
 
     private MethodSyntax constAccessor(ShapeCodegenState state, MemberShape member) {
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
-        var type = Utils.toJavaTypeName(symbol);
+        var type = Utils.toJavaTypeName(state, member);
         var builder = MethodSyntax.builder(Utils.toGetterName(state, member).toString())
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(type);
@@ -124,7 +118,7 @@ public final class StructureData implements DirectedClass {
         var constMember = state.model().expectShape(shapeId, MemberShape.class);
         var containingSymbol = state.model().expectShape(constMember.getContainer(), EnumShape.class);
         builder.addStatement("return $T.$L", Utils.toJavaTypeName(state, containingSymbol),
-                             symbolProvider.toMemberName(constMember));
+                             Utils.toJavaName(state, constMember));
         return builder.build();
     }
 
@@ -215,7 +209,7 @@ public final class StructureData implements DirectedClass {
                 if (!isFirst) {
                     expressionBuilder.addCode("\n&& ");
                 }
-                if (Utils.isMemberNullable(state, member)) {
+                if (Utils.isNullable(state, member)) {
                     expressionBuilder.addCode("$1T.equals(this.$2L, that.$2L)", Objects.class, name);
                 } else {
                     expressionBuilder.addCode("this.$1L.equals(that.$1L)", name);
@@ -262,7 +256,7 @@ public final class StructureData implements DirectedClass {
                 builder.addStatement("hashCode = 31 * hashCode + this.$L().hashCode()", Utils.toGetterName(state, member));
                 continue;
             }
-            if (Utils.isMemberNullable(state, member)) {
+            if (Utils.isNullable(state, member)) {
                 builder.addStatement("hashCode = 31 * hashCode + ($1L != null ? $1L.hashCode() : 0)", name);
             } else {
                 builder.addStatement("hashCode = 31 * hashCode + $L.hashCode()", name);
