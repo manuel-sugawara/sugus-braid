@@ -28,13 +28,13 @@ public final class MethodSyntax implements BaseMethodSyntax {
 
     private MethodSyntax(Builder builder) {
         this.name = Objects.requireNonNull(builder.name, "name");
-        this.typeParams = builder.typeParams.asPersistent();
+        this.typeParams = Objects.requireNonNull(builder.typeParams.asPersistent(), "typeParams");
         this.returns = Objects.requireNonNull(builder.returns, "returns");
         this.body = Objects.requireNonNull(builder.body.asPersistent(), "body");
         this.javadoc = builder.javadoc;
-        this.annotations = builder.annotations.asPersistent();
-        this.modifiers = builder.modifiers.asPersistent();
-        this.parameters = builder.parameters.asPersistent();
+        this.annotations = Objects.requireNonNull(builder.annotations.asPersistent(), "annotations");
+        this.modifiers = Objects.requireNonNull(builder.modifiers.asPersistent(), "modifiers");
+        this.parameters = Objects.requireNonNull(builder.parameters.asPersistent(), "parameters");
     }
 
     public MethodKind kind() {

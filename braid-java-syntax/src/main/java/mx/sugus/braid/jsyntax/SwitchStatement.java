@@ -17,7 +17,7 @@ public final class SwitchStatement implements Statement {
 
     private SwitchStatement(Builder builder) {
         this.expression = Objects.requireNonNull(builder.expression, "expression");
-        this.cases = builder.cases.asPersistent();
+        this.cases = Objects.requireNonNull(builder.cases.asPersistent(), "cases");
         this.defaultCase = builder.defaultCase;
     }
 

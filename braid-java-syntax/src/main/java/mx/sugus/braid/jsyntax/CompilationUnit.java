@@ -19,9 +19,9 @@ public final class CompilationUnit implements SyntaxNode {
 
     private CompilationUnit(Builder builder) {
         this.packageName = Objects.requireNonNull(builder.packageName, "packageName");
-        this.imports = builder.imports.asPersistent();
+        this.imports = Objects.requireNonNull(builder.imports.asPersistent(), "imports");
         this.type = Objects.requireNonNull(builder.type, "type");
-        this.definedNames = builder.definedNames.asPersistent();
+        this.definedNames = Objects.requireNonNull(builder.definedNames.asPersistent(), "definedNames");
     }
 
     public String packageName() {

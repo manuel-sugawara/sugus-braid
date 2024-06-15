@@ -26,15 +26,15 @@ public final class ClassSyntax implements TypeSyntax {
 
     private ClassSyntax(Builder builder) {
         this.superClass = builder.superClass;
-        this.typeParams = builder.typeParams.asPersistent();
+        this.typeParams = Objects.requireNonNull(builder.typeParams.asPersistent(), "typeParams");
         this.javadoc = builder.javadoc;
-        this.methods = builder.methods.asPersistent();
+        this.methods = Objects.requireNonNull(builder.methods.asPersistent(), "methods");
         this.name = Objects.requireNonNull(builder.name, "name");
-        this.annotations = builder.annotations.asPersistent();
-        this.modifiers = builder.modifiers.asPersistent();
-        this.fields = builder.fields.asPersistent();
-        this.superInterfaces = builder.superInterfaces.asPersistent();
-        this.innerTypes = builder.innerTypes.asPersistent();
+        this.annotations = Objects.requireNonNull(builder.annotations.asPersistent(), "annotations");
+        this.modifiers = Objects.requireNonNull(builder.modifiers.asPersistent(), "modifiers");
+        this.fields = Objects.requireNonNull(builder.fields.asPersistent(), "fields");
+        this.superInterfaces = Objects.requireNonNull(builder.superInterfaces.asPersistent(), "superInterfaces");
+        this.innerTypes = Objects.requireNonNull(builder.innerTypes.asPersistent(), "innerTypes");
     }
 
     public TypeSyntaxKind kind() {

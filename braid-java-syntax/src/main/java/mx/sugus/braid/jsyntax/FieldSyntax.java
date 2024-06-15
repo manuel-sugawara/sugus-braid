@@ -24,8 +24,8 @@ public final class FieldSyntax implements SyntaxNode {
         this.javadoc = builder.javadoc;
         this.name = Objects.requireNonNull(builder.name, "name");
         this.type = Objects.requireNonNull(builder.type, "type");
-        this.modifiers = builder.modifiers.asPersistent();
-        this.annotations = builder.annotations.asPersistent();
+        this.modifiers = Objects.requireNonNull(builder.modifiers.asPersistent(), "modifiers");
+        this.annotations = Objects.requireNonNull(builder.annotations.asPersistent(), "annotations");
         this.initializer = builder.initializer;
     }
 

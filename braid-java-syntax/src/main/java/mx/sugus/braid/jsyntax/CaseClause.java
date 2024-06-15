@@ -18,7 +18,7 @@ public final class CaseClause implements SyntaxNode {
     private final Block body;
 
     private CaseClause(Builder builder) {
-        this.label = builder.label.asPersistent();
+        this.label = Objects.requireNonNull(builder.label.asPersistent(), "label");
         this.body = Objects.requireNonNull(builder.body.asPersistent(), "body");
     }
 

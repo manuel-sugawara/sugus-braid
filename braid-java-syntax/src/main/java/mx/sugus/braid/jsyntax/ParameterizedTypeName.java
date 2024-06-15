@@ -15,7 +15,7 @@ public final class ParameterizedTypeName implements TypeName {
 
     private ParameterizedTypeName(Builder builder) {
         this.rawType = Objects.requireNonNull(builder.rawType, "rawType");
-        this.typeArguments = builder.typeArguments.asPersistent();
+        this.typeArguments = Objects.requireNonNull(builder.typeArguments.asPersistent(), "typeArguments");
     }
 
     public TypeKind kind() {
