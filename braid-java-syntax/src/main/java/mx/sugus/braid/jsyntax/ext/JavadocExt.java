@@ -4,7 +4,10 @@ import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
-public class JavadocExt {
+public final class JavadocExt {
+
+    private JavadocExt() {
+    }
 
     public static String document(String source) {
         Parser parser = Parser.builder().build();

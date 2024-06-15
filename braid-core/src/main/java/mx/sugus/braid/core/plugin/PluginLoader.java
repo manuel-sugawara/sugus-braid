@@ -1,5 +1,6 @@
 package mx.sugus.braid.core.plugin;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -68,7 +69,7 @@ public interface PluginLoader {
             var newUnresolved = new HashSet<>(unresolved);
             newUnresolved.addAll(other.unresolved);
             newUnresolved.removeAll(newResolved.keySet());
-            return new LoadResult(newUnresolved, newResolved);
+            return new LoadResult(Collections.unmodifiableSet(newUnresolved), Collections.unmodifiableMap(newResolved));
         }
 
         @Override

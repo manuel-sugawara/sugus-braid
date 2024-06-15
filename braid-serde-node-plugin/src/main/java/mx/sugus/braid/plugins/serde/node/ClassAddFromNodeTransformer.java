@@ -26,7 +26,7 @@ import software.amazon.smithy.model.shapes.Shape;
 
 public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<TypeSyntaxResult> {
 
-    public static Identifier ID = Identifier.of(ClassAddFromNodeTransformer.class);
+    public static final Identifier ID = Identifier.of(ClassAddFromNodeTransformer.class);
 
     @Override
     public Identifier taskId() {
@@ -154,8 +154,6 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
 
     private void addSimpleMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var target = state.model().expectShape(member.getTarget());
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
         if (Utils.isRequired(state, member)) {
             if (target.isEnumShape()) {
                 addRequiredEnumMember(state, member, body);

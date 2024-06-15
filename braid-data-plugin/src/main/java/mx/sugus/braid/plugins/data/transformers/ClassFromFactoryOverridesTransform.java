@@ -38,8 +38,6 @@ public final class ClassFromFactoryOverridesTransform implements ShapeTaskTransf
     @Override
     public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
         var syntax = (ClassSyntax) result.syntax();
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(state.shape());
         var methods = fromFactories(state);
         if (methods.isEmpty()) {
             return result;

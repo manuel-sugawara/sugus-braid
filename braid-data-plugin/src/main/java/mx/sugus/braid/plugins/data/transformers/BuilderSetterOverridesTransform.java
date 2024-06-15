@@ -68,8 +68,6 @@ public final class BuilderSetterOverridesTransform implements ShapeTaskTransform
     }
 
     private MethodSyntax settersOverride(ShapeCodegenState state, MemberShape member, SetterOverride override) {
-        var symbolProvider = state.symbolProvider();
-        var symbol = symbolProvider.toSymbol(member);
         var setterName = Utils.toSetterName(state, member);
         var builder = MethodSyntax.builder(setterName.toString())
                                   .addModifier(Modifier.PUBLIC)

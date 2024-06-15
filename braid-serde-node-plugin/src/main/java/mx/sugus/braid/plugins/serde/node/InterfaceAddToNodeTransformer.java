@@ -10,7 +10,7 @@ import software.amazon.smithy.model.node.ToNode;
 
 public final class InterfaceAddToNodeTransformer implements ShapeTaskTransformer<TypeSyntaxResult> {
 
-    public static Identifier ID = Identifier.of(ClassAddFromNodeTransformer.class);
+    public static final Identifier ID = Identifier.of(ClassAddFromNodeTransformer.class);
 
     @Override
     public Identifier taskId() {

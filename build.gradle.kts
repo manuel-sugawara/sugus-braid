@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     checkstyle
-    // id("com.github.spotbugs") version "4.7.3"
+    id("com.github.spotbugs") version "6.0.17"
     `maven-publish`
     jacoco
 }
@@ -64,15 +64,16 @@ subprojects {
         /*
          * Spotbugs
          * ====================================================
-
+*/
         apply(plugin = "com.github.spotbugs")
 
         // We don't need to lint tests.
         tasks["spotbugsTest"].enabled = false
+        // Enable on demand, is super slow and gives a ton of false positives.
+        tasks["spotbugsMain"].enabled = false
 
         // Configure the bug filter for spotbugs.
         spotbugs {
-            // setEffort("max")
             val excludeFile = File("${project.rootDir}/config/spotbugs/filter.xml")
             if (excludeFile.exists()) {
                 excludeFilter.set(excludeFile)
@@ -85,12 +86,8 @@ subprojects {
                 outputLocation.set(file("$buildDir/reports/spotbugs.html"))
                 setStylesheet("fancy-hist.xsl")
             }
-            reports.create("xml") {
-                required.set(true)
-                outputLocation.set(file("$buildDir/reports/spotbugs.xml"))
-            }
         }
-         */
+
         repositories {
             mavenLocal()
             mavenCentral()

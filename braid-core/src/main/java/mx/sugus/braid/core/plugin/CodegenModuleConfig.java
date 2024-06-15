@@ -72,7 +72,7 @@ public final class CodegenModuleConfig {
         this.shapeReducers = Collections.unmodifiableSet(builder.shapeReducers);
 
         // Non-shape
-        this.nonShapeProducers = new LinkedHashSet<>(builder.nonShapeProducers);
+        this.nonShapeProducers = Collections.unmodifiableSet(new LinkedHashSet<>(builder.nonShapeProducers));
         var nonShapeTaskTransformers2 = new LinkedHashMap<Identifier, Set<NonShapeTaskTransformer<?>>>();
         for (var kvp : builder.nonShapeTaskTransformers.entrySet()) {
             nonShapeTaskTransformers2.put(kvp.getKey(), Collections.unmodifiableSet(new LinkedHashSet<>(kvp.getValue())));
