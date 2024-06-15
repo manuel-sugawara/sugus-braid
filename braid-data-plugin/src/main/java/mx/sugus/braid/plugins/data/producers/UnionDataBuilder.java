@@ -74,7 +74,7 @@ public final class UnionDataBuilder implements DirectedClass {
         var memberSwitch = SwitchStatement.builder()
                                           .expression(CodeBlock.from("this.type"));
         for (var member : state.shape().members()) {
-            var unionVariant = Utils.toJavaName(state, member, Name.Convention.SCREAM_CASE).toString();
+            var unionVariant = Utils.toSourceName(state, member, Name.Convention.SCREAM_CASE).toString();
             memberSwitch.addCase(CaseClause.builder()
                                            .addLabel(CodeBlock.from("$L", unionVariant))
                                            .addStatement("return $C", getValueForMember(state, member))
@@ -132,7 +132,7 @@ public final class UnionDataBuilder implements DirectedClass {
     }
 
     private MethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
-        var unionVariant = Utils.toRawName(state, member, Name.Convention.SCREAM_CASE).toString();
+        var unionVariant = Utils.toSourceName(state, member, Name.Convention.SCREAM_CASE).toString();
         var name = Utils.toJavaName(state, member);
         var type = Utils.toBuilderTypeName(state, member);
         var accessor = MethodSyntax.builder(Utils.toGetterName(state, member).toString())
@@ -288,7 +288,7 @@ public final class UnionDataBuilder implements DirectedClass {
         if (usesBuilderReference(state, member)) {
             setBuilderReferenceValue(state, member, builder);
         } else {
-            var unionVariant = Utils.toRawName(state, member, Name.Convention.SCREAM_CASE);
+            var unionVariant = Utils.toSourceName(state, member, Name.Convention.SCREAM_CASE);
             builder.addStatement("this.type = Type.$1L", unionVariant);
             builder.addStatement("this.value = $L", name);
         }
@@ -340,7 +340,7 @@ public final class UnionDataBuilder implements DirectedClass {
         builder.addStatement("this.type = data.type");
         var typeSwitch = SwitchStatement.builder().expression(CodeBlock.from("data.type"));
         for (var member : withReferenceMember) {
-            var unionVariant = Utils.toJavaName(state, member, Name.Convention.SCREAM_CASE).toString();
+            var unionVariant = Utils.toSourceName(state, member, Name.Convention.SCREAM_CASE).toString();
             typeSwitch.addCase(CaseClause.builder()
                                          .addLabel(CodeBlock.from("$L", unionVariant))
                                          .body(b -> {
