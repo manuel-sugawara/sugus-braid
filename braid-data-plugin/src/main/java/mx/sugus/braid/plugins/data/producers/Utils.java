@@ -131,29 +131,25 @@ public final class Utils {
                     .orElseThrow(() -> new NoSuchElementException(shape.toString()));
     }
 
-    public static Name toRawName(CodegenState state, Shape shape) {
+    public static Name toSourceName(CodegenState state, Shape shape, Name.Convention kind) {
         var symbol = state.symbolProvider().toSymbol(shape);
-        return symbol.getProperty(SymbolProperties.SIMPLE_NAME)
-                     .orElseThrow(() -> new NoSuchElementException(shape.toString()));
-    }
-
-    public static Name toRawName(CodegenState state, Shape shape, Name.Convention kind) {
-        return toRawName(state, shape)
-            .toNameConvention(kind);
+        var name = symbol.getProperty(SymbolProperties.SIMPLE_NAME)
+                         .orElseThrow(() -> new NoSuchElementException(shape.toString()))
+                         .toNameConvention(kind);
+        return escapeNameIfNeeded(state, name, shape);
     }
 
     public static Name toJavaName(CodegenState state, Shape shape, Name.Convention kind) {
-        return state.symbolProvider()
-                    .toSymbol(shape)
-                    .getProperty(SymbolProperties.JAVA_NAME)
-                    .orElseThrow(() -> new NoSuchElementException(shape.toString()))
-                    .toNameConvention(kind);
+        var name = state.symbolProvider()
+                        .toSymbol(shape)
+                        .getProperty(SymbolProperties.JAVA_NAME)
+                        .orElseThrow(() -> new NoSuchElementException(shape.toString()))
+                        .toNameConvention(kind);
+        return escapeNameIfNeeded(state, name, shape);
     }
 
     public static Name toJavaSingularName(CodegenState state, Shape shape) {
-        return state.dependencies()
-                    .expect(RESERVED_WORDS_ESCAPER)
-                    .escape(toJavaName(state, shape).toSingularSpelling(), shape);
+        return escapeNameIfNeeded(state, toJavaName(state, shape).toSingularSpelling(), shape);
     }
 
     public static TypeName toJavaTypeName(CodegenState state, Shape shape) {
@@ -170,6 +166,8 @@ public final class Utils {
 
     public static boolean isRequired(CodegenState state, MemberShape shape) {
         var symbol = state.symbolProvider().toSymbol(shape);
+        // XXX Remove this and split the logic using it, technically those are
+        //  never null, but not actually "required" as in marked as so.
         if (aggregateType(state, shape) != SymbolConstants.AggregateType.NONE) {
             return true;
         }
@@ -256,5 +254,11 @@ public final class Utils {
         var symbol = state.symbolProvider().toSymbol(member);
         var initFunction = symbol.getProperty(SymbolProperties.BUILDER_EMPTY_INIT_EXPRESSION).orElseThrow();
         return initFunction.apply(state, member);
+    }
+
+    private static Name escapeNameIfNeeded(CodegenState state, Name name, Shape shape) {
+        return state.dependencies()
+                    .expect(RESERVED_WORDS_ESCAPER)
+                    .escape(name, shape);
     }
 }

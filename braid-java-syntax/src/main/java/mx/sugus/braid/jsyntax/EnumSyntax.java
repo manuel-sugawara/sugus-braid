@@ -24,15 +24,15 @@ public final class EnumSyntax implements TypeSyntax {
     private int _hashCode = 0;
 
     private EnumSyntax(Builder builder) {
-        this.enumConstants = builder.enumConstants.asPersistent();
+        this.enumConstants = Objects.requireNonNull(builder.enumConstants.asPersistent(), "enumConstants");
         this.javadoc = builder.javadoc;
-        this.methods = builder.methods.asPersistent();
+        this.methods = Objects.requireNonNull(builder.methods.asPersistent(), "methods");
         this.name = Objects.requireNonNull(builder.name, "name");
-        this.annotations = builder.annotations.asPersistent();
-        this.modifiers = builder.modifiers.asPersistent();
-        this.fields = builder.fields.asPersistent();
-        this.superInterfaces = builder.superInterfaces.asPersistent();
-        this.innerTypes = builder.innerTypes.asPersistent();
+        this.annotations = Objects.requireNonNull(builder.annotations.asPersistent(), "annotations");
+        this.modifiers = Objects.requireNonNull(builder.modifiers.asPersistent(), "modifiers");
+        this.fields = Objects.requireNonNull(builder.fields.asPersistent(), "fields");
+        this.superInterfaces = Objects.requireNonNull(builder.superInterfaces.asPersistent(), "superInterfaces");
+        this.innerTypes = Objects.requireNonNull(builder.innerTypes.asPersistent(), "innerTypes");
     }
 
     public TypeSyntaxKind kind() {

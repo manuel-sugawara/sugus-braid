@@ -1,6 +1,7 @@
 package mx.sugus.braid.jsyntax;
 
 import java.util.List;
+import java.util.Objects;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
@@ -9,7 +10,7 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
     private final List<FormatterNode> parts;
 
     private CodeBlock(Builder builder) {
-        this.parts = builder.parts.asPersistent();
+        this.parts = Objects.requireNonNull(builder.parts.asPersistent(), "parts");
     }
 
     public StatementKind stmtKind() {

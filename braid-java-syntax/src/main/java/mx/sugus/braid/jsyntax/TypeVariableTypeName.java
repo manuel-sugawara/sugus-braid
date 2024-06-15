@@ -15,7 +15,7 @@ public final class TypeVariableTypeName implements TypeName {
 
     private TypeVariableTypeName(Builder builder) {
         this.name = Objects.requireNonNull(builder.name, "name");
-        this.bounds = builder.bounds.asPersistent();
+        this.bounds = Objects.requireNonNull(builder.bounds.asPersistent(), "bounds");
     }
 
     public TypeKind kind() {

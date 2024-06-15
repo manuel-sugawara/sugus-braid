@@ -26,7 +26,7 @@ public final class UnionTypeEnumData implements DirectedEnum {
                                  .addModifier(Modifier.PUBLIC);
         var shape = state.shape().asUnionShape().orElseThrow();
         for (var member : shape.getAllMembers().values()) {
-            var unionVariant = Utils.toRawName(state, member, Name.Convention.SCREAM_CASE).toString();
+            var unionVariant = Utils.toSourceName(state, member, Name.Convention.SCREAM_CASE).toString();
             var name = member.getMemberName();
             typeEnum.addEnumConstant(EnumConstant.builder()
                                                  .name(unionVariant)

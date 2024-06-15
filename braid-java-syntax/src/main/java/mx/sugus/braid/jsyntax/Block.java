@@ -1,6 +1,7 @@
 package mx.sugus.braid.jsyntax;
 
 import java.util.List;
+import java.util.Objects;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
@@ -12,7 +13,7 @@ public final class Block implements Statement {
     private final List<Statement> statements;
 
     private Block(Builder builder) {
-        this.statements = builder.statements.asPersistent();
+        this.statements = Objects.requireNonNull(builder.statements.asPersistent(), "statements");
     }
 
     public StatementKind stmtKind() {

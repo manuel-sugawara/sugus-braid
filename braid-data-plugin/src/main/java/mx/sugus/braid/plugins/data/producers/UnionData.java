@@ -79,7 +79,7 @@ public final class UnionData implements DirectedClass {
         var getterName = Utils.toGetterName(state, member);
         var type = Utils.toJavaTypeName(state, member);
         var memberName = member.getMemberName();
-        var unionVariant = Utils.toRawName(state, member, Name.Convention.SCREAM_CASE).toString();
+        var unionVariant = Utils.toSourceName(state, member, Name.Convention.SCREAM_CASE).toString();
         var builder = MethodSyntax.builder(getterName.toString())
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(type);
@@ -187,7 +187,7 @@ public final class UnionData implements DirectedClass {
         for (var member : state.shape().members()) {
             var memberName = member.getMemberName();
             var literalName = ", " + memberName + ": ";
-            var unionVariant = Utils.toRawName(state, member, Name.Convention.SCREAM_CASE).toString();
+            var unionVariant = Utils.toSourceName(state, member, Name.Convention.SCREAM_CASE).toString();
             memberSwitch.addCase(CaseClause.builder()
                                            .addLabel(CodeBlock.from("$L", unionVariant))
                                            .body(b -> {

@@ -77,9 +77,9 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
     }
 
     MethodSyntax.Builder visitForStructure(CodegenState state, StructureShape shape) {
-        var name = Utils.toJavaName(state, shape, Name.Convention.PASCAL_CASE);
+        var name = Utils.toJavaName(state, shape, Name.Convention.CAMEL_CASE).withPrefix("visit");
         var type = Utils.toJavaTypeName(state, shape);
-        var builder = MethodSyntax.builder("visit" + name)
+        var builder = MethodSyntax.builder(name.toString())
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(type)
                                   .addParameter(type, "node");

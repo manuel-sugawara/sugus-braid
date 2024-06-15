@@ -17,8 +17,8 @@ public final class WildcardTypeName implements TypeName {
 
     private WildcardTypeName(Builder builder) {
         this.rawType = builder.rawType;
-        this.upperBounds = builder.upperBounds.asPersistent();
-        this.lowerBounds = builder.lowerBounds.asPersistent();
+        this.upperBounds = Objects.requireNonNull(builder.upperBounds.asPersistent(), "upperBounds");
+        this.lowerBounds = Objects.requireNonNull(builder.lowerBounds.asPersistent(), "lowerBounds");
     }
 
     public TypeKind kind() {
