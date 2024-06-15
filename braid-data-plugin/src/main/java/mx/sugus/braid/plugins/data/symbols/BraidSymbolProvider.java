@@ -13,6 +13,7 @@ import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.writer.CodeWriter;
 import mx.sugus.braid.plugins.data.dependencies.ShapeToJavaName;
+import mx.sugus.braid.plugins.data.dependencies.ShapeToJavaType;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants.AggregateType;
 import mx.sugus.braid.rt.util.BuilderReference;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;

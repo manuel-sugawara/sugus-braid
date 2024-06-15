@@ -1,9 +1,8 @@
-package mx.sugus.braid.plugins.data.symbols;
+package mx.sugus.braid.plugins.data.dependencies;
 
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.ext.TypeNameExt;
-import mx.sugus.braid.plugins.data.dependencies.ShapeToJavaName;
 import mx.sugus.braid.traits.JavaTrait;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.shapes.BigDecimalShape;

@@ -3,6 +3,7 @@ package mx.sugus.braid.plugins.data.symbols;
 import mx.sugus.braid.core.plugin.Dependencies;
 import mx.sugus.braid.core.plugin.SymbolProviderDecorator;
 import mx.sugus.braid.plugins.data.dependencies.DataPluginDependencies;
+import mx.sugus.braid.plugins.data.dependencies.ShapeToJavaType;
 import software.amazon.smithy.codegen.core.SymbolProvider;
 import software.amazon.smithy.model.Model;
 
