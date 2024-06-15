@@ -186,7 +186,8 @@ public final class StructureDataBuilder implements DirectedClass {
 
     private void addValueParam(ShapeCodegenState state, MemberShape member, MethodSyntax.Builder builder) {
         var paramName = Utils.toJavaSingularName(state, member).toString();
-        builder.addParameter(Utils.toJavaTypeName(state, member), paramName);
+        var references = state.symbolProvider().toSymbol(member).getReferences();
+        builder.addParameter(Utils.toJavaTypeName(state, references.get(0).getSymbol()), paramName);
     }
 
     private void addKeyValueParam(ShapeCodegenState state, MemberShape member, MethodSyntax.Builder builder) {

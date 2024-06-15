@@ -170,6 +170,9 @@ public final class Utils {
 
     public static boolean isRequired(CodegenState state, MemberShape shape) {
         var symbol = state.symbolProvider().toSymbol(shape);
+        if (aggregateType(state, shape) != SymbolConstants.AggregateType.NONE) {
+            return true;
+        }
         return symbol.getProperty(SymbolProperties.IS_REQUIRED).orElseGet(() -> shape.hasTrait(ConstTrait.class));
     }
 

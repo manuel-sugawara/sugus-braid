@@ -246,8 +246,8 @@ public final class UnionDataBuilder implements DirectedClass {
 
     private void addValueParam(ShapeCodegenState state, MemberShape member, MethodSyntax.Builder builder) {
         var paramName = Utils.toJavaSingularName(state, member).toString();
-        var paramType = Utils.toJavaTypeName(state, member);
-        builder.addParameter(paramType, paramName);
+        var references = state.symbolProvider().toSymbol(member).getReferences();
+        builder.addParameter(Utils.toJavaTypeName(state, references.get(0).getSymbol()), paramName);
     }
 
     private void addKeyValueParam(ShapeCodegenState state, MemberShape member, MethodSyntax.Builder builder) {

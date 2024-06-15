@@ -17,9 +17,9 @@ public final class StructureWithAggregates {
 
     private StructureWithAggregates(Builder builder) {
         this.simpleMember = builder.simpleMember;
-        this.structuresOne = builder.structuresOne.asPersistent();
-        this.structureTwoMap = builder.structureTwoMap.asPersistent();
-        this.structureThreeSet = builder.structureThreeSet.asPersistent();
+        this.structuresOne = Objects.requireNonNull(builder.structuresOne.asPersistent(), "structuresOne");
+        this.structureTwoMap = Objects.requireNonNull(builder.structureTwoMap.asPersistent(), "structureTwoMap");
+        this.structureThreeSet = Objects.requireNonNull(builder.structureThreeSet.asPersistent(), "structureThreeSet");
     }
 
     public Long simpleMember() {
