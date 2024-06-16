@@ -8,12 +8,17 @@
             "packageVersion": "0.0.1",
             "plugins": {
                 "mx.sugus.braid.core.plugins#ShapeCodegenPlugin": {
-                    "selector": "[id|namespace ^= 'mx.sugus.braid']"
+                    "selector": "[id|namespace = 'mx.sugus.braid.test']"
                 },
                 "mx.sugus.braid.plugins.data#FlattenInterfaceMembersPlugin": {
                 },
                 "mx.sugus.braid.plugins.data#DataPlugin": {
+                    "package": "mx.sugus.braid.test"
+                },
+                "mx.sugus.braid.plugins.serde.node#NodeSerdePlugin": {
+                    "package": "mx.sugus.braid.test"
                 }
+
             }
         }
     }
