@@ -38,7 +38,7 @@ public final class StructureInterfaceJavaProducer implements ShapeProducerTask<T
         if (!shape.hasTrait(InterfaceTrait.class)) {
             return null;
         }
-        var syntax = new InterfaceData().build(state);
+        var syntax = new InterfaceData().buildCompilationUnit(state);
         return TypeSyntaxResult.builder()
                                .syntax(syntax)
                                .build();

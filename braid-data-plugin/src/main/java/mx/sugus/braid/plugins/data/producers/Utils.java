@@ -1,6 +1,5 @@
 package mx.sugus.braid.plugins.data.producers;
 
-import static mx.sugus.braid.plugins.data.dependencies.DataPluginDependencies.NULLABILITY_INDEX_PROVIDER;
 import static mx.sugus.braid.plugins.data.dependencies.DataPluginDependencies.RESERVED_WORDS_ESCAPER;
 
 import java.util.ArrayList;

@@ -40,12 +40,13 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
 
     @Override
     public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
-        var syntax = ((ClassSyntax) result.syntax())
+        var syntax = result.syntax();
+        var classSyntax = ((ClassSyntax) syntax.type())
             .toBuilder()
             .addMethod(fromNodeMethod(state))
             .build();
         return result.toBuilder()
-                     .syntax(syntax)
+                     .syntax(syntax.toBuilder().type(classSyntax).build())
                      .build();
     }
 

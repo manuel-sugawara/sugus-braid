@@ -10,7 +10,7 @@ import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
 import mx.sugus.braid.jsyntax.ClassName;
-import mx.sugus.braid.jsyntax.ClassSyntax;
+import mx.sugus.braid.jsyntax.CompilationUnit;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.transforms.AddMethodsTransform;
 import mx.sugus.braid.jsyntax.transforms.MethodMatcher;
@@ -38,11 +38,11 @@ public final class BuilderSetterOverridesTransform implements ShapeTaskTransform
 
     @Override
     public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
-        var syntax = (ClassSyntax) result.syntax();
+        var syntax = result.syntax();
         for (var member : state.shape().asStructureShape().orElseThrow().members()) {
             var methods = methodsFor(state, member);
             if (!methods.isEmpty()) {
-                syntax = (ClassSyntax)
+                syntax = (CompilationUnit)
                     AddMethodsTransform.builder()
                                        .addAfter()
                                        .methodMatcher(MethodMatcher.byName(Utils.toSetterName(state, member).toString()))

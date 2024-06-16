@@ -29,8 +29,8 @@ public interface NullabilityIndex {
     }
 
     /**
-     * Returns true if the given member is explicitly required. Similar to {@link #isRequired(MemberShape)} but checks if
-     * the shape has the default trait but not the required trait.
+     * Returns true if the given member is explicitly required. Similar to {@link #isRequired(MemberShape)} but checks if the
+     * shape has the default trait but not the required trait.
      *
      * @param member The member to check.
      * @return true if the given member is required but not implicitly by having a default trait.

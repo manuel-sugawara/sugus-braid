@@ -13,8 +13,8 @@ import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
 import mx.sugus.braid.jsyntax.ClassName;
-import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.CodeBlock;
+import mx.sugus.braid.jsyntax.CompilationUnit;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
@@ -48,12 +48,12 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
 
     @Override
     public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
-        var syntax = (ClassSyntax) result.syntax();
+        var syntax = result.syntax();
         for (var member : state.shape().asStructureShape().orElseThrow().members()) {
             if (Utils.aggregateType(state, member) != SymbolConstants.AggregateType.NONE) {
                 var methods = methodsFor(state, member);
                 if (!methods.isEmpty()) {
-                    syntax = (ClassSyntax)
+                    syntax = (CompilationUnit)
                         AddMethodsTransform.builder()
                                            .addAfter()
                                            .methodMatcher(MethodMatcher.byName(Utils.toAdderName(state, member).toString()))

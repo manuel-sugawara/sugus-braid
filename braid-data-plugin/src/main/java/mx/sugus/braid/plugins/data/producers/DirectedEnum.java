@@ -11,6 +11,7 @@ import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.TypeSyntax;
 
 public interface DirectedEnum extends DirectiveToTypeSyntax {
+    @Override
     default ClassName className(ShapeCodegenState state) {
         return ClassName.toClassName(Utils.toJavaTypeName(state, state.shape()));
     }

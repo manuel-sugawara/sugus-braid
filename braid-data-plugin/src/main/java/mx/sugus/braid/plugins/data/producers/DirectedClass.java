@@ -13,6 +13,7 @@ import mx.sugus.braid.jsyntax.TypeSyntax;
 import software.amazon.smithy.model.shapes.MemberShape;
 
 public interface DirectedClass extends DirectiveToTypeSyntax {
+    @Override
     default ClassName className(ShapeCodegenState state) {
         return ClassName.toClassName(Utils.toJavaTypeName(state, state.shape()));
     }

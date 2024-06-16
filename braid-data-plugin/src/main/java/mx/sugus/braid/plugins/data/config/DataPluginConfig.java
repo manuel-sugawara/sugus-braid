@@ -51,7 +51,7 @@ public final class DataPluginConfig implements ToNode {
             return false;
         }
         DataPluginConfig that = (DataPluginConfig) obj;
-        return Objects.equals(this.nullabilityMode, that.nullabilityMode)
+        return this.nullabilityMode == that.nullabilityMode
                && Objects.equals(this.packageName, that.packageName);
     }
 
@@ -117,7 +117,7 @@ public final class DataPluginConfig implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>nullabilityMode</code></p>
+         * <p>Sets the value for {@code nullabilityMode}</p>
          * <p>The nullability mode to check if the member of an aggregate shape
          * should be considered nullable. If not configured otherwise the CLIENT mode is used.</p>
          */
@@ -127,7 +127,7 @@ public final class DataPluginConfig implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>packageName</code></p>
+         * <p>Sets the value for {@code packageName}</p>
          * <p>If configured is the package name used for the codegen java classes.
          * By default the namespace of the shape is used.</p>
          */

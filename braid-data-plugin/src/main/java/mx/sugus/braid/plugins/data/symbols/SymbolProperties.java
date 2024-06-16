@@ -148,7 +148,8 @@ public final class SymbolProperties {
     /**
      * From data builder initializer code.
      */
-    public static final Property<BiFunction<ShapeCodegenState, MemberShape, Block>> BUILDER_DATA_INIT = Property.named("builder-data-init");
+    public static final Property<BiFunction<ShapeCodegenState, MemberShape, Block>> BUILDER_DATA_INIT =
+        Property.named("builder-data-init");
 
     /**
      * From data builder initializer expression.
@@ -165,7 +166,8 @@ public final class SymbolProperties {
     /**
      * From data builder code for setting a member.
      */
-    public static final Property<BiFunction<ShapeCodegenState, MemberShape, Block>> BUILDER_SETTER_FOR_MEMBER = Property.named("builder-setter");
+    public static final Property<BiFunction<ShapeCodegenState, MemberShape, Block>> BUILDER_SETTER_FOR_MEMBER = Property.named(
+        "builder-setter");
 
     /**
      * From builder data initializer code.

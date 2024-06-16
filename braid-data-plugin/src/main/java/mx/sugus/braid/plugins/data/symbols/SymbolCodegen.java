@@ -10,10 +10,8 @@ import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
-import mx.sugus.braid.jsyntax.writer.CodeWriter;
 import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
-import software.amazon.smithy.codegen.core.Symbol;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.traits.DefaultTrait;
@@ -209,11 +207,11 @@ public final class SymbolCodegen {
             case BYTE, SHORT, INTEGER, DOUBLE:
                 return CodeBlock.from("$L", defaultValueNode.expectNumberNode().getValue().toString());
             case LONG:
-                return CodeBlock.from("$LL",  defaultValueNode.expectNumberNode().getValue().toString());
+                return CodeBlock.from("$LL", defaultValueNode.expectNumberNode().getValue().toString());
             case FLOAT:
                 return CodeBlock.from("$LF", defaultValueNode.expectNumberNode().getValue().toString());
             case STRING:
-                 return CodeBlock.from("$S", defaultValueNode.expectStringNode().getValue());
+                return CodeBlock.from("$S", defaultValueNode.expectStringNode().getValue());
             case BOOLEAN:
                 return CodeBlock.from("$L", defaultValueNode.expectBooleanNode().getValue());
             case ENUM:

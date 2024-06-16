@@ -66,19 +66,14 @@ public final class JavaSyntaxPlugin implements SmithyGeneratorPlugin<ObjectNode>
 
         @Override
         public void consume(TypeSyntaxResult result, CodegenState state) {
-            var ns = state.settings().packageName();
-            if (result.namespace() != null) {
-                ns = ns + "." +
-                     result.namespace();
-            }
-
             @SuppressWarnings("unchecked")
             var packageImplicitNames =
                 (Map<String, ClassName>) state.properties().get(PackageImplicitNamesReducer.ID);
-            if (result.syntax() != null) {
-                var file = ns.replace(".", "/") + "/" + result.syntax().name() + ".java";
+            var syntax = result.syntax();
+            if (syntax != null) {
+                var file = syntax.packageName().replace(".", "/") + "/" + result.syntax().type().name() + ".java";
                 state.fileManifest()
-                     .writeFile(file, CodeRenderer.render(ns, packageImplicitNames, result.syntax()));
+                     .writeFile(file, CodeRenderer.render(syntax.packageName(), packageImplicitNames, result.syntax()));
             }
         }
     }

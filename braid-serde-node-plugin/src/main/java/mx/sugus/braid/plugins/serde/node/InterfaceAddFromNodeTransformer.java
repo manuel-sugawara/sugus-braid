@@ -36,12 +36,13 @@ public final class InterfaceAddFromNodeTransformer implements ShapeTaskTransform
 
     @Override
     public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
-        var syntax = ((InterfaceSyntax) result.syntax())
+        var syntax = result.syntax();
+        var interfaceSyntax = ((InterfaceSyntax) syntax.type())
             .toBuilder()
             .addMethod(fromNodeMethodForInterface(state))
             .build();
         return result.toBuilder()
-                     .syntax(syntax)
+                     .syntax(syntax.toBuilder().type(interfaceSyntax).build())
                      .build();
     }
 

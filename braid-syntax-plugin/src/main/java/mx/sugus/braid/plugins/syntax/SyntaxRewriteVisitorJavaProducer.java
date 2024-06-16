@@ -3,19 +3,20 @@ package mx.sugus.braid.plugins.syntax;
 import java.util.Objects;
 import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.ImplementsKnowledgeIndex;
-import mx.sugus.braid.plugins.data.symbols.SymbolConstants;
 import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.NonShapeProducerTask;
-import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.CodeBlock;
+import mx.sugus.braid.jsyntax.CompilationUnit;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
+import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.plugins.data.producers.Utils;
+import mx.sugus.braid.plugins.data.symbols.SymbolConstants;
 import mx.sugus.braid.traits.InterfaceTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.shapes.Shape;
@@ -42,7 +43,17 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
 
     @Override
     public TypeSyntaxResult produce(CodegenState state) {
-        var builder = typeSyntax(state);
+        return TypeSyntaxResult.builder().syntax(compilationUnit(state)).build();
+    }
+
+    CompilationUnit compilationUnit(CodegenState state) {
+        var syntaxShape = state.model().expectShape(ShapeId.from(syntaxNode));
+        var typeName = ClassName.toClassName(Utils.toJavaTypeName(state, syntaxShape));
+        return CompilationUnit.builder().packageName(typeName.packageName()).type(typeSyntax(state)).build();
+    }
+
+    ClassSyntax typeSyntax(CodegenState state) {
+        var builder = typeSyntaxBuilder(state);
         var isaKnowledgeIndex = ImplementsKnowledgeIndex.of(state.model());
         var syntaxNodeShapeId = ShapeId.from(syntaxNode);
         var syntaxNodeShape = state.model().expectShape(syntaxNodeShapeId).asStructureShape().orElseThrow();
@@ -56,10 +67,10 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
                                   .addModifier(Modifier.PUBLIC)
                                   .build());
         }
-        return TypeSyntaxResult.builder().syntax(builder.build()).build();
+        return builder.build();
     }
 
-    ClassSyntax.Builder typeSyntax(CodegenState state) {
+    ClassSyntax.Builder typeSyntaxBuilder(CodegenState state) {
         var syntaxShape = state.model().expectShape(ShapeId.from(syntaxNode));
         var syntaxNodeClass = ClassName.toClassName(Utils.toJavaTypeName(state, syntaxShape));
         var syntaxNodeRawClass = ClassName.toClassName(syntaxNodeClass);

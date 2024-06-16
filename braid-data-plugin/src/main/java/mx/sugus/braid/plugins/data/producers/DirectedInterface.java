@@ -12,6 +12,7 @@ import mx.sugus.braid.jsyntax.TypeSyntax;
 import software.amazon.smithy.model.shapes.MemberShape;
 
 public interface DirectedInterface extends DirectiveToTypeSyntax {
+    @Override
     TypeName className(ShapeCodegenState state);
 
     InterfaceSyntax.Builder typeSpec(ShapeCodegenState state);

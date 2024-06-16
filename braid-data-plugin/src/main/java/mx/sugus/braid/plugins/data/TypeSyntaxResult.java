@@ -1,9 +1,9 @@
 package mx.sugus.braid.plugins.data;
 
-import mx.sugus.braid.jsyntax.TypeSyntax;
+import mx.sugus.braid.jsyntax.CompilationUnit;
 
 public final class TypeSyntaxResult {
-    private final TypeSyntax syntax;
+    private final CompilationUnit syntax;
     private final String namespace;
 
     TypeSyntaxResult(TypeSyntaxResult.Builder builder) {
@@ -11,7 +11,7 @@ public final class TypeSyntaxResult {
         this.namespace = builder.namespace;
     }
 
-    public TypeSyntax syntax() {
+    public CompilationUnit syntax() {
         return syntax;
     }
 
@@ -28,7 +28,7 @@ public final class TypeSyntaxResult {
     }
 
     public static class Builder {
-        private TypeSyntax syntax;
+        private CompilationUnit syntax;
         private String namespace;
 
         Builder() {
@@ -39,7 +39,7 @@ public final class TypeSyntaxResult {
             this.namespace = result.namespace;
         }
 
-        public Builder syntax(TypeSyntax syntax) {
+        public Builder syntax(CompilationUnit syntax) {
             this.syntax = syntax;
             return this;
         }
