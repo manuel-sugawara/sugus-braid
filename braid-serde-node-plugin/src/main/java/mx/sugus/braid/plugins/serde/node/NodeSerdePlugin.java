@@ -8,7 +8,7 @@ import mx.sugus.braid.core.plugin.SmithyGeneratorPlugin;
 import mx.sugus.braid.plugins.data.DataPlugin;
 import software.amazon.smithy.model.node.ObjectNode;
 
-public final class NodeSerdePlugin implements SmithyGeneratorPlugin {
+public final class NodeSerdePlugin implements SmithyGeneratorPlugin<ObjectNode> {
     public static final Identifier ID = Identifier.of(NodeSerdePlugin.class);
 
     @Override
@@ -19,6 +19,11 @@ public final class NodeSerdePlugin implements SmithyGeneratorPlugin {
     @Override
     public Collection<Identifier> requires() {
         return List.of(DataPlugin.ID);
+    }
+
+    @Override
+    public ObjectNode fromNode(ObjectNode node) {
+        return node;
     }
 
     @Override

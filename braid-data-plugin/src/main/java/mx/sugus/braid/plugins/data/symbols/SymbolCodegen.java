@@ -3,15 +3,20 @@ package mx.sugus.braid.plugins.data.symbols;
 import static mx.sugus.braid.plugins.data.symbols.SymbolProperties.BUILDER_REFERENCE_FROM_PERSISTENT;
 import static mx.sugus.braid.plugins.data.symbols.SymbolProperties.BUILDER_REFERENCE_JAVA_TYPE;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
+import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
+import mx.sugus.braid.jsyntax.writer.CodeWriter;
 import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import software.amazon.smithy.codegen.core.Symbol;
 import software.amazon.smithy.model.shapes.MemberShape;
+import software.amazon.smithy.model.shapes.Shape;
+import software.amazon.smithy.model.traits.DefaultTrait;
 
 public final class SymbolCodegen {
     private SymbolCodegen() {
@@ -45,7 +50,7 @@ public final class SymbolCodegen {
                 var defaultValue = Utils.defaultValue(state, member);
                 if (defaultValue != null) {
                     return CodeBlock.builder()
-                                    .addCode("$L", defaultValue)
+                                    .addCode("$C", defaultValue)
                                     .build();
                 }
                 return CodeBlock.builder().build();
@@ -190,5 +195,44 @@ public final class SymbolCodegen {
         }
         return builder.addStatement("this.$1L = $1L", name)
                       .build();
+    }
+
+    public static CodeBlock defaultValue(CodegenState state, MemberShape member) {
+        var defaultValue = member.getTrait(DefaultTrait.class).orElse(null);
+        if (defaultValue == null) {
+            return null;
+        }
+        var target = state.model().expectShape(member.getTarget());
+        var defaultValueNode = defaultValue.toNode();
+        var shapeType = target.getType();
+        switch (shapeType) {
+            case BYTE, SHORT, INTEGER, DOUBLE:
+                return CodeBlock.from("$L", defaultValueNode.expectNumberNode().getValue().toString());
+            case LONG:
+                return CodeBlock.from("$LL",  defaultValueNode.expectNumberNode().getValue().toString());
+            case FLOAT:
+                return CodeBlock.from("$LF", defaultValueNode.expectNumberNode().getValue().toString());
+            case STRING:
+                 return CodeBlock.from("$S", defaultValueNode.expectStringNode().getValue());
+            case BOOLEAN:
+                return CodeBlock.from("$L", defaultValueNode.expectBooleanNode().getValue());
+            case ENUM:
+                var enumMember = findEnumMember(target, defaultValueNode.expectStringNode().getValue());
+                return CodeBlock.from("$T.$L", Utils.toJavaTypeName(state, target), Utils.toJavaName(state, enumMember));
+            default:
+                throw new UnsupportedOperationException("Unsupported type: " + shapeType + " for default value");
+        }
+    }
+
+    private static MemberShape findEnumMember(Shape target, String value) {
+        var enumShape = target.asEnumShape().orElseThrow();
+        var values = enumShape.getEnumValues();
+        for (var kvp : enumShape.getAllMembers().entrySet()) {
+            var enumValue = values.get(kvp.getKey());
+            if (enumValue.equals(value)) {
+                return kvp.getValue();
+            }
+        }
+        throw new NoSuchElementException("cannot find enum member with value: " + value);
     }
 }

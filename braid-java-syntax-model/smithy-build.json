@@ -10,6 +10,9 @@
                 "mx.sugus.braid.core.plugins#ShapeCodegenPlugin": {
                     "selector": "[id|namespace = 'mx.sugus.braid.jsyntax']"
                 },
+                "mx.sugus.braid.plugins.data#DataPlugin": {
+                    "nullabilityMode": "server"
+                },
                 "mx.sugus.braid.plugins.data#FlattenInterfaceMembersPlugin": {
                 },
                 "mx.sugus.braid.plugins.data#OrderedCollectionsByDefaultPlugin": {

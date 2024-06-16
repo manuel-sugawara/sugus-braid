@@ -5,6 +5,7 @@ import java.math.BigInteger;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.core.util.PathUtil;
@@ -12,7 +13,7 @@ import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.writer.CodeWriter;
-import mx.sugus.braid.plugins.data.dependencies.DefaultShapeToJavaName;
+import mx.sugus.braid.plugins.data.dependencies.NullabilityIndexProvider;
 import mx.sugus.braid.plugins.data.dependencies.ShapeToJavaName;
 import mx.sugus.braid.plugins.data.dependencies.ShapeToJavaType;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants.AggregateType;
@@ -56,15 +57,18 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
     private final Model model;
     private final ShapeToJavaName shapeToJavaName;
     private final ShapeToJavaType shapeToJavaType;
+    private final NullabilityIndexProvider nullabilityIndexProvider;
 
     public BraidSymbolProvider(
         Model model,
         ShapeToJavaName shapeToJavaName,
-        ShapeToJavaType shapeToJavaType
+        ShapeToJavaType shapeToJavaType,
+        NullabilityIndexProvider nullabilityIndexProvider
     ) {
-        this.model = model;
-        this.shapeToJavaName = shapeToJavaName;
-        this.shapeToJavaType = shapeToJavaType;
+        this.model = Objects.requireNonNull(model, "model");
+        this.shapeToJavaName = Objects.requireNonNull(shapeToJavaName, "shapeToJavaName");
+        this.shapeToJavaType = Objects.requireNonNull(shapeToJavaType, "shapeToJavaType");
+        this.nullabilityIndexProvider = Objects.requireNonNull(nullabilityIndexProvider, "nullabilityIndexProvider");
     }
 
     @Override
@@ -161,7 +165,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
             .putProperty(SymbolProperties.JAVA_NAME, javaName)
             .putProperty(SymbolProperties.SETTER_NAME, javaName)
             .putProperty(SymbolProperties.GETTER_NAME, javaName)
-            .putProperty(SymbolProperties.IS_REQUIRED, shape.isRequired())
+            .putProperty(SymbolProperties.IS_REQUIRED, nullabilityIndexProvider.of(model).isMemberRequired(shape))
             .putProperty(SymbolProperties.BUILDER_REFERENCE, builderReference)
             .putProperty(SymbolProperties.IS_CONSTANT, shape.hasTrait(ConstTrait.class))
             .putProperty(SymbolProperties.BUILDER_EMPTY_INIT, SymbolCodegen::builderEmptyInitializer)
@@ -172,7 +176,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
                          SymbolCodegen::builderUnionDataInitializerExpression)
             .putProperty(SymbolProperties.BUILDER_SETTER_FOR_MEMBER, SymbolCodegen::builderSetterForMember)
             .putProperty(SymbolProperties.DATA_BUILDER_INIT, SymbolCodegen::dataBuilderInitializer)
-            .putProperty(SymbolProperties.DEFAULT_VALUE, getDefaultValue(shape, targetShape));
+            .putProperty(SymbolProperties.DEFAULT_VALUE, SymbolCodegen::defaultValue);
         var aggregateType = targetSymbol.getProperty(SymbolProperties.AGGREGATE_TYPE).orElse(AggregateType.NONE);
         if (aggregateType != AggregateType.NONE) {
             var targetType = targetSymbol.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
@@ -376,5 +380,4 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
                 throw new UnsupportedOperationException("Unsupported type: " + shapeType + " for default value");
         }
     }
-
 }

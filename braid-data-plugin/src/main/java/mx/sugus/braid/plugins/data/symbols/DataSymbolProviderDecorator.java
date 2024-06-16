@@ -17,7 +17,8 @@ public class DataSymbolProviderDecorator implements SymbolProviderDecorator {
     public SymbolProvider decorate(Model model, SymbolProvider decorated, Dependencies dependencies) {
         var shapeToJavaName = dependencies.get(DataPluginDependencies.SHAPE_TO_JAVA_NAME);
         var shapeToJavaType = new DefaultShapeToJavaType(shapeToJavaName, model);
-        return new BraidSymbolProvider(model, shapeToJavaName, shapeToJavaType);
+        var nullabilityIndexProvider = dependencies.expect(DataPluginDependencies.NULLABILITY_INDEX_PROVIDER);
+        return new BraidSymbolProvider(model, shapeToJavaName, shapeToJavaType, nullabilityIndexProvider);
     }
 
     public static DataSymbolProviderDecorator get() {

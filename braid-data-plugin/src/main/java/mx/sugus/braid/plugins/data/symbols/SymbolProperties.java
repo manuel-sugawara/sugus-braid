@@ -1,6 +1,7 @@
 package mx.sugus.braid.plugins.data.symbols;
 
 import java.util.function.BiFunction;
+import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.Block;
@@ -83,9 +84,10 @@ public final class SymbolProperties {
     public static final Property<Boolean> IS_CONSTANT = Property.named("is-constant?");
 
     /**
-     * Property for the default value of a member shape.
+     * Property to get a code block for the default value of a member shape.
      */
-    public static final Property<String> DEFAULT_VALUE = Property.named("default-value");
+    public static final Property<BiFunction<CodegenState, MemberShape, CodeBlock>> DEFAULT_VALUE =
+        Property.named("default-value");
 
     /**
      * Property for the type of aggregate the symbol represents.

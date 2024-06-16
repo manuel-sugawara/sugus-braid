@@ -16,7 +16,7 @@ public class SpiPluginLoader implements PluginLoader {
     public LoadResult loadPlugins(Set<Identifier> ids) {
         var resolved = Container.LOADED;
         var unresolved = new HashSet<>(ids);
-        var plugins = new HashMap<Identifier, SmithyGeneratorPlugin>();
+        var plugins = new HashMap<Identifier, SmithyGeneratorPlugin<?>>();
         for (var id : ids) {
             if (resolved.containsKey(id)) {
                 plugins.put(id, resolved.get(id));

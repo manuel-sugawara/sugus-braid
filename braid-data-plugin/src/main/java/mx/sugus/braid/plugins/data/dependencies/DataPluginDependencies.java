@@ -9,8 +9,13 @@ import mx.sugus.braid.core.plugin.Dependencies;
 import mx.sugus.braid.core.plugin.DependencyKey;
 import mx.sugus.braid.core.util.Lazy;
 import mx.sugus.braid.core.util.Name;
+import mx.sugus.braid.plugins.data.config.DataPluginConfig;
+import mx.sugus.braid.plugins.data.config.NullabilityCheckMode;
 import software.amazon.smithy.codegen.core.ReservedWords;
 import software.amazon.smithy.codegen.core.ReservedWordsBuilder;
+import software.amazon.smithy.model.Model;
+import software.amazon.smithy.model.knowledge.NullableIndex;
+import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.shapes.ShapeType;
 
@@ -25,21 +30,30 @@ public final class DataPluginDependencies {
      */
     public static final DependencyKey<ReservedWords> RESERVED_WORDS =
         DependencyKey.from("reserved-words", x -> LAZY_RESERVED_WORDS.get());
+    /**
+     * The class to escape reserved words.
+     */
+    public static final DependencyKey<ReservedWordsEscaper> RESERVED_WORDS_ESCAPER =
+        DependencyKey.from("java-name->escaped-java-name", DataPluginDependencies::defaultReservedWordsEscaper);
 
     /**
      * The class to convert shapes to java names.
      */
     public static final DependencyKey<ShapeToJavaName> SHAPE_TO_JAVA_NAME =
-        DependencyKey.from("shape->java-name", DataPluginDependencies::buildShapeToJavaName);
+        DependencyKey.from("shape->java-name", DataPluginDependencies::defaultShapeToJavaName);
 
     /**
-     * The class to escape reserved words.
+     * The class to create nullability indexes.
      */
-    public static final DependencyKey<ReservedWordsEscaper> RESERVED_WORDS_ESCAPER =
-        DependencyKey.from("java-name->escaped-java-name", DataPluginDependencies::buildReservedWordsEscaper);
+    public static final DependencyKey<NullabilityIndexProvider> NULLABILITY_INDEX_PROVIDER =
+        DependencyKey.from("model->nullability-index", DataPluginDependencies::defaultNullabilityIndexProvider);
 
+    /**
+     * The config instance for this plugin
+     */
+    public static final DependencyKey<DataPluginConfig> DATA_PLUGIN_CONFIG = DependencyKey.from("data-plugin-config");
 
-    static ShapeToJavaName buildShapeToJavaName(Dependencies dependencies) {
+    static ShapeToJavaName defaultShapeToJavaName(Dependencies dependencies) {
         var packageName = dependencies.getOptional(DefaultDependencies.SETTINGS)
                                       .map(BrideCodegenSettings::packageName)
                                       .orElse(null);
@@ -47,9 +61,18 @@ public final class DataPluginDependencies {
         return new DefaultShapeToJavaName(packageName, escaper);
     }
 
-    static ReservedWordsEscaper buildReservedWordsEscaper(Dependencies dependencies) {
+    static ReservedWordsEscaper defaultReservedWordsEscaper(Dependencies dependencies) {
         var reservedWords = dependencies.expect(RESERVED_WORDS);
         return new DefaultReservedWordsEscaper(reservedWords);
+    }
+
+    static NullabilityIndexProvider defaultNullabilityIndexProvider(Dependencies dependencies) {
+        var config = dependencies.expect(DATA_PLUGIN_CONFIG);
+        if (config.nullabilityMode() == NullabilityCheckMode.ALL_OPTIONAL) {
+            return model -> shape -> true;
+        }
+        var checkMode = checkModeFrom(config.nullabilityMode());
+        return new DefaultNullabilityIndexProvider(checkMode);
     }
 
     static ReservedWords buildReservedWords() {
@@ -83,4 +106,42 @@ public final class DataPluginDependencies {
             return name;
         }
     }
+
+    private static NullableIndex.CheckMode checkModeFrom(NullabilityCheckMode mode) {
+        return switch (mode) {
+            case CLIENT -> NullableIndex.CheckMode.CLIENT;
+            case CLIENT_CAREFUL -> NullableIndex.CheckMode.CLIENT_CAREFUL;
+            case SERVER -> NullableIndex.CheckMode.SERVER;
+            default -> throw new IllegalArgumentException("unsupported mode: " + mode);
+        };
+    }
+
+    static class DefaultNullabilityIndexProvider implements NullabilityIndexProvider {
+        private final NullableIndex.CheckMode checkMode;
+
+        DefaultNullabilityIndexProvider(NullableIndex.CheckMode checkMode) {
+            this.checkMode = Objects.requireNonNull(checkMode, "checkMode");
+        }
+
+        @Override
+        public NullabilityIndex of(Model model) {
+            return new DefaultNullabilityIndex(checkMode, model);
+        }
+    }
+
+    static class DefaultNullabilityIndex implements NullabilityIndex {
+        private final NullableIndex.CheckMode checkMode;
+        private final NullableIndex index;
+
+        DefaultNullabilityIndex(NullableIndex.CheckMode checkMode, Model model) {
+            this.checkMode = Objects.requireNonNull(checkMode, "checkMode");
+            index = NullableIndex.of(model);
+        }
+
+        @Override
+        public boolean isMemberNullable(MemberShape member) {
+            return index.isMemberNullable(member, checkMode);
+        }
+    }
+
 }

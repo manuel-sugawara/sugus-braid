@@ -19,6 +19,7 @@ public final class DefaultBaseModuleConfig {
         return CodegenModuleConfig.builder().build();
     }
 
+    @SuppressWarnings("unchecked")
     public static CodegenModuleConfig buildDependants(PluginLoader loader, ObjectNode basePluginConfig) {
         var pluginsEnabled = pluginsEnabled(basePluginConfig);
         var pluginsLoaded = loader.loadPluginsAndRequirements(pluginsEnabled.keySet());
@@ -29,12 +30,13 @@ public final class DefaultBaseModuleConfig {
         var sortedPlugins = sortPlugins(pluginsLoaded.resolved());
         for (var plugin : sortedPlugins) {
             var pluginConfig = pluginsEnabled.get(plugin.provides());
-            configBuilder.merge(plugin.moduleConfig(pluginConfig));
+            Object config = plugin.fromNode(pluginConfig);
+            configBuilder.merge(plugin.moduleConfig(config));
         }
         return configBuilder.build();
     }
 
-    private static List<SmithyGeneratorPlugin> sortPlugins(Map<Identifier, SmithyGeneratorPlugin> pluginsLoaded) {
+    private static List<SmithyGeneratorPlugin> sortPlugins(Map<Identifier, SmithyGeneratorPlugin<?>> pluginsLoaded) {
         var sorting = TopologicalSort.of(Identifier.class);
         for (var kvp : pluginsLoaded.entrySet()) {
             var pluginId = kvp.getKey();

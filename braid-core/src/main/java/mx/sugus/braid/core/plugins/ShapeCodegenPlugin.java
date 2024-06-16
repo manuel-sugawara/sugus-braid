@@ -20,12 +20,17 @@ import software.amazon.smithy.model.transform.ModelTransformer;
 /**
  * Plugin to configure the model shape selector and corresponding transforms for service codegen.
  */
-public final class ShapeCodegenPlugin implements SmithyGeneratorPlugin {
+public final class ShapeCodegenPlugin implements SmithyGeneratorPlugin<ObjectNode> {
     private final Identifier ID = Identifier.of(ShapeCodegenPlugin.class);
 
     @Override
     public Identifier provides() {
         return ID;
+    }
+
+    @Override
+    public ObjectNode fromNode(ObjectNode node) {
+        return node;
     }
 
     @Override

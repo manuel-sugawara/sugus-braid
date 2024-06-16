@@ -7,6 +7,8 @@ import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.SmithyGeneratorPlugin;
 import mx.sugus.braid.jsyntax.Annotation;
 import mx.sugus.braid.jsyntax.CodeBlock;
+import mx.sugus.braid.plugins.data.config.DataPluginConfig;
+import mx.sugus.braid.plugins.data.dependencies.DataPluginDependencies;
 import mx.sugus.braid.plugins.data.producers.EnumJavaProducer;
 import mx.sugus.braid.plugins.data.producers.StructureInterfaceJavaProducer;
 import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
@@ -21,7 +23,7 @@ import mx.sugus.braid.plugins.data.transformers.InterfaceFromFactoryOverridesTra
 import mx.sugus.braid.rt.util.annotations.Generated;
 import software.amazon.smithy.model.node.ObjectNode;
 
-public final class DataPlugin implements SmithyGeneratorPlugin {
+public final class DataPlugin implements SmithyGeneratorPlugin<DataPluginConfig> {
     public static final Identifier ID = Identifier.of(DataPlugin.class);
     private static final Annotation GENERATED_BY = Annotation.builder(Generated.class)
                                                              .value(CodeBlock.from("$S", ID.toString()))
@@ -38,7 +40,15 @@ public final class DataPlugin implements SmithyGeneratorPlugin {
     }
 
     @Override
-    public CodegenModuleConfig moduleConfig(ObjectNode node) {
+    public DataPluginConfig fromNode(ObjectNode node) {
+        if (node == null) {
+            return DataPluginConfig.builder().build();
+        }
+        return DataPluginConfig.fromNode(node);
+    }
+
+    @Override
+    public CodegenModuleConfig moduleConfig(DataPluginConfig config) {
         return CodegenModuleConfig
             .builder()
             .addProducer(new StructureJavaProducer())
@@ -52,6 +62,7 @@ public final class DataPlugin implements SmithyGeneratorPlugin {
             .addTransformer(new InterfaceFromFactoryOverridesTransform())
             .addTransformer(new ClassAddBuilderReferenceTransform())
             .addSymbolProviderDecorator(DataSymbolProviderDecorator.get())
+            .putDependency(DataPluginDependencies.DATA_PLUGIN_CONFIG, config)
             .build();
     }
 
