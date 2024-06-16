@@ -8,6 +8,7 @@ import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants.AggregateType;
+import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.traits.UseBuilderReferenceTrait;
 import software.amazon.smithy.codegen.core.Property;
 import software.amazon.smithy.model.shapes.MemberShape;
@@ -77,6 +78,17 @@ public final class SymbolProperties {
      * Property to mark the symbol as required.
      */
     public static final Property<Boolean> IS_REQUIRED = Property.named("is-required?");
+
+    /**
+     * Property to mark the symbol as explicitly required (i.e., not because the @default trait is present).
+     */
+    public static final Property<Boolean> IS_EXPLICITLY_REQUIRED = Property.named("is-explicitly-required?");
+
+    /**
+     * Property to mark the symbol as implicitly required, that is, it's required or the member cannot be null as it's the case
+     * for collections when using {@link CollectionBuilderReference}.
+     */
+    public static final Property<Boolean> IS_IMPLICITLY_REQUIRED = Property.named("is-implicitly-required?");
 
     /**
      * Property to mark the symbol as constant.

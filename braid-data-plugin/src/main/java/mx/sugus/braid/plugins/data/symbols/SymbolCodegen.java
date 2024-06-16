@@ -163,14 +163,14 @@ public final class SymbolCodegen {
         if (builderReference != null) {
             builderProperty.addCode(".asPersistent()");
         }
-        if (Utils.isRequired(state, member)) {
+        if (!Utils.isImplicitlyRequired(state, member)) {
             return BodyBuilder.create()
-                              .addStatement("this.$1L = $2T.requireNonNull($3C, $1S)",
-                                            name, Objects.class, builderProperty.build())
+                              .addStatement("this.$L = $C", name, builderProperty.build())
                               .build();
         }
         return BodyBuilder.create()
-                          .addStatement("this.$L = $C", name, builderProperty.build())
+                          .addStatement("this.$1L = $2T.requireNonNull($3C, $1S)",
+                                        name, Objects.class, builderProperty.build())
                           .build();
     }
 

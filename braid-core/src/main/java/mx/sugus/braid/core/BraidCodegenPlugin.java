@@ -27,7 +27,6 @@ public final class BraidCodegenPlugin implements SmithyBuildPlugin {
         var configured = DefaultBaseModuleConfig.buildDependants(pluginLoader(), settings.settingsNode());
         var moduleConfig = mergeDefaults(settings, configured);
         var module = new CodegenModule(moduleConfig);
-
         BraidCodegenDirector.builder()
                             .model(context.getModel())
                             .settings(settings)

@@ -94,7 +94,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
             return;
         }
         var targetType = Utils.toJavaTypeName(state, target);
-        if (Utils.isRequired(state, member)) {
+        if (Utils.isExplicitlyRequired(state, member)) {
             body.addStatement("builder.$L($T.fromNode(obj.expectMember($S).expectObjectNode()))",
                               Utils.toSetterName(state, member), targetType, member.getMemberName());
         } else {

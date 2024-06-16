@@ -1,5 +1,6 @@
 package mx.sugus.braid.plugins.data.producers;
 
+import static mx.sugus.braid.plugins.data.dependencies.DataPluginDependencies.NULLABILITY_INDEX_PROVIDER;
 import static mx.sugus.braid.plugins.data.dependencies.DataPluginDependencies.RESERVED_WORDS_ESCAPER;
 
 import java.util.ArrayList;
@@ -23,7 +24,6 @@ import mx.sugus.braid.jsyntax.TypeSyntax;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants;
 import mx.sugus.braid.plugins.data.symbols.SymbolProperties;
 import mx.sugus.braid.rt.util.annotations.Generated;
-import mx.sugus.braid.traits.ConstTrait;
 import mx.sugus.braid.traits.UseBuilderReferenceTrait;
 import software.amazon.smithy.codegen.core.Symbol;
 import software.amazon.smithy.model.shapes.MemberShape;
@@ -166,12 +166,21 @@ public final class Utils {
 
     public static boolean isRequired(CodegenState state, MemberShape shape) {
         var symbol = state.symbolProvider().toSymbol(shape);
-        // XXX Remove this and split the logic using it, technically those are
-        //  never null, but not actually "required" as in marked as so.
-        if (aggregateType(state, shape) != SymbolConstants.AggregateType.NONE) {
-            return true;
+        return symbol.getProperty(SymbolProperties.IS_REQUIRED).orElse(false);
+    }
+
+    public static boolean isExplicitlyRequired(CodegenState state, MemberShape shape) {
+        var symbol = state.symbolProvider().toSymbol(shape);
+        return symbol.getProperty(SymbolProperties.IS_EXPLICITLY_REQUIRED).orElse(false);
+    }
+
+    public static boolean isImplicitlyRequired(CodegenState state, MemberShape shape) {
+        var symbol = state.symbolProvider().toSymbol(shape);
+        var isImplicitlyRequired = symbol.getProperty(SymbolProperties.IS_IMPLICITLY_REQUIRED).orElse(false);
+        if (!isImplicitlyRequired) {
+            return isRequired(state, shape);
         }
-        return symbol.getProperty(SymbolProperties.IS_REQUIRED).orElseThrow();
+        return true;
     }
 
     public static TypeName concreteClassFor(SymbolConstants.AggregateType type) {

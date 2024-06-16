@@ -208,10 +208,10 @@ public final class StructureData implements DirectedClass {
                 if (!isFirst) {
                     expressionBuilder.addCode("\n&& ");
                 }
-                if (Utils.isNullable(state, member)) {
-                    expressionBuilder.addCode("$1T.equals(this.$2L, that.$2L)", Objects.class, name);
-                } else {
+                if (Utils.isImplicitlyRequired(state, member)) {
                     expressionBuilder.addCode("this.$1L.equals(that.$1L)", name);
+                } else {
+                    expressionBuilder.addCode("$1T.equals(this.$2L, that.$2L)", Objects.class, name);
                 }
                 isFirst = false;
             }
@@ -246,19 +246,17 @@ public final class StructureData implements DirectedClass {
     }
 
     private AbstractBlockBuilder<?, ?> addComputeHashCode(ShapeCodegenState state, AbstractBlockBuilder<?, ?> builder) {
-        var symbolProvider = state.symbolProvider();
         builder.addStatement("int hashCode = 17");
         for (var member : state.shape().members()) {
-            var symbol = symbolProvider.toSymbol(member);
             var name = Utils.toJavaName(state, member);
             if (member.hasTrait(ConstTrait.class)) {
                 builder.addStatement("hashCode = 31 * hashCode + this.$L().hashCode()", Utils.toGetterName(state, member));
                 continue;
             }
-            if (Utils.isNullable(state, member)) {
-                builder.addStatement("hashCode = 31 * hashCode + ($1L != null ? $1L.hashCode() : 0)", name);
-            } else {
+            if (Utils.isImplicitlyRequired(state, member)) {
                 builder.addStatement("hashCode = 31 * hashCode + $L.hashCode()", name);
+            } else {
+                builder.addStatement("hashCode = 31 * hashCode + ($1L != null ? $1L.hashCode() : 0)", name);
             }
         }
         return builder;
