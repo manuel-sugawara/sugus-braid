@@ -5,13 +5,13 @@ import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
-import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
+import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
 import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.traits.ConstTrait;
@@ -39,13 +39,14 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
 
     @Override
     public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
-        var syntax = ((ClassSyntax) result.syntax())
+        var syntax = result.syntax();
+        var classSyntax = ((ClassSyntax) syntax.type())
             .toBuilder()
             .addSuperInterface(ToNode.class)
             .addMethod(toNodeMethod(state))
             .build();
         return result.toBuilder()
-                     .syntax(Utils.addGeneratedBy(syntax, NodeSerdePlugin.ID))
+                     .syntax(syntax.toBuilder().type(Utils.addGeneratedBy(classSyntax, NodeSerdePlugin.ID)).build())
                      .build();
     }
 

@@ -40,16 +40,17 @@ public record SyntaxAddAcceptVisitorTransformer(String syntaxNode) implements Sh
             return result;
         }
         var shape = state.shape();
-        var syntax = (ClassSyntax)
+        var syntax = result.syntax();
+        var classSyntax = (ClassSyntax)
             AddMethodsTransform.builder()
                                .addBefore()
                                .methodMatcher(MethodMatcher.byName("equals"))
                                .typeMatcher(TypeMatcher.byName(Utils.toJavaName(state, shape).toString()))
                                .methods(methods)
                                .build()
-                               .transform(result.syntax());
+                               .transform(syntax.type());
         return result.toBuilder()
-                     .syntax(Utils.addGeneratedBy(syntax, SyntaxModelPlugin.ID))
+                     .syntax(syntax.toBuilder().type(Utils.addGeneratedBy(classSyntax, SyntaxModelPlugin.ID)).build())
                      .build();
     }
 

@@ -7,6 +7,7 @@ import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
+import mx.sugus.braid.jsyntax.CompilationUnit;
 import mx.sugus.braid.jsyntax.ConstructorMethodSyntax;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
@@ -43,9 +44,9 @@ public class ClassAddBuilderReferenceTransform implements ShapeTaskTransformer<T
         if (useBuilderReference.builderType() != null || useBuilderReference.fromPersistent() != null) {
             return result;
         }
-        var syntax = (ClassSyntax) result.syntax();
+        var syntax = result.syntax();
         var className = Utils.toJavaName(state, shape).toString();
-        var transformed = (ClassSyntax)
+        var transformed = (CompilationUnit)
             AddInnerTypesTransform.builder()
                                   .types(innerTypes(state))
                                   .typeMatcher(TypeMatcher.byName(className),

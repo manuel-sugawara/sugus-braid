@@ -132,6 +132,15 @@ public final class IfStatement implements Statement {
             return this;
         }
 
+        /**
+         * <p>Sets the value for <code>statement</code></p>
+         * <p>The body of the <code>if</code> statement</p>
+         */
+        public Builder statement(Block statement) {
+            this.statement.setPersistent(statement);
+            return this;
+        }
+
         public Builder addStatement(String format, Object... args) {
             this.statement.asTransient().addStatement(format, args);
             return this;
@@ -174,15 +183,6 @@ public final class IfStatement implements Statement {
 
         public Builder endControlFlow() {
             this.statement.asTransient().endControlFlow();
-            return this;
-        }
-
-        /**
-         * <p>Sets the value for <code>statement</code></p>
-         * <p>The body of the <code>if</code> statement</p>
-         */
-        public Builder statement(Block statement) {
-            this.statement.setPersistent(statement);
             return this;
         }
 

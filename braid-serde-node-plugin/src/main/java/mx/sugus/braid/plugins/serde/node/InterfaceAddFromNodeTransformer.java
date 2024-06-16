@@ -5,13 +5,13 @@ import mx.sugus.braid.core.ImplementsKnowledgeIndex;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
-import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.jsyntax.CaseClause;
 import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.DefaultCaseClause;
 import mx.sugus.braid.jsyntax.InterfaceSyntax;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.SwitchStatement;
+import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.plugins.data.producers.StructureInterfaceJavaProducer;
 import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.traits.ConstTrait;
@@ -36,12 +36,13 @@ public final class InterfaceAddFromNodeTransformer implements ShapeTaskTransform
 
     @Override
     public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
-        var syntax = ((InterfaceSyntax) result.syntax())
+        var syntax = result.syntax();
+        var interfaceSyntax = ((InterfaceSyntax) syntax.type())
             .toBuilder()
             .addMethod(fromNodeMethodForInterface(state))
             .build();
         return result.toBuilder()
-                     .syntax(syntax)
+                     .syntax(syntax.toBuilder().type(interfaceSyntax).build())
                      .build();
     }
 

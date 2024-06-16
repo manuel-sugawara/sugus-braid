@@ -29,7 +29,7 @@ public class UnionJavaProducer implements ShapeProducerTask<TypeSyntaxResult> {
 
     @Override
     public TypeSyntaxResult produce(ShapeCodegenState directive) {
-        var syntax = new UnionData().build(directive);
+        var syntax = new UnionData().buildCompilationUnit(directive);
         return TypeSyntaxResult.builder()
                                .syntax(syntax)
                                .build();

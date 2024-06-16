@@ -34,7 +34,7 @@ public final class EnumJavaProducer implements ShapeProducerTask<TypeSyntaxResul
         if (shape.hasTrait(JavaTrait.class)) {
             return null;
         }
-        var spec = new EnumData().build(directive);
+        var spec = new EnumData().buildCompilationUnit(directive);
         return TypeSyntaxResult.builder()
                                .syntax(spec)
                                .build();

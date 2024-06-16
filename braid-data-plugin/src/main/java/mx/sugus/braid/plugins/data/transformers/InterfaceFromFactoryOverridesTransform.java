@@ -3,7 +3,7 @@ package mx.sugus.braid.plugins.data.transformers;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
-import mx.sugus.braid.jsyntax.InterfaceSyntax;
+import mx.sugus.braid.jsyntax.CompilationUnit;
 import mx.sugus.braid.jsyntax.transforms.AddMethodsTransform;
 import mx.sugus.braid.jsyntax.transforms.MethodMatcher;
 import mx.sugus.braid.jsyntax.transforms.TypeMatcher;
@@ -27,12 +27,12 @@ public class InterfaceFromFactoryOverridesTransform implements ShapeTaskTransfor
 
     @Override
     public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
-        var syntax = (InterfaceSyntax) result.syntax();
+        var syntax = result.syntax();
         var methods = ClassFromFactoryOverridesTransform.fromFactories(state);
         if (methods.isEmpty()) {
             return result;
         }
-        syntax = (InterfaceSyntax)
+        syntax = (CompilationUnit)
             AddMethodsTransform.builder()
                                .addAfter()
                                .methodMatcher(MethodMatcher.any())

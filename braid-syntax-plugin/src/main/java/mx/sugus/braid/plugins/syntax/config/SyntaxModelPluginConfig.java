@@ -12,7 +12,7 @@ import software.amazon.smithy.model.node.ToNode;
 /**
  * <p>Config settings for the SyntaxModelPlugin</p>
  */
-@Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.serde.node#NodeSerdePlugin"})
+@Generated( {"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.serde.node#NodeSerdePlugin"})
 public final class SyntaxModelPluginConfig implements ToNode {
     private final List<String> syntaxNodes;
 
@@ -61,13 +61,6 @@ public final class SyntaxModelPluginConfig implements ToNode {
     }
 
     /**
-     * <p>Creates a new builder</p>
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    /**
      * <p>Converts this instance to Node</p>
      */
     @Override
@@ -81,6 +74,13 @@ public final class SyntaxModelPluginConfig implements ToNode {
             builder.withMember("syntaxNodes", syntaxNodesBuilder.build());
         }
         return builder.build();
+    }
+
+    /**
+     * <p>Creates a new builder</p>
+     */
+    public static Builder builder() {
+        return new Builder();
     }
 
     /**
@@ -98,7 +98,7 @@ public final class SyntaxModelPluginConfig implements ToNode {
     }
 
     public static final class Builder {
-        private CollectionBuilderReference<List<String>> syntaxNodes;
+        private final CollectionBuilderReference<List<String>> syntaxNodes;
 
         Builder() {
             this.syntaxNodes = CollectionBuilderReference.forList();
@@ -109,7 +109,7 @@ public final class SyntaxModelPluginConfig implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>syntaxNodes</code></p>
+         * <p>Sets the value for {@code syntaxNodes}</p>
          * <p>The shape ids of the shapes to be consider roots
          * for the syntax nodes.</p>
          */
@@ -120,7 +120,7 @@ public final class SyntaxModelPluginConfig implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>syntaxNodes</code></p>
+         * <p>Adds a single value for {@code syntaxNodes}</p>
          */
         public Builder addSyntaxNode(String syntaxNode) {
             this.syntaxNodes.asTransient().add(syntaxNode);
