@@ -1,17 +1,15 @@
 package mx.sugus.braid.plugins.syntax;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import mx.sugus.braid.core.plugin.CodegenModuleConfig;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.SmithyGeneratorPlugin;
 import mx.sugus.braid.plugins.data.DataPlugin;
+import mx.sugus.braid.plugins.syntax.config.SyntaxModelPluginConfig;
 import software.amazon.smithy.model.node.ObjectNode;
-import software.amazon.smithy.model.node.StringNode;
 
-public final class SyntaxModelPlugin implements SmithyGeneratorPlugin<ObjectNode> {
+public final class SyntaxModelPlugin implements SmithyGeneratorPlugin<SyntaxModelPluginConfig> {
     public static final Identifier ID = Identifier.of(SyntaxModelPlugin.class);
 
     public SyntaxModelPlugin() {
@@ -28,38 +26,20 @@ public final class SyntaxModelPlugin implements SmithyGeneratorPlugin<ObjectNode
     }
 
     @Override
-    public ObjectNode fromNode(ObjectNode node) {
-        return node;
+    public SyntaxModelPluginConfig fromNode(ObjectNode node) {
+        return SyntaxModelPluginConfig.fromNode(node);
     }
 
     @Override
-    public CodegenModuleConfig moduleConfig(ObjectNode node) {
-        return newBaseConfig(configuredSyntaxNodes(node)).build();
-    }
-
-    static CodegenModuleConfig.Builder newBaseConfig(List<String> syntaxNodes) {
+    public CodegenModuleConfig moduleConfig(SyntaxModelPluginConfig config) {
         var builder = CodegenModuleConfig.builder();
-        for (var syntaxNode : syntaxNodes) {
+        for (var syntaxNode : config.syntaxNodes()) {
             builder.addProducer(new SyntaxVisitorJavaProducer(syntaxNode))
                    .addProducer(new SyntaxWalkVisitorJavaProducer(syntaxNode))
                    .addProducer(new SyntaxRewriteVisitorJavaProducer(syntaxNode))
                    .addTransformer(new InterfaceSyntaxAddAcceptVisitorTransformer(syntaxNode))
                    .addTransformer(new SyntaxAddAcceptVisitorTransformer(syntaxNode));
         }
-        return builder;
-    }
-
-    static List<String> configuredSyntaxNodes(ObjectNode node) {
-        var syntaxNode = node.getStringMember("syntaxNode").map(StringNode::getValue).orElse(null);
-        var syntaxNodes = new ArrayList<String>();
-        if (syntaxNode != null) {
-            syntaxNodes.add(syntaxNode);
-        }
-        node.getArrayMember("syntaxNodes").ifPresent(n -> {
-            for (var element : n.getElements()) {
-                syntaxNodes.add(element.expectStringNode().getValue());
-            }
-        });
-        return Collections.unmodifiableList(syntaxNodes);
+        return builder.build();
     }
 }

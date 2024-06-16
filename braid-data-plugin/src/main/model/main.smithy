@@ -1,6 +1,6 @@
 $version: "1.0"
 
-namespace mx.sugus.braid.plugins.data
+namespace mx.sugus.braid.plugins.data.config
 
 /// Possibles modes to check if a member is nullable.
 enum NullabilityCheckMode {
@@ -14,7 +14,7 @@ enum NullabilityCheckMode {
     SERVER = "server"
 }
 
-/// Configuration settings for the
+/// Configuration settings for the DataPlugin
 structure DataPluginConfig {
     /// The nullability mode to check if the member of an aggregate shape
     /// should be considered nullable. If not configured otherwise the
