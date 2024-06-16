@@ -4,7 +4,6 @@ import mx.sugus.braid.core.plugin.CodegenModuleConfig;
 import mx.sugus.braid.core.plugin.DefaultModelTransformerTask;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.SmithyGeneratorPlugin;
-import mx.sugus.braid.core.transforms.SynthesizeServiceTransform;
 import mx.sugus.braid.plugins.data.model.FlattenInterfaceMembers;
 import software.amazon.smithy.model.node.ObjectNode;
 
@@ -30,7 +29,7 @@ public final class FlattenInterfaceMembersPlugin implements SmithyGeneratorPlugi
             .builder()
             .addModelTransformer(DefaultModelTransformerTask
                                      .builder()
-                                     .taskId(Identifier.of(SynthesizeServiceTransform.class))
+                                     .taskId(ID)
                                      .transform(FlattenInterfaceMembers::transform)
                                      .build())
             .build();

@@ -8,6 +8,7 @@ import java.util.function.Supplier;
  * @param <T> The type of the value.
  */
 public final class Lazy<T> {
+    private final Object lock = new Object();
     private final Supplier<T> initializer;
     private volatile T value;
 
@@ -23,7 +24,7 @@ public final class Lazy<T> {
     public T get() {
         T result = value;
         if (result == null) {
-            synchronized (this) {
+            synchronized (lock) {
                 result = value;
                 if (result == null) {
                     result = initializer.get();

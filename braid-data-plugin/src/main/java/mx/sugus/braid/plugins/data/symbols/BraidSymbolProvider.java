@@ -160,12 +160,14 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
         var targetSymbol = targetShape.accept(this);
         var builderReference = targetShape.getTrait(UseBuilderReferenceTrait.class).orElse(null);
         var javaName = shapeToJavaName.toJavaName(shape, model);
+        var nullabilityIndex = nullabilityIndexProvider.of(model);
         var builder = targetSymbol
             .toBuilder()
             .putProperty(SymbolProperties.JAVA_NAME, javaName)
             .putProperty(SymbolProperties.SETTER_NAME, javaName)
             .putProperty(SymbolProperties.GETTER_NAME, javaName)
-            .putProperty(SymbolProperties.IS_REQUIRED, nullabilityIndexProvider.of(model).isMemberRequired(shape))
+            .putProperty(SymbolProperties.IS_REQUIRED, nullabilityIndex.isRequired(shape))
+            .putProperty(SymbolProperties.IS_EXPLICITLY_REQUIRED, nullabilityIndex.isExplicitlyRequired(shape))
             .putProperty(SymbolProperties.BUILDER_REFERENCE, builderReference)
             .putProperty(SymbolProperties.IS_CONSTANT, shape.hasTrait(ConstTrait.class))
             .putProperty(SymbolProperties.BUILDER_EMPTY_INIT, SymbolCodegen::builderEmptyInitializer)
@@ -186,6 +188,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
             var prefix = aggregateType == AggregateType.MAP ? "put" : "add";
             builder.putProperty(SymbolProperties.ADDER_NAME, simpleName.toSingularSpelling().withPrefix(prefix));
             builder.putProperty(SymbolProperties.MULTI_ADDER_NAME, simpleName.withPrefix(prefix));
+            builder.putProperty(SymbolProperties.IS_IMPLICITLY_REQUIRED, true);
         } else if (builderReference != null) {
             var targetType = targetSymbol.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
             var targetTypeClass = ClassName.toClassName(targetType);

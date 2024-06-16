@@ -3,8 +3,6 @@ package mx.sugus.braid.plugins.data.dependencies;
 import java.util.Objects;
 import java.util.function.Function;
 import mx.sugus.braid.core.BraidCodegenPlugin;
-import mx.sugus.braid.core.BrideCodegenSettings;
-import mx.sugus.braid.core.plugin.DefaultDependencies;
 import mx.sugus.braid.core.plugin.Dependencies;
 import mx.sugus.braid.core.plugin.DependencyKey;
 import mx.sugus.braid.core.util.Lazy;
@@ -35,27 +33,24 @@ public final class DataPluginDependencies {
      */
     public static final DependencyKey<ReservedWordsEscaper> RESERVED_WORDS_ESCAPER =
         DependencyKey.from("java-name->escaped-java-name", DataPluginDependencies::defaultReservedWordsEscaper);
-
+    /**
+     * The config instance for this plugin
+     */
+    public static final DependencyKey<DataPluginConfig> DATA_PLUGIN_CONFIG = DependencyKey.from("data-plugin-config");
     /**
      * The class to convert shapes to java names.
      */
     public static final DependencyKey<ShapeToJavaName> SHAPE_TO_JAVA_NAME =
         DependencyKey.from("shape->java-name", DataPluginDependencies::defaultShapeToJavaName);
-
     /**
      * The class to create nullability indexes.
      */
     public static final DependencyKey<NullabilityIndexProvider> NULLABILITY_INDEX_PROVIDER =
         DependencyKey.from("model->nullability-index", DataPluginDependencies::defaultNullabilityIndexProvider);
 
-    /**
-     * The config instance for this plugin
-     */
-    public static final DependencyKey<DataPluginConfig> DATA_PLUGIN_CONFIG = DependencyKey.from("data-plugin-config");
-
     static ShapeToJavaName defaultShapeToJavaName(Dependencies dependencies) {
-        var packageName = dependencies.getOptional(DefaultDependencies.SETTINGS)
-                                      .map(BrideCodegenSettings::packageName)
+        var packageName = dependencies.getOptional(DATA_PLUGIN_CONFIG)
+                                      .map(DataPluginConfig::packageName)
                                       .orElse(null);
         var escaper = dependencies.expect(RESERVED_WORDS_ESCAPER);
         return new DefaultShapeToJavaName(packageName, escaper);
@@ -85,6 +80,15 @@ public final class DataPluginDependencies {
                 .build();
     }
 
+    private static NullableIndex.CheckMode checkModeFrom(NullabilityCheckMode mode) {
+        return switch (mode) {
+            case CLIENT -> NullableIndex.CheckMode.CLIENT;
+            case CLIENT_CAREFUL -> NullableIndex.CheckMode.CLIENT_CAREFUL;
+            case SERVER -> NullableIndex.CheckMode.SERVER;
+            default -> throw new IllegalArgumentException("unsupported mode: " + mode);
+        };
+    }
+
     static class DefaultReservedWordsEscaper implements ReservedWordsEscaper {
         private final ReservedWords reservedWords;
 
@@ -107,15 +111,6 @@ public final class DataPluginDependencies {
         }
     }
 
-    private static NullableIndex.CheckMode checkModeFrom(NullabilityCheckMode mode) {
-        return switch (mode) {
-            case CLIENT -> NullableIndex.CheckMode.CLIENT;
-            case CLIENT_CAREFUL -> NullableIndex.CheckMode.CLIENT_CAREFUL;
-            case SERVER -> NullableIndex.CheckMode.SERVER;
-            default -> throw new IllegalArgumentException("unsupported mode: " + mode);
-        };
-    }
-
     static class DefaultNullabilityIndexProvider implements NullabilityIndexProvider {
         private final NullableIndex.CheckMode checkMode;
 
@@ -132,16 +127,17 @@ public final class DataPluginDependencies {
     static class DefaultNullabilityIndex implements NullabilityIndex {
         private final NullableIndex.CheckMode checkMode;
         private final NullableIndex index;
+        private final Model model;
 
         DefaultNullabilityIndex(NullableIndex.CheckMode checkMode, Model model) {
             this.checkMode = Objects.requireNonNull(checkMode, "checkMode");
-            index = NullableIndex.of(model);
+            this.model = Objects.requireNonNull(model, "model");
+            this.index = NullableIndex.of(model);
         }
 
         @Override
-        public boolean isMemberNullable(MemberShape member) {
+        public boolean isNullable(MemberShape member) {
             return index.isMemberNullable(member, checkMode);
         }
     }
-
 }
