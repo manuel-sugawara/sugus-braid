@@ -6,16 +6,16 @@ import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.NonShapeProducerTask;
 import mx.sugus.braid.core.util.Name;
-import mx.sugus.braid.jsyntax.CompilationUnit;
-import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.jsyntax.AbstractMethodSyntax;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
+import mx.sugus.braid.jsyntax.CompilationUnit;
 import mx.sugus.braid.jsyntax.InterfaceSyntax;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeSyntax;
 import mx.sugus.braid.jsyntax.TypeVariableTypeName;
+import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.traits.InterfaceTrait;
 import software.amazon.smithy.model.Model;
@@ -50,8 +50,8 @@ public final class SyntaxVisitorJavaProducer implements NonShapeProducerTask<Typ
     CompilationUnit generate(CodegenState state) {
         var visitorClass = visitorClass(state);
         return CompilationUnit.builder().packageName(visitorClass.packageName())
-            .type(generateInterface(state))
-            .build();
+                              .type(generateInterface(state))
+                              .build();
     }
 
     InterfaceSyntax.Builder typeSyntax(CodegenState state) {
