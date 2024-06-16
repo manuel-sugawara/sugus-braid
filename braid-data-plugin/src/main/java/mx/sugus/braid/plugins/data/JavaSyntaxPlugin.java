@@ -20,7 +20,7 @@ import software.amazon.smithy.model.shapes.ShapeType;
 /**
  * Provides serialization for instances of {@link TypeSyntaxResult}.
  */
-public final class JavaSyntaxPlugin implements SmithyGeneratorPlugin {
+public final class JavaSyntaxPlugin implements SmithyGeneratorPlugin<ObjectNode> {
     public static final Identifier ID = Identifier.of(JavaSyntaxPlugin.class);
     private static final TypeSyntaxResultSerializer SERIALIZER = new TypeSyntaxResultSerializer();
     private static final PackageImplicitNamesReducer PACKAGE_IMPLICIT_NAMES_REDUCER = new PackageImplicitNamesReducer();
@@ -31,6 +31,11 @@ public final class JavaSyntaxPlugin implements SmithyGeneratorPlugin {
     @Override
     public Identifier provides() {
         return ID;
+    }
+
+    @Override
+    public ObjectNode fromNode(ObjectNode node) {
+        return node;
     }
 
     @Override

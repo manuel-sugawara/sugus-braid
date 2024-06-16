@@ -8,7 +8,7 @@ import mx.sugus.braid.core.transforms.SynthesizeServiceTransform;
 import mx.sugus.braid.plugins.data.model.FlattenInterfaceMembers;
 import software.amazon.smithy.model.node.ObjectNode;
 
-public final class FlattenInterfaceMembersPlugin implements SmithyGeneratorPlugin {
+public final class FlattenInterfaceMembersPlugin implements SmithyGeneratorPlugin<ObjectNode> {
     public static final Identifier ID = Identifier.of(FlattenInterfaceMembersPlugin.class);
 
     public FlattenInterfaceMembersPlugin() {
@@ -20,11 +20,12 @@ public final class FlattenInterfaceMembersPlugin implements SmithyGeneratorPlugi
     }
 
     @Override
-    public CodegenModuleConfig moduleConfig(ObjectNode node) {
-        return newBaseConfig();
+    public ObjectNode fromNode(ObjectNode node) {
+        return node;
     }
 
-    static CodegenModuleConfig newBaseConfig() {
+    @Override
+    public CodegenModuleConfig moduleConfig(ObjectNode node) {
         return CodegenModuleConfig
             .builder()
             .addModelTransformer(DefaultModelTransformerTask

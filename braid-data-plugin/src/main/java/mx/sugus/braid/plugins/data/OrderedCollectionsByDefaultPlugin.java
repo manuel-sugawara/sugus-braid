@@ -7,7 +7,7 @@ import mx.sugus.braid.core.plugin.SmithyGeneratorPlugin;
 import mx.sugus.braid.plugins.data.model.AddOrderedToMapAndSets;
 import software.amazon.smithy.model.node.ObjectNode;
 
-public class OrderedCollectionsByDefaultPlugin implements SmithyGeneratorPlugin {
+public class OrderedCollectionsByDefaultPlugin implements SmithyGeneratorPlugin<ObjectNode> {
     public static final Identifier ID = Identifier.of(OrderedCollectionsByDefaultPlugin.class);
 
     public OrderedCollectionsByDefaultPlugin() {
@@ -16,6 +16,11 @@ public class OrderedCollectionsByDefaultPlugin implements SmithyGeneratorPlugin 
     @Override
     public Identifier provides() {
         return ID;
+    }
+
+    @Override
+    public ObjectNode fromNode(ObjectNode node) {
+        return node;
     }
 
     @Override

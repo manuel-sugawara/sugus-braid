@@ -58,7 +58,7 @@ public interface PluginLoader {
         return allRequired;
     }
 
-    record LoadResult(Set<Identifier> unresolved, Map<Identifier, SmithyGeneratorPlugin> resolved) {
+    record LoadResult(Set<Identifier> unresolved, Map<Identifier, SmithyGeneratorPlugin<?>> resolved) {
         public boolean isFullyResolved() {
             return unresolved.isEmpty();
         }

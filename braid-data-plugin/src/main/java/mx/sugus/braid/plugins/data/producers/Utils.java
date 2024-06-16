@@ -171,7 +171,7 @@ public final class Utils {
         if (aggregateType(state, shape) != SymbolConstants.AggregateType.NONE) {
             return true;
         }
-        return symbol.getProperty(SymbolProperties.IS_REQUIRED).orElseGet(() -> shape.hasTrait(ConstTrait.class));
+        return symbol.getProperty(SymbolProperties.IS_REQUIRED).orElseThrow();
     }
 
     public static TypeName concreteClassFor(SymbolConstants.AggregateType type) {
@@ -204,9 +204,10 @@ public final class Utils {
         return symbol.getProperty(SymbolProperties.IS_ORDERED).orElse(false);
     }
 
-    public static String defaultValue(CodegenState state, Shape shape) {
+    public static CodeBlock defaultValue(CodegenState state, MemberShape shape) {
         var symbol = state.symbolProvider().toSymbol(shape);
-        return symbol.getProperty(SymbolProperties.DEFAULT_VALUE).orElse(null);
+        var defaultFunction = symbol.getProperty(SymbolProperties.DEFAULT_VALUE).orElse(null);
+        return defaultFunction.apply(state, shape);
     }
 
     public static UseBuilderReferenceTrait builderReference(ShapeCodegenState state, Shape shape) {

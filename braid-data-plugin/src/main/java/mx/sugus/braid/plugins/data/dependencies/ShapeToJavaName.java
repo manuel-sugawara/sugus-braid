@@ -3,45 +3,35 @@ package mx.sugus.braid.plugins.data.dependencies;
 import mx.sugus.braid.core.util.Name;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.shapes.Shape;
-import software.amazon.smithy.model.shapes.ShapeType;
 
-public final class ShapeToJavaName {
-    private final String packageOverride;
-    private final ReservedWordsEscaper escaper;
+/**
+ * Encapsulates the logic to convert a shape to an idiomatic java name.¬
+ */
+public interface ShapeToJavaName {
+    /**
+     * Converts the given shape to an idiomatic name, without any validation.
+     *
+     * @param shape The shape to covert.
+     * @param model The model containing the shape.
+     * @return A java name for the given shape.
+     */
+    Name toName(Shape shape, Model model);
 
-    public ShapeToJavaName(String packageOverride, ReservedWordsEscaper escaper) {
-        this.packageOverride = packageOverride;
-        this.escaper = escaper;
-    }
+    /**
+     * Converts the given shape to an idiomatic name, the name is expected to be usable within java, meaning that reserved words
+     * should be converted into a usable name.
+     *
+     * @param shape The shape to covert.
+     * @param model The model containing the shape.
+     * @return A java name for the given shape.
+     */
+    Name toJavaName(Shape shape, Model model);
 
-    public Name toName(Shape shape, Model model) {
-        var kind = Name.Convention.PASCAL_CASE;
-        var simpleName = shape.getId().getName();
-        if (shape.getType() == ShapeType.MEMBER) {
-            var member = shape.asMemberShape().orElseThrow();
-            var targetShape = model.expectShape(member.getContainer());
-            if (targetShape.getType() == ShapeType.ENUM) {
-                kind = Name.Convention.SCREAM_CASE;
-            } else {
-                kind = Name.Convention.CAMEL_CASE;
-            }
-            simpleName = member.getMemberName();
-        }
-        return Name.of(simpleName, kind);
-    }
-
-    public Name toJavaName(Shape shape, Model model) {
-        return escape(toName(shape, model), shape);
-    }
-
-    public String toJavaPackage(Shape shape) {
-        if (packageOverride != null) {
-            return packageOverride;
-        }
-        return shape.getId().getNamespace();
-    }
-
-    private Name escape(Name name, Shape shape) {
-        return escaper.escape(name, shape);
-    }
+    /**
+     * Returns the configured java package for the given shape.
+     *
+     * @param shape The shape to get the package for.
+     * @return A java package for the given shape.
+     */
+    String toJavaPackage(Shape shape);
 }

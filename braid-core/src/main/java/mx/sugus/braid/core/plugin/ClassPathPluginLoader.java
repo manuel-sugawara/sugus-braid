@@ -14,9 +14,9 @@ public final class ClassPathPluginLoader implements PluginLoader {
 
     @Override
     public LoadResult loadPlugins(Set<Identifier> ids) {
-        var plugins = new HashMap<Identifier, SmithyGeneratorPlugin>();
+        var plugins = new HashMap<Identifier, SmithyGeneratorPlugin<?>>();
         for (Identifier identifier : ids) {
-            SmithyGeneratorPlugin plugin = tryLoadPlugin(identifier);
+            SmithyGeneratorPlugin<?> plugin = tryLoadPlugin(identifier);
             if (plugin != null) {
                 plugins.put(plugin.provides(), plugin);
             }
@@ -30,7 +30,7 @@ public final class ClassPathPluginLoader implements PluginLoader {
         return new LoadResult(unresolved, plugins);
     }
 
-    private SmithyGeneratorPlugin tryLoadPlugin(Identifier value) {
+    private SmithyGeneratorPlugin<?> tryLoadPlugin(Identifier value) {
         var className = value.namespace() + "." + value.name();
         Class<?> clazz = tryLoad(className);
         if (clazz == null) {
@@ -43,7 +43,7 @@ public final class ClassPathPluginLoader implements PluginLoader {
                                            + SmithyGeneratorPlugin.class.getCanonicalName());
         }
         try {
-            return (SmithyGeneratorPlugin) clazz.getDeclaredConstructor().newInstance();
+            return (SmithyGeneratorPlugin<?>) clazz.getDeclaredConstructor().newInstance();
         } catch (NoSuchMethodException | InstantiationException | IllegalAccessException e) {
             throw new SmithyBuildException("Unable to load plugin with class `"
                                            + className

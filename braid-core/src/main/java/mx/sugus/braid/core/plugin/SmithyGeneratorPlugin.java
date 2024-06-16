@@ -9,8 +9,10 @@ import software.amazon.smithy.model.node.ObjectNode;
  * {@code smithy-build.json} file. Plugins can declare that depend on others and therefore the required plugins are also loaded
  * and initialized <em>before</em> it. Plugins contribute to the {@link CodegenModuleConfig} to produce create a new one with its
  * elements added to it.
+ *
+ * @param <C> The configuration type.
  */
-public interface SmithyGeneratorPlugin {
+public interface SmithyGeneratorPlugin<C> {
 
     /**
      * Returns the identifier that identify this plugin.
@@ -29,10 +31,15 @@ public interface SmithyGeneratorPlugin {
     }
 
     /**
+     * Returns the configuration type from the give {@link ObjectNode}.
+     */
+    C fromNode(ObjectNode node);
+
+    /**
      * Returns the plugin configuration settings.
      *
-     * @param node The node with the configured settings for the plugin.
+     * @param config The configuration settings for the node.
      * @return The plugin configuration settings.
      */
-    CodegenModuleConfig moduleConfig(ObjectNode node);
+    CodegenModuleConfig moduleConfig(C config);
 }

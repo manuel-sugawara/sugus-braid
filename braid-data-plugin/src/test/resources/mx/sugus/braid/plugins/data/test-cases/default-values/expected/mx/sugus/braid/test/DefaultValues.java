@@ -16,14 +16,14 @@ public final class DefaultValues {
     private int _hashCode = 0;
 
     private DefaultValues(Builder builder) {
-        this.aBoolean = builder.aBoolean;
-        this.aByte = builder.aByte;
-        this.aShort = builder.aShort;
-        this.anInt = builder.anInt;
-        this.aLong = builder.aLong;
-        this.aFloat = builder.aFloat;
-        this.aDouble = builder.aDouble;
-        this.string = builder.string;
+        this.aBoolean = Objects.requireNonNull(builder.aBoolean, "aBoolean");
+        this.aByte = Objects.requireNonNull(builder.aByte, "aByte");
+        this.aShort = Objects.requireNonNull(builder.aShort, "aShort");
+        this.anInt = Objects.requireNonNull(builder.anInt, "anInt");
+        this.aLong = Objects.requireNonNull(builder.aLong, "aLong");
+        this.aFloat = Objects.requireNonNull(builder.aFloat, "aFloat");
+        this.aDouble = Objects.requireNonNull(builder.aDouble, "aDouble");
+        this.string = Objects.requireNonNull(builder.string, "string");
     }
 
     public Boolean aBoolean() {
@@ -74,28 +74,28 @@ public final class DefaultValues {
             return false;
         }
         DefaultValues that = (DefaultValues) obj;
-        return Objects.equals(this.aBoolean, that.aBoolean)
-            && Objects.equals(this.aByte, that.aByte)
-            && Objects.equals(this.aShort, that.aShort)
-            && Objects.equals(this.anInt, that.anInt)
-            && Objects.equals(this.aLong, that.aLong)
-            && Objects.equals(this.aFloat, that.aFloat)
-            && Objects.equals(this.aDouble, that.aDouble)
-            && Objects.equals(this.string, that.string);
+        return this.aBoolean.equals(that.aBoolean)
+            && this.aByte.equals(that.aByte)
+            && this.aShort.equals(that.aShort)
+            && this.anInt.equals(that.anInt)
+            && this.aLong.equals(that.aLong)
+            && this.aFloat.equals(that.aFloat)
+            && this.aDouble.equals(that.aDouble)
+            && this.string.equals(that.string);
     }
 
     @Override
     public int hashCode() {
         if (_hashCode == 0) {
             int hashCode = 17;
-            hashCode = 31 * hashCode + (aBoolean != null ? aBoolean.hashCode() : 0);
-            hashCode = 31 * hashCode + (aByte != null ? aByte.hashCode() : 0);
-            hashCode = 31 * hashCode + (aShort != null ? aShort.hashCode() : 0);
-            hashCode = 31 * hashCode + (anInt != null ? anInt.hashCode() : 0);
-            hashCode = 31 * hashCode + (aLong != null ? aLong.hashCode() : 0);
-            hashCode = 31 * hashCode + (aFloat != null ? aFloat.hashCode() : 0);
-            hashCode = 31 * hashCode + (aDouble != null ? aDouble.hashCode() : 0);
-            hashCode = 31 * hashCode + (string != null ? string.hashCode() : 0);
+            hashCode = 31 * hashCode + aBoolean.hashCode();
+            hashCode = 31 * hashCode + aByte.hashCode();
+            hashCode = 31 * hashCode + aShort.hashCode();
+            hashCode = 31 * hashCode + anInt.hashCode();
+            hashCode = 31 * hashCode + aLong.hashCode();
+            hashCode = 31 * hashCode + aFloat.hashCode();
+            hashCode = 31 * hashCode + aDouble.hashCode();
+            hashCode = 31 * hashCode + string.hashCode();
             _hashCode = hashCode;
         }
         return _hashCode;
