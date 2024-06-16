@@ -113,6 +113,14 @@ public final class CaseClause implements SyntaxNode {
             return this;
         }
 
+        /**
+         * <p>Sets the value for <code>body</code></p>
+         */
+        public Builder body(Block body) {
+            this.body.setPersistent(body);
+            return this;
+        }
+
         public Builder addStatement(String format, Object... args) {
             this.body.asTransient().addStatement(format, args);
             return this;
@@ -155,14 +163,6 @@ public final class CaseClause implements SyntaxNode {
 
         public Builder endControlFlow() {
             this.body.asTransient().endControlFlow();
-            return this;
-        }
-
-        /**
-         * <p>Sets the value for <code>body</code></p>
-         */
-        public Builder body(Block body) {
-            this.body.setPersistent(body);
             return this;
         }
 

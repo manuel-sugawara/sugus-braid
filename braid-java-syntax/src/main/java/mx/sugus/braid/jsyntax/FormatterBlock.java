@@ -80,6 +80,14 @@ public final class FormatterBlock implements FormatterNode {
             return this;
         }
 
+        /**
+         * <p>Sets the value for <code>value</code></p>
+         */
+        public Builder value(Block value) {
+            this.value.setPersistent(value);
+            return this;
+        }
+
         public Builder addStatement(String format, Object... args) {
             this.value.asTransient().addStatement(format, args);
             return this;
@@ -122,14 +130,6 @@ public final class FormatterBlock implements FormatterNode {
 
         public Builder endControlFlow() {
             this.value.asTransient().endControlFlow();
-            return this;
-        }
-
-        /**
-         * <p>Sets the value for <code>value</code></p>
-         */
-        public Builder value(Block value) {
-            this.value.setPersistent(value);
             return this;
         }
 
