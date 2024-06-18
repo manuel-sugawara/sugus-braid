@@ -95,67 +95,69 @@ VerifyError
 VirtualMachineError
 Void
 
-# Additional common classes in the java.util package
-AbstractCollection
-AbstractList
-AbstractMap
-AbstractQueue
-AbstractSequentialList
-AbstractSet
-ArrayDeque
-ArrayList
-Arrays
-Base64
-BitSet
-Calendar
-Collections
-Currency
-Date
-Dictionary
-DoubleSummaryStatistics
-EnumMap
-EnumSet
-EventListenerProxy
-EventObject
-FormattableFlags
-Formatter
-GregorianCalendar
-HashMap
-HashSet
-Hashtable
-IdentityHashMap
-IntSummaryStatistics
-LinkedHashMap
-LinkedHashSet
-LinkedList
-ListResourceBundle
-Locale
-LongSummaryStatistics
-Objects
-Observable
-Optional
-OptionalDouble
-OptionalInt
-OptionalLong
-PriorityQueue
-Properties
-PropertyPermission
-PropertyResourceBundle
-Random
-ResourceBundle
-Scanner
-ServiceLoader
-SimpleTimeZone
-Spliterators
-SplittableRandom
-Stack
-StringJoiner
-StringTokenizer
-TimeZone
-Timer
-TimerTask
-TreeMap
-TreeSet
-UUID
-Vector
-WeakHashMap
+# # Additional common classes in the java.util package, uncomment to also escape them
+# # It's probable that escaping those as well might lead to a more usable API,
+# # commented for now.
+# AbstractCollection
+# AbstractList
+# AbstractMap
+# AbstractQueue
+# AbstractSequentialList
+# AbstractSet
+# ArrayDeque
+# ArrayList
+# Arrays
+# Base64
+# BitSet
+# Calendar
+# Collections
+# Currency
+# Date
+# Dictionary
+# DoubleSummaryStatistics
+# EnumMap
+# EnumSet
+# EventListenerProxy
+# EventObject
+# FormattableFlags
+# Formatter
+# GregorianCalendar
+# HashMap
+# HashSet
+# Hashtable
+# IdentityHashMap
+# IntSummaryStatistics
+# LinkedHashMap
+# LinkedHashSet
+# LinkedList
+# ListResourceBundle
+# Locale
+# LongSummaryStatistics
+# Objects
+# Observable
+# Optional
+# OptionalDouble
+# OptionalInt
+# OptionalLong
+# PriorityQueue
+# Properties
+# PropertyPermission
+# PropertyResourceBundle
+# Random
+# ResourceBundle
+# Scanner
+# ServiceLoader
+# SimpleTimeZone
+# Spliterators
+# SplittableRandom
+# Stack
+# StringJoiner
+# StringTokenizer
+# TimeZone
+# Timer
+# TimerTask
+# TreeMap
+# TreeSet
+# UUID
+# Vector
+# WeakHashMap

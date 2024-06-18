@@ -161,10 +161,6 @@ public final class ImportableNames {
             return simpleNames;
         }
 
-        public String containingPackage() {
-            return containingPackage;
-        }
-
         public boolean tryImportSymbol(ClassName className) {
             var candidate = normalize(className);
             var existing = simpleNames.get(candidate.name());
@@ -193,9 +189,11 @@ public final class ImportableNames {
             // to be imported and package.Class.Inner can be called Inner inside Class.
             // Should be OK given that we will prefer avoiding imports in the same package
             if (from.packageName() == null) {
-                return from.toBuilder().packageName(containingPackage).build();
+                from = from.toBuilder().packageName(containingPackage).build();
             }
-            return from;
+
+            // Take the top-level name, avoid adding imports for inner classes.
+            return ClassName.toEnclosing(from);
         }
 
         private boolean shouldReplace(ClassName existing, ClassName candidate) {
@@ -213,6 +211,5 @@ public final class ImportableNames {
             }
             return HIGHER_PRIORITY.contains(candidate.packageName());
         }
-
     }
 }

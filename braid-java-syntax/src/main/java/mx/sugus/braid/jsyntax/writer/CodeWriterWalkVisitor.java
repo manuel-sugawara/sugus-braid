@@ -544,15 +544,24 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
     }
 
     private boolean isClassImported(ClassName node) {
-        var imported = simpleNames.get(node.name());
+        var enclosing = ClassName.toEnclosing(node);
+        var imported = simpleNames.get(enclosing.name());
         if (imported != null) {
-            if (node.equals(imported)) {
+            if (enclosing.equals(imported)) {
                 return true;
             }
-            return node.packageName() == null;
+            return enclosing.packageName() == null;
         }
         return false;
     }
+
+    private static String toString(ClassName className) {
+        if (className.packageName() == null) {
+            return "#" + className.name();
+        }
+        return className.packageName() + "#" + className.name();
+    }
+
 
     private boolean isJavaObject(TypeName upper) {
         return upper.equals(TypeNameExt.OBJECT);
