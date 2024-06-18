@@ -16,6 +16,7 @@ import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -36,9 +39,12 @@ import software.amazon.smithy.model.Model;
 
 public class DataPluginTest {
 
+    private static final Predicate<String> NOT_COMMENT = Predicate.not(Pattern.compile("^ *//.*$").asMatchPredicate());
+
     @ParameterizedTest(name = "[{index}] => {0}")
     @MethodSource("testCases")
     public void runTestCase(TestCase test) {
+
         test.builder.build();
         var got = test.manifests.stream().flatMap(x -> x.getFiles().stream()).collect(Collectors.toSet());
         for (var expected : test.expectedToContents.keySet()) {
@@ -46,7 +52,7 @@ public class DataPluginTest {
             assertNotNull(found);
             var contents = findGotContent(found, test);
             assertTrue(contents.isPresent());
-            assertEquals(test.expectedToContents.get(expected), contents.get());
+            assertEquals(test.expectedToContents.get(expected), contents.get().trim());
         }
     }
 
@@ -141,12 +147,22 @@ public class DataPluginTest {
             for (var path : paths) {
                 var relative = path.toString().replace(prefix, "");
                 var contents = Files.readString(path);
-                result.put(relative, contents);
+                result.put(relative, removeSingleLineComments(contents));
             }
         } catch (IOException e) {
             throw new UncheckedIOException(e);
         }
         return result;
+    }
+
+    /**
+     * Removes single line comments that can be added to the expected class to annotate specific behavior.
+     */
+    private static String removeSingleLineComments(String contents) {
+        return Arrays.asList(contents.split("\\n")).stream()
+                     .filter(NOT_COMMENT)
+                     .collect(Collectors.joining("\n"))
+                     .trim();
     }
 
     static TestCaseBuilder builder() {

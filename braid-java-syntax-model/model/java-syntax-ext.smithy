@@ -383,10 +383,32 @@ apply ClassName @fromFactories([
         ]
     }
     {
+        name: "toEnclosing"
+        javadoc: """
+            Returns the top level enclosing class name if this class name represents an inner class,
+            otherwise returns this className unchanged.
+            """
+        args: [
+            {
+                type: "ClassName"
+                name: "className"
+            }
+        ]
+        body: [
+            """
+            String name = className.name();
+            int indexOfDot = name.indexOf('.');
+            if (indexOfDot == -1) {
+                return className;
+            }
+            return className.toBuilder().name(name.substring(0, indexOfDot)).build()"""
+        ]
+    }
+    {
         name: "toClassName"
         javadoc: """
             Returns the type name as class name. If the given type name is a parametrized type name it
-            returns its base class, if this is an array type, the compoonent class.
+            returns its base class, if this is an array type, the component class.
             """
         args: [
             {
