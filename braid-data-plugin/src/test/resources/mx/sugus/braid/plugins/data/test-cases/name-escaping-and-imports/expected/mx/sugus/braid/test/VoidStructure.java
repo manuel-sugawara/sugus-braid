@@ -1,9 +1,9 @@
 package mx.sugus.braid.test;
 
+import java.util.Objects;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
-// NOTE: Void is "reserved" (as in the java.lang package) and thus it gets escaped.
 public final class VoidStructure {
     private final EnumStructure anEnum;
 
@@ -31,7 +31,7 @@ public final class VoidStructure {
             return false;
         }
         VoidStructure that = (VoidStructure) obj;
-        return java.util.Objects.equals(this.anEnum, that.anEnum);
+        return Objects.equals(this.anEnum, that.anEnum);
     }
 
     @Override

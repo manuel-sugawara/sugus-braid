@@ -21,7 +21,7 @@ public final class CodeRenderer {
      * @return The rendered string of the syntax
      */
     public static String render(SyntaxNode node) {
-        var simpleNames = new ImportableNames().importableNames("", node, Collections.emptyMap());
+        var simpleNames = new ImportableNames().importableNames("", node);
         var stringWriter = new StringWriter();
         var codeWriter = new CodeWriter(stringWriter);
         var visitor = new CodeWriterWalkVisitor(codeWriter, "", simpleNames);
@@ -35,12 +35,11 @@ public final class CodeRenderer {
      * when it can be imported.
      *
      * @param containingPackage    The name of the package
-     * @param packageImplicitNames A mapping between simple names and class names defined in the package
      * @param node                 The syntax node to render.
      * @return The rendered string of the syntax
      */
-    public static String render(String containingPackage, Map<String, ClassName> packageImplicitNames, SyntaxNode node) {
-        var simpleNames = new ImportableNames().importableNames(containingPackage, node, packageImplicitNames);
+    public static String render(String containingPackage, SyntaxNode node) {
+        var simpleNames = new ImportableNames().importableNames(containingPackage, node);
         var stringWriter = new StringWriter();
         var codeWriter = new CodeWriter(stringWriter);
         var visitor = new CodeWriterWalkVisitor(codeWriter, containingPackage, simpleNames);

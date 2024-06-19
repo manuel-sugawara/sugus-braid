@@ -30,7 +30,6 @@ public final class Objects {
             return false;
         }
         Objects that = (Objects) obj;
-        // NOTE: cannot import java.util.Objects as it will clash with this class name.
         return java.util.Objects.equals(this.object, that.object);
     }
 

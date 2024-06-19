@@ -1,16 +1,12 @@
 package mx.sugus.braid.core;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.logging.Logger;
 import mx.sugus.braid.core.plugin.CodegenModule;
-import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.NonShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
-import mx.sugus.braid.traits.CodegenIgnoreTrait;
 import software.amazon.smithy.build.FileManifest;
 import software.amazon.smithy.codegen.core.SymbolProvider;
 import software.amazon.smithy.model.Model;
@@ -33,28 +29,14 @@ public final class BraidCodegenDirector {
     }
 
     public void execute() {
-        LOG.fine("Begin model preparation for codegen");
         var sortedShapes = selectedShapes();
-        var properties = new HashMap<Identifier, Object>();
-        LOG.fine("Running shape reducers");
-        for (var reducer : module.shapeReducers()) {
-            var init = reducer.init();
-            for (var shape : sortedShapes) {
-                if (shape.hasTrait(CodegenIgnoreTrait.class)) {
-                    continue;
-                }
-                var javaShapeState = stateForShape(shape);
-                init.consume(javaShapeState);
-            }
-            properties.put(reducer.taskId(), init.finalizeJob());
-        }
         LOG.fine("Beginning shape codegen");
         for (var shape : sortedShapes) {
-            var javaShapeState = stateForShape(shape, properties);
+            var javaShapeState = stateForShape(shape);
             module.generateShape(javaShapeState);
         }
         LOG.fine("Beginning non-shape codegen");
-        var nonShapeState = stateFor(properties);
+        var nonShapeState = stateFor();
         module.generateNonShape(nonShapeState);
     }
 
@@ -74,27 +56,13 @@ public final class BraidCodegenDirector {
             .build();
     }
 
-    private ShapeCodegenState stateForShape(Shape shape, Map<Identifier, Object> properties) {
-        return ShapeCodegenState
-            .builder()
-            .model(model)
-            .shape(shape)
-            .symbolProvider(symbolProvider)
-            .fileManifest(fileManifest)
-            .settings(settings)
-            .properties(properties)
-            .dependencies(module.dependencies())
-            .build();
-    }
-
-    private NonShapeCodegenState stateFor(Map<Identifier, Object> properties) {
+    private NonShapeCodegenState stateFor() {
         return NonShapeCodegenState
             .builder()
             .model(model)
             .symbolProvider(symbolProvider)
             .fileManifest(fileManifest)
             .settings(settings)
-            .properties(properties)
             .dependencies(module.dependencies())
             .build();
     }

@@ -47,7 +47,6 @@ public final class JavaSyntaxPlugin implements SmithyGeneratorPlugin<ObjectNode>
         return CodegenModuleConfig
             .builder()
             .addConsumer(SERIALIZER)
-            .addShapeReducer(PACKAGE_IMPLICIT_NAMES_REDUCER)
             .build();
     }
 
@@ -67,13 +66,11 @@ public final class JavaSyntaxPlugin implements SmithyGeneratorPlugin<ObjectNode>
         @Override
         public void consume(TypeSyntaxResult result, CodegenState state) {
             @SuppressWarnings("unchecked")
-            var packageImplicitNames =
-                (Map<String, ClassName>) state.properties().get(PackageImplicitNamesReducer.ID);
             var syntax = result.syntax();
             if (syntax != null) {
                 var file = syntax.packageName().replace(".", "/") + "/" + result.syntax().type().name() + ".java";
                 state.fileManifest()
-                     .writeFile(file, CodeRenderer.render(syntax.packageName(), packageImplicitNames, result.syntax()));
+                     .writeFile(file, CodeRenderer.render(syntax.packageName(), result.syntax()));
             }
         }
     }

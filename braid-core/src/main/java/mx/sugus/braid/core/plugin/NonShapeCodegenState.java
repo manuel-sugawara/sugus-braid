@@ -1,6 +1,5 @@
 package mx.sugus.braid.core.plugin;
 
-import java.util.Map;
 import java.util.Objects;
 import mx.sugus.braid.core.BrideCodegenSettings;
 import software.amazon.smithy.build.FileManifest;
@@ -15,7 +14,6 @@ public final class NonShapeCodegenState implements CodegenState {
     private final SymbolProvider symbolProvider;
     private final BrideCodegenSettings settings;
     private final FileManifest fileManifest;
-    private final Map<Identifier, Object> properties;
     private final Dependencies dependencies;
 
     NonShapeCodegenState(Builder builder) {
@@ -23,7 +21,6 @@ public final class NonShapeCodegenState implements CodegenState {
         this.symbolProvider = Objects.requireNonNull(builder.symbolProvider, "symbolProvider");
         this.settings = Objects.requireNonNull(builder.settings, "settings");
         this.fileManifest = Objects.requireNonNull(builder.fileManifest, "fileManifest");
-        this.properties = Objects.requireNonNull(builder.properties, "properties");
         this.dependencies = Objects.requireNonNull(builder.dependencies, "dependencies");
     }
 
@@ -48,11 +45,6 @@ public final class NonShapeCodegenState implements CodegenState {
     }
 
     @Override
-    public Map<Identifier, Object> properties() {
-        return properties;
-    }
-
-    @Override
     public Dependencies dependencies() {
         return dependencies;
     }
@@ -66,7 +58,6 @@ public final class NonShapeCodegenState implements CodegenState {
         private SymbolProvider symbolProvider;
         private BrideCodegenSettings settings;
         private FileManifest fileManifest;
-        private Map<Identifier, Object> properties = Map.of();
         private Dependencies dependencies;
 
         public Builder model(Model model) {
@@ -86,11 +77,6 @@ public final class NonShapeCodegenState implements CodegenState {
 
         public Builder settings(BrideCodegenSettings settings) {
             this.settings = settings;
-            return this;
-        }
-
-        public Builder properties(Map<Identifier, Object> properties) {
-            this.properties = Map.copyOf(properties);
             return this;
         }
 

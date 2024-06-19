@@ -49,9 +49,9 @@ public final class DependencyKey<T> {
     /**
      * Creates a new dependency key with the given name
      *
-     * @param name Name for the dependency
+     * @param name              Name for the dependency
      * @param computeDependency A supplier for the default value
-     * @param <T>  the type of the dependency
+     * @param <T>               the type of the dependency
      * @return a new property with the given name
      */
     public static <T> DependencyKey<T> from(String name, Function<Dependencies, T> computeDependency) {
