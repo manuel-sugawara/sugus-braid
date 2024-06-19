@@ -1,11 +1,10 @@
 package mx.sugus.braid.test;
 
+import java.util.Objects;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
-// NOTE: Enum is "reserved" (as in the java.lang package) and thus it gets escaped.
 public final class EnumStructure {
-    // NOTE: int is reserved, thus it gets escaped
     private final Integer anInt;
     private final String aVoid;
 
@@ -38,8 +37,8 @@ public final class EnumStructure {
             return false;
         }
         EnumStructure that = (EnumStructure) obj;
-        return java.util.Objects.equals(this.anInt, that.anInt)
-            && java.util.Objects.equals(this.aVoid, that.aVoid);
+        return Objects.equals(this.anInt, that.anInt)
+            && Objects.equals(this.aVoid, that.aVoid);
     }
 
     @Override

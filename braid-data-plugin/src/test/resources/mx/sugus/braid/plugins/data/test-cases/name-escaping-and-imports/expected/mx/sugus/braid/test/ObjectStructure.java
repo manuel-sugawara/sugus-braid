@@ -1,9 +1,9 @@
 package mx.sugus.braid.test;
 
+import java.util.Objects;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
-// NOTE: Object is "reserved" (as in the java.lang package) and thus it gets escaped.
 public final class ObjectStructure {
     private final String object;
 
@@ -31,7 +31,7 @@ public final class ObjectStructure {
             return false;
         }
         ObjectStructure that = (ObjectStructure) obj;
-        return java.util.Objects.equals(this.object, that.object);
+        return Objects.equals(this.object, that.object);
     }
 
     @Override

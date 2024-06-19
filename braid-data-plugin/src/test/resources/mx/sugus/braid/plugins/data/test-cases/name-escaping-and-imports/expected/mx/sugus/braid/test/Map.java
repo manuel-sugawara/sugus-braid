@@ -1,5 +1,6 @@
 package mx.sugus.braid.test;
 
+import java.util.Objects;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
@@ -30,7 +31,7 @@ public final class Map {
             return false;
         }
         Map that = (Map) obj;
-        return java.util.Objects.equals(this.member, that.member);
+        return Objects.equals(this.member, that.member);
     }
 
     @Override

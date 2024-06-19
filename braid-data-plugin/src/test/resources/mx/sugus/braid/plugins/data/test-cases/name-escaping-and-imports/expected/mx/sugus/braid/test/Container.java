@@ -7,8 +7,6 @@ import mx.sugus.braid.rt.util.annotations.Generated;
 public final class Container {
     private final List list;
     private final String aConst;
-    // NOTE: List and Map are not imported since we have in the same
-    // package clases named List and Map
     private final java.util.List<List> listOfLists;
     private final java.util.Map<String, Map> mapOfMaps;
     private final ObjectStructure object;

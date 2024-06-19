@@ -34,14 +34,14 @@ public final class DataPluginDependencies {
     public static final DependencyKey<ReservedWordsEscaper> RESERVED_WORDS_ESCAPER =
         DependencyKey.from("java-name->escaped-java-name", DataPluginDependencies::defaultReservedWordsEscaper);
     /**
+     * The config instance for this plugin
+     */
+    public static final DependencyKey<DataPluginConfig> DATA_PLUGIN_CONFIG = DependencyKey.from("data-plugin-config");
+    /**
      * The class to convert shapes to java names.
      */
     public static final DependencyKey<ShapeToJavaName> SHAPE_TO_JAVA_NAME =
         DependencyKey.from("shape->java-name", DataPluginDependencies::defaultShapeToJavaName);
-    /**
-     * The config instance for this plugin
-     */
-    public static final DependencyKey<DataPluginConfig> DATA_PLUGIN_CONFIG = DependencyKey.from("data-plugin-config");
     /**
      * The class to create nullability indexes.
      */

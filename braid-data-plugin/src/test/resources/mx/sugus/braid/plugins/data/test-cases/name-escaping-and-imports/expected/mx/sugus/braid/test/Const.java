@@ -1,9 +1,9 @@
 package mx.sugus.braid.test;
 
+import java.util.Objects;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
-// NOTE: const is reserved, Const is not
 public final class Const {
     private final String aConst;
 
@@ -31,7 +31,7 @@ public final class Const {
             return false;
         }
         Const that = (Const) obj;
-        return java.util.Objects.equals(this.aConst, that.aConst);
+        return Objects.equals(this.aConst, that.aConst);
     }
 
     @Override

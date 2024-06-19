@@ -26,23 +26,18 @@ public final class ImportableNames {
     private CodegenImportContainer importContainer;
 
     public Map<String, ClassName> importableNames(CompilationUnit unit) {
-        return importableNames(unit.packageName(), unit, Map.of());
-    }
-
-    public Map<String, ClassName> importableNames(CompilationUnit unit, Map<String, ClassName> implicitPackageNames) {
-        return importableNames(unit.packageName(), unit, implicitPackageNames);
+        return importableNames(unit.packageName(), unit);
     }
 
     public Map<String, ClassName> importableNames(
         String containingPackage,
-        SyntaxNode node,
-        Map<String, ClassName> implicitPackageNames
+        SyntaxNode node
     ) {
         Set<ClassName> imports = Collections.emptySet();
         if (node instanceof CompilationUnit cu) {
             imports = cu.imports();
         }
-        importContainer = new CodegenImportContainer(containingPackage, implicitPackageNames, imports);
+        importContainer = new CodegenImportContainer(containingPackage, imports);
         node.accept(new CodegenPrepareImports(importContainer));
         return Collections.unmodifiableMap(importContainer.simpleNames());
     }
@@ -147,14 +142,12 @@ public final class ImportableNames {
 
         CodegenImportContainer(
             String containingPackage,
-            Map<String, ClassName> implicitPackageNames,
             Set<ClassName> givenImports
         ) {
             this.containingPackage = containingPackage;
             for (var className : givenImports) {
                 simpleNames.put(className.name(), className);
             }
-            simpleNames.putAll(implicitPackageNames);
         }
 
         public Map<String, ClassName> simpleNames() {

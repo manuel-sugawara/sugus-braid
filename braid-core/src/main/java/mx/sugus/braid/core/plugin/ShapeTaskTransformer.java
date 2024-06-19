@@ -25,8 +25,8 @@ public interface ShapeTaskTransformer<T> {
     /**
      * Transforms the give result and returns the transformed instance.
      *
-     * @param result      The result to transform.
-     * @param state The state containing all the data needed for the transformer.
+     * @param result The result to transform.
+     * @param state  The state containing all the data needed for the transformer.
      * @return The transformed result.
      */
     T transform(T result, ShapeCodegenState state);
