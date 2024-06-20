@@ -110,9 +110,10 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
                 addValue(state, member, body, override.getBody());
                 body.addStatement("return this");
             });
-            var javadoc = coalesce(override.getJavadoc(), () -> "Adds to `" + name + "` building the value using the given "
+            var javadoc = coalesce(override.getJavadoc(),
+                                   () -> "Adds to `" + name + "` building the value using the given "
                                                                 + "arguments");
-            overrideBuilder.javadoc("$L", JavadocExt.document(javadoc));
+            overrideBuilder.javadoc(JavadocExt.document(javadoc));
             methods.add(overrideBuilder.build());
         }
     }
@@ -141,7 +142,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
             });
             var javadoc = coalesce(override.getJavadoc(), () -> "Adds to `" + name + "` building the value using the given "
                                                                 + "arguments");
-            overrideBuilder.javadoc("$L", JavadocExt.document(javadoc));
+            overrideBuilder.javadoc(JavadocExt.document(javadoc));
             methods.add(overrideBuilder.build());
         }
     }
@@ -166,7 +167,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
             });
             var javadoc = coalesce(override.getJavadoc(), () -> "Adds to `" + name + "` building the values using the given "
                                                                 + "arguments");
-            overrideBuilder.javadoc("$L", JavadocExt.document(javadoc));
+            overrideBuilder.javadoc(JavadocExt.document(javadoc));
             methods.add(overrideBuilder.build());
         }
     }
@@ -177,9 +178,6 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
         MemberShape member,
         MultiAddOverridesTrait multiAddOverrides
     ) {
-        if (multiAddOverrides == null) {
-            return;
-        }
         var name = Utils.toJavaName(state, member);
         for (var override : multiAddOverrides.getValues()) {
             var adderName = coalesce(override.getName(),
@@ -193,7 +191,7 @@ public final class BuilderAdderOverridesTransform implements ShapeTaskTransforme
                 body.addStatement("return this");
             });
             var javadoc = coalesce(override.getJavadoc(), () -> "Adds the given values to `" + name + "`");
-            overrideBuilder.javadoc("$L", JavadocExt.document(javadoc));
+            overrideBuilder.javadoc(JavadocExt.document(javadoc));
             methods.add(overrideBuilder.build());
         }
     }

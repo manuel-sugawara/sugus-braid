@@ -76,7 +76,7 @@ public class DataPluginTest {
     }
 
     private static List<TestCase> addTestCasesFromUrl(URL url) {
-        if (!url.getProtocol().equals("file")) {
+        if (!"file".equals(url.getProtocol())) {
             throw new IllegalArgumentException("Only file URLs are supported: " + url);
         }
         try {
@@ -136,7 +136,6 @@ public class DataPluginTest {
             .builder(builder)
             .manifests(manifests)
             .expectedToContents(expectedToContents)
-            .expected(javaFiles)
             .build();
     }
 
@@ -174,14 +173,12 @@ public class DataPluginTest {
         private final SmithyBuild builder;
         private final List<MockManifest> manifests;
         private final Map<String, String> expectedToContents;
-        private final List<Path> expected;
 
         TestCase(TestCaseBuilder builder) {
             this.name = Objects.requireNonNull(builder.name, "name");
             this.builder = Objects.requireNonNull(builder.builder, "builder");
             this.manifests = Objects.requireNonNull(builder.manifests, "manifest");
             this.expectedToContents = Objects.requireNonNull(builder.expectedToContents, "expectedToContents");
-            this.expected = Objects.requireNonNull(builder.expected, "expected");
         }
 
         @Override
@@ -194,16 +191,10 @@ public class DataPluginTest {
         private String name;
         private SmithyBuild builder;
         private List<MockManifest> manifests;
-        private List<Path> expected;
         private Map<String, String> expectedToContents;
 
         public TestCaseBuilder name(String name) {
             this.name = name;
-            return this;
-        }
-
-        public TestCaseBuilder expected(List<Path> expected) {
-            this.expected = expected;
             return this;
         }
 
