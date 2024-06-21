@@ -25,9 +25,9 @@ public final class MemberValue {
      * <p>An expression member, equivalent to the <code>ConditionalExpression</code> production
      * in the java spec.</p>
      */
-    public CodeBlock expression() {
+    public Expression expression() {
         if (this.type == Type.EXPRESSION) {
-            return (CodeBlock) this.value;
+            return (Expression) this.value;
         }
         throw new NoSuchElementException("Union element `expression` not set, currently set `" + this.type + "`");
     }
@@ -36,9 +36,9 @@ public final class MemberValue {
      * <p>An array initializer member, equivalent to the <code>ElementValueArrayInitializer</code>
      * production in the java spec.</p>
      */
-    public List<CodeBlock> arrayExpression() {
+    public List<Expression> arrayExpression() {
         if (this.type == Type.ARRAY_EXPRESSION) {
-            return (List<CodeBlock>) this.value;
+            return (List<Expression>) this.value;
         }
         throw new NoSuchElementException("Union element `arrayExpression` not set, currently set `" + this.type + "`");
     }
@@ -168,20 +168,20 @@ public final class MemberValue {
          * <p>An expression member, equivalent to the <code>ConditionalExpression</code> production
          * in the java spec.</p>
          */
-        public Builder expression(CodeBlock expression) {
+        public Builder expression(Expression expression) {
             this.type = Type.EXPRESSION;
             this.value = expression;
             return this;
         }
 
-        private CollectionBuilderReference<List<CodeBlock>> arrayExpression() {
+        private CollectionBuilderReference<List<Expression>> arrayExpression() {
             if (this.type != Type.ARRAY_EXPRESSION) {
                 this.type = Type.ARRAY_EXPRESSION;
-                CollectionBuilderReference<List<CodeBlock>> arrayExpression = CollectionBuilderReference.forList();
+                CollectionBuilderReference<List<Expression>> arrayExpression = CollectionBuilderReference.forList();
                 this.value = arrayExpression;
                 return arrayExpression;
             } else {
-                return (CollectionBuilderReference<List<CodeBlock>>) this.value;
+                return (CollectionBuilderReference<List<Expression>>) this.value;
             }
         }
 
@@ -190,8 +190,8 @@ public final class MemberValue {
          * <p>An array initializer member, equivalent to the <code>ElementValueArrayInitializer</code>
          * production in the java spec.</p>
          */
-        public Builder arrayExpression(List<CodeBlock> arrayExpression) {
-            CollectionBuilderReference<List<CodeBlock>> tmp = arrayExpression();
+        public Builder arrayExpression(List<Expression> arrayExpression) {
+            CollectionBuilderReference<List<Expression>> tmp = arrayExpression();
             tmp.clear();
             tmp.asTransient().addAll(arrayExpression);
             return this;
@@ -200,7 +200,7 @@ public final class MemberValue {
         /**
          * <p>Adds a single value for <code>arrayExpression</code></p>
          */
-        public Builder addArrayExpression(CodeBlock arrayExpression) {
+        public Builder addArrayExpression(Expression arrayExpression) {
             arrayExpression().asTransient().add(arrayExpression);
             return this;
         }

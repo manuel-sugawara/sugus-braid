@@ -176,6 +176,30 @@ apply Annotation @newBuilderOverrides([
     }
 ])
 
+apply Annotation @fromFactories([
+    {
+        javadoc: """
+        Creates a new annotation with a single string member value.
+        """
+        name: "fromStringValue"
+        args: [
+            {
+                type: "java.lang#Class<?>"
+                name: "kclass"
+            }
+            {
+                type: "String"
+                name: "value"
+            }
+        ]
+        body: ["""
+        return builder().type(ClassName.from(kclass))
+            .putMember("value", MemberValue.forExpression(CodeBlock.from("$$S", value)))
+            .build()
+        """]
+    }
+])
+
 apply AnnotationList @adderOverrides([
     {
         args: [
@@ -197,8 +221,7 @@ apply AnnotationList @adderOverrides([
     }
 ])
 
-// Consider adding this by default without having to manually configure
-// it for all union shapes.
+// TODO: Consider adding this by default without having to manually configure it for all union shapes.
 apply MemberValue @fromFactories([
     {
         javadoc: "Creates a new `MemberValue` for the expression variant"

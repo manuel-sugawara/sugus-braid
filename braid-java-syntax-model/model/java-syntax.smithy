@@ -230,8 +230,8 @@ list ModifierList {
     member: Modifier
 }
 
-list CodeBlockList {
-    member: CodeBlock
+list ExpressionList {
+    member: Expression
 }
 
 /// Possible values for an annotation member, either an expression or
@@ -240,10 +240,10 @@ list CodeBlockList {
 union MemberValue {
     /// An expression member, equivalent to the `ConditionalExpression` production
     /// in the java spec.
-    expression: CodeBlock
+    expression: Expression
     /// An array initializer member, equivalent to the `ElementValueArrayInitializer`
     /// production in the java spec.
-    arrayExpression: CodeBlockList
+    arrayExpression: ExpressionList
 }
 
 map MemberMap {
@@ -257,12 +257,6 @@ structure Annotation {
     /// The class for the annotation
     @required
     type: ClassName
-
-    /// A single member name
-    member: String
-
-    /// A single member value
-    value: CodeBlock
 
     /// The members of the annotation
     members: MemberMap

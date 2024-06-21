@@ -26,9 +26,6 @@ import software.amazon.smithy.model.node.ObjectNode;
 
 public final class DataPlugin implements SmithyGeneratorPlugin<DataPluginConfig> {
     public static final Identifier ID = Identifier.of(DataPlugin.class);
-    private static final Annotation GENERATED_BY = Annotation.builder(Generated.class)
-                                                             .value(CodeBlock.from("$S", ID.toString()))
-                                                             .build();
 
     @Override
     public Identifier provides() {
@@ -66,9 +63,5 @@ public final class DataPlugin implements SmithyGeneratorPlugin<DataPluginConfig>
             .addSymbolProviderDecorator(DataSymbolProviderDecorator.get())
             .putDependency(DataPluginDependencies.DATA_PLUGIN_CONFIG, config)
             .build();
-    }
-
-    public static Annotation generatedBy() {
-        return GENERATED_BY;
     }
 }

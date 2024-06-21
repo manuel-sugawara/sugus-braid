@@ -150,12 +150,6 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
     public SyntaxNode visitAnnotation(Annotation node) {
         writer.write("@");
         node.type().accept(this);
-        SyntaxNode value = node.value();
-        if (value != null) {
-            writer.write("(");
-            value.accept(this);
-            writer.write(")");
-        }
         var members = node.members();
         if (members.size() == 1 && members.containsKey("value")) {
             writer.write("(");

@@ -11,15 +11,10 @@ import mx.sugus.braid.rt.util.annotations.Generated;
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class Annotation implements SyntaxNode {
     private final ClassName type;
-    private final String member;
-    private final CodeBlock value;
-    private final Map<String, MemberValue> members;
-    private int _hashCode = 0;
+    private final Map<java.lang.String, MemberValue> members;
 
     private Annotation(Builder builder) {
         this.type = Objects.requireNonNull(builder.type, "type");
-        this.member = builder.member;
-        this.value = builder.value;
         this.members = Objects.requireNonNull(builder.members.asPersistent(), "members");
     }
 
@@ -31,23 +26,9 @@ public final class Annotation implements SyntaxNode {
     }
 
     /**
-     * <p>A single member name</p>
-     */
-    public String member() {
-        return this.member;
-    }
-
-    /**
-     * <p>A single member value</p>
-     */
-    public CodeBlock value() {
-        return this.value;
-    }
-
-    /**
      * <p>The members of the annotation</p>
      */
-    public Map<String, MemberValue> members() {
+    public Map<java.lang.String, MemberValue> members() {
         return this.members;
     }
 
@@ -73,30 +54,21 @@ public final class Annotation implements SyntaxNode {
         }
         Annotation that = (Annotation) obj;
         return this.type.equals(that.type)
-            && Objects.equals(this.member, that.member)
-            && Objects.equals(this.value, that.value)
             && this.members.equals(that.members);
     }
 
     @Override
     public int hashCode() {
-        if (_hashCode == 0) {
-            int hashCode = 17;
-            hashCode = 31 * hashCode + type.hashCode();
-            hashCode = 31 * hashCode + (member != null ? member.hashCode() : 0);
-            hashCode = 31 * hashCode + (value != null ? value.hashCode() : 0);
-            hashCode = 31 * hashCode + members.hashCode();
-            _hashCode = hashCode;
-        }
-        return _hashCode;
+        int hashCode = 17;
+        hashCode = 31 * hashCode + type.hashCode();
+        hashCode = 31 * hashCode + members.hashCode();
+        return hashCode;
     }
 
     @Override
-    public String toString() {
+    public java.lang.String toString() {
         return "Annotation{"
             + "type: " + type
-            + ", member: " + member
-            + ", value: " + value
             + ", members: " + members + "}";
     }
 
@@ -121,11 +93,18 @@ public final class Annotation implements SyntaxNode {
         return builder().type(ClassName.from(kclass));
     }
 
+    /**
+     * <p>Creates a new annotation with a single string member value.</p>
+     */
+    public static Annotation fromStringValue(Class<?> kclass, String value) {
+        return builder().type(ClassName.from(kclass))
+                .putMember("value", MemberValue.forExpression(CodeBlock.from("$S", value)))
+                .build();
+    }
+
     public static final class Builder {
         private ClassName type;
-        private String member;
-        private CodeBlock value;
-        private CollectionBuilderReference<Map<String, MemberValue>> members;
+        private CollectionBuilderReference<Map<java.lang.String, MemberValue>> members;
 
         Builder() {
             this.members = CollectionBuilderReference.forOrderedMap();
@@ -133,8 +112,6 @@ public final class Annotation implements SyntaxNode {
 
         Builder(Annotation data) {
             this.type = data.type;
-            this.member = data.member;
-            this.value = data.value;
             this.members = CollectionBuilderReference.fromPersistentOrderedMap(data.members);
         }
 
@@ -148,34 +125,16 @@ public final class Annotation implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>member</code></p>
-         * <p>A single member name</p>
-         */
-        public Builder member(String member) {
-            this.member = member;
-            return this;
-        }
-
-        /**
-         * <p>Sets the value for <code>value</code></p>
-         * <p>A single member value</p>
-         */
-        public Builder value(CodeBlock value) {
-            this.value = value;
-            return this;
-        }
-
-        /**
          * <p>Sets the value for <code>members</code></p>
          * <p>The members of the annotation</p>
          */
-        public Builder members(Map<String, MemberValue> members) {
+        public Builder members(Map<java.lang.String, MemberValue> members) {
             this.members.clear();
             this.members.asTransient().putAll(members);
             return this;
         }
 
-        public Builder putMember(String key, MemberValue member) {
+        public Builder putMember(java.lang.String key, MemberValue member) {
             this.members.asTransient().put(key, member);
             return this;
         }

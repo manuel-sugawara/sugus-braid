@@ -36,7 +36,7 @@ public final class StructureData implements DirectedClass {
     @Override
     public ClassSyntax.Builder typeSpec(ShapeCodegenState state) {
         var builder = ClassSyntax.builder(state.symbol().getName())
-                                 .addAnnotation(DataPlugin.generatedBy())
+                                 .addAnnotation(Utils.generatedBy(DataPlugin.ID))
                                  .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         var shape = state.shape().asStructureShape().orElseThrow();
         var superInterfaces = ImplementsKnowledgeIndex.of(state.model()).superInterfaces(shape);

@@ -52,9 +52,7 @@ class CodeRendererTest {
                                  .javadoc(JavadocExt.document(
                                      """
                                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do"""))
-                                 .addAnnotation(Annotation.builder(Generated.class)
-                                                          .value(CodeBlock.from("$S", "super-duper"))
-                                                          .build())
+                                 .addAnnotation(Annotation.fromStringValue(Generated.class, "super-duper"))
                                  .addMethod(MethodSyntax.builder("increment")
                                                         .addModifier(Modifier.PUBLIC)
                                                         .returns(void.class)

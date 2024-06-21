@@ -18,6 +18,7 @@ import mx.sugus.braid.jsyntax.EnumSyntax;
 import mx.sugus.braid.jsyntax.FormatterLiteral;
 import mx.sugus.braid.jsyntax.FormatterNode;
 import mx.sugus.braid.jsyntax.InterfaceSyntax;
+import mx.sugus.braid.jsyntax.MemberValue;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.TypeSyntax;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants;
@@ -39,10 +40,12 @@ public final class Utils {
         if (generatedBy == null) {
             generatedBy = generatedBy(id);
         } else {
-            var value = removeBrackets(generatedBy.value());
-            var newValue = CodeBlock.from("{$C, $S}", value, id.toString());
+            var memberValue = generatedBy.members().get("value");
+            memberValue = memberValue.toBuilder()
+                                     .addArrayExpression(CodeBlock.from("$S", id.toString()))
+                                     .build();
             generatedBy = generatedBy.toBuilder()
-                                     .value(newValue)
+                                     .putMember("value", memberValue)
                                      .build();
         }
         return insertOrReplaceGeneratedBy(src, generatedBy);
@@ -50,7 +53,7 @@ public final class Utils {
 
     public static Annotation generatedBy(Identifier id) {
         return Annotation.builder(GENERATED)
-                         .value(CodeBlock.from("$S", id.toString()))
+                         .putMember("value", MemberValue.forArrayExpression(CodeBlock.from("$S", id.toString())))
                          .build();
     }
 
