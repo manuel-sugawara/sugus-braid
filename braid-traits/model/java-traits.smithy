@@ -87,7 +87,7 @@ structure useBuilderReference {
     fromPersistent: String
 }
 
-@trait(selector: "structure")
+@trait(selector: ":is(structure, union)")
 list fromFactories {
     member: BuilderOverride
 }

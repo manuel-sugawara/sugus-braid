@@ -197,6 +197,48 @@ apply AnnotationList @adderOverrides([
     }
 ])
 
+// Consider adding this by default without having to manually configure
+// it for all union shapes.
+apply MemberValue @fromFactories([
+    {
+        javadoc: "Creates a new `MemberValue` for the expression variant"
+        name: "forExpression"
+        args: [
+            {
+                type: "java.lang#String"
+                name: "format"
+            }
+            {
+                type: "java.lang#Object..."
+                name: "args"
+            }
+        ]
+        body: ["return builder().expression(CodeBlock.from(format, args)).build()"]
+    }
+    {
+        javadoc: "Creates a new `MemberValue` for the expression variant"
+        name: "forExpression"
+        args: [
+            {
+                type: "CodeBlock"
+                name: "codeBlock"
+            }
+        ]
+        body: ["return builder().expression(codeBlock).build()"]
+    }
+    {
+        javadoc: "Creates a new `MemberValue` for the array expression variant"
+        name: "forArrayExpression"
+        args: [
+            {
+                type: "CodeBlock..."
+                name: "values"
+            }
+        ]
+        body: ["return builder().arrayExpression(java.util.Arrays.asList(values)).build()"]
+    }
+])
+
 apply ParameterList @adderOverrides([
     {
         args: [

@@ -18,8 +18,9 @@ import mx.sugus.braid.plugins.data.transformers.BuilderAdderOverridesTransform;
 import mx.sugus.braid.plugins.data.transformers.BuilderSetterOverridesTransform;
 import mx.sugus.braid.plugins.data.transformers.ClassAddBuilderReferenceTransform;
 import mx.sugus.braid.plugins.data.transformers.ClassBuilderOverridesTransform;
-import mx.sugus.braid.plugins.data.transformers.ClassFromFactoryOverridesTransform;
 import mx.sugus.braid.plugins.data.transformers.InterfaceFromFactoryOverridesTransform;
+import mx.sugus.braid.plugins.data.transformers.StructureFromFactoryOverridesTransform;
+import mx.sugus.braid.plugins.data.transformers.UnionFromFactoryOverridesTransform;
 import mx.sugus.braid.rt.util.annotations.Generated;
 import software.amazon.smithy.model.node.ObjectNode;
 
@@ -58,7 +59,8 @@ public final class DataPlugin implements SmithyGeneratorPlugin<DataPluginConfig>
             .addTransformer(new BuilderSetterOverridesTransform())
             .addTransformer(new BuilderAdderOverridesTransform())
             .addTransformer(new ClassBuilderOverridesTransform())
-            .addTransformer(new ClassFromFactoryOverridesTransform())
+            .addTransformer(new StructureFromFactoryOverridesTransform())
+            .addTransformer(new UnionFromFactoryOverridesTransform())
             .addTransformer(new InterfaceFromFactoryOverridesTransform())
             .addTransformer(new ClassAddBuilderReferenceTransform())
             .addSymbolProviderDecorator(DataSymbolProviderDecorator.get())

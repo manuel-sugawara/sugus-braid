@@ -28,7 +28,7 @@ public class InterfaceFromFactoryOverridesTransform implements ShapeTaskTransfor
     @Override
     public TypeSyntaxResult transform(TypeSyntaxResult result, ShapeCodegenState state) {
         var syntax = result.syntax();
-        var methods = ClassFromFactoryOverridesTransform.fromFactories(state);
+        var methods = StructureFromFactoryOverridesTransform.fromFactories(state);
         if (methods.isEmpty()) {
             return result;
         }

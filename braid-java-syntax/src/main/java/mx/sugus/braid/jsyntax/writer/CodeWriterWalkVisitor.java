@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 import mx.sugus.braid.jsyntax.AbstractControlFlow;
 import mx.sugus.braid.jsyntax.AbstractMethodSyntax;
 import mx.sugus.braid.jsyntax.Annotation;
@@ -28,6 +29,7 @@ import mx.sugus.braid.jsyntax.FormatterTypeName;
 import mx.sugus.braid.jsyntax.IfStatement;
 import mx.sugus.braid.jsyntax.InterfaceSyntax;
 import mx.sugus.braid.jsyntax.Javadoc;
+import mx.sugus.braid.jsyntax.MemberValue;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.Parameter;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
@@ -154,8 +156,52 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
             value.accept(this);
             writer.write(")");
         }
+        var members = node.members();
+        if (members.size() == 1 && members.containsKey("value")) {
+            writer.write("(");
+            var memberValue = members.get("value");
+            renderAnnotationMemberValue(memberValue);
+            writer.write(")");
+        } else if (!members.isEmpty()) {
+            writer.write("(");
+            var isFirst = true;
+            for (var kvp : members.entrySet()) {
+                if (!isFirst) {
+                    writer.write(", ");
+                }
+                writer.write(kvp.getKey());
+                writer.write(" = ");
+                renderAnnotationMemberValue(kvp.getValue());
+                isFirst = false;
+            }
+            writer.write(")");
+        }
         writer.newLine();
         return node;
+    }
+
+    private void renderAnnotationMemberValue(MemberValue memberValue) {
+        switch (memberValue.type()) {
+            case EXPRESSION -> memberValue.expression().accept(this);
+            case ARRAY_EXPRESSION ->  {
+                var arrayExpression = memberValue.arrayExpression();
+                if (arrayExpression.size() == 1) {
+                    arrayExpression.get(0).accept(this);
+                } if (arrayExpression.size() > 1) {
+                    writer.write("{");
+                    var isFirst = true;
+                    for (var expr : arrayExpression) {
+                        if (!isFirst) {
+                            writer.write(", ");
+                        }
+                        expr.accept(this);
+                        isFirst = false;
+                    }
+                    writer.write("}");
+                }
+            }
+            default -> throw new IllegalArgumentException("unknown enum variant: " + memberValue.type());
+        }
     }
 
     @Override
@@ -555,14 +601,6 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
         return false;
     }
 
-    private static String toString(ClassName className) {
-        if (className.packageName() == null) {
-            return "#" + className.name();
-        }
-        return className.packageName() + "#" + className.name();
-    }
-
-
     private boolean isJavaObject(TypeName upper) {
         return upper.equals(TypeNameExt.OBJECT);
     }
@@ -617,6 +655,13 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
         codeBlockContexts.push(CodeBlockContext.EXPRESSION);
         r.run();
         codeBlockContexts.pop();
+    }
+
+    private static String toString(ClassName className) {
+        if (className.packageName() == null) {
+            return "#" + className.name();
+        }
+        return className.packageName() + "#" + className.name();
     }
 
     enum CodeBlockContext {
