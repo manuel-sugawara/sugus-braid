@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import javax.lang.model.element.Modifier;
-import mx.sugus.braid.jsyntax.block.BodyBuilder;
-import mx.sugus.braid.jsyntax.writer.CodeRenderer;
 import mx.sugus.braid.jsyntax.AbstractMethodSyntax;
 import mx.sugus.braid.jsyntax.Annotation;
 import mx.sugus.braid.jsyntax.ArrayTypeName;
@@ -25,6 +23,7 @@ import mx.sugus.braid.jsyntax.EnumConstant;
 import mx.sugus.braid.jsyntax.EnumSyntax;
 import mx.sugus.braid.jsyntax.FieldSyntax;
 import mx.sugus.braid.jsyntax.InterfaceSyntax;
+import mx.sugus.braid.jsyntax.MemberValue;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.Parameter;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
@@ -34,7 +33,6 @@ import mx.sugus.braid.jsyntax.TypeVariableTypeName;
 import mx.sugus.braid.jsyntax.WildcardTypeName;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.rt.util.annotations.Generated;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -47,18 +45,6 @@ class CodeRendererTest {
         assertEquals(testCase.expected, rendered);
     }
 
-    @Test
-    public void foobar() {
-        var node = BodyBuilder.create()
-            .addStatement("$B", BodyBuilder.create()
-                .addStatement("foo.clear()")
-                .addStatement("foo.addAll(bar)")
-                .build())
-            .build();
-        var rendered = CodeRenderer.render(node);
-        System.out.printf("============\n%s\n", rendered);
-    }
-
     public static List<TestCase> testCases() {
         return List.of(
             testCase("Simple class")
@@ -66,9 +52,7 @@ class CodeRendererTest {
                                  .javadoc(JavadocExt.document(
                                      """
                                          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do"""))
-                                 .addAnnotation(Annotation.builder(Generated.class)
-                                                          .value(CodeBlock.from("$S", "super-duper"))
-                                                          .build())
+                                 .addAnnotation(Annotation.fromStringValue(Generated.class, "super-duper"))
                                  .addMethod(MethodSyntax.builder("increment")
                                                         .addModifier(Modifier.PUBLIC)
                                                         .returns(void.class)
@@ -502,6 +486,63 @@ class CodeRendererTest {
                               }
                               """)
                 .build()
+            , testCase("Annotations with single value")
+                .node(ClassSyntax.builder("SomeAnnotatedClass")
+                                 .addAnnotation(Annotation.builder(ClassName.from("FooBar"))
+                                                          .putMember("value", MemberValue.forExpression("$S", "string value"))
+                                                          .build())
+                                 .build())
+                .expected("""
+                              @FooBar("string value")
+                              class SomeAnnotatedClass {
+                              }
+                              """)
+                .build()
+            , testCase("Annotations with array value")
+                .node(ClassSyntax.builder("SomeAnnotatedClass")
+                                 .addAnnotation(Annotation
+                                                    .builder(ClassName.from("FooBar"))
+                                                    .putMember("value", MemberValue.forArrayExpression(
+                                                        CodeBlock.from("$S", "string value 1"),
+                                                        CodeBlock.from("$S", "string value 2")
+                                                    ))
+                                                    .build())
+                                 .build())
+                .expected("""
+                              @FooBar({"string value 1", "string value 2"})
+                              class SomeAnnotatedClass {
+                              }
+                              """)
+                .build()
+            , testCase("Annotations with member named foo")
+                .node(ClassSyntax.builder("SomeAnnotatedClass")
+                                 .addAnnotation(Annotation
+                                                    .builder(ClassName.from("FooBar"))
+                                                    .putMember("foo", MemberValue.forExpression("$S", "string value 1"))
+                                                    .build())
+                                 .build())
+                .expected("""
+                              @FooBar(foo = "string value 1")
+                              class SomeAnnotatedClass {
+                              }
+                              """)
+                .build()
+            , testCase("Annotations with array member named foo")
+                .node(ClassSyntax.builder("SomeAnnotatedClass")
+                                 .addAnnotation(Annotation
+                                                    .builder(ClassName.from("FooBar"))
+                                                    .putMember("foo", MemberValue.forArrayExpression(
+                                                        CodeBlock.from("$S", "string value 1"),
+                                                        CodeBlock.from("$S", "string value 2")
+                                                    ))
+                                                    .build())
+                                 .build())
+                .expected("""
+                              @FooBar(foo = {"string value 1", "string value 2"})
+                              class SomeAnnotatedClass {
+                              }
+                              """)
+                .build()
 
         );
     }
@@ -520,6 +561,11 @@ class CodeRendererTest {
             this.name = Objects.requireNonNull(builder.name, "name");
             this.node = Objects.requireNonNull(builder.node, "node");
             this.expected = Objects.requireNonNull(builder.expected, "expected");
+        }
+
+        @Override
+        public String toString() {
+            return name;
         }
 
     }

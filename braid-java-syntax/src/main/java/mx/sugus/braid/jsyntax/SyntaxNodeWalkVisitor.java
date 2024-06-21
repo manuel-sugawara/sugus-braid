@@ -46,10 +46,6 @@ public class SyntaxNodeWalkVisitor implements SyntaxNodeVisitor<SyntaxNode> {
     @Override
     public SyntaxNode visitAnnotation(Annotation node) {
         node.type().accept(this);
-        CodeBlock value = node.value();
-        if (value != null) {
-            value.accept(this);
-        }
         return node;
     }
 

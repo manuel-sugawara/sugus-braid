@@ -136,17 +136,6 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             builder = node.toBuilder();
             builder.type(typeNew);
         }
-        CodeBlock value = node.value();
-        CodeBlock valueNew = null;
-        if (value != null) {
-            valueNew = visitCodeBlock(value);
-        }
-        if (!Objects.equals(value, valueNew)) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.value(valueNew);
-        }
         if (builder != null) {
             return builder.build();
         }

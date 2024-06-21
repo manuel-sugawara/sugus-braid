@@ -24,7 +24,7 @@ public final class InterfaceData implements DirectedInterface {
     @Override
     public InterfaceSyntax.Builder typeSpec(ShapeCodegenState state) {
         var builder = InterfaceSyntax.builder(Utils.toJavaName(state, state.shape()).toString())
-                                     .addAnnotation(DataPlugin.generatedBy())
+                                     .addAnnotation(Utils.generatedBy(DataPlugin.ID))
                                      .addModifier(Modifier.PUBLIC);
         var shape = state.shape().asStructureShape().orElseThrow();
         var superInterfaces = ImplementsKnowledgeIndex.of(state.model()).superInterfaces(shape);

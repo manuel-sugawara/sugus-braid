@@ -230,15 +230,36 @@ list ModifierList {
     member: Modifier
 }
 
+list ExpressionList {
+    member: Expression
+}
+
+/// Possible values for an annotation member, either an expression or
+/// a list of expressions. Annotation members are missing for the time
+/// being.
+union MemberValue {
+    /// An expression member, equivalent to the `ConditionalExpression` production
+    /// in the java spec.
+    expression: Expression
+    /// An array initializer member, equivalent to the `ElementValueArrayInitializer`
+    /// production in the java spec.
+    arrayExpression: ExpressionList
+}
+
+map MemberMap {
+    key: String
+    value: MemberValue
+}
+
 /// Represent an `annotation`.
 @implements([SyntaxNode])
 structure Annotation {
+    /// The class for the annotation
     @required
     type: ClassName
 
-    member: String
-
-    value: CodeBlock
+    /// The members of the annotation
+    members: MemberMap
 }
 
 list AnnotationList {

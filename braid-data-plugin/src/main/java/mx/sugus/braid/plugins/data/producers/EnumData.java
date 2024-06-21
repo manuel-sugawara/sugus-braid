@@ -28,7 +28,7 @@ public final class EnumData implements DirectedEnum {
     @Override
     public EnumSyntax.Builder typeSpec(ShapeCodegenState state) {
         var builder = EnumSyntax.builder(state.symbol().getName())
-                                .addAnnotation(DataPlugin.generatedBy())
+                                .addAnnotation(Utils.generatedBy(DataPlugin.ID))
                                 .addModifier(Modifier.PUBLIC);
         var shape = state.shape().asEnumShape().orElseThrow();
         for (var kvp : shape.getAllMembers().entrySet()) {

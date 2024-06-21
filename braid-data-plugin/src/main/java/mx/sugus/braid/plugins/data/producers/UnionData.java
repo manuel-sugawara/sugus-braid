@@ -27,14 +27,12 @@ import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.traits.DocumentationTrait;
 
 public final class UnionData implements DirectedClass {
-    static Annotation SUPPRESS_UNCHECKED = Annotation.builder(SuppressWarnings.class)
-                                                     .value(CodeBlock.from("$S", "unchecked"))
-                                                     .build();
+    static Annotation SUPPRESS_UNCHECKED = Annotation.fromStringValue(SuppressWarnings.class, "unchecked");
 
     @Override
     public ClassSyntax.Builder typeSpec(ShapeCodegenState state) {
         var builder = ClassSyntax.builder(state.symbol().getName())
-                                 .addAnnotation(DataPlugin.generatedBy())
+                                 .addAnnotation(Utils.generatedBy(DataPlugin.ID))
                                  .addAnnotation(SUPPRESS_UNCHECKED)
                                  .addModifiers(Modifier.PUBLIC, Modifier.FINAL);
         var shape = state.shape();

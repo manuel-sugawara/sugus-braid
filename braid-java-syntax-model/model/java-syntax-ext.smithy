@@ -176,6 +176,30 @@ apply Annotation @newBuilderOverrides([
     }
 ])
 
+apply Annotation @fromFactories([
+    {
+        javadoc: """
+        Creates a new annotation with a single string member value.
+        """
+        name: "fromStringValue"
+        args: [
+            {
+                type: "java.lang#Class<?>"
+                name: "kclass"
+            }
+            {
+                type: "String"
+                name: "value"
+            }
+        ]
+        body: ["""
+        return builder().type(ClassName.from(kclass))
+            .putMember("value", MemberValue.forExpression(CodeBlock.from("$$S", value)))
+            .build()
+        """]
+    }
+])
+
 apply AnnotationList @adderOverrides([
     {
         args: [
@@ -194,6 +218,47 @@ apply AnnotationList @adderOverrides([
             }
         ]
         body: ["Annotation.builder(kclass).build()"]
+    }
+])
+
+// TODO: Consider adding this by default without having to manually configure it for all union shapes.
+apply MemberValue @fromFactories([
+    {
+        javadoc: "Creates a new `MemberValue` for the expression variant"
+        name: "forExpression"
+        args: [
+            {
+                type: "java.lang#String"
+                name: "format"
+            }
+            {
+                type: "java.lang#Object..."
+                name: "args"
+            }
+        ]
+        body: ["return builder().expression(CodeBlock.from(format, args)).build()"]
+    }
+    {
+        javadoc: "Creates a new `MemberValue` for the expression variant"
+        name: "forExpression"
+        args: [
+            {
+                type: "CodeBlock"
+                name: "codeBlock"
+            }
+        ]
+        body: ["return builder().expression(codeBlock).build()"]
+    }
+    {
+        javadoc: "Creates a new `MemberValue` for the array expression variant"
+        name: "forArrayExpression"
+        args: [
+            {
+                type: "CodeBlock..."
+                name: "values"
+            }
+        ]
+        body: ["return builder().arrayExpression(java.util.Arrays.asList(values)).build()"]
     }
 ])
 
