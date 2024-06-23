@@ -12,17 +12,17 @@ import mx.sugus.braid.jsyntax.EnumSyntax;
 import mx.sugus.braid.jsyntax.FieldSyntax;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 
-public final class UnionTypeEnumData implements DirectedEnum {
-    static final ClassName TYPE_NAME = ClassName.builder().name("Type").build();
+public final class UnionVariantTagEnumData implements DirectedEnum {
+    static final ClassName VARIANT_TAG_NAME = ClassName.builder().name("VariantTag").build();
 
     @Override
     public ClassName className(ShapeCodegenState state) {
-        return TYPE_NAME;
+        return VARIANT_TAG_NAME;
     }
 
     @Override
     public EnumSyntax.Builder typeSpec(ShapeCodegenState state) {
-        var typeEnum = EnumSyntax.builder(TYPE_NAME.name())
+        var typeEnum = EnumSyntax.builder(VARIANT_TAG_NAME.name())
                                  .addModifier(Modifier.PUBLIC);
         var shape = state.shape().asUnionShape().orElseThrow();
         for (var member : shape.getAllMembers().values()) {

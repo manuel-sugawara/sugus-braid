@@ -50,8 +50,8 @@ public final class UnionData implements DirectedClass {
 
     @Override
     public List<FieldSyntax> extraFields(ShapeCodegenState state) {
-        return List.of(FieldSyntax.from(Object.class, "value"),
-                       FieldSyntax.from(ClassName.from("Type"), "type"));
+        return List.of(FieldSyntax.from(Object.class, "variantValue"),
+                       FieldSyntax.from(UnionVariantTagEnumData.VARIANT_TAG_NAME, "variantTag"));
     }
 
     @Override
@@ -63,8 +63,8 @@ public final class UnionData implements DirectedClass {
         return ConstructorMethodSyntax.builder()
                                       .addModifier(Modifier.PRIVATE)
                                       .addParameter(builderJavaClassName(), "builder")
-                                      .addStatement("this.value = builder.getValue()")
-                                      .addStatement("this.type = builder.type")
+                                      .addStatement("this.variantValue = builder.getValue()")
+                                      .addStatement("this.variantTag = builder.variantTag")
                                       .build();
     }
 
@@ -81,10 +81,10 @@ public final class UnionData implements DirectedClass {
         var builder = MethodSyntax.builder(getterName.toString())
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(type);
-        builder.ifStatement("this.type == Type.$L", unionVariant, then -> {
-            then.addStatement("return ($T) this.value", type);
+        builder.ifStatement("this.variantTag == VariantTag.$L", unionVariant, then -> {
+            then.addStatement("return ($T) this.variantValue", type);
         });
-        builder.addStatement("throw new $T($S + this.type + $S)", NoSuchElementException.class,
+        builder.addStatement("throw new $T($S + this.variantTag + $S)", NoSuchElementException.class,
                              "Union element `" + memberName + "` not set, currently set `", "`");
         member.getTrait(DocumentationTrait.class)
               .map(DocumentationTrait::getValue)
@@ -113,11 +113,11 @@ public final class UnionData implements DirectedClass {
     private MethodSyntax accessorForType() {
         var doc = "Returns an enum value representing which member of this object is populated.\n\n"
                   + "This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.";
-        return MethodSyntax.builder("type")
+        return MethodSyntax.builder("variantTag")
                            .javadoc(JavadocExt.document(doc))
                            .addModifier(Modifier.PUBLIC)
-                           .returns(UnionTypeEnumData.TYPE_NAME)
-                           .addStatement("return this.type")
+                           .returns(UnionVariantTagEnumData.VARIANT_TAG_NAME)
+                           .addStatement("return this.variantTag")
                            .build();
     }
 
@@ -125,11 +125,11 @@ public final class UnionData implements DirectedClass {
         var doc = "Returns the untyped value of the union.\n\n"
                   + "Use {@link #type()} to get the member currently set.";
 
-        return MethodSyntax.builder("value")
+        return MethodSyntax.builder("variantValue")
                            .javadoc(JavadocExt.document(doc))
                            .addModifier(Modifier.PUBLIC)
                            .returns(Object.class)
-                           .body(b -> b.addStatement("return this.value"))
+                           .body(b -> b.addStatement("return this.variantValue"))
                            .build();
     }
 
@@ -153,7 +153,7 @@ public final class UnionData implements DirectedClass {
         var className = className(state);
         builder.ifStatement("!(other instanceof $T)", className, b -> b.addStatement("return false"));
         builder.addStatement("$1T that = ($1T) other", className);
-        builder.addStatement("return this.type == that.type && this.value.equals(that.value)");
+        builder.addStatement("return this.variantTag == that.variantTag && this.variantValue.equals(that.variantValue)");
         return builder.build();
     }
 
@@ -162,7 +162,7 @@ public final class UnionData implements DirectedClass {
                            .addAnnotation(Override.class)
                            .addModifier(Modifier.PUBLIC)
                            .returns(int.class)
-                           .addStatement("return this.type.hashCode() + 31 * this.value.hashCode()")
+                           .addStatement("return this.variantTag.hashCode() + 31 * this.variantValue.hashCode()")
                            .build();
     }
 
@@ -178,10 +178,10 @@ public final class UnionData implements DirectedClass {
 
     private void toStringMethodBody(ShapeCodegenState state, BodyBuilder body) {
         var sensitiveIndex = SensitiveKnowledgeIndex.of(state.model());
-        body.addStatement("$1T buf = new $1T($2S)", StringBuilder.class, state.shape().getId().getName() + "{type: ");
-        body.addStatement("buf.append($L)", "this.type");
+        body.addStatement("$1T buf = new $1T($2S)", StringBuilder.class, state.shape().getId().getName() + "{variantTag: ");
+        body.addStatement("buf.append($L)", "this.variantTag");
         var memberSwitch = SwitchStatement.builder()
-                                          .expression(CodeBlock.from("this.type"));
+                                          .expression(CodeBlock.from("this.variantTag"));
         for (var member : state.shape().members()) {
             var memberName = member.getMemberName();
             var literalName = ", " + memberName + ": ";
@@ -192,7 +192,7 @@ public final class UnionData implements DirectedClass {
                                                if (sensitiveIndex.isSensitive(member.getTarget())) {
                                                    b.addStatement("buf.append($S)", literalName + "<*** REDACTED ***>");
                                                } else {
-                                                   b.addStatement("buf.append($S).append(this.value)", literalName);
+                                                   b.addStatement("buf.append($S).append(this.variantValue)", literalName);
                                                }
                                                b.addStatement("break");
                                            })
@@ -231,6 +231,6 @@ public final class UnionData implements DirectedClass {
 
     @Override
     public List<DirectiveToTypeSyntax> innerTypes(ShapeCodegenState state) {
-        return List.of(new UnionTypeEnumData(), new UnionDataBuilder());
+        return List.of(new UnionVariantTagEnumData(), new UnionDataBuilder());
     }
 }

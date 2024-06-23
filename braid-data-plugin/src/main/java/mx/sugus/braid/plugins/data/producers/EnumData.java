@@ -46,7 +46,7 @@ public final class EnumData implements DirectedEnum {
         var unknownValueBuilder = EnumConstant.builder()
                                               .body(CodeBlock.from("$L", "null"))
                                               .name("UNKNOWN_TO_VERSION");
-        unknownValueBuilder.javadoc("$L", JavadocExt.document("Unknown enum constant"));
+        unknownValueBuilder.javadoc(JavadocExt.document("Unknown enum constant"));
         builder.addEnumConstant(unknownValueBuilder.build());
         shape.getTrait(DocumentationTrait.class)
              .map(DocumentationTrait::getValue)

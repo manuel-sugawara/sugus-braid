@@ -175,7 +175,7 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
     }
 
     private void renderAnnotationMemberValue(MemberValue memberValue) {
-        switch (memberValue.type()) {
+        switch (memberValue.variantTag()) {
             case EXPRESSION -> memberValue.expression().accept(this);
             case ARRAY_EXPRESSION ->  {
                 var arrayExpression = memberValue.arrayExpression();
@@ -194,7 +194,7 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
                     writer.write("}");
                 }
             }
-            default -> throw new IllegalArgumentException("unknown enum variant: " + memberValue.type());
+            default -> throw new IllegalArgumentException("unknown enum variant: " + memberValue.variantTag());
         }
     }
 

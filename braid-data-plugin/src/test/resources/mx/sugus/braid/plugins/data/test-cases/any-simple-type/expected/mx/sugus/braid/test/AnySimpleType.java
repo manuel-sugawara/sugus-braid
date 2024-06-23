@@ -12,128 +12,128 @@ import mx.sugus.braid.rt.util.annotations.Generated;
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 @SuppressWarnings("unchecked")
 public final class AnySimpleType {
-    private final Object value;
-    private final Type type;
+    private final Object variantValue;
+    private final VariantTag variantTag;
 
     private AnySimpleType(Builder builder) {
-        this.value = builder.getValue();
-        this.type = builder.type;
+        this.variantValue = builder.getValue();
+        this.variantTag = builder.variantTag;
     }
 
     /**
      * <p>byte variant</p>
      */
     public Byte aByte() {
-        if (this.type == Type.BYTE) {
-            return (Byte) this.value;
+        if (this.variantTag == VariantTag.BYTE) {
+            return (Byte) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `byte` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `byte` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>short variant</p>
      */
     public Short aShort() {
-        if (this.type == Type.SHORT) {
-            return (Short) this.value;
+        if (this.variantTag == VariantTag.SHORT) {
+            return (Short) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `short` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `short` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>int variant</p>
      */
     public Integer anInt() {
-        if (this.type == Type.INT) {
-            return (Integer) this.value;
+        if (this.variantTag == VariantTag.INT) {
+            return (Integer) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `int` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `int` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>long variant</p>
      */
     public Long aLong() {
-        if (this.type == Type.LONG) {
-            return (Long) this.value;
+        if (this.variantTag == VariantTag.LONG) {
+            return (Long) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `long` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `long` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>bigInteger variant</p>
      */
     public BigInteger bigInteger() {
-        if (this.type == Type.BIG_INTEGER) {
-            return (BigInteger) this.value;
+        if (this.variantTag == VariantTag.BIG_INTEGER) {
+            return (BigInteger) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `bigInteger` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `bigInteger` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>float variant</p>
      */
     public Float aFloat() {
-        if (this.type == Type.FLOAT) {
-            return (Float) this.value;
+        if (this.variantTag == VariantTag.FLOAT) {
+            return (Float) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `float` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `float` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>double variant</p>
      */
     public Double aDouble() {
-        if (this.type == Type.DOUBLE) {
-            return (Double) this.value;
+        if (this.variantTag == VariantTag.DOUBLE) {
+            return (Double) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `double` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `double` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>bigDecimal variant</p>
      */
     public BigDecimal bigDecimal() {
-        if (this.type == Type.BIG_DECIMAL) {
-            return (BigDecimal) this.value;
+        if (this.variantTag == VariantTag.BIG_DECIMAL) {
+            return (BigDecimal) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `bigDecimal` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `bigDecimal` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>string variant</p>
      */
     public String string() {
-        if (this.type == Type.STRING) {
-            return (String) this.value;
+        if (this.variantTag == VariantTag.STRING) {
+            return (String) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `string` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `string` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>instant variant</p>
      */
     public Instant instant() {
-        if (this.type == Type.INSTANT) {
-            return (Instant) this.value;
+        if (this.variantTag == VariantTag.INSTANT) {
+            return (Instant) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `instant` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `instant` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>Returns an enum value representing which member of this object is populated.</p>
      * <p>This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.</p>
      */
-    public Type type() {
-        return this.type;
+    public VariantTag variantTag() {
+        return this.variantTag;
     }
 
     /**
      * <p>Returns the untyped value of the union.</p>
      * <p>Use {@link #type()} to get the member currently set.</p>
      */
-    public Object value() {
-        return this.value;
+    public Object variantValue() {
+        return this.variantValue;
     }
 
     /**
@@ -152,48 +152,48 @@ public final class AnySimpleType {
             return false;
         }
         AnySimpleType that = (AnySimpleType) other;
-        return this.type == that.type && this.value.equals(that.value);
+        return this.variantTag == that.variantTag && this.variantValue.equals(that.variantValue);
     }
 
     @Override
     public int hashCode() {
-        return this.type.hashCode() + 31 * this.value.hashCode();
+        return this.variantTag.hashCode() + 31 * this.variantValue.hashCode();
     }
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder("AnySimpleType{type: ");
-        buf.append(this.type);
-        switch (this.type) {
+        StringBuilder buf = new StringBuilder("AnySimpleType{variantTag: ");
+        buf.append(this.variantTag);
+        switch (this.variantTag) {
             case BYTE:
-                buf.append(", byte: ").append(this.value);
+                buf.append(", byte: ").append(this.variantValue);
                 break;
             case SHORT:
-                buf.append(", short: ").append(this.value);
+                buf.append(", short: ").append(this.variantValue);
                 break;
             case INT:
-                buf.append(", int: ").append(this.value);
+                buf.append(", int: ").append(this.variantValue);
                 break;
             case LONG:
-                buf.append(", long: ").append(this.value);
+                buf.append(", long: ").append(this.variantValue);
                 break;
             case BIG_INTEGER:
-                buf.append(", bigInteger: ").append(this.value);
+                buf.append(", bigInteger: ").append(this.variantValue);
                 break;
             case FLOAT:
-                buf.append(", float: ").append(this.value);
+                buf.append(", float: ").append(this.variantValue);
                 break;
             case DOUBLE:
-                buf.append(", double: ").append(this.value);
+                buf.append(", double: ").append(this.variantValue);
                 break;
             case BIG_DECIMAL:
-                buf.append(", bigDecimal: ").append(this.value);
+                buf.append(", bigDecimal: ").append(this.variantValue);
                 break;
             case STRING:
-                buf.append(", string: ").append(this.value);
+                buf.append(", string: ").append(this.variantValue);
                 break;
             case INSTANT:
-                buf.append(", instant: ").append(this.value);
+                buf.append(", instant: ").append(this.variantValue);
                 break;
         }
         return buf.append("}").toString();
@@ -206,7 +206,7 @@ public final class AnySimpleType {
         return new Builder();
     }
 
-    public enum Type {
+    public enum VariantTag {
         BYTE("byte"),
         SHORT("short"),
         INT("int"),
@@ -221,7 +221,7 @@ public final class AnySimpleType {
 
         private final String value;
 
-        Type(String value) {
+        VariantTag(String value) {
             this.value = value;
         }
 
@@ -232,17 +232,17 @@ public final class AnySimpleType {
     }
 
     public static final class Builder {
-        private Object value;
-        private Type type;
+        private Object variantValue;
+        private VariantTag variantTag;
 
         Builder() {
-            this.type = null;
-            this.value = Type.UNKNOWN_TO_VERSION;
+            this.variantTag = null;
+            this.variantValue = VariantTag.UNKNOWN_TO_VERSION;
         }
 
         Builder(AnySimpleType data) {
-            this.type = data.type;
-            this.value = data.value;
+            this.variantTag = data.variantTag;
+            this.variantValue = data.variantValue;
         }
 
         /**
@@ -250,8 +250,8 @@ public final class AnySimpleType {
          * <p>byte variant</p>
          */
         public Builder aByte(Byte aByte) {
-            this.type = Type.BYTE;
-            this.value = aByte;
+            this.variantTag = VariantTag.BYTE;
+            this.variantValue = aByte;
             return this;
         }
 
@@ -260,8 +260,8 @@ public final class AnySimpleType {
          * <p>short variant</p>
          */
         public Builder aShort(Short aShort) {
-            this.type = Type.SHORT;
-            this.value = aShort;
+            this.variantTag = VariantTag.SHORT;
+            this.variantValue = aShort;
             return this;
         }
 
@@ -270,8 +270,8 @@ public final class AnySimpleType {
          * <p>int variant</p>
          */
         public Builder anInt(Integer anInt) {
-            this.type = Type.INT;
-            this.value = anInt;
+            this.variantTag = VariantTag.INT;
+            this.variantValue = anInt;
             return this;
         }
 
@@ -280,8 +280,8 @@ public final class AnySimpleType {
          * <p>long variant</p>
          */
         public Builder aLong(Long aLong) {
-            this.type = Type.LONG;
-            this.value = aLong;
+            this.variantTag = VariantTag.LONG;
+            this.variantValue = aLong;
             return this;
         }
 
@@ -290,8 +290,8 @@ public final class AnySimpleType {
          * <p>bigInteger variant</p>
          */
         public Builder bigInteger(BigInteger bigInteger) {
-            this.type = Type.BIG_INTEGER;
-            this.value = bigInteger;
+            this.variantTag = VariantTag.BIG_INTEGER;
+            this.variantValue = bigInteger;
             return this;
         }
 
@@ -300,8 +300,8 @@ public final class AnySimpleType {
          * <p>float variant</p>
          */
         public Builder aFloat(Float aFloat) {
-            this.type = Type.FLOAT;
-            this.value = aFloat;
+            this.variantTag = VariantTag.FLOAT;
+            this.variantValue = aFloat;
             return this;
         }
 
@@ -310,8 +310,8 @@ public final class AnySimpleType {
          * <p>double variant</p>
          */
         public Builder aDouble(Double aDouble) {
-            this.type = Type.DOUBLE;
-            this.value = aDouble;
+            this.variantTag = VariantTag.DOUBLE;
+            this.variantValue = aDouble;
             return this;
         }
 
@@ -320,8 +320,8 @@ public final class AnySimpleType {
          * <p>bigDecimal variant</p>
          */
         public Builder bigDecimal(BigDecimal bigDecimal) {
-            this.type = Type.BIG_DECIMAL;
-            this.value = bigDecimal;
+            this.variantTag = VariantTag.BIG_DECIMAL;
+            this.variantValue = bigDecimal;
             return this;
         }
 
@@ -330,8 +330,8 @@ public final class AnySimpleType {
          * <p>string variant</p>
          */
         public Builder string(String string) {
-            this.type = Type.STRING;
-            this.value = string;
+            this.variantTag = VariantTag.STRING;
+            this.variantValue = string;
             return this;
         }
 
@@ -340,13 +340,13 @@ public final class AnySimpleType {
          * <p>instant variant</p>
          */
         public Builder instant(Instant instant) {
-            this.type = Type.INSTANT;
-            this.value = instant;
+            this.variantTag = VariantTag.INSTANT;
+            this.variantValue = instant;
             return this;
         }
 
         Object getValue() {
-            return this.value;
+            return this.variantValue;
         }
 
         public AnySimpleType build() {

@@ -13,12 +13,12 @@ import mx.sugus.braid.rt.util.annotations.Generated;
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 @SuppressWarnings("unchecked")
 public final class MemberValue {
-    private final Object value;
-    private final Type type;
+    private final Object variantValue;
+    private final VariantTag variantTag;
 
     private MemberValue(Builder builder) {
-        this.value = builder.getValue();
-        this.type = builder.type;
+        this.variantValue = builder.getValue();
+        this.variantTag = builder.variantTag;
     }
 
     /**
@@ -26,10 +26,10 @@ public final class MemberValue {
      * in the java spec.</p>
      */
     public Expression expression() {
-        if (this.type == Type.EXPRESSION) {
-            return (Expression) this.value;
+        if (this.variantTag == VariantTag.EXPRESSION) {
+            return (Expression) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `expression` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `expression` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
@@ -37,26 +37,26 @@ public final class MemberValue {
      * production in the java spec.</p>
      */
     public List<Expression> arrayExpression() {
-        if (this.type == Type.ARRAY_EXPRESSION) {
-            return (List<Expression>) this.value;
+        if (this.variantTag == VariantTag.ARRAY_EXPRESSION) {
+            return (List<Expression>) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `arrayExpression` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `arrayExpression` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>Returns an enum value representing which member of this object is populated.</p>
      * <p>This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.</p>
      */
-    public Type type() {
-        return this.type;
+    public VariantTag variantTag() {
+        return this.variantTag;
     }
 
     /**
      * <p>Returns the untyped value of the union.</p>
      * <p>Use {@link #type()} to get the member currently set.</p>
      */
-    public Object value() {
-        return this.value;
+    public Object variantValue() {
+        return this.variantValue;
     }
 
     /**
@@ -75,24 +75,24 @@ public final class MemberValue {
             return false;
         }
         MemberValue that = (MemberValue) other;
-        return this.type == that.type && this.value.equals(that.value);
+        return this.variantTag == that.variantTag && this.variantValue.equals(that.variantValue);
     }
 
     @Override
     public int hashCode() {
-        return this.type.hashCode() + 31 * this.value.hashCode();
+        return this.variantTag.hashCode() + 31 * this.variantValue.hashCode();
     }
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder("MemberValue{type: ");
-        buf.append(this.type);
-        switch (this.type) {
+        StringBuilder buf = new StringBuilder("MemberValue{variantTag: ");
+        buf.append(this.variantTag);
+        switch (this.variantTag) {
             case EXPRESSION:
-                buf.append(", expression: ").append(this.value);
+                buf.append(", expression: ").append(this.variantValue);
                 break;
             case ARRAY_EXPRESSION:
-                buf.append(", arrayExpression: ").append(this.value);
+                buf.append(", arrayExpression: ").append(this.variantValue);
                 break;
         }
         return buf.append("}").toString();
@@ -126,14 +126,14 @@ public final class MemberValue {
         return builder().arrayExpression(java.util.Arrays.asList(values)).build();
     }
 
-    public enum Type {
+    public enum VariantTag {
         EXPRESSION("expression"),
         ARRAY_EXPRESSION("arrayExpression"),
         UNKNOWN_TO_VERSION(null);
 
         private final String value;
 
-        Type(String value) {
+        VariantTag(String value) {
             this.value = value;
         }
 
@@ -144,22 +144,22 @@ public final class MemberValue {
     }
 
     public static final class Builder {
-        private Object value;
-        private Type type;
+        private Object variantValue;
+        private VariantTag variantTag;
 
         Builder() {
-            this.type = null;
-            this.value = Type.UNKNOWN_TO_VERSION;
+            this.variantTag = null;
+            this.variantValue = VariantTag.UNKNOWN_TO_VERSION;
         }
 
         Builder(MemberValue data) {
-            this.type = data.type;
-            switch (data.type) {
+            this.variantTag = data.variantTag;
+            switch (data.variantTag) {
                 case ARRAY_EXPRESSION:
-                    this.value = CollectionBuilderReference.fromPersistentList(data.arrayExpression());
+                    this.variantValue = CollectionBuilderReference.fromPersistentList(data.arrayExpression());
                     break;
                 default:
-                    this.value = data.value;
+                    this.variantValue = data.variantValue;
             }
         }
 
@@ -169,19 +169,19 @@ public final class MemberValue {
          * in the java spec.</p>
          */
         public Builder expression(Expression expression) {
-            this.type = Type.EXPRESSION;
-            this.value = expression;
+            this.variantTag = VariantTag.EXPRESSION;
+            this.variantValue = expression;
             return this;
         }
 
         private CollectionBuilderReference<List<Expression>> arrayExpression() {
-            if (this.type != Type.ARRAY_EXPRESSION) {
-                this.type = Type.ARRAY_EXPRESSION;
+            if (this.variantTag != VariantTag.ARRAY_EXPRESSION) {
+                this.variantTag = VariantTag.ARRAY_EXPRESSION;
                 CollectionBuilderReference<List<Expression>> arrayExpression = CollectionBuilderReference.forList();
-                this.value = arrayExpression;
+                this.variantValue = arrayExpression;
                 return arrayExpression;
             } else {
-                return (CollectionBuilderReference<List<Expression>>) this.value;
+                return (CollectionBuilderReference<List<Expression>>) this.variantValue;
             }
         }
 
@@ -206,13 +206,13 @@ public final class MemberValue {
         }
 
         Object getValue() {
-            switch (this.type) {
+            switch (this.variantTag) {
                 case EXPRESSION:
-                    return this.value;
+                    return this.variantValue;
                 case ARRAY_EXPRESSION:
                     return arrayExpression().asPersistent();
                 default:
-                    return this.value;
+                    return this.variantValue;
             }
         }
 

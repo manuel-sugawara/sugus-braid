@@ -12,7 +12,6 @@ import mx.sugus.braid.core.util.PathUtil;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeName;
-import mx.sugus.braid.jsyntax.writer.CodeWriter;
 import mx.sugus.braid.plugins.data.dependencies.NullabilityIndexProvider;
 import mx.sugus.braid.plugins.data.dependencies.ShapeToJavaName;
 import mx.sugus.braid.plugins.data.dependencies.ShapeToJavaType;
@@ -50,7 +49,6 @@ import software.amazon.smithy.model.shapes.StringShape;
 import software.amazon.smithy.model.shapes.StructureShape;
 import software.amazon.smithy.model.shapes.TimestampShape;
 import software.amazon.smithy.model.shapes.UnionShape;
-import software.amazon.smithy.model.traits.DefaultTrait;
 import software.amazon.smithy.model.traits.UniqueItemsTrait;
 
 public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol> {
@@ -361,26 +359,4 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
                      .namespace(clazz.getPackageName(), ".");
     }
 
-    static String getDefaultValue(MemberShape member, Shape target) {
-        var defaultValue = member.getTrait(DefaultTrait.class).orElse(null);
-        if (defaultValue == null) {
-            return null;
-        }
-        var defaultValueNode = defaultValue.toNode();
-        var shapeType = target.getType();
-        switch (shapeType) {
-            case BYTE, SHORT, INTEGER, DOUBLE:
-                return defaultValueNode.expectNumberNode().getValue().toString();
-            case LONG:
-                return defaultValueNode.expectNumberNode().getValue().toString() + "L";
-            case FLOAT:
-                return defaultValueNode.expectNumberNode().getValue().toString() + "F";
-            case STRING:
-                return CodeWriter.escapeJavaString(defaultValueNode.expectStringNode().getValue());
-            case BOOLEAN:
-                return Boolean.toString(defaultValueNode.expectBooleanNode().getValue());
-            default:
-                throw new UnsupportedOperationException("Unsupported type: " + shapeType + " for default value");
-        }
-    }
 }

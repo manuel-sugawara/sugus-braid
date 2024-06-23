@@ -138,7 +138,7 @@ public final class DefaultValues {
             this.anInt = 3;
             this.aLong = 21474836470L;
             this.aFloat = 3.14159F;
-            this.aDouble = 2.71828;
+            this.aDouble = 2.71828D;
             this.string = "Hello";
         }
 
