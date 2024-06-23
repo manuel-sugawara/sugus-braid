@@ -15,8 +15,6 @@ import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.EnumSyntax;
-import mx.sugus.braid.jsyntax.FormatterLiteral;
-import mx.sugus.braid.jsyntax.FormatterNode;
 import mx.sugus.braid.jsyntax.InterfaceSyntax;
 import mx.sugus.braid.jsyntax.MemberValue;
 import mx.sugus.braid.jsyntax.TypeName;
@@ -89,21 +87,6 @@ public final class Utils {
             }
         }
         return null;
-    }
-
-    private static CodeBlock removeBrackets(CodeBlock block) {
-        var parts = block.parts();
-        var newParts = new ArrayList<FormatterNode>();
-        for (var part : parts) {
-            if (part instanceof FormatterLiteral literal) {
-                var value = literal.value();
-                if ("{".equals(value) || "}".equals(value)) {
-                    continue;
-                }
-            }
-            newParts.add(part);
-        }
-        return CodeBlock.builder().parts(newParts).build();
     }
 
     public static Name toSetterName(CodegenState state, MemberShape member) {

@@ -1,7 +1,6 @@
 package mx.sugus.braid.plugins.data.producers;
 
 import static mx.sugus.braid.plugins.data.producers.CodegenUtils.BUILDER_TYPE;
-import static mx.sugus.braid.plugins.data.producers.CodegenUtils.toParameters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,6 @@ import mx.sugus.braid.jsyntax.SwitchStatement;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.plugins.data.DataPlugin;
-import mx.sugus.braid.traits.NewBuilderOverridesTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.traits.DocumentationTrait;
 
@@ -210,22 +208,6 @@ public final class UnionData implements DirectedClass {
                                          .returns(dataType)
                                          .body(b -> b.addStatement("return new $T()", dataType))
                                          .build();
-        if (state.shape().hasTrait(NewBuilderOverridesTrait.class)) {
-            var result = new ArrayList<MethodSyntax>();
-            result.add(defaultBuilder);
-            var builderOverrides = state.shape().expectTrait(NewBuilderOverridesTrait.class);
-            for (var override : builderOverrides.getValues()) {
-                var overrideBuilder = defaultBuilder.toBuilder();
-                overrideBuilder.parameters(toParameters(override.getArgs()));
-                var body = new BodyBuilder();
-                for (var value : override.getBody()) {
-                    body.addStatement("$L", value);
-                }
-                overrideBuilder.body(body.build());
-                result.add(overrideBuilder.build());
-            }
-            return result;
-        }
         return List.of(defaultBuilder);
     }
 
