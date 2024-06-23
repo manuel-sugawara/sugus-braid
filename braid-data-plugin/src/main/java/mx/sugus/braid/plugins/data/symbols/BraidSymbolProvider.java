@@ -272,7 +272,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
 
     @Override
     public Symbol documentShape(DocumentShape shape) {
-        // XXX no support for blob shape yet.
+        // XXX no support for document shape yet.
         throw new UnsupportedOperationException();
     }
 
