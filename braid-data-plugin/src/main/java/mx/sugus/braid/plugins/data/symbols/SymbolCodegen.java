@@ -202,10 +202,15 @@ public final class SymbolCodegen {
         }
         var target = state.model().expectShape(member.getTarget());
         var defaultValueNode = defaultValue.toNode();
+        if (defaultValueNode.isNullNode()) {
+            return CodeBlock.from("null");
+        }
         var shapeType = target.getType();
         switch (shapeType) {
-            case BYTE, SHORT, INTEGER, DOUBLE:
+            case BYTE, SHORT, INTEGER:
                 return CodeBlock.from("$L", defaultValueNode.expectNumberNode().getValue().toString());
+            case DOUBLE:
+                return CodeBlock.from("$LD", defaultValueNode.expectNumberNode().getValue().toString());
             case LONG:
                 return CodeBlock.from("$LL", defaultValueNode.expectNumberNode().getValue().toString());
             case FLOAT:

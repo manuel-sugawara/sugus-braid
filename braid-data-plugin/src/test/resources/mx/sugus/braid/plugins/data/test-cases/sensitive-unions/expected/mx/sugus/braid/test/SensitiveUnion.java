@@ -6,42 +6,42 @@ import mx.sugus.braid.rt.util.annotations.Generated;
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 @SuppressWarnings("unchecked")
 public final class SensitiveUnion {
-    private final Object value;
-    private final Type type;
+    private final Object variantValue;
+    private final VariantTag variantTag;
 
     private SensitiveUnion(Builder builder) {
-        this.value = builder.getValue();
-        this.type = builder.type;
+        this.variantValue = builder.getValue();
+        this.variantTag = builder.variantTag;
     }
 
     public String stringSecretMember() {
-        if (this.type == Type.STRING_SECRET_MEMBER) {
-            return (String) this.value;
+        if (this.variantTag == VariantTag.STRING_SECRET_MEMBER) {
+            return (String) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `stringSecretMember` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `stringSecretMember` not set, currently set `" + this.variantTag + "`");
     }
 
     public Integer intSecretMember() {
-        if (this.type == Type.INT_SECRET_MEMBER) {
-            return (Integer) this.value;
+        if (this.variantTag == VariantTag.INT_SECRET_MEMBER) {
+            return (Integer) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `intSecretMember` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `intSecretMember` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>Returns an enum value representing which member of this object is populated.</p>
      * <p>This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.</p>
      */
-    public Type type() {
-        return this.type;
+    public VariantTag variantTag() {
+        return this.variantTag;
     }
 
     /**
      * <p>Returns the untyped value of the union.</p>
      * <p>Use {@link #type()} to get the member currently set.</p>
      */
-    public Object value() {
-        return this.value;
+    public Object variantValue() {
+        return this.variantValue;
     }
 
     /**
@@ -60,12 +60,12 @@ public final class SensitiveUnion {
             return false;
         }
         SensitiveUnion that = (SensitiveUnion) other;
-        return this.type == that.type && this.value.equals(that.value);
+        return this.variantTag == that.variantTag && this.variantValue.equals(that.variantValue);
     }
 
     @Override
     public int hashCode() {
-        return this.type.hashCode() + 31 * this.value.hashCode();
+        return this.variantTag.hashCode() + 31 * this.variantValue.hashCode();
     }
 
     @Override
@@ -80,14 +80,14 @@ public final class SensitiveUnion {
         return new Builder();
     }
 
-    public enum Type {
+    public enum VariantTag {
         STRING_SECRET_MEMBER("stringSecretMember"),
         INT_SECRET_MEMBER("intSecretMember"),
         UNKNOWN_TO_VERSION(null);
 
         private final String value;
 
-        Type(String value) {
+        VariantTag(String value) {
             this.value = value;
         }
 
@@ -98,25 +98,25 @@ public final class SensitiveUnion {
     }
 
     public static final class Builder {
-        private Object value;
-        private Type type;
+        private Object variantValue;
+        private VariantTag variantTag;
 
         Builder() {
-            this.type = null;
-            this.value = Type.UNKNOWN_TO_VERSION;
+            this.variantTag = null;
+            this.variantValue = VariantTag.UNKNOWN_TO_VERSION;
         }
 
         Builder(SensitiveUnion data) {
-            this.type = data.type;
-            this.value = data.value;
+            this.variantTag = data.variantTag;
+            this.variantValue = data.variantValue;
         }
 
         /**
          * <p>Sets the value for <code>stringSecretMember</code></p>
          */
         public Builder stringSecretMember(String stringSecretMember) {
-            this.type = Type.STRING_SECRET_MEMBER;
-            this.value = stringSecretMember;
+            this.variantTag = VariantTag.STRING_SECRET_MEMBER;
+            this.variantValue = stringSecretMember;
             return this;
         }
 
@@ -124,13 +124,13 @@ public final class SensitiveUnion {
          * <p>Sets the value for <code>intSecretMember</code></p>
          */
         public Builder intSecretMember(Integer intSecretMember) {
-            this.type = Type.INT_SECRET_MEMBER;
-            this.value = intSecretMember;
+            this.variantTag = VariantTag.INT_SECRET_MEMBER;
+            this.variantValue = intSecretMember;
             return this;
         }
 
         Object getValue() {
-            return this.value;
+            return this.variantValue;
         }
 
         public SensitiveUnion build() {

@@ -14,68 +14,68 @@ import mx.sugus.braid.rt.util.annotations.Generated;
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 @SuppressWarnings("unchecked")
 public final class AnyAggregateType {
-    private final Object value;
-    private final Type type;
+    private final Object variantValue;
+    private final VariantTag variantTag;
 
     private AnyAggregateType(Builder builder) {
-        this.value = builder.getValue();
-        this.type = builder.type;
+        this.variantValue = builder.getValue();
+        this.variantTag = builder.variantTag;
     }
 
     /**
      * <p>structure member</p>
      */
     public AllSimpleTypes structure() {
-        if (this.type == Type.STRUCTURE) {
-            return (AllSimpleTypes) this.value;
+        if (this.variantTag == VariantTag.STRUCTURE) {
+            return (AllSimpleTypes) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `structure` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `structure` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>union member</p>
      */
     public AnySimpleType union() {
-        if (this.type == Type.UNION) {
-            return (AnySimpleType) this.value;
+        if (this.variantTag == VariantTag.UNION) {
+            return (AnySimpleType) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `union` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `union` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>list member</p>
      */
     public List<AllSimpleTypes> list() {
-        if (this.type == Type.LIST) {
-            return (List<AllSimpleTypes>) this.value;
+        if (this.variantTag == VariantTag.LIST) {
+            return (List<AllSimpleTypes>) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `list` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `list` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>map member</p>
      */
     public Map<String, AnySimpleType> map() {
-        if (this.type == Type.MAP) {
-            return (Map<String, AnySimpleType>) this.value;
+        if (this.variantTag == VariantTag.MAP) {
+            return (Map<String, AnySimpleType>) this.variantValue;
         }
-        throw new NoSuchElementException("Union element `map` not set, currently set `" + this.type + "`");
+        throw new NoSuchElementException("Union element `map` not set, currently set `" + this.variantTag + "`");
     }
 
     /**
      * <p>Returns an enum value representing which member of this object is populated.</p>
      * <p>This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.</p>
      */
-    public Type type() {
-        return this.type;
+    public VariantTag variantTag() {
+        return this.variantTag;
     }
 
     /**
      * <p>Returns the untyped value of the union.</p>
      * <p>Use {@link #type()} to get the member currently set.</p>
      */
-    public Object value() {
-        return this.value;
+    public Object variantValue() {
+        return this.variantValue;
     }
 
     /**
@@ -94,30 +94,30 @@ public final class AnyAggregateType {
             return false;
         }
         AnyAggregateType that = (AnyAggregateType) other;
-        return this.type == that.type && this.value.equals(that.value);
+        return this.variantTag == that.variantTag && this.variantValue.equals(that.variantValue);
     }
 
     @Override
     public int hashCode() {
-        return this.type.hashCode() + 31 * this.value.hashCode();
+        return this.variantTag.hashCode() + 31 * this.variantValue.hashCode();
     }
 
     @Override
     public String toString() {
-        StringBuilder buf = new StringBuilder("AnyAggregateType{type: ");
-        buf.append(this.type);
-        switch (this.type) {
+        StringBuilder buf = new StringBuilder("AnyAggregateType{variantTag: ");
+        buf.append(this.variantTag);
+        switch (this.variantTag) {
             case STRUCTURE:
-                buf.append(", structure: ").append(this.value);
+                buf.append(", structure: ").append(this.variantValue);
                 break;
             case UNION:
-                buf.append(", union: ").append(this.value);
+                buf.append(", union: ").append(this.variantValue);
                 break;
             case LIST:
-                buf.append(", list: ").append(this.value);
+                buf.append(", list: ").append(this.variantValue);
                 break;
             case MAP:
-                buf.append(", map: ").append(this.value);
+                buf.append(", map: ").append(this.variantValue);
                 break;
         }
         return buf.append("}").toString();
@@ -130,7 +130,7 @@ public final class AnyAggregateType {
         return new Builder();
     }
 
-    public enum Type {
+    public enum VariantTag {
         STRUCTURE("structure"),
         UNION("union"),
         LIST("list"),
@@ -139,7 +139,7 @@ public final class AnyAggregateType {
 
         private final String value;
 
-        Type(String value) {
+        VariantTag(String value) {
             this.value = value;
         }
 
@@ -150,28 +150,28 @@ public final class AnyAggregateType {
     }
 
     public static final class Builder {
-        private Object value;
-        private Type type;
+        private Object variantValue;
+        private VariantTag variantTag;
 
         Builder() {
-            this.type = null;
-            this.value = Type.UNKNOWN_TO_VERSION;
+            this.variantTag = null;
+            this.variantValue = VariantTag.UNKNOWN_TO_VERSION;
         }
 
         Builder(AnyAggregateType data) {
-            this.type = data.type;
-            switch (data.type) {
+            this.variantTag = data.variantTag;
+            switch (data.variantTag) {
                 case STRUCTURE:
-                    this.value = AllSimpleTypes.AllSimpleTypesBuilderReference.from(data.structure());
+                    this.variantValue = AllSimpleTypes.AllSimpleTypesBuilderReference.from(data.structure());
                     break;
                 case LIST:
-                    this.value = CollectionBuilderReference.fromPersistentList(data.list());
+                    this.variantValue = CollectionBuilderReference.fromPersistentList(data.list());
                     break;
                 case MAP:
-                    this.value = CollectionBuilderReference.fromPersistentOrderedMap(data.map());
+                    this.variantValue = CollectionBuilderReference.fromPersistentOrderedMap(data.map());
                     break;
                 default:
-                    this.value = data.value;
+                    this.variantValue = data.variantValue;
             }
         }
 
@@ -185,13 +185,13 @@ public final class AnyAggregateType {
         }
 
         private BuilderReference<AllSimpleTypes, AllSimpleTypes.Builder> structure() {
-            if (this.type != Type.STRUCTURE) {
-                this.type = Type.STRUCTURE;
+            if (this.variantTag != VariantTag.STRUCTURE) {
+                this.variantTag = VariantTag.STRUCTURE;
                 BuilderReference<AllSimpleTypes, AllSimpleTypes.Builder> structure = AllSimpleTypes.AllSimpleTypesBuilderReference.from(null);
-                this.value = structure;
+                this.variantValue = structure;
                 return structure;
             } else {
-                return (BuilderReference<AllSimpleTypes, AllSimpleTypes.Builder>) this.value;
+                return (BuilderReference<AllSimpleTypes, AllSimpleTypes.Builder>) this.variantValue;
             }
         }
 
@@ -205,19 +205,19 @@ public final class AnyAggregateType {
          * <p>union member</p>
          */
         public Builder union(AnySimpleType union) {
-            this.type = Type.UNION;
-            this.value = union;
+            this.variantTag = VariantTag.UNION;
+            this.variantValue = union;
             return this;
         }
 
         private CollectionBuilderReference<List<AllSimpleTypes>> list() {
-            if (this.type != Type.LIST) {
-                this.type = Type.LIST;
+            if (this.variantTag != VariantTag.LIST) {
+                this.variantTag = VariantTag.LIST;
                 CollectionBuilderReference<List<AllSimpleTypes>> list = CollectionBuilderReference.forList();
-                this.value = list;
+                this.variantValue = list;
                 return list;
             } else {
-                return (CollectionBuilderReference<List<AllSimpleTypes>>) this.value;
+                return (CollectionBuilderReference<List<AllSimpleTypes>>) this.variantValue;
             }
         }
 
@@ -241,13 +241,13 @@ public final class AnyAggregateType {
         }
 
         private CollectionBuilderReference<Map<String, AnySimpleType>> map() {
-            if (this.type != Type.MAP) {
-                this.type = Type.MAP;
+            if (this.variantTag != VariantTag.MAP) {
+                this.variantTag = VariantTag.MAP;
                 CollectionBuilderReference<Map<String, AnySimpleType>> map = CollectionBuilderReference.forOrderedMap();
-                this.value = map;
+                this.variantValue = map;
                 return map;
             } else {
-                return (CollectionBuilderReference<Map<String, AnySimpleType>>) this.value;
+                return (CollectionBuilderReference<Map<String, AnySimpleType>>) this.variantValue;
             }
         }
 
@@ -268,17 +268,17 @@ public final class AnyAggregateType {
         }
 
         Object getValue() {
-            switch (this.type) {
+            switch (this.variantTag) {
                 case STRUCTURE:
                     return structure().asPersistent();
                 case UNION:
-                    return this.value;
+                    return this.variantValue;
                 case LIST:
                     return list().asPersistent();
                 case MAP:
                     return map().asPersistent();
                 default:
-                    return this.value;
+                    return this.variantValue;
             }
         }
 

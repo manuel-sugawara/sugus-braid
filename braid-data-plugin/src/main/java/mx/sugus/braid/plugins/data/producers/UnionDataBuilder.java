@@ -45,8 +45,8 @@ public final class UnionDataBuilder implements DirectedClass {
 
     @Override
     public List<FieldSyntax> extraFields(ShapeCodegenState state) {
-        return List.of(FieldSyntax.mutableFrom(Object.class, "value"),
-                       FieldSyntax.mutableFrom(ClassName.from("Type"), "type"));
+        return List.of(FieldSyntax.mutableFrom(Object.class, "variantValue"),
+                       FieldSyntax.mutableFrom(UnionVariantTagEnumData.VARIANT_TAG_NAME, "variantTag"));
     }
 
     @Override
@@ -68,11 +68,11 @@ public final class UnionDataBuilder implements DirectedClass {
 
     private void getValueBody(ShapeCodegenState state, BodyBuilder body) {
         if (!usesReferenceBuilders(state)) {
-            body.addStatement("return this.value");
+            body.addStatement("return this.variantValue");
             return;
         }
         var memberSwitch = SwitchStatement.builder()
-                                          .expression(CodeBlock.from("this.type"));
+                                          .expression(CodeBlock.from("this.variantTag"));
         for (var member : state.shape().members()) {
             var unionVariant = Utils.toSourceName(state, member, Name.Convention.SCREAM_CASE).toString();
             memberSwitch.addCase(CaseClause.builder()
@@ -81,7 +81,7 @@ public final class UnionDataBuilder implements DirectedClass {
                                            .build());
         }
         memberSwitch.defaultCase(DefaultCaseClause.builder()
-                                                  .addStatement("return this.value")
+                                                  .addStatement("return this.variantValue")
                                                   .build());
         body.addStatement(memberSwitch.build());
     }
@@ -93,7 +93,7 @@ public final class UnionDataBuilder implements DirectedClass {
         if (usesReference) {
             return CodeBlock.builder().addCode("$L().asPersistent()", name).build();
         }
-        return CodeBlock.builder().addCode("this.value").build();
+        return CodeBlock.builder().addCode("this.variantValue").build();
     }
 
     private boolean usesReferenceBuilders(ShapeCodegenState state) {
@@ -138,17 +138,17 @@ public final class UnionDataBuilder implements DirectedClass {
         var accessor = MethodSyntax.builder(Utils.toGetterName(state, member).toString())
                                    .addModifier(Modifier.PRIVATE)
                                    .returns(type)
-                                   .ifStatement("this.type != Type.$L", unionVariant, then -> {
-                                       then.addStatement("this.type = Type.$L", unionVariant);
+                                   .ifStatement("this.variantTag != VariantTag.$L", unionVariant, then -> {
+                                       then.addStatement("this.variantTag = VariantTag.$L", unionVariant);
                                        var empty = Utils.toBuilderInitExpression(state, member);
                                        then.addStatement("$T $L = $C",
                                                          type,
                                                          name,
                                                          empty);
-                                       then.addStatement("this.value = $L", name);
+                                       then.addStatement("this.variantValue = $L", name);
                                        then.addStatement("return $L", name);
                                    }, otherwise -> {
-                                       otherwise.addStatement("return ($T) this.value", type);
+                                       otherwise.addStatement("return ($T) this.variantValue", type);
                                    })
                                    .build();
         return accessor;
@@ -289,8 +289,8 @@ public final class UnionDataBuilder implements DirectedClass {
             setBuilderReferenceValue(state, member, builder);
         } else {
             var unionVariant = Utils.toSourceName(state, member, Name.Convention.SCREAM_CASE);
-            builder.addStatement("this.type = Type.$1L", unionVariant);
-            builder.addStatement("this.value = $L", name);
+            builder.addStatement("this.variantTag = VariantTag.$1L", unionVariant);
+            builder.addStatement("this.variantValue = $L", name);
         }
     }
 
@@ -311,8 +311,8 @@ public final class UnionDataBuilder implements DirectedClass {
 
     ConstructorMethodSyntax constructor() {
         return ConstructorMethodSyntax.builder()
-                                      .addStatement("this.type = null")
-                                      .addStatement("this.value = Type.UNKNOWN_TO_VERSION")
+                                      .addStatement("this.variantTag = null")
+                                      .addStatement("this.variantValue = VariantTag.UNKNOWN_TO_VERSION")
                                       .build();
     }
 
@@ -324,8 +324,8 @@ public final class UnionDataBuilder implements DirectedClass {
                                              .addParameter(paramType, "data");
         var withReferenceMember = membersUsingBuilderReference(state);
         if (withReferenceMember.isEmpty()) {
-            builder.addStatement("this.type = data.type")
-                   .addStatement("this.value = data.value");
+            builder.addStatement("this.variantTag = data.variantTag")
+                   .addStatement("this.variantValue = data.variantValue");
         } else {
             builder.body(b -> initBuilderReferences(state, withReferenceMember, b));
         }
@@ -337,8 +337,8 @@ public final class UnionDataBuilder implements DirectedClass {
         List<MemberShape> withReferenceMember,
         BodyBuilder builder
     ) {
-        builder.addStatement("this.type = data.type");
-        var typeSwitch = SwitchStatement.builder().expression(CodeBlock.from("data.type"));
+        builder.addStatement("this.variantTag = data.variantTag");
+        var typeSwitch = SwitchStatement.builder().expression(CodeBlock.from("data.variantTag"));
         for (var member : withReferenceMember) {
             var unionVariant = Utils.toSourceName(state, member, Name.Convention.SCREAM_CASE).toString();
             typeSwitch.addCase(CaseClause.builder()
@@ -350,7 +350,7 @@ public final class UnionDataBuilder implements DirectedClass {
                                          .build());
         }
         typeSwitch.defaultCase(DefaultCaseClause.builder()
-                                                .addStatement("this.value = data.value")
+                                                .addStatement("this.variantValue = data.variantValue")
                                                 .build());
         builder.addStatement(typeSwitch.build());
     }
@@ -376,6 +376,6 @@ public final class UnionDataBuilder implements DirectedClass {
     }
 
     static void setValueFromPersistent(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
-        builder.addStatement("this.value = $C", Utils.builderUnionInitFromDataExpression(state, member));
+        builder.addStatement("this.variantValue = $C", Utils.builderUnionInitFromDataExpression(state, member));
     }
 }
