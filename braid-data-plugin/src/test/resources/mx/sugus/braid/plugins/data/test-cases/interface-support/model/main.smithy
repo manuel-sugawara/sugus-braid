@@ -5,22 +5,18 @@ namespace mx.sugus.braid.test
 use mx.sugus.braid.traits#const
 use mx.sugus.braid.traits#implements
 use mx.sugus.braid.traits#interface
-use mx.sugus.braid.traits#java
 
 enum FormatKind {
     STRING, NUMBER, BOOLEAN
 }
 
-@java("java.lang.Object")
-structure Object {}
 
 /// A structure to test interface support
 @interface
 structure Format {
     /// The format kind
+    @const(FormatKind)
     kind: FormatKind
-    /// The format value
-    value: Object
 }
 
 /// Format string

@@ -66,7 +66,7 @@ public final class StructureShape2 implements StructureBase {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements StructureBase.Builder {
         private Integer intValue;
         private String stringValue;
 

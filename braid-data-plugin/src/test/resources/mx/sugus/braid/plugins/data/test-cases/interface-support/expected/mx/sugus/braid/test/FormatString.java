@@ -66,7 +66,7 @@ public final class FormatString implements Format {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements Format.Builder {
         private String value;
 
         Builder() {

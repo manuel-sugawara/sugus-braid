@@ -14,7 +14,15 @@ public interface Format {
     FormatKind kind();
 
     /**
-     * <p>The format value</p>
+     * Creates a new {@link Builder} to modify a copy of this instance
      */
-    Object value();
+    Builder toBuilder();
+
+    interface Builder {
+
+        /**
+         * Builds a new instance of {@link Format}
+         */
+        Format build();
+    }
 }
