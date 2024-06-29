@@ -68,16 +68,7 @@ public final class Utils {
     }
 
     private static TypeSyntax insertOrReplaceGeneratedBy(TypeSyntax src, List<Annotation> annotations) {
-        if (src instanceof ClassSyntax c) {
-            return c.toBuilder().annotations(annotations).build();
-        }
-        if (src instanceof EnumSyntax e) {
-            return e.toBuilder().annotations(annotations).build();
-        }
-        if (src instanceof InterfaceSyntax i) {
-            return i.toBuilder().annotations(annotations).build();
-        }
-        throw new IllegalArgumentException("unsupported TypeSyntax kind: " + src.getClass().getName());
+        return src.toBuilder().annotations(annotations).build();
     }
 
     private static Annotation findGeneratedAnnotation(TypeSyntax src) {

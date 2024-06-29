@@ -182,7 +182,7 @@ public final class EnumSyntax implements TypeSyntax {
         return builder().name(name);
     }
 
-    public static final class Builder {
+    public static final class Builder implements TypeSyntax.Builder {
         private CollectionBuilderReference<List<EnumConstant>> enumConstants;
         private Javadoc javadoc;
         private CollectionBuilderReference<List<BaseMethodSyntax>> methods;

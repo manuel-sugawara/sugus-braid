@@ -60,7 +60,7 @@ public final class FormatterTypeName implements FormatterNode {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements FormatterNode.Builder {
         private TypeName value;
 
         Builder() {

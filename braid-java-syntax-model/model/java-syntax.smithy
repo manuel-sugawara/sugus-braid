@@ -22,6 +22,7 @@ enum SyntaxFormatterNodeKind {
 
 @interface
 structure FormatterNode {
+    @const(SyntaxFormatterNodeKind)
     kind: SyntaxFormatterNodeKind
 }
 
@@ -99,6 +100,7 @@ enum StatementKind {
 @interface
 structure Statement {
     /// The concrete type of statement.
+    @const(StatementKind)
     stmtKind: StatementKind
 }
 
@@ -296,6 +298,7 @@ enum MethodKind {
 @interface
 structure BaseMethodSyntax {
     /// The concrete kind for this method
+    @const(MethodKind)
     kind: MethodKind
 
     /// The javadoc for the type.
@@ -410,6 +413,7 @@ enum TypeSyntaxKind {
 @implements([SyntaxNode])
 @interface
 structure TypeSyntax {
+    @const(TypeSyntaxKind)
     kind: TypeSyntaxKind
 
     /// The javadoc for the type.
@@ -523,6 +527,7 @@ enum TypeKind {
 @interface
 @implements([SyntaxNode])
 structure TypeName {
+    @const(TypeKind)
     kind: TypeKind
 }
 

@@ -70,7 +70,7 @@ public final class Block implements Statement {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements Statement.Builder {
         private CollectionBuilderReference<List<Statement>> statements;
 
         Builder() {

@@ -102,7 +102,7 @@ public final class Annotation implements SyntaxNode {
                 .build();
     }
 
-    public static final class Builder {
+    public static final class Builder implements SyntaxNode.Builder {
         private ClassName type;
         private CollectionBuilderReference<Map<java.lang.String, MemberValue>> members;
 

@@ -110,7 +110,7 @@ public final class AbstractControlFlow implements Statement {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements Statement.Builder {
         private CodeBlock prefix;
         private BuilderReference<Block, BodyBuilder> statement;
         private AbstractControlFlow next;

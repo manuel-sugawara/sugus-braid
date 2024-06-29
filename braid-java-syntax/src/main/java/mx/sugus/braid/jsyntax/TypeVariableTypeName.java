@@ -83,7 +83,7 @@ public final class TypeVariableTypeName implements TypeName {
         return TypeVariableTypeName.builder().name(name).build();
     }
 
-    public static final class Builder {
+    public static final class Builder implements TypeName.Builder {
         private String name;
         private CollectionBuilderReference<List<TypeName>> bounds;
 

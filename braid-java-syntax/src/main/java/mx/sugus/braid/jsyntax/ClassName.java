@@ -172,7 +172,7 @@ public final class ClassName implements TypeName {
             throw new IllegalArgumentException("Cannot convert type: " + type.kind() + ", to java class");
     }
 
-    public static final class Builder {
+    public static final class Builder implements TypeName.Builder {
         private String name;
         private String packageName;
 

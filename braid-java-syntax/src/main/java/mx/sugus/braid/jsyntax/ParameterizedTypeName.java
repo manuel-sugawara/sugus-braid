@@ -106,7 +106,7 @@ public final class ParameterizedTypeName implements TypeName {
             return builder.build();
     }
 
-    public static final class Builder {
+    public static final class Builder implements TypeName.Builder {
         private ClassName rawType;
         private CollectionBuilderReference<List<TypeName>> typeArguments;
 

@@ -68,7 +68,7 @@ public final class PrimitiveTypeName implements TypeName {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements TypeName.Builder {
         private TypePrimitiveName name;
 
         Builder() {

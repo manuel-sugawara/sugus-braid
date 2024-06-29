@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 import javax.lang.model.element.Modifier;
+import mx.sugus.braid.core.ImplementsKnowledgeIndex;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
@@ -34,8 +35,19 @@ public final class StructureDataBuilder implements DirectedClass {
 
     @Override
     public ClassSyntax.Builder typeSpec(ShapeCodegenState state) {
-        return ClassSyntax.builder("Builder")
-                          .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL);
+        var builder = ClassSyntax.builder("Builder")
+                                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL);
+        var shape = state.shape().asStructureShape().orElseThrow();
+        var superInterfaces = ImplementsKnowledgeIndex.of(state.model()).superInterfaces(shape);
+        for (var superInterface : superInterfaces) {
+            var superInterfaceClass = ClassName.toClassName(Utils.toJavaTypeName(state, superInterface));
+            builder.addSuperInterface(superInterfaceClass
+                                          .toBuilder()
+                                          .name(superInterfaceClass.name() + "." + BUILDER_TYPE.name())
+                                          .build());
+        }
+
+        return builder;
     }
 
     @Override

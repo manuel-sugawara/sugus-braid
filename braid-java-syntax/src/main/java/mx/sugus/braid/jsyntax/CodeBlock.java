@@ -71,7 +71,7 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
         return builder().parts(FormatParser.parseFormat(format, args)).build();
     }
 
-    public static final class Builder {
+    public static final class Builder implements SyntaxNode.Builder, Expression.Builder, EnumBody.Builder, Statement.Builder, Javadoc.Builder {
         private CollectionBuilderReference<List<FormatterNode>> parts;
 
         Builder() {

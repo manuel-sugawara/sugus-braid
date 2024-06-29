@@ -92,7 +92,7 @@ public final class WildcardTypeName implements TypeName {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements TypeName.Builder {
         private ClassName rawType;
         private CollectionBuilderReference<List<TypeName>> upperBounds;
         private CollectionBuilderReference<List<TypeName>> lowerBounds;
