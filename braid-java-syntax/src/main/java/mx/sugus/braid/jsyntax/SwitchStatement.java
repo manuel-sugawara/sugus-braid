@@ -92,7 +92,7 @@ public final class SwitchStatement implements Statement {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements Statement.Builder {
         private Expression expression;
         private CollectionBuilderReference<List<CaseClause>> cases;
         private DefaultCaseClause defaultCase;

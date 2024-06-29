@@ -162,16 +162,7 @@ public final class AddMethodsTransform implements SyntaxNodeTransformer {
         }
 
         private TypeSyntax addMethods(TypeSyntax typeSyntax, List<BaseMethodSyntax> methods) {
-            if (typeSyntax instanceof InterfaceSyntax node) {
-                return node.toBuilder().methods(methods).build();
-            }
-            if (typeSyntax instanceof ClassSyntax node) {
-                return node.toBuilder().methods(methods).build();
-            }
-            if (typeSyntax instanceof EnumSyntax node) {
-                return node.toBuilder().methods(methods).build();
-            }
-            throw new UnsupportedOperationException("the type syntax `" + typeSyntax + "` is unsupported");
+            return typeSyntax.toBuilder().methods(methods).build();
         }
     }
 }

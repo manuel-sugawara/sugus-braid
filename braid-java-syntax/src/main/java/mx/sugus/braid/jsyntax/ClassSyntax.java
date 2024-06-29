@@ -194,7 +194,7 @@ public final class ClassSyntax implements TypeSyntax {
         return builder().name(name);
     }
 
-    public static final class Builder {
+    public static final class Builder implements TypeSyntax.Builder {
         private TypeName superClass;
         private CollectionBuilderReference<List<TypeVariableTypeName>> typeParams;
         private Javadoc javadoc;

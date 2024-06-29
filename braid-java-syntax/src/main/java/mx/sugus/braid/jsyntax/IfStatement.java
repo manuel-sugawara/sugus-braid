@@ -103,7 +103,7 @@ public final class IfStatement implements Statement {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements Statement.Builder {
         private Expression expression;
         private BuilderReference<Block, BodyBuilder> statement;
         private Statement elseStatement;

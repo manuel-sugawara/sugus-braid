@@ -88,7 +88,7 @@ public final class ForStatement implements Statement {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements Statement.Builder {
         private CodeBlock initializer;
         private BuilderReference<Block, BodyBuilder> statement;
 

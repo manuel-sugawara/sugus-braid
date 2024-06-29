@@ -66,7 +66,7 @@ public final class DefaultCaseClause implements SyntaxNode {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements SyntaxNode.Builder {
         private BuilderReference<Block, BodyBuilder> body;
 
         Builder() {

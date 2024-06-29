@@ -96,7 +96,7 @@ public final class CompilationUnit implements SyntaxNode {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements SyntaxNode.Builder {
         private String packageName;
         private CollectionBuilderReference<Set<ClassName>> imports;
         private TypeSyntax type;

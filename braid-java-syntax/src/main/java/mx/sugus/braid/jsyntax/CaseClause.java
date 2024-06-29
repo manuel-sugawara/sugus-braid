@@ -77,7 +77,7 @@ public final class CaseClause implements SyntaxNode {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements SyntaxNode.Builder {
         private CollectionBuilderReference<List<Expression>> label;
         private BuilderReference<Block, BodyBuilder> body;
 

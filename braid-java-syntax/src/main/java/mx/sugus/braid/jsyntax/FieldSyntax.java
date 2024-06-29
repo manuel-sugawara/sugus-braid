@@ -165,7 +165,7 @@ public final class FieldSyntax implements SyntaxNode {
                        .build();
     }
 
-    public static final class Builder {
+    public static final class Builder implements SyntaxNode.Builder {
         private Javadoc javadoc;
         private String name;
         private TypeName type;

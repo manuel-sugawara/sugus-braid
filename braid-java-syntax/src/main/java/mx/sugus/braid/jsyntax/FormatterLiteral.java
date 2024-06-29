@@ -60,7 +60,7 @@ public final class FormatterLiteral implements FormatterNode {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements FormatterNode.Builder {
         private String value;
 
         Builder() {

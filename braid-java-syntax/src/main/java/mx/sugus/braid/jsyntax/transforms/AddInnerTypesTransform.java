@@ -150,16 +150,7 @@ public class AddInnerTypesTransform implements SyntaxNodeTransformer {
         }
 
         private TypeSyntax addInnerTypes(TypeSyntax typeSyntax, List<TypeSyntax> innerTypes) {
-            if (typeSyntax instanceof InterfaceSyntax node) {
-                return node.toBuilder().innerTypes(innerTypes).build();
-            }
-            if (typeSyntax instanceof ClassSyntax node) {
-                return node.toBuilder().innerTypes(innerTypes).build();
-            }
-            if (typeSyntax instanceof EnumSyntax node) {
-                return node.toBuilder().innerTypes(innerTypes).build();
-            }
-            throw new UnsupportedOperationException("the type syntax `" + typeSyntax + "` is unsupported");
+            return typeSyntax.toBuilder().innerTypes(innerTypes).build();
         }
     }
 }

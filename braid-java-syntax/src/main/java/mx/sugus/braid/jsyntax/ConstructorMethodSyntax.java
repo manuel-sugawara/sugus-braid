@@ -128,7 +128,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements BaseMethodSyntax.Builder {
         private BuilderReference<Block, BodyBuilder> body;
         private Javadoc javadoc;
         private CollectionBuilderReference<List<Annotation>> annotations;

@@ -84,7 +84,7 @@ public final class Parameter implements SyntaxNode {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements SyntaxNode.Builder {
         private String name;
         private TypeName type;
         private Boolean varargs;

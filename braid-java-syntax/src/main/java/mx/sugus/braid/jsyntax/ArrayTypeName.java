@@ -68,7 +68,7 @@ public final class ArrayTypeName implements TypeName {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements TypeName.Builder {
         private TypeName componentType;
 
         Builder() {

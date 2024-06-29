@@ -93,7 +93,7 @@ public final class EnumConstant implements SyntaxNode {
         return new Builder();
     }
 
-    public static final class Builder {
+    public static final class Builder implements SyntaxNode.Builder {
         private Javadoc javadoc;
         private String name;
         private EnumBody body;

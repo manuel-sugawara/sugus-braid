@@ -174,7 +174,7 @@ public final class MethodSyntax implements BaseMethodSyntax {
         return builder().name(name);
     }
 
-    public static final class Builder {
+    public static final class Builder implements BaseMethodSyntax.Builder {
         private String name;
         private CollectionBuilderReference<List<TypeVariableTypeName>> typeParams;
         private TypeName returns;
