@@ -1,14 +1,19 @@
 package mx.sugus.braid.plugins.data.model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import mx.sugus.braid.core.ImplementsKnowledgeIndex;
 import mx.sugus.braid.traits.ImplementsTrait;
 import mx.sugus.braid.traits.InterfaceTrait;
 import software.amazon.smithy.model.Model;
+import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.shapes.Shape;
+import software.amazon.smithy.model.shapes.ShapeId;
 import software.amazon.smithy.model.shapes.StructureShape;
 import software.amazon.smithy.model.transform.ModelTransformer;
 
@@ -38,27 +43,42 @@ public final class FlattenInterfaceMembers {
                               .collect(Collectors.toSet());
 
         var implementsIndex = ImplementsKnowledgeIndex.of(model);
-        var replacements = new HashSet<Shape>();
+        var replacements = new LinkedHashMap<ShapeId, StructureShape>();
         for (var parent : interfaces) {
-            for (var implementer : implementsIndex.implementers(parent)) {
-                var merged = mergeParentFields(parent, implementer);
+            for (var implementer : implementsIndex.recursiveImplementers(parent)) {
+                var current = replacements.getOrDefault(implementer.toShapeId(), implementer);
+                var merged = mergeParentFields(parent, current);
                 if (merged != null) {
-                    replacements.add(merged);
+                    replacements.put(merged.toShapeId(), merged);
                 }
             }
         }
-        return replacements;
+        return new LinkedHashSet<>(replacements.values());
     }
 
     private StructureShape mergeParentFields(StructureShape parent, StructureShape child) {
-        var missing = new HashSet<>(parent.getMemberNames());
-        for (var childMemberName : child.getMemberNames()) {
-            missing.remove(childMemberName);
+        if (child.hasTrait(InterfaceTrait.class)) {
+            return null;
         }
-        if (missing.isEmpty()) {
+        var missing = new LinkedHashSet<>(parent.getMemberNames());
+        var changed = new ArrayList<MemberShape>();
+
+        for (var childMemberName : child.getMemberNames()) {
+            var childMember = child.getMember(childMemberName).get();
+            if (missing.remove(childMemberName)) {
+                if (!child.getAllTraits().equals(parent.getMember(childMemberName).get().getAllTraits())) {
+                    childMember = childMember.toBuilder().addTraits(parent.getAllTraits().values()).build();
+                    changed.add(childMember);
+                }
+            }
+        }
+        if (changed.isEmpty() && missing.isEmpty()) {
             return null;
         }
         var builder = child.toBuilder();
+        for (var member : changed) {
+            builder.addMember(member);
+        }
         for (var fieldName : missing) {
             var parentField = parent.getMember(fieldName).orElseThrow();
             builder.addMember(parentField
