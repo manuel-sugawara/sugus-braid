@@ -6,6 +6,7 @@ val smithyVersion: String by project
 
 plugins {
     `java-library`
+    `maven-publish`
 }
 
 repositories {
@@ -13,6 +14,18 @@ repositories {
     mavenCentral()
 }
 
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "mx.sugus.braid"
+            artifactId = "braid-java-syntax"
+            version = "0.1"
+
+            from(components["java"])
+        }
+    }
+}
 
 dependencies {
     implementation(project(":braid-rt-util"))

@@ -4,6 +4,11 @@ extra["moduleName"] = "mx.sugus.codegen"
 
 val smithyVersion: String by project
 
+plugins {
+    `java-library`
+    `maven-publish`
+}
+
 buildscript {
     val smithyVersion: String by project
 
@@ -13,6 +18,18 @@ buildscript {
     dependencies {
         "classpath"("software.amazon.smithy:smithy-cli:$smithyVersion")
         "classpath"("software.amazon.smithy:smithy-model:$smithyVersion")
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "mx.sugus.braid"
+            artifactId = "braid-core"
+            version = "0.1"
+
+            from(components["java"])
+        }
     }
 }
 

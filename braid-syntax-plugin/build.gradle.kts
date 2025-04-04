@@ -2,6 +2,10 @@ description = "Generates code from Smithy models"
 extra["displayName"] = "Smithy :: Codegen Smithy Syntax Plugin"
 extra["moduleName"] = "mx.sugus.codegen.plugin.syntax"
 
+plugins {
+    `maven-publish`
+}
+
 val smithyVersion: String by project
 
 buildscript {
@@ -24,4 +28,16 @@ dependencies {
     implementation("software.amazon.smithy:smithy-codegen-core:$smithyVersion")
     implementation("software.amazon.smithy:smithy-model:$smithyVersion")
     testImplementation("org.mockito:mockito-core:3.+")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "mx.sugus.braid"
+            artifactId = "braid-syntax-plugin"
+            version = "0.1"
+
+            from(components["java"])
+        }
+    }
 }

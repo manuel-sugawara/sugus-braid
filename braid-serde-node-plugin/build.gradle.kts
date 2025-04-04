@@ -17,6 +17,7 @@ buildscript {
 
 plugins {
     `java-library`
+    `maven-publish`
 }
 
 
@@ -29,4 +30,16 @@ dependencies {
     implementation("software.amazon.smithy:smithy-codegen-core:$smithyVersion")
     implementation("software.amazon.smithy:smithy-model:$smithyVersion")
     testImplementation("org.mockito:mockito-core:3.+")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "mx.sugus.braid"
+            artifactId = "braid-serde-node-plugin"
+            version = "0.1"
+
+            from(components["java"])
+        }
+    }
 }

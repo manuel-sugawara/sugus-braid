@@ -28,8 +28,8 @@ repositories {
 publishing {
     publications {
         create<MavenPublication>("maven") {
-            groupId = "mx.sugus.syntax.java"
-            artifactId = "smithy-java-syntax-util"
+            groupId = "mx.sugus.braid"
+            artifactId = "braid-rt"
             version = "0.1"
 
             from(components["java"])

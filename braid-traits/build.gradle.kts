@@ -21,6 +21,19 @@ plugins {
     val smithyGradleVersion: String by project
 
     id("software.amazon.smithy").version(smithyGradleVersion)
+    `maven-publish`
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            groupId = "mx.sugus.braid"
+            artifactId = "braid-traits"
+            version = "0.1"
+
+            from(components["java"])
+        }
+    }
 }
 
 repositories {
