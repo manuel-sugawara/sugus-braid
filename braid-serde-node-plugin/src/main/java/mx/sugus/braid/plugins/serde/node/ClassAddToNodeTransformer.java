@@ -112,16 +112,17 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
         var target = state.model().expectShape(listShape.getValue().getTarget());
         var targetType = Utils.toJavaTypeName(state, target);
         var memberField = Utils.toJavaName(state, member);
-        body.addStatement("$1T.Builder $2LBuilder = $1T.builder()", ObjectNode.class, memberField);
-        var forInit = CodeBlock.from("$T<$T, $T> kvp : this.$L.entrySet()",
-                                     Map.Entry.class, String.class, targetType, memberField);
-        body.forStatement(forInit, b -> {
-            b.addStatement("$LBuilder.withMember(kvp.getKey(), $C)",
-                           memberField,
-                           valueToNode("kvp.getValue()", state, target));
+        body.ifStatement("!this.$L.isEmpty()", memberField, then -> {
+            then.addStatement("$1T.Builder $2LBuilder = $1T.builder()", ObjectNode.class, memberField);
+            var forInit = CodeBlock.from("$T<$T, $T> kvp : this.$L.entrySet()",
+                                         Map.Entry.class, String.class, targetType, memberField);
+            then.forStatement(forInit, b -> {
+                b.addStatement("$LBuilder.withMember(kvp.getKey(), $C)",
+                               memberField,
+                               valueToNode("kvp.getValue()", state, target));
+            });
+            then.addStatement("builder.withMember($S, $LBuilder.build())", member.getMemberName(), memberField);
         });
-
-        body.addStatement("builder.withMember($S, $LBuilder.build())", member.getMemberName(), memberField);
     }
 
     private void addSimpleMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
