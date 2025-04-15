@@ -5,8 +5,7 @@ import static java.util.stream.Collectors.toMap;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -60,7 +59,9 @@ public final class ImplementsKnowledgeIndex implements KnowledgeIndex {
 
         return inheritors.stream()
                          .collect(toMap(x -> x.getMember(dispatchMember.getMemberName()).orElseThrow(),
-                                        Function.identity()));
+                                        Function.identity(),
+                                        (left, right) -> left,
+                                        LinkedHashMap::new));
     }
 
     public MemberShape polymorphicDispatchMember(StructureShape parent) {
@@ -92,10 +93,10 @@ public final class ImplementsKnowledgeIndex implements KnowledgeIndex {
     private static Map<StructureShape, Set<StructureShape>> structureToImplementers(
         Map<StructureShape, Set<StructureShape>> structureToSuperInterfaces
     ) {
-        var result = new HashMap<StructureShape, Set<StructureShape>>();
+        var result = new LinkedHashMap<StructureShape, Set<StructureShape>>();
         for (var kvp : structureToSuperInterfaces.entrySet()) {
             for (var structure : kvp.getValue()) {
-                result.computeIfAbsent(structure, x -> new HashSet<>()).add(kvp.getKey());
+                result.computeIfAbsent(structure, x -> new LinkedHashSet<>()).add(kvp.getKey());
             }
         }
         return result;
