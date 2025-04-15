@@ -1,4 +1,4 @@
-package mx.sugus.braid.plugins.data;
+package mx.sugus.braid.plugins.serde.node;
 
 import static mx.sugus.braid.test.PluginTestRunner.TestCase;
 import static mx.sugus.braid.test.PluginTestRunner.addTestCasesFromUrl;
@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class DataPluginTest {
+public class NodeSerdePluginTest {
 
     @ParameterizedTest(name = "[{index}] => {0}")
     @MethodSource("testCases")
@@ -35,6 +35,6 @@ public class DataPluginTest {
     }
 
     public static Collection<TestCase> testCases() {
-        return addTestCasesFromUrl(DataPluginTest.class.getResource("test-cases"));
+        return addTestCasesFromUrl(NodeSerdePluginTest.class.getResource("test-cases"));
     }
 }

@@ -26,7 +26,7 @@ dependencies {
     implementation(project(":braid-java-syntax"))
     implementation("software.amazon.smithy:smithy-codegen-core:$smithyVersion")
     implementation("software.amazon.smithy:smithy-model:$smithyVersion")
-    testImplementation("org.mockito:mockito-core:3.+")
+    testImplementation(project(":braid-test-util"))
 }
 
 publishing {

@@ -11,6 +11,7 @@ include(":braid-java-syntax-model")
 include(":braid-java-syntax-model-plugin")
 include(":braid-rt-util")
 include(":braid-java-syntax")
+include(":braid-test-util")
 
 pluginManagement {
     repositories {
