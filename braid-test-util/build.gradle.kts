@@ -40,4 +40,5 @@ publishing {
 dependencies {
     implementation("software.amazon.smithy:smithy-codegen-core:$smithyVersion")
     implementation("software.amazon.smithy:smithy-model:$smithyVersion")
+    implementation("org.junit.jupiter:junit-jupiter-api:5.4.0")
 }

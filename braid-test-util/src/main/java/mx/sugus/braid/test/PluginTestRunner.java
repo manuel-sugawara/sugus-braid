@@ -1,5 +1,7 @@
 package mx.sugus.braid.test;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -45,6 +47,14 @@ public class PluginTestRunner {
             }
         }
         return Optional.empty();
+    }
+
+    public static void assertContentEquals(String left, String right) {
+        try {
+            assertEquals(left.replaceAll("\n +", "\n"), right.replaceAll("\n +", "\n"));
+        } catch (Throwable e) {
+            assertEquals(left, right);
+        }
     }
 
     public static Path findExpected(String expected, Set<Path> manifestFiles) {

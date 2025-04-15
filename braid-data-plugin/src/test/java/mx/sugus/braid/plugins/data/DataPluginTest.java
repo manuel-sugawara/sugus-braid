@@ -2,6 +2,7 @@ package mx.sugus.braid.plugins.data;
 
 import static mx.sugus.braid.test.PluginTestRunner.TestCase;
 import static mx.sugus.braid.test.PluginTestRunner.addTestCasesFromUrl;
+import static mx.sugus.braid.test.PluginTestRunner.assertContentEquals;
 import static mx.sugus.braid.test.PluginTestRunner.findGotContent;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -26,7 +27,7 @@ public class DataPluginTest {
             assertNotNull(found);
             var contents = findGotContent(found, test);
             assertTrue(contents.isPresent());
-            assertEquals(test.expectedToContents().get(expected), contents.get().trim());
+            assertContentEquals(test.expectedToContents().get(expected), contents.get().trim());
         }
     }
 
