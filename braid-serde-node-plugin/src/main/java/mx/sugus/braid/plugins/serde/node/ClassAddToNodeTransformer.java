@@ -76,7 +76,7 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
     private void addAggregateMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var target = state.model().expectShape(member.getTarget());
         switch (target.getType()) {
-            case STRUCTURE -> addStructureMember(state, member, body);
+            case STRUCTURE, UNION -> addStructureMember(state, member, body);
             case LIST -> addListMember(state, member, body);
             case MAP -> addMapMember(state, member, body);
             default -> throw new RuntimeException("unsupported aggregated type: " + target.getType());
@@ -128,7 +128,7 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
     private void addSimpleMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var target = state.model().expectShape(member.getTarget());
         var memberField = "this." + Utils.toJavaName(state, member);
-        if (Utils.isRequired(state, member)) {
+        if (Utils.isRequired(state, member) || member.hasTrait(ConstTrait.class)) {
             if (member.hasTrait(ConstTrait.class)) {
                 body.addStatement("builder.withMember($S, $C)",
                                   member.getMemberName(), valueToNode(memberField + "()", state, target));
@@ -147,7 +147,7 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
     private CodeBlock valueToNode(String source, ShapeCodegenState state, Shape target) {
         var type = target.getType();
         return switch (type) {
-            case STRUCTURE -> structureValueToNode(source, state, target);
+            case STRUCTURE, UNION -> structureValueToNode(source, state, target);
             case STRING,
                  BYTE, SHORT, INTEGER, INT_ENUM, LONG,
                  FLOAT, DOUBLE,
