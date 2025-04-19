@@ -108,6 +108,18 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
         var target = state.model().expectShape(member.getTarget());
         var targetType = Utils.toJavaTypeName(state, target);
         var actualClass = toActualJavaClass(ClassName.toClassName(targetType));
+        if (Node.class.isAssignableFrom(actualClass)) {
+            if (Utils.isRequired(state, member)) {
+                body.addStatement("builder.$L(obj.expectMember($S))",
+                                  Utils.toJavaName(state, member),
+                                  member.getMemberName());
+            } else {
+                body.addStatement("obj.getMember($S)"
+                                  + ".ifPresent(builder::$L)",
+                                  member.getMemberName(), Utils.toSetterName(state, member));
+            }
+            return;
+        }
         if (!actualClass.isEnum()) {
             throw new RuntimeException("Node serde of non-enum types is not currently supported: " + actualClass);
         }

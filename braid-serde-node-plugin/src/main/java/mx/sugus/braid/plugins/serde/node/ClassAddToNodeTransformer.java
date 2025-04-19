@@ -166,6 +166,9 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
         if (target.hasTrait(JavaTrait.class)) {
             var targetType = ClassName.toClassName(Utils.toJavaTypeName(state, target));
             var actualClass = ClassAddFromNodeTransformer.toActualJavaClass(targetType);
+            if (Node.class.isAssignableFrom(actualClass)) {
+                return CodeBlock.from("$L", source);
+            }
             if (!actualClass.isEnum()) {
                 throw new RuntimeException("Node serde of non-enum types is not currently supported: " + actualClass);
             }
