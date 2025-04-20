@@ -1,5 +1,6 @@
 package mx.sugus.braid.plugins.syntax;
 
+import java.util.Map;
 import java.util.Objects;
 import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.ImplementsKnowledgeIndex;
@@ -123,50 +124,20 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
     void addCollectionOfSyntaxNode(CodegenState state, MemberShape member, BodyBuilder builder, boolean isBuilderNull) {
         var memberName = Utils.toJavaName(state, member);
         var memberNameNew = memberName.withPrefix("new");
-        var memberInnerTypeShape = memberInnerType(state, member);
-        var memberInnerType = Utils.toJavaTypeName(state, memberInnerTypeShape);
         var memberType = Utils.toJavaTypeName(state, member);
         var getterName = Utils.toGetterName(state, member);
         builder.addStatement("$T $L = node.$L()", memberType, memberName, getterName);
         var type = Utils.aggregateType(state, member);
         builder.addStatement("$T $L = null", memberType, memberNameNew);
         if (type == SymbolConstants.AggregateType.LIST) {
-            builder.forStatement("int idx = 0; idx < $L.size(); idx++", memberName, b -> {
-                // XXX, do we need to be adjusted this for @sparse lists?.
-                b.addStatement("$T value = $L.get(idx)", memberInnerType, memberName);
-                var acceptBlock = acceptBlock(state, memberInnerTypeShape, "value");
-                b.addStatement("$T newValue = $C", memberInnerType, acceptBlock);
-                b.ifStatement("$L == null && !value.equals(newValue)", memberNameNew, valueChanged -> {
-                    valueChanged.addStatement("$L = new $T<>($L.size())",
-                                              memberNameNew,
-                                              Utils.concreteClassFor(SymbolConstants.AggregateType.LIST), memberName);
-                    valueChanged.addStatement("$L.addAll($L.subList(0, idx))", memberNameNew, memberName);
-                });
-                b.ifStatement("$L != null", memberNameNew, then -> {
-                    then.addStatement("$L.add(newValue)", memberNameNew);
-                });
-            });
+            addRewriteForList(state, member, builder, isBuilderNull);
         } else if (type == SymbolConstants.AggregateType.SET) {
-            builder.forStatement("$T value : $L", memberInnerType, memberName, b -> {
-                var acceptBlock = acceptBlock(state, memberInnerTypeShape, "value");
-                b.addStatement("$T newValue = $C", memberInnerType, acceptBlock);
-                b.ifStatement("$L == null && !value.equals(newValue)", memberNameNew, valueChanged -> {
-                    valueChanged.addStatement("$L = new $T<>($L.size())",
-                                              memberNameNew, Utils.concreteClassFor(SymbolConstants.AggregateType.SET)
-                        , memberName);
-                    // XXX This assumes that the set is ordered, for now is true but this will change
-                    valueChanged.forStatement("$T innerValue : $L", memberInnerType, memberName, copyMembers -> {
-                        copyMembers.ifStatement("innerValue == value", done -> done.addStatement("break"));
-                        copyMembers.addStatement("$L.add(innerValue)", memberNameNew);
-                    });
-                });
-                b.ifStatement("$L != null", memberNameNew, then -> {
-                    then.addStatement("$L.add(newValue)", memberNameNew);
-                });
-            });
+            addRewriteForSet(state, member, builder, isBuilderNull);
+        } else if (type == SymbolConstants.AggregateType.MAP) {
+            addRewriteForMap(state, member, builder, isBuilderNull);
         } else {
             // XXX add support for maps
-            throw new UnsupportedOperationException("Unknown aggregate type: " + type);
+            throw new UnsupportedOperationException("Unsupported aggregate type: " + type);
         }
         builder.ifStatement("$L != null", memberNameNew, then -> {
             if (isBuilderNull) {
@@ -179,12 +150,98 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
         });
     }
 
+
+    void addRewriteForList(CodegenState state, MemberShape member, BodyBuilder builder, boolean isBuilderNull) {
+        var memberName = Utils.toJavaName(state, member);
+        var memberNameNew = memberName.withPrefix("new");
+        var memberInnerTypeShape = memberInnerType(state, member);
+        var memberInnerType = Utils.toJavaTypeName(state, memberInnerTypeShape);
+        builder.forStatement("int idx = 0; idx < $L.size(); idx++", memberName, b -> {
+            // XXX, do we need to be adjusted this for @sparse lists?.
+            b.addStatement("$T value = $L.get(idx)", memberInnerType, memberName);
+            var acceptBlock = acceptBlock(state, memberInnerTypeShape, "value");
+            b.addStatement("$T newValue = $C", memberInnerType, acceptBlock);
+            b.ifStatement("$L == null && !value.equals(newValue)", memberNameNew, valueChanged -> {
+                valueChanged.addStatement("$L = new $T<>($L.size())",
+                                          memberNameNew,
+                                          Utils.concreteClassFor(SymbolConstants.AggregateType.LIST), memberName);
+                valueChanged.addStatement("$L.addAll($L.subList(0, idx))", memberNameNew, memberName);
+            });
+            b.ifStatement("$L != null", memberNameNew, then -> {
+                then.addStatement("$L.add(newValue)", memberNameNew);
+            });
+        });
+    }
+
+    void addRewriteForSet(CodegenState state, MemberShape member, BodyBuilder builder, boolean isBuilderNull) {
+        var memberName = Utils.toJavaName(state, member);
+        var memberNameNew = memberName.withPrefix("new");
+        var memberInnerTypeShape = memberInnerType(state, member);
+        var memberInnerType = Utils.toJavaTypeName(state, memberInnerTypeShape);
+        builder.forStatement("$T value : $L", memberInnerType, memberName, b -> {
+            var acceptBlock = acceptBlock(state, memberInnerTypeShape, "value");
+            b.addStatement("$T newValue = $C", memberInnerType, acceptBlock);
+            b.ifStatement("$L == null && !value.equals(newValue)", memberNameNew, valueChanged -> {
+                valueChanged.addStatement("$L = new $T<>($L.size())",
+                                          memberNameNew, Utils.concreteClassFor(SymbolConstants.AggregateType.SET)
+                    , memberName);
+                // XXX This assumes that the set is ordered, for now is true but this will change
+                valueChanged.forStatement("$T innerValue : $L", memberInnerType, memberName, copyMembers -> {
+                    copyMembers.ifStatement("innerValue == value", done -> done.addStatement("break"));
+                    copyMembers.addStatement("$L.add(innerValue)", memberNameNew);
+                });
+            });
+            b.ifStatement("$L != null", memberNameNew, then -> {
+                then.addStatement("$L.add(newValue)", memberNameNew);
+            });
+        });
+    }
+
+    void addRewriteForMap(CodegenState state, MemberShape member, BodyBuilder builder, boolean isBuilderNull) {
+        var memberName = Utils.toJavaName(state, member);
+        var memberNameNew = memberName.withPrefix("new");
+        var memberInnerTypeShape = memberInnerType(state, member);
+        var memberInnerType = Utils.toJavaTypeName(state, memberInnerTypeShape);
+        var entryType = ParameterizedTypeName.builder()
+                                             .rawType(ClassName.from(Map.Entry.class))
+                                             .addTypeArgument(String.class)
+                                             .addTypeArgument(memberInnerType)
+                                             .build();
+        builder.forStatement("$T kvp : $L.entrySet()", entryType, memberName, b -> {
+            b.addStatement("$T value = kvp.getValue()", memberInnerType);
+            var acceptBlock = acceptBlock(state, memberInnerTypeShape, "value");
+            b.addStatement("$T newValue = $C", memberInnerType, acceptBlock);
+            b.ifStatement("$L == null && !value.equals(newValue)", memberNameNew, valueChanged -> {
+                valueChanged.addStatement("$L = new $T<>($L.size())",
+                                          memberNameNew, Utils.concreteClassFor(SymbolConstants.AggregateType.MAP)
+                    , memberName);
+                // XXX Account for non-ordered
+                valueChanged.forStatement("$T innerKvp : $L.entrySet()", entryType, memberName, copyMembers -> {
+                    copyMembers.ifStatement("innerKvp.getValue() == value", done -> done.addStatement("break"));
+                    copyMembers.addStatement("$L.put(innerKvp.getKey(), innerKvp.getValue())", memberNameNew);
+                });
+            });
+            b.ifStatement("$L != null", memberNameNew, then -> {
+                then.addStatement("$L.put(kvp.getKey(), newValue)", memberNameNew);
+            });
+        });
+    }
+
     Shape memberInnerType(CodegenState state, MemberShape member) {
+        var type = Utils.aggregateType(state, member);
         var targetId = member.getTarget();
         var target = state.model().expectShape(targetId);
-        var listShape = target.asListShape().orElseThrow();
-        var listMemberTarget = listShape.getMember().getTarget();
-        return state.model().expectShape(listMemberTarget);
+        if (type == SymbolConstants.AggregateType.LIST || type == SymbolConstants.AggregateType.SET) {
+            var listShape = target.asListShape().orElseThrow();
+            var listMemberTarget = listShape.getMember().getTarget();
+            return state.model().expectShape(listMemberTarget);
+        }
+        if (type == SymbolConstants.AggregateType.MAP) {
+            var mapShape = target.asMapShape().orElseThrow();
+            var valueMemberTarget = mapShape.getValue().getTarget();
+            return state.model().expectShape(valueMemberTarget);
+        }
+        throw new IllegalArgumentException("unknown aggregate type");
     }
 
     boolean isCollectionOfSyntaxNode(CodegenState state, MemberShape member) {
@@ -194,6 +251,14 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
         if (type == SymbolConstants.AggregateType.LIST || type == SymbolConstants.AggregateType.SET) {
             var listShape = target.asListShape().orElseThrow();
             var targetShape = state.model().expectShape(listShape.getMember().getTarget());
+            if (SyntaxVisitorJavaProducer.shapeImplements(syntaxNode, state.model(), targetShape)) {
+                return true;
+            }
+            return targetShape.getId().toString().equals(syntaxNode);
+        }
+        if (type == SymbolConstants.AggregateType.MAP) {
+            var mapShape = target.asMapShape().orElseThrow();
+            var targetShape = state.model().expectShape(mapShape.getValue().getTarget());
             if (SyntaxVisitorJavaProducer.shapeImplements(syntaxNode, state.model(), targetShape)) {
                 return true;
             }
