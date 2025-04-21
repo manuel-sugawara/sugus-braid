@@ -22,3 +22,9 @@ map StringToSimple {
 structure StructureShape {
     members: StringToSimple
 }
+
+@implements([SyntaxNode])
+structure StructureShape2 {
+    structureShape: StructureShape
+    members: StringToSimple
+}

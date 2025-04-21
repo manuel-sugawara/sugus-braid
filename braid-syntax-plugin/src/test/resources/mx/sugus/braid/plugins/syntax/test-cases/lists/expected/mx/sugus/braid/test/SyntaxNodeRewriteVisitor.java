@@ -1,7 +1,5 @@
 package mx.sugus.braid.test;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -23,46 +21,43 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             builder.structureMember(structureMemberNew);
         }
         List<StructureSimple> listMember = node.listMember();
-        List<StructureSimple> newListMember = null;
-        for (int idx = 0; idx < listMember.size(); idx++) {
+        boolean listMemberChanged = false;
+        int listMemberSize = listMember.size();
+        for (int idx = 0; idx < listMemberSize; idx++) {
             StructureSimple value = listMember.get(idx);
             StructureSimple newValue = visitStructureSimple(value);
-            if (newListMember == null && !value.equals(newValue)) {
-                newListMember = new ArrayList<>(listMember.size());
-                newListMember.addAll(listMember.subList(0, idx));
+            if (!listMemberChanged && value != newValue) {
+                listMemberChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addListMember(listMember.get(innerIdx));
+                }
             }
-            if (newListMember != null) {
-                newListMember.add(newValue);
+            if (listMemberChanged) {
+                builder.addListMember(newValue);
             }
-        }
-        if (newListMember != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.listMember(newListMember);
         }
         Set<StructureSimple> setMember = node.setMember();
-        Set<StructureSimple> newSetMember = null;
+        boolean setMemberChanged = false;
         for (StructureSimple value : setMember) {
             StructureSimple newValue = visitStructureSimple(value);
-            if (newSetMember == null && !value.equals(newValue)) {
-                newSetMember = new LinkedHashSet<>(setMember.size());
+            if (!setMemberChanged && value != newValue) {
+                setMemberChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
                 for (StructureSimple innerValue : setMember) {
                     if (innerValue == value) {
                         break;
                     }
-                    newSetMember.add(innerValue);
+                    builder.addSetMember(innerValue);
                 }
             }
-            if (newSetMember != null) {
-                newSetMember.add(newValue);
+            if (setMemberChanged) {
+                builder.addSetMember(newValue);
             }
-        }
-        if (newSetMember != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.setMember(newSetMember);
         }
         if (builder != null) {
             return builder.build();

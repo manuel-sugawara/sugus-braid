@@ -128,7 +128,7 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
         var getterName = Utils.toGetterName(state, member);
         builder.addStatement("$T $L = node.$L()", memberType, memberName, getterName);
         var type = Utils.aggregateType(state, member);
-        builder.addStatement("$T $L = null", memberType, memberNameNew);
+
         if (type == SymbolConstants.AggregateType.LIST) {
             addRewriteForList(state, member, builder, isBuilderNull);
         } else if (type == SymbolConstants.AggregateType.SET) {
@@ -139,67 +139,74 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
             // XXX add support for maps
             throw new UnsupportedOperationException("Unsupported aggregate type: " + type);
         }
-        builder.ifStatement("$L != null", memberNameNew, then -> {
-            if (isBuilderNull) {
-                then.addStatement("builder = node.toBuilder()");
-            } else {
-                then.ifStatement("builder == null", builderIsNull -> builderIsNull.addStatement("builder = node.toBuilder()"));
-            }
-            var setterName = Utils.toSetterName(state, member);
-            then.addStatement("builder.$L($L)", setterName, memberNameNew);
-        });
     }
 
 
     void addRewriteForList(CodegenState state, MemberShape member, BodyBuilder builder, boolean isBuilderNull) {
         var memberName = Utils.toJavaName(state, member);
-        var memberNameNew = memberName.withPrefix("new");
         var memberInnerTypeShape = memberInnerType(state, member);
         var memberInnerType = Utils.toJavaTypeName(state, memberInnerTypeShape);
-        builder.forStatement("int idx = 0; idx < $L.size(); idx++", memberName, b -> {
-            // XXX, do we need to be adjusted this for @sparse lists?.
+        var memberChanged = memberName.withSuffix("changed");
+        var memberSize = memberName.withSuffix("size");
+        var addMethodName = Utils.toAdderName(state, member).toString();
+        builder.addStatement("boolean $L = false", memberChanged);
+        builder.addStatement("int $L = $L.size()", memberSize, memberName);
+        builder.forStatement("int idx = 0; idx < $L; idx++", memberSize, b -> {
             b.addStatement("$T value = $L.get(idx)", memberInnerType, memberName);
             var acceptBlock = acceptBlock(state, memberInnerTypeShape, "value");
             b.addStatement("$T newValue = $C", memberInnerType, acceptBlock);
-            b.ifStatement("$L == null && !value.equals(newValue)", memberNameNew, valueChanged -> {
-                valueChanged.addStatement("$L = new $T<>($L.size())",
-                                          memberNameNew,
-                                          Utils.concreteClassFor(SymbolConstants.AggregateType.LIST), memberName);
-                valueChanged.addStatement("$L.addAll($L.subList(0, idx))", memberNameNew, memberName);
+            b.ifStatement("!$L && value != newValue", memberChanged, valueChanged -> {
+                valueChanged.addStatement("$L = true", memberChanged);
+                if (isBuilderNull) {
+                    valueChanged.addStatement("builder = node.toBuilder()");
+                } else {
+                    valueChanged.ifStatement("builder == null", builderIsNull -> {
+                        builderIsNull.addStatement("builder = node.toBuilder()");
+                    });
+                }
+                valueChanged.forStatement("int innerIdx = 0; innerIdx < idx; innerIdx++", memberSize, copyMembers -> {
+                    copyMembers.addStatement("builder.$L($L.get(innerIdx))", addMethodName, memberName);
+                });
             });
-            b.ifStatement("$L != null", memberNameNew, then -> {
-                then.addStatement("$L.add(newValue)", memberNameNew);
+            b.ifStatement("$L", memberChanged, then -> {
+                then.addStatement("builder.$L(newValue)", addMethodName);
             });
         });
     }
 
     void addRewriteForSet(CodegenState state, MemberShape member, BodyBuilder builder, boolean isBuilderNull) {
         var memberName = Utils.toJavaName(state, member);
-        var memberNameNew = memberName.withPrefix("new");
         var memberInnerTypeShape = memberInnerType(state, member);
         var memberInnerType = Utils.toJavaTypeName(state, memberInnerTypeShape);
+        var memberChanged = memberName.withSuffix("changed");
+        var addMethodName = Utils.toAdderName(state, member).toString();
+        builder.addStatement("boolean $L = false", memberChanged);
         builder.forStatement("$T value : $L", memberInnerType, memberName, b -> {
             var acceptBlock = acceptBlock(state, memberInnerTypeShape, "value");
             b.addStatement("$T newValue = $C", memberInnerType, acceptBlock);
-            b.ifStatement("$L == null && !value.equals(newValue)", memberNameNew, valueChanged -> {
-                valueChanged.addStatement("$L = new $T<>($L.size())",
-                                          memberNameNew, Utils.concreteClassFor(SymbolConstants.AggregateType.SET)
-                    , memberName);
-                // XXX This assumes that the set is ordered, for now is true but this will change
+            b.ifStatement("!$L && value != newValue", memberChanged, valueChanged -> {
+                valueChanged.addStatement("$L = true", memberChanged);
+                if (isBuilderNull) {
+                    valueChanged.addStatement("builder = node.toBuilder()");
+                } else {
+                    valueChanged.ifStatement("builder == null", builderIsNull -> {
+                        builderIsNull.addStatement("builder = node.toBuilder()");
+                    });
+                }
                 valueChanged.forStatement("$T innerValue : $L", memberInnerType, memberName, copyMembers -> {
                     copyMembers.ifStatement("innerValue == value", done -> done.addStatement("break"));
-                    copyMembers.addStatement("$L.add(innerValue)", memberNameNew);
+                    copyMembers.addStatement("builder.$L(innerValue)", addMethodName);
                 });
             });
-            b.ifStatement("$L != null", memberNameNew, then -> {
-                then.addStatement("$L.add(newValue)", memberNameNew);
+            b.ifStatement("$L", memberChanged, then -> {
+                then.addStatement("builder.$L(newValue)", addMethodName);
             });
         });
     }
 
     void addRewriteForMap(CodegenState state, MemberShape member, BodyBuilder builder, boolean isBuilderNull) {
         var memberName = Utils.toJavaName(state, member);
-        var memberNameNew = memberName.withPrefix("new");
+        var memberChanged = memberName.withSuffix("changed");
         var memberInnerTypeShape = memberInnerType(state, member);
         var memberInnerType = Utils.toJavaTypeName(state, memberInnerTypeShape);
         var entryType = ParameterizedTypeName.builder()
@@ -207,22 +214,28 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
                                              .addTypeArgument(String.class)
                                              .addTypeArgument(memberInnerType)
                                              .build();
+        var putMethodName = Utils.toAdderName(state, member).toString();
+        builder.addStatement("boolean $L = false", memberChanged);
         builder.forStatement("$T kvp : $L.entrySet()", entryType, memberName, b -> {
             b.addStatement("$T value = kvp.getValue()", memberInnerType);
             var acceptBlock = acceptBlock(state, memberInnerTypeShape, "value");
             b.addStatement("$T newValue = $C", memberInnerType, acceptBlock);
-            b.ifStatement("$L == null && !value.equals(newValue)", memberNameNew, valueChanged -> {
-                valueChanged.addStatement("$L = new $T<>($L.size())",
-                                          memberNameNew, Utils.concreteClassFor(SymbolConstants.AggregateType.MAP)
-                    , memberName);
-                // XXX Account for non-ordered
+            b.ifStatement("!$L && value != newValue", memberChanged, valueChanged -> {
+                valueChanged.addStatement("$L = true", memberChanged);
+                if (isBuilderNull) {
+                    valueChanged.addStatement("builder = node.toBuilder()");
+                } else {
+                    valueChanged.ifStatement("builder == null", builderIsNull -> {
+                        builderIsNull.addStatement("builder = node.toBuilder()");
+                    });
+                }
                 valueChanged.forStatement("$T innerKvp : $L.entrySet()", entryType, memberName, copyMembers -> {
                     copyMembers.ifStatement("innerKvp.getValue() == value", done -> done.addStatement("break"));
-                    copyMembers.addStatement("$L.put(innerKvp.getKey(), innerKvp.getValue())", memberNameNew);
+                    copyMembers.addStatement("builder.$L(innerKvp.getKey(), innerKvp.getValue())", putMethodName);
                 });
             });
-            b.ifStatement("$L != null", memberNameNew, then -> {
-                then.addStatement("$L.put(kvp.getKey(), newValue)", memberNameNew);
+            b.ifStatement("$L", memberChanged, then -> {
+                then.addStatement("builder.$L(kvp.getKey(), newValue)", putMethodName);
             });
         });
     }
