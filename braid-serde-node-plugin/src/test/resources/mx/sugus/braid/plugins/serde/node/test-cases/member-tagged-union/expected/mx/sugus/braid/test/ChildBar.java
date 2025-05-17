@@ -91,6 +91,7 @@ public final class ChildBar implements SyntaxNodeChild, SyntaxNode, ToNode {
      * <p>Converts a {@link Node} to ChildBar</p>
      */
     public static ChildBar fromNode(Validation validator, Node node) {
+        validator = validator.with("ChildBar");
         ChildBar.Builder builder = builder();
         ObjectNode obj = node.expectObjectNode();
         for (Map.Entry<StringNode, Node> kvp : obj.getMembers().entrySet()) {

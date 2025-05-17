@@ -119,6 +119,7 @@ public final class StructureShape implements ToNode {
      * <p>Converts a {@link Node} to StructureShape</p>
      */
     public static StructureShape fromNode(Validation validator, Node node) {
+        validator = validator.with("StructureShape");
         StructureShape.Builder builder = builder();
         ObjectNode obj = node.expectObjectNode();
         for (Map.Entry<StringNode, Node> kvp : obj.getMembers().entrySet()) {
@@ -132,9 +133,9 @@ public final class StructureShape implements ToNode {
                     builder.anotherModifier(Modifier.valueOf(item.expectStringNode().getValue().toUpperCase(Locale.US)));
                     break;
                 case "modifierList":
-                    value.expectArrayNode().forEach(item -> {
-                        builder.addModifierList(Modifier.valueOf(item.expectStringNode().getValue().toUpperCase(Locale.US)));
-                    });
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        builder.addModifierList(Modifier.valueOf(lstNodeValue.expectStringNode().getValue().toUpperCase(Locale.US)));
+                    }
                     break;
                 default:
                     validator.report(Validation.Severity.WARNING, key, () -> String.format("unknown key `%s` with value `%s`", key, value));

@@ -19,8 +19,8 @@ import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
 import mx.sugus.braid.plugins.data.producers.Utils;
-import mx.sugus.braid.rt.util.Validation;
 import mx.sugus.braid.rt.util.SinkValidator;
+import mx.sugus.braid.rt.util.Validation;
 import mx.sugus.braid.traits.ConstTrait;
 import mx.sugus.braid.traits.JavaTrait;
 import software.amazon.smithy.model.node.Node;
@@ -64,7 +64,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
                                   .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                                   .addParameter(Node.class, "node")
                                   .returns(className);
-         builder.addStatement("return fromNode($T.instance(), node)", SinkValidator.class);
+        builder.addStatement("return fromNode($T.instance(), node)", SinkValidator.class);
         return builder.build();
     }
 
@@ -78,6 +78,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
                                   .addParameter(Node.class, "node")
                                   .returns(className);
         var body = new BodyBuilder();
+        body.addStatement("validator = validator.with($S)", state.shape().getId().getName());
         body.addStatement("$T.Builder builder = builder()", className);
         body.addStatement("$T obj = node.expectObjectNode()", ObjectNode.class);
 
@@ -141,8 +142,8 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
             return;
         }
         var targetType = Utils.toJavaTypeName(state, target);
-        body.addStatement("builder.$L($T.fromNode(validator, value.expectObjectNode()))",
-                          Utils.toSetterName(state, member), targetType);
+        body.addStatement("builder.$L($T.fromNode(validator.with($S), value.expectObjectNode()))",
+                          Utils.toSetterName(state, member), targetType, member.getMemberName());
     }
 
     private void addJavaMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder body) {
@@ -158,17 +159,17 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
         if (!actualClass.isEnum()) {
             throw new RuntimeException("Node serde of non-enum types is not currently supported: " + actualClass);
         }
-        body.addStatement("builder.$L($C)", Utils.toSetterName(state, member), valueFromNode("item", state, target));
+        body.addStatement("builder.$L($C)", Utils.toSetterName(state, member), valueFromNode("item", state, target, member));
     }
 
     private void addListMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder body) {
         var listShape = state.model().expectShape(member.getTarget()).asListShape().orElseThrow();
         var target = state.model().expectShape(listShape.getMember().getTarget());
+        var targetType = Utils.toJavaTypeName(state, target);
         var adder = Utils.toAdderName(state, member);
-        body.addStatement("value.expectArrayNode().forEach(item -> $B)",
-                          BodyBuilder.create()
-                                     .addStatement("builder.$L($C)", adder, valueFromNode("item", state, target))
-                                     .build());
+        body.beginControlFlow("for ($T lstNodeValue : value.expectArrayNode())", Node.class);
+        body.addStatement("builder.$L($C)", adder, valueFromNode("lstNodeValue", state, target, member));
+        body.endControlFlow();
     }
 
     private void addMapMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder body) {
@@ -181,7 +182,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
             caseBody.forStatement(forInit, b -> {
                 b.addStatement("$T valueNode = memberKvp.getValue()", Node.class);
                 b.addStatement("builder.$L(memberKvp.getKey().getValue(), $C)",
-                               putter, valueFromNode("valueNode", state, target));
+                               putter, valueFromNode("valueNode", state, target, member));
             });
         });
     }
@@ -197,14 +198,14 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
         } else {
             caseBuilder.addStatement("builder.$L($C)",
                                      Utils.toSetterName(state, member),
-                                     valueFromNode("value", state, target));
+                                     valueFromNode("value", state, target, member));
         }
     }
 
-    private CodeBlock valueFromNode(String nodeVar, ShapeCodegenState state, Shape target) {
+    private CodeBlock valueFromNode(String nodeVar, ShapeCodegenState state, Shape target, MemberShape member) {
         var type = target.getType();
         return switch (type) {
-            case STRUCTURE -> valueFromStructureNode(nodeVar, state, target);
+            case STRUCTURE -> valueFromStructureNode(nodeVar, state, target, member);
             case STRING -> CodeBlock.from("$L.expectStringNode().getValue()", nodeVar);
             case BYTE -> CodeBlock.from("$L.expectNumberNode().getValue().byteValue()", nodeVar);
             case SHORT -> CodeBlock.from("$L.expectNumberNode().getValue().shortValue()", nodeVar);
@@ -221,7 +222,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
         };
     }
 
-    private CodeBlock valueFromStructureNode(String nodeVar, ShapeCodegenState state, Shape target) {
+    private CodeBlock valueFromStructureNode(String nodeVar, ShapeCodegenState state, Shape target, MemberShape member) {
         if (target.hasTrait(JavaTrait.class)) {
             var targetType = ClassName.toClassName(Utils.toJavaTypeName(state, target));
             var actualClass = toActualJavaClass(targetType);
@@ -231,7 +232,8 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
             return CodeBlock.from("$T.valueOf($L.expectStringNode().getValue().toUpperCase($T.US))",
                                   Utils.toJavaTypeName(state, target), nodeVar, Locale.class);
         }
-        return CodeBlock.from("$T.fromNode(validator, $L)", Utils.toJavaTypeName(state, target), nodeVar);
+        return CodeBlock.from("$T.fromNode(validator.with($S), $L)",
+                              Utils.toJavaTypeName(state, target), member.getMemberName(), nodeVar);
     }
 
     static Class<?> toActualJavaClass(ClassName className) {

@@ -96,6 +96,7 @@ public final class AnotherChild implements SyntaxNode, ToNode {
      * <p>Converts a {@link Node} to AnotherChild</p>
      */
     public static AnotherChild fromNode(Validation validator, Node node) {
+        validator = validator.with("AnotherChild");
         AnotherChild.Builder builder = builder();
         ObjectNode obj = node.expectObjectNode();
         for (Map.Entry<StringNode, Node> kvp : obj.getMembers().entrySet()) {

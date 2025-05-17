@@ -283,6 +283,7 @@ public final class Parent implements ToNode {
      * <p>Converts a {@link Node} to Parent</p>
      */
     public static Parent fromNode(Validation validator, Node node) {
+        validator = validator.with("Parent");
         Parent.Builder builder = builder();
         ObjectNode obj = node.expectObjectNode();
         for (Map.Entry<StringNode, Node> kvp : obj.getMembers().entrySet()) {
@@ -295,7 +296,7 @@ public final class Parent implements ToNode {
                 case "children":
                     for (Map.Entry<StringNode, Node> memberKvp : value.expectObjectNode().getMembers().entrySet()) {
                         Node valueNode = memberKvp.getValue();
-                        builder.putChildren(memberKvp.getKey().getValue(), Child.fromNode(validator, valueNode));
+                        builder.putChildren(memberKvp.getKey().getValue(), Child.fromNode(validator.with("children"), valueNode));
                     }
                     break;
                 case "booleans":

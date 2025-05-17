@@ -96,6 +96,7 @@ public final class Parent implements SyntaxNode, ToNode {
      * <p>Converts a {@link Node} to Parent</p>
      */
     public static Parent fromNode(Validation validator, Node node) {
+        validator = validator.with("Parent");
         Parent.Builder builder = builder();
         ObjectNode obj = node.expectObjectNode();
         for (Map.Entry<StringNode, Node> kvp : obj.getMembers().entrySet()) {
@@ -103,10 +104,10 @@ public final class Parent implements SyntaxNode, ToNode {
             String key = kvp.getKey().getValue();
             switch (key) {
                 case "child":
-                    builder.child(SyntaxNodeChild.fromNode(validator, value.expectObjectNode()));
+                    builder.child(SyntaxNodeChild.fromNode(validator.with("child"), value.expectObjectNode()));
                     break;
                 case "anotherChild":
-                    builder.anotherChild(AnotherChild.fromNode(validator, value.expectObjectNode()));
+                    builder.anotherChild(AnotherChild.fromNode(validator.with("anotherChild"), value.expectObjectNode()));
                     break;
                 default:
                     validator.report(Validation.Severity.WARNING, key, () -> String.format("unknown key `%s` with value `%s`", key, value));

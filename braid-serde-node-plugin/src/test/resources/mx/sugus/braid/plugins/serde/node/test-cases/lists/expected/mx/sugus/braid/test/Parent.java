@@ -285,6 +285,7 @@ public final class Parent implements ToNode {
      * <p>Converts a {@link Node} to Parent</p>
      */
     public static Parent fromNode(Validation validator, Node node) {
+        validator = validator.with("Parent");
         Parent.Builder builder = builder();
         ObjectNode obj = node.expectObjectNode();
         for (Map.Entry<StringNode, Node> kvp : obj.getMembers().entrySet()) {
@@ -295,64 +296,64 @@ public final class Parent implements ToNode {
                     builder.stringMember(value.expectStringNode().getValue());
                     break;
                 case "children":
-                    value.expectArrayNode().forEach(item -> {
-                        builder.addChildren(Child.fromNode(validator, item));
-                    });
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        builder.addChildren(Child.fromNode(validator.with("children"), lstNodeValue));
+                    }
                     break;
                 case "booleans":
-                    value.expectArrayNode().forEach(item -> {
-                        builder.addBoolean(item.expectBooleanNode().getValue());
-                    });
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        builder.addBoolean(lstNodeValue.expectBooleanNode().getValue());
+                    }
                     break;
                 case "bytes":
-                    value.expectArrayNode().forEach(item -> {
-                        builder.addByte(item.expectNumberNode().getValue().byteValue());
-                    });
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        builder.addByte(lstNodeValue.expectNumberNode().getValue().byteValue());
+                    }
                     break;
                 case "shorts":
-                    value.expectArrayNode().forEach(item -> {
-                        builder.addShort(item.expectNumberNode().getValue().shortValue());
-                    });
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        builder.addShort(lstNodeValue.expectNumberNode().getValue().shortValue());
+                    }
                     break;
                 case "integers":
-                    value.expectArrayNode().forEach(item -> {
-                        builder.addInteger(item.expectNumberNode().getValue().intValue());
-                    });
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        builder.addInteger(lstNodeValue.expectNumberNode().getValue().intValue());
+                    }
                     break;
                 case "bigIntegers":
-                    value.expectArrayNode().forEach(item -> {
-                        builder.addBigInteger(item.expectNumberNode().asBigDecimal().get().toBigInteger());
-                    });
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        builder.addBigInteger(lstNodeValue.expectNumberNode().asBigDecimal().get().toBigInteger());
+                    }
                     break;
                 case "longs":
-                    value.expectArrayNode().forEach(item -> {
-                        builder.addLong(item.expectNumberNode().getValue().longValue());
-                    });
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        builder.addLong(lstNodeValue.expectNumberNode().getValue().longValue());
+                    }
                     break;
                 case "floats":
-                    value.expectArrayNode().forEach(item -> {
-                        builder.addFloat(item.expectNumberNode().getValue().floatValue());
-                    });
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        builder.addFloat(lstNodeValue.expectNumberNode().getValue().floatValue());
+                    }
                     break;
                 case "doubles":
-                    value.expectArrayNode().forEach(item -> {
-                        builder.addDouble(item.expectNumberNode().getValue().doubleValue());
-                    });
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        builder.addDouble(lstNodeValue.expectNumberNode().getValue().doubleValue());
+                    }
                     break;
                 case "strings":
-                    value.expectArrayNode().forEach(item -> {
-                        builder.addString(item.expectStringNode().getValue());
-                    });
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        builder.addString(lstNodeValue.expectStringNode().getValue());
+                    }
                     break;
                 case "bigDecimals":
-                    value.expectArrayNode().forEach(item -> {
-                        builder.addBigDecimal(item.expectNumberNode().asBigDecimal().get());
-                    });
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        builder.addBigDecimal(lstNodeValue.expectNumberNode().asBigDecimal().get());
+                    }
                     break;
                 case "enumValues":
-                    value.expectArrayNode().forEach(item -> {
-                        builder.addEnumValue(EnumValue.from(item.expectStringNode().getValue()));
-                    });
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        builder.addEnumValue(EnumValue.from(lstNodeValue.expectStringNode().getValue()));
+                    }
                     break;
                 default:
                     validator.report(Validation.Severity.WARNING, key, () -> String.format("unknown key `%s` with value `%s`", key, value));

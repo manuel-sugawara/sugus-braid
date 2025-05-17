@@ -96,6 +96,7 @@ public final class Child implements ToNode {
      * <p>Converts a {@link Node} to Child</p>
      */
     public static Child fromNode(Validation validator, Node node) {
+        validator = validator.with("Child");
         Child.Builder builder = builder();
         ObjectNode obj = node.expectObjectNode();
         for (Map.Entry<StringNode, Node> kvp : obj.getMembers().entrySet()) {

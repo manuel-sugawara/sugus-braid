@@ -91,6 +91,7 @@ public final class ChildFoo implements SyntaxNodeChild, SyntaxNode, ToNode {
      * <p>Converts a {@link Node} to ChildFoo</p>
      */
     public static ChildFoo fromNode(Validation validator, Node node) {
+        validator = validator.with("ChildFoo");
         ChildFoo.Builder builder = builder();
         ObjectNode obj = node.expectObjectNode();
         for (Map.Entry<StringNode, Node> kvp : obj.getMembers().entrySet()) {

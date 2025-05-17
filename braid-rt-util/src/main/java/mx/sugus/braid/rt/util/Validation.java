@@ -11,6 +11,10 @@ public interface Validation {
 
     void report(Severity severity, String path, Supplier<String> message);
 
+    default Validation with(String path) {
+        return this;
+    }
+
     default List<Event> events() {
         return Collections.emptyList();
     }
@@ -40,6 +44,21 @@ public interface Validation {
 
         public Path with(String segment) {
             return new Path(this, segment);
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder sb = new StringBuilder();
+            append(sb);
+            return sb.toString();
+        }
+
+        void append(StringBuilder sb) {
+            if (parent != null) {
+                parent.append(sb);
+                sb.append(" > ");
+            }
+            sb.append(segment);
         }
     }
 }
