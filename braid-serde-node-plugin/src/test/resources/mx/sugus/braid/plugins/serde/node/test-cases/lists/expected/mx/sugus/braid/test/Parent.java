@@ -3,12 +3,16 @@ package mx.sugus.braid.test;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
+import mx.sugus.braid.rt.util.SinkValidator;
+import mx.sugus.braid.rt.util.Validation;
 import mx.sugus.braid.rt.util.annotations.Generated;
 import software.amazon.smithy.model.node.ArrayNode;
 import software.amazon.smithy.model.node.Node;
 import software.amazon.smithy.model.node.ObjectNode;
+import software.amazon.smithy.model.node.StringNode;
 import software.amazon.smithy.model.node.ToNode;
 
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.serde.node#NodeSerdePlugin"})
@@ -271,72 +275,90 @@ public final class Parent implements ToNode {
     }
 
     /**
-     * <p>Converts a Node to Parent</p>
+     * <p>Converts a {@link Node} to Parent</p>
      */
     public static Parent fromNode(Node node) {
+        return fromNode(SinkValidator.instance(), node);
+    }
+
+    /**
+     * <p>Converts a {@link Node} to Parent</p>
+     */
+    public static Parent fromNode(Validation validator, Node node) {
         Parent.Builder builder = builder();
         ObjectNode obj = node.expectObjectNode();
-        obj.getMember("stringMember").map(n -> n.expectStringNode().getValue()).ifPresent(builder::stringMember);
-        obj.getArrayMember("children", nodes -> {
-            for (Node item : nodes) {
-                builder.addChildren(Child.fromNode(item));
+        for (Map.Entry<StringNode, Node> kvp : obj.getMembers().entrySet()) {
+            Node value = kvp.getValue();
+            String key = kvp.getKey().getValue();
+            switch (key) {
+                case "stringMember":
+                    builder.stringMember(value.expectStringNode().getValue());
+                    break;
+                case "children":
+                    value.expectArrayNode().forEach(item -> {
+                        builder.addChildren(Child.fromNode(validator, item));
+                    });
+                    break;
+                case "booleans":
+                    value.expectArrayNode().forEach(item -> {
+                        builder.addBoolean(item.expectBooleanNode().getValue());
+                    });
+                    break;
+                case "bytes":
+                    value.expectArrayNode().forEach(item -> {
+                        builder.addByte(item.expectNumberNode().getValue().byteValue());
+                    });
+                    break;
+                case "shorts":
+                    value.expectArrayNode().forEach(item -> {
+                        builder.addShort(item.expectNumberNode().getValue().shortValue());
+                    });
+                    break;
+                case "integers":
+                    value.expectArrayNode().forEach(item -> {
+                        builder.addInteger(item.expectNumberNode().getValue().intValue());
+                    });
+                    break;
+                case "bigIntegers":
+                    value.expectArrayNode().forEach(item -> {
+                        builder.addBigInteger(item.expectNumberNode().asBigDecimal().get().toBigInteger());
+                    });
+                    break;
+                case "longs":
+                    value.expectArrayNode().forEach(item -> {
+                        builder.addLong(item.expectNumberNode().getValue().longValue());
+                    });
+                    break;
+                case "floats":
+                    value.expectArrayNode().forEach(item -> {
+                        builder.addFloat(item.expectNumberNode().getValue().floatValue());
+                    });
+                    break;
+                case "doubles":
+                    value.expectArrayNode().forEach(item -> {
+                        builder.addDouble(item.expectNumberNode().getValue().doubleValue());
+                    });
+                    break;
+                case "strings":
+                    value.expectArrayNode().forEach(item -> {
+                        builder.addString(item.expectStringNode().getValue());
+                    });
+                    break;
+                case "bigDecimals":
+                    value.expectArrayNode().forEach(item -> {
+                        builder.addBigDecimal(item.expectNumberNode().asBigDecimal().get());
+                    });
+                    break;
+                case "enumValues":
+                    value.expectArrayNode().forEach(item -> {
+                        builder.addEnumValue(EnumValue.from(item.expectStringNode().getValue()));
+                    });
+                    break;
+                default:
+                    validator.report(Validation.Severity.WARNING, key, () -> String.format("unknown key `%s` with value `%s`", key, value));
+                    break;
             }
-        });
-        obj.getArrayMember("booleans", nodes -> {
-            for (Node item : nodes) {
-                builder.addBoolean(item.expectBooleanNode().getValue());
-            }
-        });
-        obj.getArrayMember("bytes", nodes -> {
-            for (Node item : nodes) {
-                builder.addByte(item.expectNumberNode().getValue().byteValue());
-            }
-        });
-        obj.getArrayMember("shorts", nodes -> {
-            for (Node item : nodes) {
-                builder.addShort(item.expectNumberNode().getValue().shortValue());
-            }
-        });
-        obj.getArrayMember("integers", nodes -> {
-            for (Node item : nodes) {
-                builder.addInteger(item.expectNumberNode().getValue().intValue());
-            }
-        });
-        obj.getArrayMember("bigIntegers", nodes -> {
-            for (Node item : nodes) {
-                builder.addBigInteger(item.expectNumberNode().asBigDecimal().get().toBigInteger());
-            }
-        });
-        obj.getArrayMember("longs", nodes -> {
-            for (Node item : nodes) {
-                builder.addLong(item.expectNumberNode().getValue().longValue());
-            }
-        });
-        obj.getArrayMember("floats", nodes -> {
-            for (Node item : nodes) {
-                builder.addFloat(item.expectNumberNode().getValue().floatValue());
-            }
-        });
-        obj.getArrayMember("doubles", nodes -> {
-            for (Node item : nodes) {
-                builder.addDouble(item.expectNumberNode().getValue().doubleValue());
-            }
-        });
-        obj.getArrayMember("strings", nodes -> {
-            for (Node item : nodes) {
-                builder.addString(item.expectStringNode().getValue());
-            }
-        });
-        obj.getArrayMember("bigDecimals", nodes -> {
-            for (Node item : nodes) {
-                builder.addBigDecimal(item.expectNumberNode().asBigDecimal().get());
-            }
-        });
-        obj.getArrayMember("enumValues", nodes -> {
-            for (Node item : nodes) {
-                builder.addEnumValue(EnumValue.from(item.expectStringNode().getValue()));
-            }
-        });
+        }
         return builder.build();
     }
 

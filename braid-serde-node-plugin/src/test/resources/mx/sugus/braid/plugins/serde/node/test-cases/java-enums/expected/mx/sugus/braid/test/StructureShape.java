@@ -2,13 +2,17 @@ package mx.sugus.braid.test;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Objects;
 import javax.lang.model.element.Modifier;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
+import mx.sugus.braid.rt.util.SinkValidator;
+import mx.sugus.braid.rt.util.Validation;
 import mx.sugus.braid.rt.util.annotations.Generated;
 import software.amazon.smithy.model.node.ArrayNode;
 import software.amazon.smithy.model.node.Node;
 import software.amazon.smithy.model.node.ObjectNode;
+import software.amazon.smithy.model.node.StringNode;
 import software.amazon.smithy.model.node.ToNode;
 
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.serde.node#NodeSerdePlugin"})
@@ -105,18 +109,38 @@ public final class StructureShape implements ToNode {
     }
 
     /**
-     * <p>Converts a Node to StructureShape</p>
+     * <p>Converts a {@link Node} to StructureShape</p>
      */
     public static StructureShape fromNode(Node node) {
+        return fromNode(SinkValidator.instance(), node);
+    }
+
+    /**
+     * <p>Converts a {@link Node} to StructureShape</p>
+     */
+    public static StructureShape fromNode(Validation validator, Node node) {
         StructureShape.Builder builder = builder();
         ObjectNode obj = node.expectObjectNode();
-        obj.getMember("modifier").map(n -> n.expectStringNode().getValue()).map(Modifier::valueOf).ifPresent(builder::modifier);
-        builder.anotherModifier(Modifier.valueOf(obj.expectMember("anotherModifier").expectStringNode().getValue()));
-        obj.getArrayMember("modifierList", nodes -> {
-            for (Node item : nodes) {
-                builder.addModifierList(Modifier.valueOf(item.expectStringNode().getValue().toUpperCase(Locale.US)));
+        for (Map.Entry<StringNode, Node> kvp : obj.getMembers().entrySet()) {
+            Node value = kvp.getValue();
+            String key = kvp.getKey().getValue();
+            switch (key) {
+                case "modifier":
+                    builder.modifier(Modifier.valueOf(item.expectStringNode().getValue().toUpperCase(Locale.US)));
+                    break;
+                case "anotherModifier":
+                    builder.anotherModifier(Modifier.valueOf(item.expectStringNode().getValue().toUpperCase(Locale.US)));
+                    break;
+                case "modifierList":
+                    value.expectArrayNode().forEach(item -> {
+                        builder.addModifierList(Modifier.valueOf(item.expectStringNode().getValue().toUpperCase(Locale.US)));
+                    });
+                    break;
+                default:
+                    validator.report(Validation.Severity.WARNING, key, () -> String.format("unknown key `%s` with value `%s`", key, value));
+                    break;
             }
-        });
+        }
         return builder.build();
     }
 

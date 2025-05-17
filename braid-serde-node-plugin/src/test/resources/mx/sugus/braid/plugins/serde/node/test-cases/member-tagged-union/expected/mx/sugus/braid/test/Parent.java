@@ -1,9 +1,13 @@
 package mx.sugus.braid.test;
 
+import java.util.Map;
 import java.util.Objects;
+import mx.sugus.braid.rt.util.SinkValidator;
+import mx.sugus.braid.rt.util.Validation;
 import mx.sugus.braid.rt.util.annotations.Generated;
 import software.amazon.smithy.model.node.Node;
 import software.amazon.smithy.model.node.ObjectNode;
+import software.amazon.smithy.model.node.StringNode;
 import software.amazon.smithy.model.node.ToNode;
 
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.serde.node#NodeSerdePlugin"})
@@ -41,7 +45,7 @@ public final class Parent implements SyntaxNode, ToNode {
         }
         Parent that = (Parent) obj;
         return Objects.equals(this.child, that.child)
-            && Objects.equals(this.anotherChild, that.anotherChild);
+               && Objects.equals(this.anotherChild, that.anotherChild);
     }
 
     @Override
@@ -55,8 +59,8 @@ public final class Parent implements SyntaxNode, ToNode {
     @Override
     public String toString() {
         return "Parent{"
-            + "child: " + child
-            + ", anotherChild: " + anotherChild + "}";
+               + "child: " + child
+               + ", anotherChild: " + anotherChild + "}";
     }
 
     /**
@@ -82,13 +86,33 @@ public final class Parent implements SyntaxNode, ToNode {
     }
 
     /**
-     * <p>Converts a Node to Parent</p>
+     * <p>Converts a {@link Node} to Parent</p>
      */
     public static Parent fromNode(Node node) {
+        return fromNode(SinkValidator.instance(), node);
+    }
+
+    /**
+     * <p>Converts a {@link Node} to Parent</p>
+     */
+    public static Parent fromNode(Validation validator, Node node) {
         Parent.Builder builder = builder();
         ObjectNode obj = node.expectObjectNode();
-        obj.getMember("child").map(SyntaxNodeChild::fromNode).ifPresent(builder::child);
-        obj.getMember("anotherChild").map(AnotherChild::fromNode).ifPresent(builder::anotherChild);
+        for (Map.Entry<StringNode, Node> kvp : obj.getMembers().entrySet()) {
+            Node value = kvp.getValue();
+            String key = kvp.getKey().getValue();
+            switch (key) {
+                case "child":
+                    builder.child(SyntaxNodeChild.fromNode(validator, value.expectObjectNode()));
+                    break;
+                case "anotherChild":
+                    builder.anotherChild(AnotherChild.fromNode(validator, value.expectObjectNode()));
+                    break;
+                default:
+                    validator.report(Validation.Severity.WARNING, key, () -> String.format("unknown key `%s` with value `%s`", key, value));
+                    break;
+            }
+        }
         return builder.build();
     }
 

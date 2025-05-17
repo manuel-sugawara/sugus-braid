@@ -1,9 +1,13 @@
 package mx.sugus.braid.test;
 
+import java.util.Map;
 import java.util.Objects;
+import mx.sugus.braid.rt.util.SinkValidator;
+import mx.sugus.braid.rt.util.Validation;
 import mx.sugus.braid.rt.util.annotations.Generated;
 import software.amazon.smithy.model.node.Node;
 import software.amazon.smithy.model.node.ObjectNode;
+import software.amazon.smithy.model.node.StringNode;
 import software.amazon.smithy.model.node.ToNode;
 
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.serde.node#NodeSerdePlugin"})
@@ -92,14 +96,36 @@ public final class StructureShape implements ToNode {
     }
 
     /**
-     * <p>Converts a Node to StructureShape</p>
+     * <p>Converts a {@link Node} to StructureShape</p>
      */
     public static StructureShape fromNode(Node node) {
+        return fromNode(SinkValidator.instance(), node);
+    }
+
+    /**
+     * <p>Converts a {@link Node} to StructureShape</p>
+     */
+    public static StructureShape fromNode(Validation validator, Node node) {
         StructureShape.Builder builder = builder();
         ObjectNode obj = node.expectObjectNode();
-        builder.enumValue(EnumShape.from(obj.expectMember("enumValue").expectStringNode().getValue()));
-        builder.stringMember(obj.expectMember("stringMember").expectStringNode().getValue());
-        builder.structureShape(SimpleStructure.fromNode(obj.expectMember("structureShape").expectObjectNode()));
+        for (Map.Entry<StringNode, Node> kvp : obj.getMembers().entrySet()) {
+            Node value = kvp.getValue();
+            String key = kvp.getKey().getValue();
+            switch (key) {
+                case "enumValue":
+                    builder.enumValue(EnumShape.from(value.expectStringNode().getValue()));
+                    break;
+                case "stringMember":
+                    builder.stringMember(value.expectStringNode().getValue());
+                    break;
+                case "structureShape":
+                    builder.structureShape(SimpleStructure.fromNode(validator, value.expectObjectNode()));
+                    break;
+                default:
+                    validator.report(Validation.Severity.WARNING, key, () -> String.format("unknown key `%s` with value `%s`", key, value));
+                    break;
+            }
+        }
         return builder.build();
     }
 

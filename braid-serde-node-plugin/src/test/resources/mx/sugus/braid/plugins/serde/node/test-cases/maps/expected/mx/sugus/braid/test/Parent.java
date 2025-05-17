@@ -5,6 +5,8 @@ import java.math.BigInteger;
 import java.util.Map;
 import java.util.Objects;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
+import mx.sugus.braid.rt.util.SinkValidator;
+import mx.sugus.braid.rt.util.Validation;
 import mx.sugus.braid.rt.util.annotations.Generated;
 import software.amazon.smithy.model.node.Node;
 import software.amazon.smithy.model.node.ObjectNode;
@@ -271,84 +273,102 @@ public final class Parent implements ToNode {
     }
 
     /**
-     * <p>Converts a Node to Parent</p>
+     * <p>Converts a {@link Node} to Parent</p>
      */
     public static Parent fromNode(Node node) {
+        return fromNode(SinkValidator.instance(), node);
+    }
+
+    /**
+     * <p>Converts a {@link Node} to Parent</p>
+     */
+    public static Parent fromNode(Validation validator, Node node) {
         Parent.Builder builder = builder();
         ObjectNode obj = node.expectObjectNode();
-        obj.getMember("stringMember").map(n -> n.expectStringNode().getValue()).ifPresent(builder::stringMember);
-        obj.getObjectMember("children", objectNode -> {
-            for (Map.Entry<StringNode, Node> kvp : objectNode.getMembers().entrySet()) {
-                Node valueNode = kvp.getValue();
-                builder.putChildren(kvp.getKey().getValue(), Child.fromNode(valueNode));
+        for (Map.Entry<StringNode, Node> kvp : obj.getMembers().entrySet()) {
+            Node value = kvp.getValue();
+            String key = kvp.getKey().getValue();
+            switch (key) {
+                case "stringMember":
+                    builder.stringMember(value.expectStringNode().getValue());
+                    break;
+                case "children":
+                    for (Map.Entry<StringNode, Node> memberKvp : value.expectObjectNode().getMembers().entrySet()) {
+                        Node valueNode = memberKvp.getValue();
+                        builder.putChildren(memberKvp.getKey().getValue(), Child.fromNode(validator, valueNode));
+                    }
+                    break;
+                case "booleans":
+                    for (Map.Entry<StringNode, Node> memberKvp : value.expectObjectNode().getMembers().entrySet()) {
+                        Node valueNode = memberKvp.getValue();
+                        builder.putBoolean(memberKvp.getKey().getValue(), valueNode.expectBooleanNode().getValue());
+                    }
+                    break;
+                case "bytes":
+                    for (Map.Entry<StringNode, Node> memberKvp : value.expectObjectNode().getMembers().entrySet()) {
+                        Node valueNode = memberKvp.getValue();
+                        builder.putByte(memberKvp.getKey().getValue(), valueNode.expectNumberNode().getValue().byteValue());
+                    }
+                    break;
+                case "shorts":
+                    for (Map.Entry<StringNode, Node> memberKvp : value.expectObjectNode().getMembers().entrySet()) {
+                        Node valueNode = memberKvp.getValue();
+                        builder.putShort(memberKvp.getKey().getValue(), valueNode.expectNumberNode().getValue().shortValue());
+                    }
+                    break;
+                case "integers":
+                    for (Map.Entry<StringNode, Node> memberKvp : value.expectObjectNode().getMembers().entrySet()) {
+                        Node valueNode = memberKvp.getValue();
+                        builder.putInteger(memberKvp.getKey().getValue(), valueNode.expectNumberNode().getValue().intValue());
+                    }
+                    break;
+                case "bigIntegers":
+                    for (Map.Entry<StringNode, Node> memberKvp : value.expectObjectNode().getMembers().entrySet()) {
+                        Node valueNode = memberKvp.getValue();
+                        builder.putBigInteger(memberKvp.getKey().getValue(), valueNode.expectNumberNode().asBigDecimal().get().toBigInteger());
+                    }
+                    break;
+                case "longs":
+                    for (Map.Entry<StringNode, Node> memberKvp : value.expectObjectNode().getMembers().entrySet()) {
+                        Node valueNode = memberKvp.getValue();
+                        builder.putLong(memberKvp.getKey().getValue(), valueNode.expectNumberNode().getValue().longValue());
+                    }
+                    break;
+                case "floats":
+                    for (Map.Entry<StringNode, Node> memberKvp : value.expectObjectNode().getMembers().entrySet()) {
+                        Node valueNode = memberKvp.getValue();
+                        builder.putFloat(memberKvp.getKey().getValue(), valueNode.expectNumberNode().getValue().floatValue());
+                    }
+                    break;
+                case "doubles":
+                    for (Map.Entry<StringNode, Node> memberKvp : value.expectObjectNode().getMembers().entrySet()) {
+                        Node valueNode = memberKvp.getValue();
+                        builder.putDouble(memberKvp.getKey().getValue(), valueNode.expectNumberNode().getValue().doubleValue());
+                    }
+                    break;
+                case "strings":
+                    for (Map.Entry<StringNode, Node> memberKvp : value.expectObjectNode().getMembers().entrySet()) {
+                        Node valueNode = memberKvp.getValue();
+                        builder.putString(memberKvp.getKey().getValue(), valueNode.expectStringNode().getValue());
+                    }
+                    break;
+                case "bigDecimals":
+                    for (Map.Entry<StringNode, Node> memberKvp : value.expectObjectNode().getMembers().entrySet()) {
+                        Node valueNode = memberKvp.getValue();
+                        builder.putBigDecimal(memberKvp.getKey().getValue(), valueNode.expectNumberNode().asBigDecimal().get());
+                    }
+                    break;
+                case "enumValues":
+                    for (Map.Entry<StringNode, Node> memberKvp : value.expectObjectNode().getMembers().entrySet()) {
+                        Node valueNode = memberKvp.getValue();
+                        builder.putEnumValue(memberKvp.getKey().getValue(), EnumValue.from(valueNode.expectStringNode().getValue()));
+                    }
+                    break;
+                default:
+                    validator.report(Validation.Severity.WARNING, key, () -> String.format("unknown key `%s` with value `%s`", key, value));
+                    break;
             }
-        });
-        obj.getObjectMember("booleans", objectNode -> {
-            for (Map.Entry<StringNode, Node> kvp : objectNode.getMembers().entrySet()) {
-                Node valueNode = kvp.getValue();
-                builder.putBoolean(kvp.getKey().getValue(), valueNode.expectBooleanNode().getValue());
-            }
-        });
-        obj.getObjectMember("bytes", objectNode -> {
-            for (Map.Entry<StringNode, Node> kvp : objectNode.getMembers().entrySet()) {
-                Node valueNode = kvp.getValue();
-                builder.putByte(kvp.getKey().getValue(), valueNode.expectNumberNode().getValue().byteValue());
-            }
-        });
-        obj.getObjectMember("shorts", objectNode -> {
-            for (Map.Entry<StringNode, Node> kvp : objectNode.getMembers().entrySet()) {
-                Node valueNode = kvp.getValue();
-                builder.putShort(kvp.getKey().getValue(), valueNode.expectNumberNode().getValue().shortValue());
-            }
-        });
-        obj.getObjectMember("integers", objectNode -> {
-            for (Map.Entry<StringNode, Node> kvp : objectNode.getMembers().entrySet()) {
-                Node valueNode = kvp.getValue();
-                builder.putInteger(kvp.getKey().getValue(), valueNode.expectNumberNode().getValue().intValue());
-            }
-        });
-        obj.getObjectMember("bigIntegers", objectNode -> {
-            for (Map.Entry<StringNode, Node> kvp : objectNode.getMembers().entrySet()) {
-                Node valueNode = kvp.getValue();
-                builder.putBigInteger(kvp.getKey().getValue(), valueNode.expectNumberNode().asBigDecimal().get().toBigInteger());
-            }
-        });
-        obj.getObjectMember("longs", objectNode -> {
-            for (Map.Entry<StringNode, Node> kvp : objectNode.getMembers().entrySet()) {
-                Node valueNode = kvp.getValue();
-                builder.putLong(kvp.getKey().getValue(), valueNode.expectNumberNode().getValue().longValue());
-            }
-        });
-        obj.getObjectMember("floats", objectNode -> {
-            for (Map.Entry<StringNode, Node> kvp : objectNode.getMembers().entrySet()) {
-                Node valueNode = kvp.getValue();
-                builder.putFloat(kvp.getKey().getValue(), valueNode.expectNumberNode().getValue().floatValue());
-            }
-        });
-        obj.getObjectMember("doubles", objectNode -> {
-            for (Map.Entry<StringNode, Node> kvp : objectNode.getMembers().entrySet()) {
-                Node valueNode = kvp.getValue();
-                builder.putDouble(kvp.getKey().getValue(), valueNode.expectNumberNode().getValue().doubleValue());
-            }
-        });
-        obj.getObjectMember("strings", objectNode -> {
-            for (Map.Entry<StringNode, Node> kvp : objectNode.getMembers().entrySet()) {
-                Node valueNode = kvp.getValue();
-                builder.putString(kvp.getKey().getValue(), valueNode.expectStringNode().getValue());
-            }
-        });
-        obj.getObjectMember("bigDecimals", objectNode -> {
-            for (Map.Entry<StringNode, Node> kvp : objectNode.getMembers().entrySet()) {
-                Node valueNode = kvp.getValue();
-                builder.putBigDecimal(kvp.getKey().getValue(), valueNode.expectNumberNode().asBigDecimal().get());
-            }
-        });
-        obj.getObjectMember("enumValues", objectNode -> {
-            for (Map.Entry<StringNode, Node> kvp : objectNode.getMembers().entrySet()) {
-                Node valueNode = kvp.getValue();
-                builder.putEnumValue(kvp.getKey().getValue(), EnumValue.from(valueNode.expectStringNode().getValue()));
-            }
-        });
+        }
         return builder.build();
     }
 

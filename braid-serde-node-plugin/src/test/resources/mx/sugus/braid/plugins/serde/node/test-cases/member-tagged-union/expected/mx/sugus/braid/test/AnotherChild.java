@@ -1,9 +1,13 @@
 package mx.sugus.braid.test;
 
+import java.util.Map;
 import java.util.Objects;
+import mx.sugus.braid.rt.util.SinkValidator;
+import mx.sugus.braid.rt.util.Validation;
 import mx.sugus.braid.rt.util.annotations.Generated;
 import software.amazon.smithy.model.node.Node;
 import software.amazon.smithy.model.node.ObjectNode;
+import software.amazon.smithy.model.node.StringNode;
 import software.amazon.smithy.model.node.ToNode;
 
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.serde.node#NodeSerdePlugin"})
@@ -41,7 +45,7 @@ public final class AnotherChild implements SyntaxNode, ToNode {
         }
         AnotherChild that = (AnotherChild) obj;
         return Objects.equals(this.stringValue, that.stringValue)
-            && Objects.equals(this.intValue, that.intValue);
+               && Objects.equals(this.intValue, that.intValue);
     }
 
     @Override
@@ -55,8 +59,8 @@ public final class AnotherChild implements SyntaxNode, ToNode {
     @Override
     public String toString() {
         return "AnotherChild{"
-            + "stringValue: " + stringValue
-            + ", intValue: " + intValue + "}";
+               + "stringValue: " + stringValue
+               + ", intValue: " + intValue + "}";
     }
 
     /**
@@ -82,13 +86,33 @@ public final class AnotherChild implements SyntaxNode, ToNode {
     }
 
     /**
-     * <p>Converts a Node to AnotherChild</p>
+     * <p>Converts a {@link Node} to AnotherChild</p>
      */
     public static AnotherChild fromNode(Node node) {
+        return fromNode(SinkValidator.instance(), node);
+    }
+
+    /**
+     * <p>Converts a {@link Node} to AnotherChild</p>
+     */
+    public static AnotherChild fromNode(Validation validator, Node node) {
         AnotherChild.Builder builder = builder();
         ObjectNode obj = node.expectObjectNode();
-        obj.getMember("stringValue").map(n -> n.expectStringNode().getValue()).ifPresent(builder::stringValue);
-        obj.getMember("intValue").map(n -> n.expectNumberNode().getValue().intValue()).ifPresent(builder::intValue);
+        for (Map.Entry<StringNode, Node> kvp : obj.getMembers().entrySet()) {
+            Node value = kvp.getValue();
+            String key = kvp.getKey().getValue();
+            switch (key) {
+                case "stringValue":
+                    builder.stringValue(value.expectStringNode().getValue());
+                    break;
+                case "intValue":
+                    builder.intValue(value.expectNumberNode().getValue().intValue());
+                    break;
+                default:
+                    validator.report(Validation.Severity.WARNING, key, () -> String.format("unknown key `%s` with value `%s`", key, value));
+                    break;
+            }
+        }
         return builder.build();
     }
 

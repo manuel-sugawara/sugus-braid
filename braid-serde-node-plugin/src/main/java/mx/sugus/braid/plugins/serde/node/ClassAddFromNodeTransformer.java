@@ -6,16 +6,21 @@ import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
+import mx.sugus.braid.jsyntax.CaseClause;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.CodeBlock;
+import mx.sugus.braid.jsyntax.DefaultCaseClause;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
+import mx.sugus.braid.jsyntax.SwitchStatement;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
 import mx.sugus.braid.plugins.data.producers.Utils;
+import mx.sugus.braid.rt.util.Validation;
+import mx.sugus.braid.rt.util.SinkValidator;
 import mx.sugus.braid.traits.ConstTrait;
 import mx.sugus.braid.traits.JavaTrait;
 import software.amazon.smithy.model.node.Node;
@@ -43,6 +48,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
         var syntax = result.syntax();
         var classSyntax = ((ClassSyntax) syntax.type())
             .toBuilder()
+            .addMethod(defaultFromNodeMethod(state))
             .addMethod(fromNodeMethod(state))
             .build();
         return result.toBuilder()
@@ -50,146 +56,149 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
                      .build();
     }
 
-    private MethodSyntax fromNodeMethod(ShapeCodegenState state) {
+    private MethodSyntax defaultFromNodeMethod(ShapeCodegenState state) {
         var className = Utils.toJavaTypeName(state, state.shape());
-        var javadoc = "Converts a Node to " + ClassName.toClassName(className).name();
+        var javadoc = "Converts a {@link Node} to " + ClassName.toClassName(className).name();
         var builder = MethodSyntax.builder("fromNode")
                                   .javadoc(JavadocExt.document(javadoc))
                                   .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                                   .addParameter(Node.class, "node")
                                   .returns(className);
-        BodyBuilder body = new BodyBuilder();
+         builder.addStatement("return fromNode($T.instance(), node)", SinkValidator.class);
+        return builder.build();
+    }
+
+    private MethodSyntax fromNodeMethod(ShapeCodegenState state) {
+        var className = Utils.toJavaTypeName(state, state.shape());
+        var javadoc = "Converts a {@link Node} to " + ClassName.toClassName(className).name();
+        var builder = MethodSyntax.builder("fromNode")
+                                  .javadoc(JavadocExt.document(javadoc))
+                                  .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                                  .addParameter(Validation.class, "validator")
+                                  .addParameter(Node.class, "node")
+                                  .returns(className);
+        var body = new BodyBuilder();
         body.addStatement("$T.Builder builder = builder()", className);
         body.addStatement("$T obj = node.expectObjectNode()", ObjectNode.class);
+
+        var switchBuilder = SwitchStatement.builder()
+                                           .expression(CodeBlock.from("key"));
         for (var member : state.shape().members()) {
+            var caseBuilder = CaseClause
+                .builder()
+                .addLabel(CodeBlock.from("$S", member.getMemberName()));
+
             if (member.hasTrait(ConstTrait.class)) {
+                switchBuilder.addCase(caseBuilder
+                                          .addStatement("break")
+                                          .build());
                 continue;
             }
+
             var target = state.model().expectShape(member.getTarget());
             var category = target.getType().getCategory();
             switch (category) {
-                case AGGREGATE -> addAggregateMember(state, member, body);
-                case SIMPLE -> addSimpleMember(state, member, body);
+                case AGGREGATE -> addAggregateMember(state, member, caseBuilder);
+                case SIMPLE -> addSimpleMember(state, member, caseBuilder);
                 default -> throw new RuntimeException("unsupported category: " + category);
             }
+            switchBuilder.addCase(caseBuilder
+                                      .addStatement("break")
+                                      .build());
         }
+        switchBuilder.defaultCase(DefaultCaseClause
+                                      .builder()
+                                      .addStatement("validator.report($T.WARNING, key, () -> $T.format($S, key, value))",
+                                                    Validation.Severity.class, String.class,
+                                                    "unknown key `%s` with value `%s`")
+                                      .addStatement("break")
+                                      .build());
+        body.forStatement("$T kvp : obj.getMembers().entrySet()",
+                          ParameterizedTypeName.from(Map.Entry.class, StringNode.class, Node.class), b -> {
+                b.addStatement("$T value = kvp.getValue()", Node.class);
+                b.addStatement("$T key = kvp.getKey().getValue()", String.class);
+                b.addStatement(switchBuilder.build());
+            });
         body.addStatement("return builder.build()");
         builder.body(body.build());
         return builder.build();
     }
 
-    private void addAggregateMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
+    private void addAggregateMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder caseBuilder) {
         var target = state.model().expectShape(member.getTarget());
         switch (target.getType()) {
-            case STRUCTURE -> addStructureMember(state, member, body);
-            case LIST -> addListMember(state, member, body);
-            case MAP -> addMapMember(state, member, body);
+            case STRUCTURE -> addStructureMember(state, member, caseBuilder);
+            case LIST -> addListMember(state, member, caseBuilder);
+            case MAP -> addMapMember(state, member, caseBuilder);
             default -> throw new RuntimeException("unsupported aggregated type: " + target.getType());
         }
     }
 
-    private void addStructureMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
+    private void addStructureMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder body) {
         var target = state.model().expectShape(member.getTarget());
         if (target.hasTrait(JavaTrait.class)) {
             addJavaMember(state, member, body);
             return;
         }
         var targetType = Utils.toJavaTypeName(state, target);
-        if (Utils.isExplicitlyRequired(state, member)) {
-            body.addStatement("builder.$L($T.fromNode(obj.expectMember($S).expectObjectNode()))",
-                              Utils.toSetterName(state, member), targetType, member.getMemberName());
-        } else {
-            body.addStatement("obj.getMember($S).map($T::fromNode).ifPresent(builder::$L)",
-                              member.getMemberName(), targetType, Utils.toSetterName(state, member));
-        }
+        body.addStatement("builder.$L($T.fromNode(validator, value.expectObjectNode()))",
+                          Utils.toSetterName(state, member), targetType);
     }
 
-    private void addJavaMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
+    private void addJavaMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder body) {
         var target = state.model().expectShape(member.getTarget());
         var targetType = Utils.toJavaTypeName(state, target);
         var actualClass = toActualJavaClass(ClassName.toClassName(targetType));
         if (Node.class.isAssignableFrom(actualClass)) {
-            if (Utils.isRequired(state, member)) {
-                body.addStatement("builder.$L(obj.expectMember($S))",
-                                  Utils.toJavaName(state, member),
-                                  member.getMemberName());
-            } else {
-                body.addStatement("obj.getMember($S)"
-                                  + ".ifPresent(builder::$L)",
-                                  member.getMemberName(), Utils.toSetterName(state, member));
-            }
+            body.addStatement("builder.$L(value)",
+                              Utils.toJavaName(state, member),
+                              member.getMemberName());
             return;
         }
         if (!actualClass.isEnum()) {
             throw new RuntimeException("Node serde of non-enum types is not currently supported: " + actualClass);
         }
-        if (Utils.isRequired(state, member)) {
-            body.addStatement("builder.$L($T.valueOf(obj.expectMember($S).expectStringNode().getValue()))",
-                              Utils.toJavaName(state, member),
-                              Utils.toJavaTypeName(state, target),
-                              member.getMemberName());
-        } else {
-            body.addStatement("obj.getMember($S)"
-                              + ".map(n -> n.expectStringNode().getValue())"
-                              + ".map($T::valueOf).ifPresent(builder::$L)",
-                              member.getMemberName(), targetType, Utils.toSetterName(state, member));
-        }
+        body.addStatement("builder.$L($C)", Utils.toSetterName(state, member), valueFromNode("item", state, target));
     }
 
-    private void addListMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
+    private void addListMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder body) {
         var listShape = state.model().expectShape(member.getTarget()).asListShape().orElseThrow();
         var target = state.model().expectShape(listShape.getMember().getTarget());
         var adder = Utils.toAdderName(state, member);
-        body.addStatement("obj.getArrayMember($S, nodes -> $B)",
-                          member.getMemberName(),
+        body.addStatement("value.expectArrayNode().forEach(item -> $B)",
                           BodyBuilder.create()
-                                     .forStatement("$T item : nodes", Node.class, b ->
-                                         b.addStatement("builder.$L($C)", adder, valueFromNode("item", state, target)))
+                                     .addStatement("builder.$L($C)", adder, valueFromNode("item", state, target))
                                      .build());
     }
 
-    private void addMapMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
+    private void addMapMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder body) {
         var listShape = state.model().expectShape(member.getTarget()).asMapShape().orElseThrow();
         var target = state.model().expectShape(listShape.getValue().getTarget());
         var putter = Utils.toAdderName(state, member);
-        var forInit = CodeBlock.from("$T kvp : objectNode.getMembers().entrySet()",
+        var forInit = CodeBlock.from("$T memberKvp : value.expectObjectNode().getMembers().entrySet()",
                                      ParameterizedTypeName.from(Map.Entry.class, StringNode.class, Node.class));
-        body.addStatement("obj.getObjectMember($S, objectNode -> $B)",
-                          member.getMemberName(),
-                          BodyBuilder.create()
-                                     .forStatement(forInit, b -> {
-                                         b.addStatement("$T valueNode = kvp.getValue()", Node.class);
-                                         b.addStatement("builder.$L(kvp.getKey().getValue(), $C)",
-                                                        putter, valueFromNode("valueNode", state, target));
-                                     })
-                                     .build());
+        body.body(caseBody -> {
+            caseBody.forStatement(forInit, b -> {
+                b.addStatement("$T valueNode = memberKvp.getValue()", Node.class);
+                b.addStatement("builder.$L(memberKvp.getKey().getValue(), $C)",
+                               putter, valueFromNode("valueNode", state, target));
+            });
+        });
     }
 
-    private void addSimpleMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
+    private void addSimpleMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder caseBuilder) {
         var target = state.model().expectShape(member.getTarget());
-        if (Utils.isRequired(state, member)) {
-            if (target.isEnumShape()) {
-                addRequiredEnumMember(state, member, body);
-                return;
-            }
-            body.addStatement("builder.$L(obj.expectMember($S)$C)",
-                              Utils.toSetterName(state, member),
-                              member.getMemberName(),
-                              valueFromNode("", state, target));
+
+        if (target.isEnumShape()) {
+            caseBuilder.addStatement("builder.$L($T.from(value.expectStringNode().getValue()))",
+                                     Utils.toSetterName(state, member),
+                                     Utils.toJavaTypeName(state, target),
+                                     member.getMemberName());
         } else {
-            body.addStatement("obj.getMember($S).map(n -> $C).ifPresent(builder::$L)",
-                              member.getMemberName(),
-                              valueFromNode("n", state, target),
-                              Utils.toSetterName(state, member));
+            caseBuilder.addStatement("builder.$L($C)",
+                                     Utils.toSetterName(state, member),
+                                     valueFromNode("value", state, target));
         }
-    }
-
-    private void addRequiredEnumMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
-        var target = state.model().expectShape(member.getTarget());
-        body.addStatement("builder.$L($T.from(obj.expectMember($S).expectStringNode().getValue()))",
-                          Utils.toSetterName(state, member),
-                          Utils.toJavaTypeName(state, target),
-                          member.getMemberName());
     }
 
     private CodeBlock valueFromNode(String nodeVar, ShapeCodegenState state, Shape target) {
@@ -222,7 +231,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
             return CodeBlock.from("$T.valueOf($L.expectStringNode().getValue().toUpperCase($T.US))",
                                   Utils.toJavaTypeName(state, target), nodeVar, Locale.class);
         }
-        return CodeBlock.from("$T.fromNode($L)", Utils.toJavaTypeName(state, target), nodeVar);
+        return CodeBlock.from("$T.fromNode(validator, $L)", Utils.toJavaTypeName(state, target), nodeVar);
     }
 
     static Class<?> toActualJavaClass(ClassName className) {

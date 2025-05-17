@@ -4,7 +4,6 @@ import static mx.sugus.braid.test.PluginTestRunner.TestCase;
 import static mx.sugus.braid.test.PluginTestRunner.addTestCasesFromUrl;
 import static mx.sugus.braid.test.PluginTestRunner.assertContentEquals;
 import static mx.sugus.braid.test.PluginTestRunner.findGotContent;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 

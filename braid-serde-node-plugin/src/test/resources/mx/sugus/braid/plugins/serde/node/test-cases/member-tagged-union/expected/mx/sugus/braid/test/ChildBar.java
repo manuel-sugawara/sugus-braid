@@ -1,9 +1,13 @@
 package mx.sugus.braid.test;
 
+import java.util.Map;
 import java.util.Objects;
+import mx.sugus.braid.rt.util.SinkValidator;
+import mx.sugus.braid.rt.util.Validation;
 import mx.sugus.braid.rt.util.annotations.Generated;
 import software.amazon.smithy.model.node.Node;
 import software.amazon.smithy.model.node.ObjectNode;
+import software.amazon.smithy.model.node.StringNode;
 import software.amazon.smithy.model.node.ToNode;
 
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.serde.node#NodeSerdePlugin"})
@@ -52,8 +56,8 @@ public final class ChildBar implements SyntaxNodeChild, SyntaxNode, ToNode {
     @Override
     public String toString() {
         return "ChildBar{"
-            + "kind: " + kind()
-            + ", bar: " + bar + "}";
+               + "kind: " + kind()
+               + ", bar: " + bar + "}";
     }
 
     /**
@@ -77,12 +81,32 @@ public final class ChildBar implements SyntaxNodeChild, SyntaxNode, ToNode {
     }
 
     /**
-     * <p>Converts a Node to ChildBar</p>
+     * <p>Converts a {@link Node} to ChildBar</p>
      */
     public static ChildBar fromNode(Node node) {
+        return fromNode(SinkValidator.instance(), node);
+    }
+
+    /**
+     * <p>Converts a {@link Node} to ChildBar</p>
+     */
+    public static ChildBar fromNode(Validation validator, Node node) {
         ChildBar.Builder builder = builder();
         ObjectNode obj = node.expectObjectNode();
-        obj.getMember("bar").map(n -> n.expectStringNode().getValue()).ifPresent(builder::bar);
+        for (Map.Entry<StringNode, Node> kvp : obj.getMembers().entrySet()) {
+            Node value = kvp.getValue();
+            String key = kvp.getKey().getValue();
+            switch (key) {
+                case "kind":
+                    break;
+                case "bar":
+                    builder.bar(value.expectStringNode().getValue());
+                    break;
+                default:
+                    validator.report(Validation.Severity.WARNING, key, () -> String.format("unknown key `%s` with value `%s`", key, value));
+                    break;
+            }
+        }
         return builder.build();
     }
 
