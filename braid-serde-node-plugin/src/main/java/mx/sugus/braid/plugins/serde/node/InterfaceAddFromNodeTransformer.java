@@ -14,6 +14,7 @@ import mx.sugus.braid.jsyntax.SwitchStatement;
 import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.plugins.data.producers.StructureInterfaceJavaProducer;
 import mx.sugus.braid.plugins.data.producers.Utils;
+import mx.sugus.braid.rt.util.Validation;
 import mx.sugus.braid.traits.ConstTrait;
 import software.amazon.smithy.model.node.Node;
 import software.amazon.smithy.model.node.ObjectNode;
@@ -53,6 +54,7 @@ public final class InterfaceAddFromNodeTransformer implements ShapeTaskTransform
         var className = Utils.toJavaTypeName(state, state.shape());
         var builder = MethodSyntax.builder("fromNode")
                                   .addModifier(Modifier.STATIC)
+                                  .addParameter(Validation.class, "validation")
                                   .addParameter(Node.class, "node")
                                   .returns(className);
         if (dispatchMember == null) {
@@ -75,7 +77,7 @@ public final class InterfaceAddFromNodeTransformer implements ShapeTaskTransform
             symbolProvider.toMemberName(constMember);
             switchStatement.addCase(CaseClause.builder()
                                               .addLabel(CodeBlock.from("$L", symbolProvider.toMemberName(constMember)))
-                                              .body(b -> b.addStatement("return $T.fromNode(node)", caseType))
+                                              .body(b -> b.addStatement("return $T.fromNode(validation, node)", caseType))
                                               .build());
         });
         switchStatement.defaultCase(DefaultCaseClause.builder()

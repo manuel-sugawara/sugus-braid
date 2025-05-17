@@ -1,5 +1,6 @@
 package mx.sugus.braid.test;
 
+import mx.sugus.braid.rt.util.Validation;
 import mx.sugus.braid.rt.util.annotations.Generated;
 import software.amazon.smithy.model.node.Node;
 import software.amazon.smithy.model.node.ObjectNode;
@@ -15,16 +16,16 @@ public interface SyntaxNodeChild extends ToNode {
      */
     Builder toBuilder();
 
-    static SyntaxNodeChild fromNode(Node node) {
+    static SyntaxNodeChild fromNode(Validation validation, Node node) {
         ObjectNode objectNode = node.expectObjectNode();
         ChildKind kind = ChildKind.from(objectNode.expectStringMember("kind").getValue());
         switch (kind) {
             case BAR:
-                return ChildBar.fromNode(node);
+                return ChildBar.fromNode(validation, node);
             case FOO:
-                return ChildFoo.fromNode(node);
+                return ChildFoo.fromNode(validation, node);
             case BAZ:
-                return ChildBaz.fromNode(node);
+                return ChildBaz.fromNode(validation, node);
             default:
                 throw new IllegalArgumentException("Unknown enum variant: " + kind);
         }
