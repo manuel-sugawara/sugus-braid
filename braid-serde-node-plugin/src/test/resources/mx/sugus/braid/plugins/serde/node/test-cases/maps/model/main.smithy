@@ -71,6 +71,29 @@ map EnumValueMap {
     value: EnumValue
 }
 
+list IntegerList {
+    member: Integer
+}
+
+map IntegerListMap {
+    key: String
+    value: IntegerList
+}
+
+map NestedIntegerListMap {
+    key: String
+    value: IntegerListMap
+}
+
+list IntegerMapList {
+    member: IntegerMap
+}
+
+map NestedNestedIntegerMap {
+    key: String
+    value: IntegerMapList
+}
+
 structure Parent {
     stringMember: String
     children: ChildMap
@@ -85,4 +108,7 @@ structure Parent {
     strings: StringMap
     bigDecimals: BigDecimalMap
     enumValues: EnumValueMap
+    integerListMap: IntegerListMap
+    nestedIntegerListMap: NestedIntegerListMap
+    nestedNestedIntegerMap: NestedNestedIntegerMap
 }

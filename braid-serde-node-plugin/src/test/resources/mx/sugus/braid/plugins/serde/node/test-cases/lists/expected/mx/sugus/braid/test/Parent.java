@@ -2,6 +2,7 @@ package mx.sugus.braid.test;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -30,6 +31,8 @@ public final class Parent implements ToNode {
     private final List<String> strings;
     private final List<BigDecimal> bigDecimals;
     private final List<EnumValue> enumValues;
+    private final List<List<Integer>> nestedIntegers;
+    private final List<List<List<Integer>>> nestedNestedIntegers;
     private int _hashCode = 0;
 
     private Parent(Builder builder) {
@@ -46,6 +49,8 @@ public final class Parent implements ToNode {
         this.strings = Objects.requireNonNull(builder.strings.asPersistent(), "strings");
         this.bigDecimals = Objects.requireNonNull(builder.bigDecimals.asPersistent(), "bigDecimals");
         this.enumValues = Objects.requireNonNull(builder.enumValues.asPersistent(), "enumValues");
+        this.nestedIntegers = Objects.requireNonNull(builder.nestedIntegers.asPersistent(), "nestedIntegers");
+        this.nestedNestedIntegers = Objects.requireNonNull(builder.nestedNestedIntegers.asPersistent(), "nestedNestedIntegers");
     }
 
     public String stringMember() {
@@ -100,6 +105,14 @@ public final class Parent implements ToNode {
         return this.enumValues;
     }
 
+    public List<List<Integer>> nestedIntegers() {
+        return this.nestedIntegers;
+    }
+
+    public List<List<List<Integer>>> nestedNestedIntegers() {
+        return this.nestedNestedIntegers;
+    }
+
     /**
      * <p>Returns a new builder to modify a copy of this instance</p>
      */
@@ -128,7 +141,9 @@ public final class Parent implements ToNode {
                && this.doubles.equals(that.doubles)
                && this.strings.equals(that.strings)
                && this.bigDecimals.equals(that.bigDecimals)
-               && this.enumValues.equals(that.enumValues);
+               && this.enumValues.equals(that.enumValues)
+               && this.nestedIntegers.equals(that.nestedIntegers)
+               && this.nestedNestedIntegers.equals(that.nestedNestedIntegers);
     }
 
     @Override
@@ -148,6 +163,8 @@ public final class Parent implements ToNode {
             hashCode = 31 * hashCode + strings.hashCode();
             hashCode = 31 * hashCode + bigDecimals.hashCode();
             hashCode = 31 * hashCode + enumValues.hashCode();
+            hashCode = 31 * hashCode + nestedIntegers.hashCode();
+            hashCode = 31 * hashCode + nestedNestedIntegers.hashCode();
             _hashCode = hashCode;
         }
         return _hashCode;
@@ -168,7 +185,9 @@ public final class Parent implements ToNode {
                + ", doubles: " + doubles
                + ", strings: " + strings
                + ", bigDecimals: " + bigDecimals
-               + ", enumValues: " + enumValues + "}";
+               + ", enumValues: " + enumValues
+               + ", nestedIntegers: " + nestedIntegers
+               + ", nestedNestedIntegers: " + nestedNestedIntegers + "}";
     }
 
     /**
@@ -271,6 +290,32 @@ public final class Parent implements ToNode {
             }
             builder.withMember("enumValues", enumValuesBuilder.build());
         }
+        if (!this.nestedIntegers.isEmpty()) {
+            ArrayNode.Builder nestedIntegersBuilder = ArrayNode.builder();
+            for (List<Integer> item : this.nestedIntegers) {
+                ArrayNode.Builder innerBuilder = ArrayNode.builder();
+                for (Integer innerItem : item) {
+                    innerBuilder.withValue(Node.from(innerItem));
+                }
+                nestedIntegersBuilder.withValue(innerBuilder.build());
+            }
+            builder.withMember("nestedIntegers", nestedIntegersBuilder.build());
+        }
+        if (!this.nestedNestedIntegers.isEmpty()) {
+            ArrayNode.Builder nestedNestedIntegersBuilder = ArrayNode.builder();
+            for (List<List<Integer>> item : this.nestedNestedIntegers) {
+                ArrayNode.Builder innerBuilder = ArrayNode.builder();
+                for (List<Integer> innerItem : item) {
+                    ArrayNode.Builder innerBuilder1 = ArrayNode.builder();
+                    for (Integer innerItem1 : innerItem) {
+                        innerBuilder1.withValue(Node.from(innerItem1));
+                    }
+                    innerBuilder.withValue(innerBuilder1.build());
+                }
+                nestedNestedIntegersBuilder.withValue(innerBuilder.build());
+            }
+            builder.withMember("nestedNestedIntegers", nestedNestedIntegersBuilder.build());
+        }
         return builder.build();
     }
 
@@ -355,6 +400,28 @@ public final class Parent implements ToNode {
                         builder.addEnumValue(EnumValue.from(lstNodeValue.expectStringNode().getValue()));
                     }
                     break;
+                case "nestedIntegers":
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        List<Integer> lstMember = new ArrayList<>();
+                        for (Node innerNodeValue : lstNodeValue.expectArrayNode()) {
+                            lstMember.add(innerNodeValue.expectNumberNode().getValue().intValue());
+                        }
+                        builder.addNestedInteger(lstMember);
+                    }
+                    break;
+                case "nestedNestedIntegers":
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        List<List<Integer>> lstMember = new ArrayList<>();
+                        for (Node innerNodeValue : lstNodeValue.expectArrayNode()) {
+                            List<Integer> lstMember1 = new ArrayList<>();
+                            for (Node innerNodeValue1 : innerNodeValue.expectArrayNode()) {
+                                lstMember1.add(innerNodeValue1.expectNumberNode().getValue().intValue());
+                            }
+                            lstMember.add(lstMember1);
+                        }
+                        builder.addNestedNestedInteger(lstMember);
+                    }
+                    break;
                 default:
                     validator.report(Validation.Severity.WARNING, key, () -> String.format("unknown key `%s` with value `%s`", key, value));
                     break;
@@ -377,6 +444,8 @@ public final class Parent implements ToNode {
         private CollectionBuilderReference<List<String>> strings;
         private CollectionBuilderReference<List<BigDecimal>> bigDecimals;
         private CollectionBuilderReference<List<EnumValue>> enumValues;
+        private CollectionBuilderReference<List<List<Integer>>> nestedIntegers;
+        private CollectionBuilderReference<List<List<List<Integer>>>> nestedNestedIntegers;
 
         Builder() {
             this.children = CollectionBuilderReference.forList();
@@ -391,6 +460,8 @@ public final class Parent implements ToNode {
             this.strings = CollectionBuilderReference.forList();
             this.bigDecimals = CollectionBuilderReference.forList();
             this.enumValues = CollectionBuilderReference.forList();
+            this.nestedIntegers = CollectionBuilderReference.forList();
+            this.nestedNestedIntegers = CollectionBuilderReference.forList();
         }
 
         Builder(Parent data) {
@@ -407,6 +478,8 @@ public final class Parent implements ToNode {
             this.strings = CollectionBuilderReference.fromPersistentList(data.strings);
             this.bigDecimals = CollectionBuilderReference.fromPersistentList(data.bigDecimals);
             this.enumValues = CollectionBuilderReference.fromPersistentList(data.enumValues);
+            this.nestedIntegers = CollectionBuilderReference.fromPersistentList(data.nestedIntegers);
+            this.nestedNestedIntegers = CollectionBuilderReference.fromPersistentList(data.nestedNestedIntegers);
         }
 
         /**
@@ -618,6 +691,40 @@ public final class Parent implements ToNode {
          */
         public Builder addEnumValue(EnumValue enumValue) {
             this.enumValues.asTransient().add(enumValue);
+            return this;
+        }
+
+        /**
+         * <p>Sets the value for <code>nestedIntegers</code></p>
+         */
+        public Builder nestedIntegers(List<List<Integer>> nestedIntegers) {
+            this.nestedIntegers.clear();
+            this.nestedIntegers.asTransient().addAll(nestedIntegers);
+            return this;
+        }
+
+        /**
+         * <p>Adds a single value for <code>nestedIntegers</code></p>
+         */
+        public Builder addNestedInteger(List<Integer> nestedInteger) {
+            this.nestedIntegers.asTransient().add(nestedInteger);
+            return this;
+        }
+
+        /**
+         * <p>Sets the value for <code>nestedNestedIntegers</code></p>
+         */
+        public Builder nestedNestedIntegers(List<List<List<Integer>>> nestedNestedIntegers) {
+            this.nestedNestedIntegers.clear();
+            this.nestedNestedIntegers.asTransient().addAll(nestedNestedIntegers);
+            return this;
+        }
+
+        /**
+         * <p>Adds a single value for <code>nestedNestedIntegers</code></p>
+         */
+        public Builder addNestedNestedInteger(List<List<Integer>> nestedNestedInteger) {
+            this.nestedNestedIntegers.asTransient().add(nestedNestedInteger);
             return this;
         }
 

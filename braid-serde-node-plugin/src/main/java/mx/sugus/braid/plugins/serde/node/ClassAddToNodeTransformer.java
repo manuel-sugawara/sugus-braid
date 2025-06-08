@@ -20,6 +20,8 @@ import software.amazon.smithy.model.node.ArrayNode;
 import software.amazon.smithy.model.node.Node;
 import software.amazon.smithy.model.node.ObjectNode;
 import software.amazon.smithy.model.node.ToNode;
+import software.amazon.smithy.model.shapes.ListShape;
+import software.amazon.smithy.model.shapes.MapShape;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.shapes.Shape;
 
@@ -101,31 +103,116 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
         var target = state.model().expectShape(listShape.getMember().getTarget());
         var targetType = Utils.toJavaTypeName(state, target);
         var memberField = Utils.toJavaName(state, member);
-        body.ifStatement("!this.$L.isEmpty()", memberField, then -> {
-            then.addStatement("$1T.Builder $2LBuilder = $1T.builder()", ArrayNode.class, memberField);
-            then.forStatement("$T item : this.$L", targetType, memberField, b -> {
-                b.addStatement("$LBuilder.withValue($C)", memberField, valueToNode("item", state, target));
-            });
-            then.addStatement("builder.withMember($S, $LBuilder.build())", member.getMemberName(), memberField);
-        });
+        body.beginControlFlow("if (!this.$L.isEmpty())", memberField);
+        body.addStatement("$1T.Builder $2LBuilder = $1T.builder()", ArrayNode.class, memberField);
+        body.beginControlFlow("for ($T item : this.$L)", targetType, memberField);
+        var aggregateType = Utils.aggregateType(state, target);
+        switch (aggregateType) {
+            case NONE -> {
+                body.addStatement("$LBuilder.withValue($C)", memberField, valueToNode("item", state, target));
+            }
+            case LIST, SET -> {
+                var element = addNestedListMember(state, target.asListShape().orElseThrow(), body);
+                body.addStatement("$LBuilder.withValue($L)", memberField, element);
+            }
+            case MAP -> {
+                var element = addNestedMapMember(state, target.asMapShape().orElseThrow(), body);
+                body.addStatement("$LBuilder.withValue($L)", memberField, element);
+            }
+        }
+        body.endControlFlow();
+        body.addStatement("builder.withMember($S, $LBuilder.build())", member.getMemberName(), memberField);
+        body.endControlFlow();
+    }
+
+    private String addNestedListMember(ShapeCodegenState state, ListShape listShape, BodyBuilder body) {
+        return addNestedListMember(state, listShape, "item", 0, body);
+    }
+
+    private String addNestedListMember(ShapeCodegenState state, ListShape listShape, String source, int depth, BodyBuilder body) {
+        var innerBuilderName = "innerBuilder" + (depth == 0 ? "" : Integer.toString(depth));
+        var innerItemName = "innerItem" + (depth == 0 ? "" : Integer.toString(depth));
+        var target = state.model().expectShape(listShape.getMember().getTarget());
+        var targetType = Utils.toJavaTypeName(state, target);
+        var aggregateType = Utils.aggregateType(state, target);
+        body.addStatement("$1T.Builder $2L = $1T.builder()", ArrayNode.class, innerBuilderName);
+        body.beginControlFlow("for ($T $L : $L)", targetType, innerItemName, source);
+        switch (aggregateType) {
+            case NONE -> {
+                body.addStatement("$L.withValue($C)", innerBuilderName, valueToNode(innerItemName, state, target));
+            }
+            case LIST, SET -> {
+                var element = addNestedListMember(state, target.asListShape().orElseThrow(), innerItemName, depth + 1, body);
+                body.addStatement("$L.withValue($L)", innerBuilderName, element);
+            }
+            case MAP -> {
+                var element = addNestedMapMember(state, target.asMapShape().orElseThrow(), innerItemName, depth + 1, body);
+                body.addStatement("$L.withValue($L)", innerBuilderName, element);
+            }
+        }
+        body.endControlFlow();
+        return innerBuilderName + ".build()";
     }
 
     private void addMapMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
-        var listShape = state.model().expectShape(member.getTarget()).asMapShape().orElseThrow();
-        var target = state.model().expectShape(listShape.getValue().getTarget());
+        var mapShape = state.model().expectShape(member.getTarget()).asMapShape().orElseThrow();
+        var target = state.model().expectShape(mapShape.getValue().getTarget());
         var targetType = Utils.toJavaTypeName(state, target);
         var memberField = Utils.toJavaName(state, member);
-        body.ifStatement("!this.$L.isEmpty()", memberField, then -> {
-            then.addStatement("$1T.Builder $2LBuilder = $1T.builder()", ObjectNode.class, memberField);
-            var forInit = CodeBlock.from("$T<$T, $T> kvp : this.$L.entrySet()",
-                                         Map.Entry.class, String.class, targetType, memberField);
-            then.forStatement(forInit, b -> {
-                b.addStatement("$LBuilder.withMember(kvp.getKey(), $C)",
-                               memberField,
-                               valueToNode("kvp.getValue()", state, target));
-            });
-            then.addStatement("builder.withMember($S, $LBuilder.build())", member.getMemberName(), memberField);
-        });
+        body.beginControlFlow("if (!this.$L.isEmpty())", memberField);
+        body.addStatement("$1T.Builder $2LBuilder = $1T.builder()", ObjectNode.class, memberField);
+        body.beginControlFlow("for ($T<$T, $T> kvp : this.$L.entrySet())",
+                              Map.Entry.class, String.class, targetType, memberField);
+        var aggregateType = Utils.aggregateType(state, target);
+        switch (aggregateType) {
+            case NONE -> {
+                body.addStatement("$LBuilder.withMember(kvp.getKey(), $C)", memberField,
+                                  valueToNode("kvp.getValue()", state, target));
+            }
+            case LIST, SET -> {
+                var element = addNestedListMember(state, target.asListShape().orElseThrow(), "kvp.getValue()", 0, body);
+                body.addStatement("$LBuilder.withMember(kvp.getKey(), $L)", memberField, element);
+            }
+            case MAP -> {
+                var element = addNestedMapMember(state, target.asMapShape().orElseThrow(), body);
+                body.addStatement("$LBuilder.withMember(kvp.getKey(), $L)", memberField, element);
+            }
+        }
+        body.endControlFlow();
+        body.addStatement("builder.withMember($S, $LBuilder.build())", member.getMemberName(), memberField);
+        body.endControlFlow();
+    }
+
+    private String addNestedMapMember(ShapeCodegenState state, MapShape mapShape, BodyBuilder body) {
+        return addNestedMapMember(state, mapShape, "kvp.getValue()", 0, body);
+    }
+
+    private String addNestedMapMember(ShapeCodegenState state, MapShape mapShape, String source, int depth, BodyBuilder body) {
+        var innerBuilderName = "innerBuilder" + (depth == 0 ? "" : Integer.toString(depth));
+        var innerKvpName = "innerKvp" + (depth == 0 ? "" : Integer.toString(depth));
+        var target = state.model().expectShape(mapShape.getValue().getTarget());
+        var targetType = Utils.toJavaTypeName(state, target);
+        var aggregateType = Utils.aggregateType(state, target);
+        body.addStatement("$1T.Builder $2L = $1T.builder()", ObjectNode.class, innerBuilderName);
+        body.beginControlFlow("for ($T<$T, $T> $L : $L.entrySet())",
+                              Map.Entry.class, String.class, targetType, innerKvpName, source);
+        var innerValue = innerKvpName + ".getValue()";
+        switch (aggregateType) {
+            case NONE -> {
+                body.addStatement("$L.withMember(kvp.getKey(), $C)", innerBuilderName,
+                                  valueToNode("kvp.getValue()", state, target));
+            }
+            case LIST, SET -> {
+                var element = addNestedListMember(state, target.asListShape().orElseThrow(), innerValue, depth + 1, body);
+                body.addStatement("$L.withMember($L.getKey(), $L)", innerBuilderName, innerKvpName, element);
+            }
+            case MAP -> {
+                var element = addNestedMapMember(state, target.asMapShape().orElseThrow(), innerValue, depth + 1, body);
+                body.addStatement("$L.withMember($L.getKey(), $L)", innerBuilderName, innerKvpName, element);
+            }
+        }
+        body.endControlFlow();
+        return innerBuilderName + ".build()";
     }
 
     private void addSimpleMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
