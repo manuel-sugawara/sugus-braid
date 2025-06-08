@@ -59,6 +59,14 @@ list EnumValueList {
     member: EnumValue
 }
 
+list NestedIntegerList {
+    member: IntegerList
+}
+
+list NestedIntegerList2 {
+    member: NestedIntegerList
+}
+
 structure Parent {
     stringMember: String
     children: ChildList
@@ -73,4 +81,6 @@ structure Parent {
     strings: StringList
     bigDecimals: BigDecimalList
     enumValues: EnumValueList
+    nestedIntegers: NestedIntegerList
+    nestedNestedIntegers: NestedIntegerList2
 }
