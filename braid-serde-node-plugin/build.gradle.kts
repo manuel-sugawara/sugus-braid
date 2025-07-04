@@ -20,7 +20,6 @@ plugins {
     `maven-publish`
 }
 
-
 dependencies {
     implementation(project(":braid-core"))
     implementation(project(":braid-traits"))

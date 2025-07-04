@@ -179,7 +179,7 @@ public final class StructureData implements DirectedClass {
         var dataType = builderJavaClassName();
         return MethodSyntax.builder("toBuilder")
                            .addModifier(Modifier.PUBLIC)
-                           .javadoc(JavadocExt.document("Returns a new builder to modify a copy of this instance"))
+                           .javadoc(JavadocExt.document("Returns a new builder to modify a copy of this instance."))
                            .returns(dataType)
                            .addStatement("return new $T(this)", dataType)
                            .build();
@@ -301,7 +301,7 @@ public final class StructureData implements DirectedClass {
 
     List<MethodSyntax> builderMethods(ShapeCodegenState state) {
         var dataType = builderJavaClassName();
-        var javadoc = JavadocExt.document("Creates a new builder");
+        var javadoc = JavadocExt.document("Creates a new builder.");
         var builder = MethodSyntax.builder("builder")
                                   .javadoc(javadoc)
                                   .addModifiers(Modifier.PUBLIC, Modifier.STATIC)

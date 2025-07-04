@@ -47,7 +47,7 @@ public final class Container {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -97,7 +97,7 @@ public final class Container {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -126,7 +126,7 @@ public final class Container {
         }
 
         /**
-         * <p>Sets the value for <code>list</code></p>
+         * <p>Sets the value for <code>list</code>.</p>
          */
         public Builder list(List list) {
             this.list = list;
@@ -134,7 +134,7 @@ public final class Container {
         }
 
         /**
-         * <p>Sets the value for <code>aConst</code></p>
+         * <p>Sets the value for <code>aConst</code>.</p>
          */
         public Builder aConst(String aConst) {
             this.aConst = aConst;
@@ -142,7 +142,7 @@ public final class Container {
         }
 
         /**
-         * <p>Sets the value for <code>listOfLists</code></p>
+         * <p>Sets the value for <code>listOfLists</code>.</p>
          */
         public Builder listOfLists(java.util.List<List> listOfLists) {
             this.listOfLists.clear();
@@ -151,7 +151,7 @@ public final class Container {
         }
 
         /**
-         * <p>Adds a single value for <code>listOfLists</code></p>
+         * <p>Adds a single value for <code>listOfLists</code>.</p>
          */
         public Builder addListOfList(List listOfList) {
             this.listOfLists.asTransient().add(listOfList);
@@ -159,7 +159,7 @@ public final class Container {
         }
 
         /**
-         * <p>Sets the value for <code>mapOfMaps</code></p>
+         * <p>Sets the value for <code>mapOfMaps</code>.</p>
          */
         public Builder mapOfMaps(java.util.Map<String, Map> mapOfMaps) {
             this.mapOfMaps.clear();
@@ -173,7 +173,7 @@ public final class Container {
         }
 
         /**
-         * <p>Sets the value for <code>object</code></p>
+         * <p>Sets the value for <code>object</code>.</p>
          */
         public Builder object(ObjectStructure object) {
             this.object = object;
@@ -181,7 +181,7 @@ public final class Container {
         }
 
         /**
-         * <p>Sets the value for <code>objects</code></p>
+         * <p>Sets the value for <code>objects</code>.</p>
          */
         public Builder objects(Objects objects) {
             this.objects = objects;

@@ -22,10 +22,10 @@ public interface SyntaxNodeChild extends ToNode {
         switch (kind) {
             case BAR:
                 return ChildBar.fromNode(validation, node);
-            case FOO:
-                return ChildFoo.fromNode(validation, node);
             case BAZ:
                 return ChildBaz.fromNode(validation, node);
+            case FOO:
+                return ChildFoo.fromNode(validation, node);
             default:
                 throw new IllegalArgumentException("Unknown enum variant: " + kind);
         }

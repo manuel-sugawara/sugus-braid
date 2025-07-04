@@ -74,7 +74,7 @@ public final class AllSimpleTypes {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -136,7 +136,7 @@ public final class AllSimpleTypes {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -171,7 +171,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aByte</code></p>
+         * <p>Sets the value for <code>aByte</code>.</p>
          */
         public Builder aByte(Byte aByte) {
             this.aByte = aByte;
@@ -179,7 +179,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aShort</code></p>
+         * <p>Sets the value for <code>aShort</code>.</p>
          */
         public Builder aShort(Short aShort) {
             this.aShort = aShort;
@@ -187,7 +187,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>anInt</code></p>
+         * <p>Sets the value for <code>anInt</code>.</p>
          */
         public Builder anInt(Integer anInt) {
             this.anInt = anInt;
@@ -195,7 +195,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aLong</code></p>
+         * <p>Sets the value for <code>aLong</code>.</p>
          */
         public Builder aLong(Long aLong) {
             this.aLong = aLong;
@@ -203,7 +203,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>bigInteger</code></p>
+         * <p>Sets the value for <code>bigInteger</code>.</p>
          */
         public Builder bigInteger(BigInteger bigInteger) {
             this.bigInteger = bigInteger;
@@ -211,7 +211,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aFloat</code></p>
+         * <p>Sets the value for <code>aFloat</code>.</p>
          */
         public Builder aFloat(Float aFloat) {
             this.aFloat = aFloat;
@@ -219,7 +219,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aDouble</code></p>
+         * <p>Sets the value for <code>aDouble</code>.</p>
          */
         public Builder aDouble(Double aDouble) {
             this.aDouble = aDouble;
@@ -227,7 +227,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>bigDecimal</code></p>
+         * <p>Sets the value for <code>bigDecimal</code>.</p>
          */
         public Builder bigDecimal(BigDecimal bigDecimal) {
             this.bigDecimal = bigDecimal;
@@ -235,7 +235,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>string</code></p>
+         * <p>Sets the value for <code>string</code>.</p>
          */
         public Builder string(String string) {
             this.string = string;
@@ -243,7 +243,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>instant</code></p>
+         * <p>Sets the value for <code>instant</code>.</p>
          */
         public Builder instant(Instant instant) {
             this.instant = instant;

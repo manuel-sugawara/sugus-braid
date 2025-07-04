@@ -108,7 +108,7 @@ public final class AllSimpleTypes {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -170,7 +170,7 @@ public final class AllSimpleTypes {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -205,7 +205,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aByte</code></p>
+         * <p>Sets the value for <code>aByte</code>.</p>
          * <p>byte member</p>
          */
         public Builder aByte(Byte aByte) {
@@ -214,7 +214,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aShort</code></p>
+         * <p>Sets the value for <code>aShort</code>.</p>
          * <p>short member</p>
          */
         public Builder aShort(Short aShort) {
@@ -223,7 +223,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>anInt</code></p>
+         * <p>Sets the value for <code>anInt</code>.</p>
          * <p>int member</p>
          */
         public Builder anInt(Integer anInt) {
@@ -232,7 +232,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aLong</code></p>
+         * <p>Sets the value for <code>aLong</code>.</p>
          * <p>long member</p>
          */
         public Builder aLong(Long aLong) {
@@ -241,7 +241,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>bigInteger</code></p>
+         * <p>Sets the value for <code>bigInteger</code>.</p>
          * <p>bigInteger member</p>
          */
         public Builder bigInteger(BigInteger bigInteger) {
@@ -250,7 +250,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aFloat</code></p>
+         * <p>Sets the value for <code>aFloat</code>.</p>
          * <p>float member</p>
          */
         public Builder aFloat(Float aFloat) {
@@ -259,7 +259,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aDouble</code></p>
+         * <p>Sets the value for <code>aDouble</code>.</p>
          * <p>double member</p>
          */
         public Builder aDouble(Double aDouble) {
@@ -268,7 +268,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>bigDecimal</code></p>
+         * <p>Sets the value for <code>bigDecimal</code>.</p>
          * <p>bigDecimal member</p>
          */
         public Builder bigDecimal(BigDecimal bigDecimal) {
@@ -277,7 +277,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>string</code></p>
+         * <p>Sets the value for <code>string</code>.</p>
          * <p>string member</p>
          */
         public Builder string(String string) {
@@ -286,7 +286,7 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>instant</code></p>
+         * <p>Sets the value for <code>instant</code>.</p>
          * <p>instant member</p>
          */
         public Builder instant(Instant instant) {

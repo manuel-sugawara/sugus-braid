@@ -29,7 +29,7 @@ public final class Parent implements SyntaxNode, ToNode {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -45,7 +45,7 @@ public final class Parent implements SyntaxNode, ToNode {
         }
         Parent that = (Parent) obj;
         return Objects.equals(this.child, that.child)
-               && Objects.equals(this.anotherChild, that.anotherChild);
+            && Objects.equals(this.anotherChild, that.anotherChild);
     }
 
     @Override
@@ -59,12 +59,12 @@ public final class Parent implements SyntaxNode, ToNode {
     @Override
     public String toString() {
         return "Parent{"
-               + "child: " + child
-               + ", anotherChild: " + anotherChild + "}";
+            + "child: " + child
+            + ", anotherChild: " + anotherChild + "}";
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -130,7 +130,7 @@ public final class Parent implements SyntaxNode, ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>child</code></p>
+         * <p>Sets the value for <code>child</code>.</p>
          */
         public Builder child(SyntaxNodeChild child) {
             this.child = child;
@@ -138,7 +138,7 @@ public final class Parent implements SyntaxNode, ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>anotherChild</code></p>
+         * <p>Sets the value for <code>anotherChild</code>.</p>
          */
         public Builder anotherChild(AnotherChild anotherChild) {
             this.anotherChild = anotherChild;

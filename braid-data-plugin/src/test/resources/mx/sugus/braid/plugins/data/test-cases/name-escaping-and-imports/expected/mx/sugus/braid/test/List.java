@@ -16,7 +16,7 @@ public final class List {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -48,7 +48,7 @@ public final class List {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -65,7 +65,7 @@ public final class List {
         }
 
         /**
-         * <p>Sets the value for <code>aVoid</code></p>
+         * <p>Sets the value for <code>aVoid</code>.</p>
          */
         public Builder aVoid(VoidStructure aVoid) {
             this.aVoid = aVoid;

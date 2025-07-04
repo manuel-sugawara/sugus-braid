@@ -59,7 +59,7 @@ public final class DefaultValues {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -115,7 +115,7 @@ public final class DefaultValues {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -154,7 +154,7 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>aBoolean</code></p>
+         * <p>Sets the value for <code>aBoolean</code>.</p>
          */
         public Builder aBoolean(Boolean aBoolean) {
             this.aBoolean = aBoolean;
@@ -162,7 +162,7 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>aByte</code></p>
+         * <p>Sets the value for <code>aByte</code>.</p>
          */
         public Builder aByte(Byte aByte) {
             this.aByte = aByte;
@@ -170,7 +170,7 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>aShort</code></p>
+         * <p>Sets the value for <code>aShort</code>.</p>
          */
         public Builder aShort(Short aShort) {
             this.aShort = aShort;
@@ -178,7 +178,7 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>anInt</code></p>
+         * <p>Sets the value for <code>anInt</code>.</p>
          */
         public Builder anInt(Integer anInt) {
             this.anInt = anInt;
@@ -186,7 +186,7 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>aLong</code></p>
+         * <p>Sets the value for <code>aLong</code>.</p>
          */
         public Builder aLong(Long aLong) {
             this.aLong = aLong;
@@ -194,7 +194,7 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>aFloat</code></p>
+         * <p>Sets the value for <code>aFloat</code>.</p>
          */
         public Builder aFloat(Float aFloat) {
             this.aFloat = aFloat;
@@ -202,7 +202,7 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>aDouble</code></p>
+         * <p>Sets the value for <code>aDouble</code>.</p>
          */
         public Builder aDouble(Double aDouble) {
             this.aDouble = aDouble;
@@ -210,7 +210,7 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>string</code></p>
+         * <p>Sets the value for <code>string</code>.</p>
          */
         public Builder string(String string) {
             this.string = string;

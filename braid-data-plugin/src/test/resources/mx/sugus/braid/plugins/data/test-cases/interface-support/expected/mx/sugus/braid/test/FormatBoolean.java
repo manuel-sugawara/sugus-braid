@@ -26,7 +26,7 @@ public final class FormatBoolean implements Format {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -60,7 +60,7 @@ public final class FormatBoolean implements Format {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -77,7 +77,7 @@ public final class FormatBoolean implements Format {
         }
 
         /**
-         * <p>Sets the value for <code>value</code></p>
+         * <p>Sets the value for <code>value</code>.</p>
          * <p>The boolean value</p>
          */
         public Builder value(Boolean value) {

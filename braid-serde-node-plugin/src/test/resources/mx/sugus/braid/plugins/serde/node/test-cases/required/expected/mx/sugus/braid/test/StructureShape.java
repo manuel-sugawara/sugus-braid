@@ -36,7 +36,7 @@ public final class StructureShape implements ToNode {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -52,8 +52,8 @@ public final class StructureShape implements ToNode {
         }
         StructureShape that = (StructureShape) obj;
         return this.enumValue.equals(that.enumValue)
-               && this.stringMember.equals(that.stringMember)
-               && this.structureShape.equals(that.structureShape);
+            && this.stringMember.equals(that.stringMember)
+            && this.structureShape.equals(that.structureShape);
     }
 
     @Override
@@ -71,13 +71,13 @@ public final class StructureShape implements ToNode {
     @Override
     public String toString() {
         return "StructureShape{"
-               + "enumValue: " + enumValue
-               + ", stringMember: " + stringMember
-               + ", structureShape: " + structureShape + "}";
+            + "enumValue: " + enumValue
+            + ", stringMember: " + stringMember
+            + ", structureShape: " + structureShape + "}";
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -145,7 +145,7 @@ public final class StructureShape implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>enumValue</code></p>
+         * <p>Sets the value for <code>enumValue</code>.</p>
          */
         public Builder enumValue(EnumShape enumValue) {
             this.enumValue = enumValue;
@@ -153,7 +153,7 @@ public final class StructureShape implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>stringMember</code></p>
+         * <p>Sets the value for <code>stringMember</code>.</p>
          */
         public Builder stringMember(String stringMember) {
             this.stringMember = stringMember;
@@ -161,7 +161,7 @@ public final class StructureShape implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>structureShape</code></p>
+         * <p>Sets the value for <code>structureShape</code>.</p>
          */
         public Builder structureShape(SimpleStructure structureShape) {
             this.structureShape = structureShape;

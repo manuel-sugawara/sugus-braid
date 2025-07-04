@@ -121,7 +121,7 @@ public final class Parent implements ToNode {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -137,21 +137,21 @@ public final class Parent implements ToNode {
         }
         Parent that = (Parent) obj;
         return Objects.equals(this.stringMember, that.stringMember)
-               && this.children.equals(that.children)
-               && this.booleans.equals(that.booleans)
-               && this.bytes.equals(that.bytes)
-               && this.shorts.equals(that.shorts)
-               && this.integers.equals(that.integers)
-               && this.bigIntegers.equals(that.bigIntegers)
-               && this.longs.equals(that.longs)
-               && this.floats.equals(that.floats)
-               && this.doubles.equals(that.doubles)
-               && this.strings.equals(that.strings)
-               && this.bigDecimals.equals(that.bigDecimals)
-               && this.enumValues.equals(that.enumValues)
-               && this.integerListMap.equals(that.integerListMap)
-               && this.nestedIntegerListMap.equals(that.nestedIntegerListMap)
-               && this.nestedNestedIntegerMap.equals(that.nestedNestedIntegerMap);
+            && this.children.equals(that.children)
+            && this.booleans.equals(that.booleans)
+            && this.bytes.equals(that.bytes)
+            && this.shorts.equals(that.shorts)
+            && this.integers.equals(that.integers)
+            && this.bigIntegers.equals(that.bigIntegers)
+            && this.longs.equals(that.longs)
+            && this.floats.equals(that.floats)
+            && this.doubles.equals(that.doubles)
+            && this.strings.equals(that.strings)
+            && this.bigDecimals.equals(that.bigDecimals)
+            && this.enumValues.equals(that.enumValues)
+            && this.integerListMap.equals(that.integerListMap)
+            && this.nestedIntegerListMap.equals(that.nestedIntegerListMap)
+            && this.nestedNestedIntegerMap.equals(that.nestedNestedIntegerMap);
     }
 
     @Override
@@ -182,26 +182,26 @@ public final class Parent implements ToNode {
     @Override
     public String toString() {
         return "Parent{"
-               + "stringMember: " + stringMember
-               + ", children: " + children
-               + ", booleans: " + booleans
-               + ", bytes: " + bytes
-               + ", shorts: " + shorts
-               + ", integers: " + integers
-               + ", bigIntegers: " + bigIntegers
-               + ", longs: " + longs
-               + ", floats: " + floats
-               + ", doubles: " + doubles
-               + ", strings: " + strings
-               + ", bigDecimals: " + bigDecimals
-               + ", enumValues: " + enumValues
-               + ", integerListMap: " + integerListMap
-               + ", nestedIntegerListMap: " + nestedIntegerListMap
-               + ", nestedNestedIntegerMap: " + nestedNestedIntegerMap + "}";
+            + "stringMember: " + stringMember
+            + ", children: " + children
+            + ", booleans: " + booleans
+            + ", bytes: " + bytes
+            + ", shorts: " + shorts
+            + ", integers: " + integers
+            + ", bigIntegers: " + bigIntegers
+            + ", longs: " + longs
+            + ", floats: " + floats
+            + ", doubles: " + doubles
+            + ", strings: " + strings
+            + ", bigDecimals: " + bigDecimals
+            + ", enumValues: " + enumValues
+            + ", integerListMap: " + integerListMap
+            + ", nestedIntegerListMap: " + nestedIntegerListMap
+            + ", nestedNestedIntegerMap: " + nestedNestedIntegerMap + "}";
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -541,7 +541,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>stringMember</code></p>
+         * <p>Sets the value for <code>stringMember</code>.</p>
          */
         public Builder stringMember(String stringMember) {
             this.stringMember = stringMember;
@@ -549,7 +549,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>children</code></p>
+         * <p>Sets the value for <code>children</code>.</p>
          */
         public Builder children(Map<String, Child> children) {
             this.children.clear();
@@ -563,7 +563,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>booleans</code></p>
+         * <p>Sets the value for <code>booleans</code>.</p>
          */
         public Builder booleans(Map<String, Boolean> booleans) {
             this.booleans.clear();
@@ -577,7 +577,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>bytes</code></p>
+         * <p>Sets the value for <code>bytes</code>.</p>
          */
         public Builder bytes(Map<String, Byte> bytes) {
             this.bytes.clear();
@@ -591,7 +591,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>shorts</code></p>
+         * <p>Sets the value for <code>shorts</code>.</p>
          */
         public Builder shorts(Map<String, Short> shorts) {
             this.shorts.clear();
@@ -605,7 +605,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>integers</code></p>
+         * <p>Sets the value for <code>integers</code>.</p>
          */
         public Builder integers(Map<String, Integer> integers) {
             this.integers.clear();
@@ -619,7 +619,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>bigIntegers</code></p>
+         * <p>Sets the value for <code>bigIntegers</code>.</p>
          */
         public Builder bigIntegers(Map<String, BigInteger> bigIntegers) {
             this.bigIntegers.clear();
@@ -633,7 +633,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>longs</code></p>
+         * <p>Sets the value for <code>longs</code>.</p>
          */
         public Builder longs(Map<String, Long> longs) {
             this.longs.clear();
@@ -647,7 +647,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>floats</code></p>
+         * <p>Sets the value for <code>floats</code>.</p>
          */
         public Builder floats(Map<String, Float> floats) {
             this.floats.clear();
@@ -661,7 +661,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>doubles</code></p>
+         * <p>Sets the value for <code>doubles</code>.</p>
          */
         public Builder doubles(Map<String, Double> doubles) {
             this.doubles.clear();
@@ -675,7 +675,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>strings</code></p>
+         * <p>Sets the value for <code>strings</code>.</p>
          */
         public Builder strings(Map<String, String> strings) {
             this.strings.clear();
@@ -689,7 +689,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>bigDecimals</code></p>
+         * <p>Sets the value for <code>bigDecimals</code>.</p>
          */
         public Builder bigDecimals(Map<String, BigDecimal> bigDecimals) {
             this.bigDecimals.clear();
@@ -703,7 +703,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>enumValues</code></p>
+         * <p>Sets the value for <code>enumValues</code>.</p>
          */
         public Builder enumValues(Map<String, EnumValue> enumValues) {
             this.enumValues.clear();
@@ -717,7 +717,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>integerListMap</code></p>
+         * <p>Sets the value for <code>integerListMap</code>.</p>
          */
         public Builder integerListMap(Map<String, List<Integer>> integerListMap) {
             this.integerListMap.clear();
@@ -731,7 +731,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>nestedIntegerListMap</code></p>
+         * <p>Sets the value for <code>nestedIntegerListMap</code>.</p>
          */
         public Builder nestedIntegerListMap(Map<String, Map<String, List<Integer>>> nestedIntegerListMap) {
             this.nestedIntegerListMap.clear();
@@ -745,7 +745,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>nestedNestedIntegerMap</code></p>
+         * <p>Sets the value for <code>nestedNestedIntegerMap</code>.</p>
          */
         public Builder nestedNestedIntegerMap(Map<String, List<Map<String, Integer>>> nestedNestedIntegerMap) {
             this.nestedNestedIntegerMap.clear();
