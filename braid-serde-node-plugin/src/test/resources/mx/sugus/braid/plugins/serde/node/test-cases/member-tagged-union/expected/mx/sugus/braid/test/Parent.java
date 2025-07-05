@@ -71,29 +71,29 @@ public final class Parent implements SyntaxNode, ToNode {
     }
 
     /**
-     * <p>Converts this instance to Node</p>
+     * <p>Converts this instance to Node.</p>
      */
     @Override
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
         if (child != null) {
-            builder.withMember("child", this.child.toNode());
+            builder.withMember("child", child().toNode());
         }
         if (anotherChild != null) {
-            builder.withMember("anotherChild", this.anotherChild.toNode());
+            builder.withMember("anotherChild", anotherChild().toNode());
         }
         return builder.build();
     }
 
     /**
-     * <p>Converts a {@link Node} to Parent</p>
+     * <p>Converts a {@link Node} to Parent.</p>
      */
     public static Parent fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * <p>Converts a {@link Node} to Parent</p>
+     * <p>Converts a {@link Node} to Parent.</p>
      */
     public static Parent fromNode(Validation validator, Node node) {
         validator = validator.with("Parent");

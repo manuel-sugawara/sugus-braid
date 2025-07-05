@@ -84,26 +84,26 @@ public final class StructureShape implements ToNode {
     }
 
     /**
-     * <p>Converts this instance to Node</p>
+     * <p>Converts this instance to Node.</p>
      */
     @Override
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
-        builder.withMember("enumValue", Node.from(this.enumValue.toString()));
-        builder.withMember("stringMember", Node.from(this.stringMember));
-        builder.withMember("structureShape", this.structureShape.toNode());
+        builder.withMember("enumValue", Node.from(enumValue().toString()));
+        builder.withMember("stringMember", Node.from(stringMember()));
+        builder.withMember("structureShape", structureShape().toNode());
         return builder.build();
     }
 
     /**
-     * <p>Converts a {@link Node} to StructureShape</p>
+     * <p>Converts a {@link Node} to StructureShape.</p>
      */
     public static StructureShape fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * <p>Converts a {@link Node} to StructureShape</p>
+     * <p>Converts a {@link Node} to StructureShape.</p>
      */
     public static StructureShape fromNode(Validation validator, Node node) {
         validator = validator.with("StructureShape");

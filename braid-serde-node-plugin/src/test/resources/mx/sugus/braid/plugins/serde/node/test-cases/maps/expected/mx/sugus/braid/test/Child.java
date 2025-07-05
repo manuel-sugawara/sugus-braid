@@ -71,29 +71,29 @@ public final class Child implements ToNode {
     }
 
     /**
-     * <p>Converts this instance to Node</p>
+     * <p>Converts this instance to Node.</p>
      */
     @Override
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
         if (this.stringValue != null) {
-            builder.withMember("stringValue", Node.from(this.stringValue));
+            builder.withMember("stringValue", Node.from(stringValue()));
         }
         if (this.intValue != null) {
-            builder.withMember("intValue", Node.from(this.intValue));
+            builder.withMember("intValue", Node.from(intValue()));
         }
         return builder.build();
     }
 
     /**
-     * <p>Converts a {@link Node} to Child</p>
+     * <p>Converts a {@link Node} to Child.</p>
      */
     public static Child fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * <p>Converts a {@link Node} to Child</p>
+     * <p>Converts a {@link Node} to Child.</p>
      */
     public static Child fromNode(Validation validator, Node node) {
         validator = validator.with("Child");

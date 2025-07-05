@@ -52,8 +52,8 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
                      .build();
     }
 
-    private MethodSyntax toNodeMethod(ShapeCodegenState state) {
-        var javadoc = "Converts this instance to Node";
+    static MethodSyntax toNodeMethod(ShapeCodegenState state) {
+        var javadoc = "Converts this instance to Node.";
         var builder = MethodSyntax.builder("toNode")
                                   .javadoc(JavadocExt.document(javadoc))
                                   .addAnnotation(Override.class)
@@ -75,7 +75,7 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
         return builder.build();
     }
 
-    private void addAggregateMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
+    static void addAggregateMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var target = state.model().expectShape(member.getTarget());
         switch (target.getType()) {
             case STRUCTURE, UNION -> addStructureMember(state, member, body);
@@ -85,27 +85,31 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
         }
     }
 
-    private void addStructureMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
+    private static void addStructureMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var memberName = Utils.toJavaName(state, member);
         var target = state.model().expectShape(member.getTarget());
-        if (Utils.isRequired(state, member) || member.hasTrait(ConstTrait.class)) {
+        var getterName = Utils.toGetterName(state, member);
+        if (isNotNullable(state, member)) {
             body.addStatement("builder.withMember($S, $C)", member.getMemberName(),
-                              valueToNode("this." + memberName, state, target));
+                              valueToNode(getterName + "()", state, target));
         } else {
             body.ifStatement("$L != null", memberName, then ->
                 then.addStatement("builder.withMember($S, $C)", member.getMemberName(),
-                                  valueToNode("this." + memberName, state, target)));
+                                  valueToNode(getterName + "()", state, target)));
         }
     }
 
-    private void addListMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
+    private static void addListMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var listShape = state.model().expectShape(member.getTarget()).asListShape().orElseThrow();
         var target = state.model().expectShape(listShape.getMember().getTarget());
         var targetType = Utils.toJavaTypeName(state, target);
         var memberField = Utils.toJavaName(state, member);
-        body.beginControlFlow("if (!this.$L.isEmpty())", memberField);
+        var getterName = Utils.toGetterName(state, member) + "()";
+        if (shouldSerializeEmptyCollections(state, member)) {
+            body.beginControlFlow("if (!$L.isEmpty())", getterName);
+        }
         body.addStatement("$1T.Builder $2LBuilder = $1T.builder()", ArrayNode.class, memberField);
-        body.beginControlFlow("for ($T item : this.$L)", targetType, memberField);
+        body.beginControlFlow("for ($T item : $L)", targetType, getterName);
         var aggregateType = Utils.aggregateType(state, target);
         switch (aggregateType) {
             case NONE -> {
@@ -122,14 +126,17 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
         }
         body.endControlFlow();
         body.addStatement("builder.withMember($S, $LBuilder.build())", member.getMemberName(), memberField);
-        body.endControlFlow();
+        if (shouldSerializeEmptyCollections(state, member)) {
+            body.endControlFlow();
+        }
     }
 
-    private String addNestedListMember(ShapeCodegenState state, ListShape listShape, BodyBuilder body) {
+    private static String addNestedListMember(ShapeCodegenState state, ListShape listShape, BodyBuilder body) {
         return addNestedListMember(state, listShape, "item", 0, body);
     }
 
-    private String addNestedListMember(ShapeCodegenState state, ListShape listShape, String source, int depth, BodyBuilder body) {
+    private static String addNestedListMember(ShapeCodegenState state, ListShape listShape, String source, int depth,
+                                              BodyBuilder body) {
         var innerBuilderName = "innerBuilder" + (depth == 0 ? "" : Integer.toString(depth));
         var innerItemName = "innerItem" + (depth == 0 ? "" : Integer.toString(depth));
         var target = state.model().expectShape(listShape.getMember().getTarget());
@@ -154,15 +161,18 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
         return innerBuilderName + ".build()";
     }
 
-    private void addMapMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
+    private static void addMapMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var mapShape = state.model().expectShape(member.getTarget()).asMapShape().orElseThrow();
         var target = state.model().expectShape(mapShape.getValue().getTarget());
         var targetType = Utils.toJavaTypeName(state, target);
         var memberField = Utils.toJavaName(state, member);
-        body.beginControlFlow("if (!this.$L.isEmpty())", memberField);
+        var getterName = Utils.toGetterName(state, member) + "()";
+        if (shouldSerializeEmptyCollections(state, member)) {
+            body.beginControlFlow("if (!this.$L.isEmpty())", memberField);
+        }
         body.addStatement("$1T.Builder $2LBuilder = $1T.builder()", ObjectNode.class, memberField);
-        body.beginControlFlow("for ($T<$T, $T> kvp : this.$L.entrySet())",
-                              Map.Entry.class, String.class, targetType, memberField);
+        body.beginControlFlow("for ($T<$T, $T> kvp : $L.entrySet())",
+                              Map.Entry.class, String.class, targetType, getterName);
         var aggregateType = Utils.aggregateType(state, target);
         switch (aggregateType) {
             case NONE -> {
@@ -180,14 +190,17 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
         }
         body.endControlFlow();
         body.addStatement("builder.withMember($S, $LBuilder.build())", member.getMemberName(), memberField);
-        body.endControlFlow();
+        if (shouldSerializeEmptyCollections(state, member)) {
+            body.endControlFlow();
+        }
     }
 
-    private String addNestedMapMember(ShapeCodegenState state, MapShape mapShape, BodyBuilder body) {
+    private static String addNestedMapMember(ShapeCodegenState state, MapShape mapShape, BodyBuilder body) {
         return addNestedMapMember(state, mapShape, "kvp.getValue()", 0, body);
     }
 
-    private String addNestedMapMember(ShapeCodegenState state, MapShape mapShape, String source, int depth, BodyBuilder body) {
+    private static String addNestedMapMember(ShapeCodegenState state, MapShape mapShape, String source, int depth,
+                                             BodyBuilder body) {
         var innerBuilderName = "innerBuilder" + (depth == 0 ? "" : Integer.toString(depth));
         var innerKvpName = "innerKvp" + (depth == 0 ? "" : Integer.toString(depth));
         var target = state.model().expectShape(mapShape.getValue().getTarget());
@@ -215,26 +228,27 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
         return innerBuilderName + ".build()";
     }
 
-    private void addSimpleMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
+    static void addSimpleMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var target = state.model().expectShape(member.getTarget());
         var memberField = "this." + Utils.toJavaName(state, member);
-        if (Utils.isRequired(state, member) || member.hasTrait(ConstTrait.class)) {
+        var getterName = Utils.toGetterName(state, member) + "()";
+        if (isNotNullable(state, member)) {
             if (member.hasTrait(ConstTrait.class)) {
                 body.addStatement("builder.withMember($S, $C)",
-                                  member.getMemberName(), valueToNode(memberField + "()", state, target));
+                                  member.getMemberName(), valueToNode(getterName, state, target));
             } else {
                 body.addStatement("builder.withMember($S, $C)",
-                                  member.getMemberName(), valueToNode(memberField, state, target));
+                                  member.getMemberName(), valueToNode(getterName, state, target));
             }
         } else {
             body.ifStatement("$L != null", memberField, then -> {
                 then.addStatement("builder.withMember($S, $C)",
-                                  member.getMemberName(), valueToNode(memberField, state, target));
+                                  member.getMemberName(), valueToNode(getterName, state, target));
             });
         }
     }
 
-    private CodeBlock valueToNode(String source, ShapeCodegenState state, Shape target) {
+    private static CodeBlock valueToNode(String source, ShapeCodegenState state, Shape target) {
         var type = target.getType();
         return switch (type) {
             case STRUCTURE, UNION -> structureValueToNode(source, state, target);
@@ -249,7 +263,7 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
         };
     }
 
-    private CodeBlock structureValueToNode(String source, ShapeCodegenState state, Shape target) {
+    private static CodeBlock structureValueToNode(String source, ShapeCodegenState state, Shape target) {
         if (target.hasTrait(JavaTrait.class)) {
             var targetType = ClassName.toClassName(Utils.toJavaTypeName(state, target));
             var actualClass = ClassAddFromNodeTransformer.toActualJavaClass(targetType);
@@ -263,5 +277,15 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
         }
 
         return CodeBlock.from("$L.toNode()", source);
+    }
+
+    private static boolean isNotNullable(ShapeCodegenState state, MemberShape member) {
+        return Utils.isRequired(state, member)
+               || member.hasTrait(ConstTrait.class)
+               || state.shape().isUnionShape();
+    }
+
+    private static boolean shouldSerializeEmptyCollections(ShapeCodegenState state, MemberShape member) {
+        return !state.shape().isUnionShape();
     }
 }

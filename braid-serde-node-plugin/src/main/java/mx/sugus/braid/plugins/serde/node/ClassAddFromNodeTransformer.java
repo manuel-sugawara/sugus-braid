@@ -58,9 +58,9 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
                      .build();
     }
 
-    private MethodSyntax defaultFromNodeMethod(ShapeCodegenState state) {
+    static MethodSyntax defaultFromNodeMethod(ShapeCodegenState state) {
         var className = Utils.toJavaTypeName(state, state.shape());
-        var javadoc = "Converts a {@link Node} to " + ClassName.toClassName(className).name();
+        var javadoc = "Converts a {@link Node} to " + ClassName.toClassName(className).name() + ".";
         var builder = MethodSyntax.builder("fromNode")
                                   .javadoc(JavadocExt.document(javadoc))
                                   .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
@@ -70,9 +70,9 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
         return builder.build();
     }
 
-    private MethodSyntax fromNodeMethod(ShapeCodegenState state) {
+    static MethodSyntax fromNodeMethod(ShapeCodegenState state) {
         var className = Utils.toJavaTypeName(state, state.shape());
-        var javadoc = "Converts a {@link Node} to " + ClassName.toClassName(className).name();
+        var javadoc = "Converts a {@link Node} to " + ClassName.toClassName(className).name() + ".";
         var builder = MethodSyntax.builder("fromNode")
                                   .javadoc(JavadocExt.document(javadoc))
                                   .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
@@ -127,17 +127,17 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
         return builder.build();
     }
 
-    private void addAggregateMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder caseBuilder) {
+    static void addAggregateMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder caseBuilder) {
         var target = state.model().expectShape(member.getTarget());
         switch (target.getType()) {
-            case STRUCTURE -> addStructureMember(state, member, caseBuilder);
+            case STRUCTURE, UNION -> addStructureMember(state, member, caseBuilder);
             case LIST -> addListMember(state, member, caseBuilder);
             case MAP -> addMapMember(state, member, caseBuilder);
             default -> throw new RuntimeException("unsupported aggregated type: " + target.getType());
         }
     }
 
-    private void addStructureMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder body) {
+    private static void addStructureMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder body) {
         var target = state.model().expectShape(member.getTarget());
         if (target.hasTrait(JavaTrait.class)) {
             addJavaMember(state, member, body);
@@ -148,7 +148,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
                           Utils.toSetterName(state, member), targetType, member.getMemberName());
     }
 
-    private void addJavaMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder body) {
+    private static void addJavaMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder body) {
         var target = state.model().expectShape(member.getTarget());
         var targetType = Utils.toJavaTypeName(state, target);
         var actualClass = toActualJavaClass(ClassName.toClassName(targetType));
@@ -164,7 +164,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
         body.addStatement("builder.$L($C)", Utils.toSetterName(state, member), valueFromNode("item", state, target, member));
     }
 
-    private void addListMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder body) {
+    private static void addListMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder body) {
         var listShape = state.model().expectShape(member.getTarget()).asListShape().orElseThrow();
         var target = state.model().expectShape(listShape.getMember().getTarget());
         var aggregateType = Utils.aggregateType(state, target);
@@ -186,11 +186,12 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
         body.endControlFlow();
     }
 
-    private String addNestedList(ShapeCodegenState state, ListShape target, CaseClause.Builder body) {
+    private static String addNestedList(ShapeCodegenState state, ListShape target, CaseClause.Builder body) {
         return addNestedList(state, target, "lstNodeValue", 0, body);
     }
 
-    private String addNestedList(ShapeCodegenState state, ListShape shape, String source, int depth, CaseClause.Builder body) {
+    private static String addNestedList(ShapeCodegenState state, ListShape shape, String source, int depth,
+                                        CaseClause.Builder body) {
         var name = "lstMember" + (depth == 0 ? "" : Integer.toString(depth));
         var elementName = depth == 0 ? "innerNodeValue" : "innerNodeValue" + depth;
         var aggregateType = Utils.aggregateType(state, shape);
@@ -217,7 +218,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
         return name;
     }
 
-    private void addMapMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder body) {
+    private static void addMapMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder body) {
         var mapShape = state.model().expectShape(member.getTarget()).asMapShape().orElseThrow();
         var target = state.model().expectShape(mapShape.getValue().getTarget());
         var putter = Utils.toAdderName(state, member);
@@ -245,11 +246,12 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
     }
 
 
-    private String addNestedMap(ShapeCodegenState state, MapShape target, CaseClause.Builder body) {
+    private static String addNestedMap(ShapeCodegenState state, MapShape target, CaseClause.Builder body) {
         return addNestedMap(state, target, "valueNode", 0, body);
     }
 
-    private String addNestedMap(ShapeCodegenState state, MapShape shape, String source, int depth, CaseClause.Builder body) {
+    private static String addNestedMap(ShapeCodegenState state, MapShape shape, String source, int depth,
+                                       CaseClause.Builder body) {
         var name = "mapValue" + (depth == 0 ? "" : Integer.toString(depth));
         var entryName = "innerKvp" + (depth == 0 ? "" : Integer.toString(depth));
         var valueName = "innerValue" + (depth == 0 ? "" : Integer.toString(depth));
@@ -281,7 +283,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
         return name;
     }
 
-    private void addSimpleMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder caseBuilder) {
+    static void addSimpleMember(ShapeCodegenState state, MemberShape member, CaseClause.Builder caseBuilder) {
         var target = state.model().expectShape(member.getTarget());
 
         if (target.isEnumShape()) {
@@ -296,7 +298,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
         }
     }
 
-    private CodeBlock valueFromNode(String nodeVar, ShapeCodegenState state, Shape target, MemberShape member) {
+    private static CodeBlock valueFromNode(String nodeVar, ShapeCodegenState state, Shape target, MemberShape member) {
         var type = target.getType();
         return switch (type) {
             case STRUCTURE -> valueFromStructureNode(nodeVar, state, target, member);
@@ -316,7 +318,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
         };
     }
 
-    private CodeBlock valueFromStructureNode(String nodeVar, ShapeCodegenState state, Shape target, MemberShape member) {
+    private static CodeBlock valueFromStructureNode(String nodeVar, ShapeCodegenState state, Shape target, MemberShape member) {
         if (target.hasTrait(JavaTrait.class)) {
             var targetType = ClassName.toClassName(Utils.toJavaTypeName(state, target));
             var actualClass = toActualJavaClass(targetType);

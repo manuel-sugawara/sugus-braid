@@ -123,6 +123,66 @@ structure StructureShape3 {
 
 }
 
+
+/// A structure shape with two structure members and two collections
+union UnionShape3 {
+
+    /// A byte field
+    byteField: Byte
+
+    /// A short field
+    shortField: Short
+
+    /// An integer field
+    intField: Integer
+
+    /// A required int field
+    requiredIntField: Integer
+
+    /// A long field
+    longField: Long
+
+    /// A big integer field
+    bigInteger: BigInteger
+
+    /// A float field
+    floatField: Float
+
+    /// A double field
+    doubleField: Double
+
+    /// A big decimal field
+    bigDecimal: BigDecimal
+
+    /// A big required decimal field
+    requiredBigDecimal: BigDecimal
+
+    /// The number one structure
+    structureOne: StructureShape1
+
+    /// The other structure, aka, number two structure
+    structureTwo: StructureShape2
+
+    /// A member with map value
+    map1: MapShape1
+
+    /// A member with list value
+    list1: ListShape1
+
+    /// Another member with a map with structure values
+    map2: MapShape2
+
+    /// Another member with a map with structure values
+    list2: ListShape2
+
+    /// Enum member
+    enumShape: EnumShape1
+
+    /// Map with enum member
+    stringToEnumShape1: StringToEnumShape1
+
+}
+
 /// A enum shape, just constants, no values attached.
 enum EnumShape1 {
     /// The member one.

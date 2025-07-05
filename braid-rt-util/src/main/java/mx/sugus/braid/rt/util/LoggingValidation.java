@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 public final class LoggingValidation implements Validation {
     private static final Validation INSTANCE = new LoggingValidation();
-    private final Logger LOG = Logger.getLogger(Validation.class.getName());
+    private static final Logger LOG = Logger.getLogger(Validation.class.getName());
 
     private final Path path;
 
@@ -26,8 +26,12 @@ public final class LoggingValidation implements Validation {
     @Override
     public void report(Severity severity, String segment, Supplier<String> message) {
         switch (severity) {
-            case ERROR -> LOG.log(Level.SEVERE, () -> String.format("at `%s` %s", path.with(segment), message.get()));
-            case WARNING -> LOG.log(Level.WARNING, () -> String.format("at `%s` %s", path.with(segment), message.get()));
+            case ERROR:
+                LOG.log(Level.SEVERE, () -> String.format("at `%s` %s", path.with(segment), message.get()));
+                break;
+            case WARNING:
+                LOG.log(Level.WARNING, () -> String.format("at `%s` %s", path.with(segment), message.get()));
+                break;
         }
     }
 

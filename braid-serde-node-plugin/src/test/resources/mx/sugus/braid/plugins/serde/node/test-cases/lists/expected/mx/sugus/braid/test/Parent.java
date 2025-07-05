@@ -198,101 +198,101 @@ public final class Parent implements ToNode {
     }
 
     /**
-     * <p>Converts this instance to Node</p>
+     * <p>Converts this instance to Node.</p>
      */
     @Override
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
         if (this.stringMember != null) {
-            builder.withMember("stringMember", Node.from(this.stringMember));
+            builder.withMember("stringMember", Node.from(stringMember()));
         }
-        if (!this.children.isEmpty()) {
+        if (!children().isEmpty()) {
             ArrayNode.Builder childrenBuilder = ArrayNode.builder();
-            for (Child item : this.children) {
+            for (Child item : children()) {
                 childrenBuilder.withValue(item.toNode());
             }
             builder.withMember("children", childrenBuilder.build());
         }
-        if (!this.booleans.isEmpty()) {
+        if (!booleans().isEmpty()) {
             ArrayNode.Builder booleansBuilder = ArrayNode.builder();
-            for (Boolean item : this.booleans) {
+            for (Boolean item : booleans()) {
                 booleansBuilder.withValue(Node.from(item));
             }
             builder.withMember("booleans", booleansBuilder.build());
         }
-        if (!this.bytes.isEmpty()) {
+        if (!bytes().isEmpty()) {
             ArrayNode.Builder bytesBuilder = ArrayNode.builder();
-            for (Byte item : this.bytes) {
+            for (Byte item : bytes()) {
                 bytesBuilder.withValue(Node.from(item));
             }
             builder.withMember("bytes", bytesBuilder.build());
         }
-        if (!this.shorts.isEmpty()) {
+        if (!shorts().isEmpty()) {
             ArrayNode.Builder shortsBuilder = ArrayNode.builder();
-            for (Short item : this.shorts) {
+            for (Short item : shorts()) {
                 shortsBuilder.withValue(Node.from(item));
             }
             builder.withMember("shorts", shortsBuilder.build());
         }
-        if (!this.integers.isEmpty()) {
+        if (!integers().isEmpty()) {
             ArrayNode.Builder integersBuilder = ArrayNode.builder();
-            for (Integer item : this.integers) {
+            for (Integer item : integers()) {
                 integersBuilder.withValue(Node.from(item));
             }
             builder.withMember("integers", integersBuilder.build());
         }
-        if (!this.bigIntegers.isEmpty()) {
+        if (!bigIntegers().isEmpty()) {
             ArrayNode.Builder bigIntegersBuilder = ArrayNode.builder();
-            for (BigInteger item : this.bigIntegers) {
+            for (BigInteger item : bigIntegers()) {
                 bigIntegersBuilder.withValue(Node.from(item.toString()));
             }
             builder.withMember("bigIntegers", bigIntegersBuilder.build());
         }
-        if (!this.longs.isEmpty()) {
+        if (!longs().isEmpty()) {
             ArrayNode.Builder longsBuilder = ArrayNode.builder();
-            for (Long item : this.longs) {
+            for (Long item : longs()) {
                 longsBuilder.withValue(Node.from(item));
             }
             builder.withMember("longs", longsBuilder.build());
         }
-        if (!this.floats.isEmpty()) {
+        if (!floats().isEmpty()) {
             ArrayNode.Builder floatsBuilder = ArrayNode.builder();
-            for (Float item : this.floats) {
+            for (Float item : floats()) {
                 floatsBuilder.withValue(Node.from(item));
             }
             builder.withMember("floats", floatsBuilder.build());
         }
-        if (!this.doubles.isEmpty()) {
+        if (!doubles().isEmpty()) {
             ArrayNode.Builder doublesBuilder = ArrayNode.builder();
-            for (Double item : this.doubles) {
+            for (Double item : doubles()) {
                 doublesBuilder.withValue(Node.from(item));
             }
             builder.withMember("doubles", doublesBuilder.build());
         }
-        if (!this.strings.isEmpty()) {
+        if (!strings().isEmpty()) {
             ArrayNode.Builder stringsBuilder = ArrayNode.builder();
-            for (String item : this.strings) {
+            for (String item : strings()) {
                 stringsBuilder.withValue(Node.from(item));
             }
             builder.withMember("strings", stringsBuilder.build());
         }
-        if (!this.bigDecimals.isEmpty()) {
+        if (!bigDecimals().isEmpty()) {
             ArrayNode.Builder bigDecimalsBuilder = ArrayNode.builder();
-            for (BigDecimal item : this.bigDecimals) {
+            for (BigDecimal item : bigDecimals()) {
                 bigDecimalsBuilder.withValue(Node.from(item.toString()));
             }
             builder.withMember("bigDecimals", bigDecimalsBuilder.build());
         }
-        if (!this.enumValues.isEmpty()) {
+        if (!enumValues().isEmpty()) {
             ArrayNode.Builder enumValuesBuilder = ArrayNode.builder();
-            for (EnumValue item : this.enumValues) {
+            for (EnumValue item : enumValues()) {
                 enumValuesBuilder.withValue(Node.from(item.toString()));
             }
             builder.withMember("enumValues", enumValuesBuilder.build());
         }
-        if (!this.nestedIntegers.isEmpty()) {
+        if (!nestedIntegers().isEmpty()) {
             ArrayNode.Builder nestedIntegersBuilder = ArrayNode.builder();
-            for (List<Integer> item : this.nestedIntegers) {
+            for (List<Integer> item : nestedIntegers()) {
                 ArrayNode.Builder innerBuilder = ArrayNode.builder();
                 for (Integer innerItem : item) {
                     innerBuilder.withValue(Node.from(innerItem));
@@ -301,9 +301,9 @@ public final class Parent implements ToNode {
             }
             builder.withMember("nestedIntegers", nestedIntegersBuilder.build());
         }
-        if (!this.nestedNestedIntegers.isEmpty()) {
+        if (!nestedNestedIntegers().isEmpty()) {
             ArrayNode.Builder nestedNestedIntegersBuilder = ArrayNode.builder();
-            for (List<List<Integer>> item : this.nestedNestedIntegers) {
+            for (List<List<Integer>> item : nestedNestedIntegers()) {
                 ArrayNode.Builder innerBuilder = ArrayNode.builder();
                 for (List<Integer> innerItem : item) {
                     ArrayNode.Builder innerBuilder1 = ArrayNode.builder();
@@ -320,14 +320,14 @@ public final class Parent implements ToNode {
     }
 
     /**
-     * <p>Converts a {@link Node} to Parent</p>
+     * <p>Converts a {@link Node} to Parent.</p>
      */
     public static Parent fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * <p>Converts a {@link Node} to Parent</p>
+     * <p>Converts a {@link Node} to Parent.</p>
      */
     public static Parent fromNode(Validation validator, Node node) {
         validator = validator.with("Parent");
