@@ -68,27 +68,27 @@ public final class ChildBar implements SyntaxNodeChild, SyntaxNode, ToNode {
     }
 
     /**
-     * <p>Converts this instance to Node</p>
+     * <p>Converts this instance to Node.</p>
      */
     @Override
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
-        builder.withMember("kind", Node.from(this.kind().toString()));
+        builder.withMember("kind", Node.from(kind().toString()));
         if (this.bar != null) {
-            builder.withMember("bar", Node.from(this.bar));
+            builder.withMember("bar", Node.from(bar()));
         }
         return builder.build();
     }
 
     /**
-     * <p>Converts a {@link Node} to ChildBar</p>
+     * <p>Converts a {@link Node} to ChildBar.</p>
      */
     public static ChildBar fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * <p>Converts a {@link Node} to ChildBar</p>
+     * <p>Converts a {@link Node} to ChildBar.</p>
      */
     public static ChildBar fromNode(Validation validator, Node node) {
         validator = validator.with("ChildBar");

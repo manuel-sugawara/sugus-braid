@@ -89,18 +89,18 @@ public final class StructureShape implements ToNode {
     }
 
     /**
-     * <p>Converts this instance to Node</p>
+     * <p>Converts this instance to Node.</p>
      */
     @Override
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
         if (modifier != null) {
-            builder.withMember("modifier", this.modifier.toString());
+            builder.withMember("modifier", modifier().toString());
         }
-        builder.withMember("anotherModifier", this.anotherModifier.toString());
-        if (!this.modifierList.isEmpty()) {
+        builder.withMember("anotherModifier", anotherModifier().toString());
+        if (!modifierList().isEmpty()) {
             ArrayNode.Builder modifierListBuilder = ArrayNode.builder();
-            for (Modifier item : this.modifierList) {
+            for (Modifier item : modifierList()) {
                 modifierListBuilder.withValue(item.toString());
             }
             builder.withMember("modifierList", modifierListBuilder.build());
@@ -109,14 +109,14 @@ public final class StructureShape implements ToNode {
     }
 
     /**
-     * <p>Converts a {@link Node} to StructureShape</p>
+     * <p>Converts a {@link Node} to StructureShape.</p>
      */
     public static StructureShape fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * <p>Converts a {@link Node} to StructureShape</p>
+     * <p>Converts a {@link Node} to StructureShape.</p>
      */
     public static StructureShape fromNode(Validation validator, Node node) {
         validator = validator.with("StructureShape");

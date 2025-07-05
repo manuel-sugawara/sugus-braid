@@ -208,101 +208,101 @@ public final class Parent implements ToNode {
     }
 
     /**
-     * <p>Converts this instance to Node</p>
+     * <p>Converts this instance to Node.</p>
      */
     @Override
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
         if (this.stringMember != null) {
-            builder.withMember("stringMember", Node.from(this.stringMember));
+            builder.withMember("stringMember", Node.from(stringMember()));
         }
         if (!this.children.isEmpty()) {
             ObjectNode.Builder childrenBuilder = ObjectNode.builder();
-            for (Map.Entry<String, Child> kvp : this.children.entrySet()) {
+            for (Map.Entry<String, Child> kvp : children().entrySet()) {
                 childrenBuilder.withMember(kvp.getKey(), kvp.getValue().toNode());
             }
             builder.withMember("children", childrenBuilder.build());
         }
         if (!this.booleans.isEmpty()) {
             ObjectNode.Builder booleansBuilder = ObjectNode.builder();
-            for (Map.Entry<String, Boolean> kvp : this.booleans.entrySet()) {
+            for (Map.Entry<String, Boolean> kvp : booleans().entrySet()) {
                 booleansBuilder.withMember(kvp.getKey(), Node.from(kvp.getValue()));
             }
             builder.withMember("booleans", booleansBuilder.build());
         }
         if (!this.bytes.isEmpty()) {
             ObjectNode.Builder bytesBuilder = ObjectNode.builder();
-            for (Map.Entry<String, Byte> kvp : this.bytes.entrySet()) {
+            for (Map.Entry<String, Byte> kvp : bytes().entrySet()) {
                 bytesBuilder.withMember(kvp.getKey(), Node.from(kvp.getValue()));
             }
             builder.withMember("bytes", bytesBuilder.build());
         }
         if (!this.shorts.isEmpty()) {
             ObjectNode.Builder shortsBuilder = ObjectNode.builder();
-            for (Map.Entry<String, Short> kvp : this.shorts.entrySet()) {
+            for (Map.Entry<String, Short> kvp : shorts().entrySet()) {
                 shortsBuilder.withMember(kvp.getKey(), Node.from(kvp.getValue()));
             }
             builder.withMember("shorts", shortsBuilder.build());
         }
         if (!this.integers.isEmpty()) {
             ObjectNode.Builder integersBuilder = ObjectNode.builder();
-            for (Map.Entry<String, Integer> kvp : this.integers.entrySet()) {
+            for (Map.Entry<String, Integer> kvp : integers().entrySet()) {
                 integersBuilder.withMember(kvp.getKey(), Node.from(kvp.getValue()));
             }
             builder.withMember("integers", integersBuilder.build());
         }
         if (!this.bigIntegers.isEmpty()) {
             ObjectNode.Builder bigIntegersBuilder = ObjectNode.builder();
-            for (Map.Entry<String, BigInteger> kvp : this.bigIntegers.entrySet()) {
+            for (Map.Entry<String, BigInteger> kvp : bigIntegers().entrySet()) {
                 bigIntegersBuilder.withMember(kvp.getKey(), Node.from(kvp.getValue().toString()));
             }
             builder.withMember("bigIntegers", bigIntegersBuilder.build());
         }
         if (!this.longs.isEmpty()) {
             ObjectNode.Builder longsBuilder = ObjectNode.builder();
-            for (Map.Entry<String, Long> kvp : this.longs.entrySet()) {
+            for (Map.Entry<String, Long> kvp : longs().entrySet()) {
                 longsBuilder.withMember(kvp.getKey(), Node.from(kvp.getValue()));
             }
             builder.withMember("longs", longsBuilder.build());
         }
         if (!this.floats.isEmpty()) {
             ObjectNode.Builder floatsBuilder = ObjectNode.builder();
-            for (Map.Entry<String, Float> kvp : this.floats.entrySet()) {
+            for (Map.Entry<String, Float> kvp : floats().entrySet()) {
                 floatsBuilder.withMember(kvp.getKey(), Node.from(kvp.getValue()));
             }
             builder.withMember("floats", floatsBuilder.build());
         }
         if (!this.doubles.isEmpty()) {
             ObjectNode.Builder doublesBuilder = ObjectNode.builder();
-            for (Map.Entry<String, Double> kvp : this.doubles.entrySet()) {
+            for (Map.Entry<String, Double> kvp : doubles().entrySet()) {
                 doublesBuilder.withMember(kvp.getKey(), Node.from(kvp.getValue()));
             }
             builder.withMember("doubles", doublesBuilder.build());
         }
         if (!this.strings.isEmpty()) {
             ObjectNode.Builder stringsBuilder = ObjectNode.builder();
-            for (Map.Entry<String, String> kvp : this.strings.entrySet()) {
+            for (Map.Entry<String, String> kvp : strings().entrySet()) {
                 stringsBuilder.withMember(kvp.getKey(), Node.from(kvp.getValue()));
             }
             builder.withMember("strings", stringsBuilder.build());
         }
         if (!this.bigDecimals.isEmpty()) {
             ObjectNode.Builder bigDecimalsBuilder = ObjectNode.builder();
-            for (Map.Entry<String, BigDecimal> kvp : this.bigDecimals.entrySet()) {
+            for (Map.Entry<String, BigDecimal> kvp : bigDecimals().entrySet()) {
                 bigDecimalsBuilder.withMember(kvp.getKey(), Node.from(kvp.getValue().toString()));
             }
             builder.withMember("bigDecimals", bigDecimalsBuilder.build());
         }
         if (!this.enumValues.isEmpty()) {
             ObjectNode.Builder enumValuesBuilder = ObjectNode.builder();
-            for (Map.Entry<String, EnumValue> kvp : this.enumValues.entrySet()) {
+            for (Map.Entry<String, EnumValue> kvp : enumValues().entrySet()) {
                 enumValuesBuilder.withMember(kvp.getKey(), Node.from(kvp.getValue().toString()));
             }
             builder.withMember("enumValues", enumValuesBuilder.build());
         }
         if (!this.integerListMap.isEmpty()) {
             ObjectNode.Builder integerListMapBuilder = ObjectNode.builder();
-            for (Map.Entry<String, List<Integer>> kvp : this.integerListMap.entrySet()) {
+            for (Map.Entry<String, List<Integer>> kvp : integerListMap().entrySet()) {
                 ArrayNode.Builder innerBuilder = ArrayNode.builder();
                 for (Integer innerItem : kvp.getValue()) {
                     innerBuilder.withValue(Node.from(innerItem));
@@ -313,7 +313,7 @@ public final class Parent implements ToNode {
         }
         if (!this.nestedIntegerListMap.isEmpty()) {
             ObjectNode.Builder nestedIntegerListMapBuilder = ObjectNode.builder();
-            for (Map.Entry<String, Map<String, List<Integer>>> kvp : this.nestedIntegerListMap.entrySet()) {
+            for (Map.Entry<String, Map<String, List<Integer>>> kvp : nestedIntegerListMap().entrySet()) {
                 ObjectNode.Builder innerBuilder = ObjectNode.builder();
                 for (Map.Entry<String, List<Integer>> innerKvp : kvp.getValue().entrySet()) {
                     ArrayNode.Builder innerBuilder1 = ArrayNode.builder();
@@ -328,7 +328,7 @@ public final class Parent implements ToNode {
         }
         if (!this.nestedNestedIntegerMap.isEmpty()) {
             ObjectNode.Builder nestedNestedIntegerMapBuilder = ObjectNode.builder();
-            for (Map.Entry<String, List<Map<String, Integer>>> kvp : this.nestedNestedIntegerMap.entrySet()) {
+            for (Map.Entry<String, List<Map<String, Integer>>> kvp : nestedNestedIntegerMap().entrySet()) {
                 ArrayNode.Builder innerBuilder = ArrayNode.builder();
                 for (Map<String, Integer> innerItem : kvp.getValue()) {
                     ObjectNode.Builder innerBuilder1 = ObjectNode.builder();
@@ -345,14 +345,14 @@ public final class Parent implements ToNode {
     }
 
     /**
-     * <p>Converts a {@link Node} to Parent</p>
+     * <p>Converts a {@link Node} to Parent.</p>
      */
     public static Parent fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * <p>Converts a {@link Node} to Parent</p>
+     * <p>Converts a {@link Node} to Parent.</p>
      */
     public static Parent fromNode(Validation validator, Node node) {
         validator = validator.with("Parent");

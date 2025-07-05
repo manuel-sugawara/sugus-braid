@@ -68,27 +68,27 @@ public final class ChildFoo implements SyntaxNodeChild, SyntaxNode, ToNode {
     }
 
     /**
-     * <p>Converts this instance to Node</p>
+     * <p>Converts this instance to Node.</p>
      */
     @Override
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
-        builder.withMember("kind", Node.from(this.kind().toString()));
+        builder.withMember("kind", Node.from(kind().toString()));
         if (this.foo != null) {
-            builder.withMember("foo", Node.from(this.foo));
+            builder.withMember("foo", Node.from(foo()));
         }
         return builder.build();
     }
 
     /**
-     * <p>Converts a {@link Node} to ChildFoo</p>
+     * <p>Converts a {@link Node} to ChildFoo.</p>
      */
     public static ChildFoo fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * <p>Converts a {@link Node} to ChildFoo</p>
+     * <p>Converts a {@link Node} to ChildFoo.</p>
      */
     public static ChildFoo fromNode(Validation validator, Node node) {
         validator = validator.with("ChildFoo");
