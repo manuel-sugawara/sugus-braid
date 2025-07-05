@@ -41,7 +41,7 @@ public final class StructureShape implements ToNode {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -57,8 +57,8 @@ public final class StructureShape implements ToNode {
         }
         StructureShape that = (StructureShape) obj;
         return Objects.equals(this.modifier, that.modifier)
-               && this.anotherModifier.equals(that.anotherModifier)
-               && this.modifierList.equals(that.modifierList);
+            && this.anotherModifier.equals(that.anotherModifier)
+            && this.modifierList.equals(that.modifierList);
     }
 
     @Override
@@ -76,13 +76,13 @@ public final class StructureShape implements ToNode {
     @Override
     public String toString() {
         return "StructureShape{"
-               + "modifier: " + modifier
-               + ", anotherModifier: " + anotherModifier
-               + ", modifierList: " + modifierList + "}";
+            + "modifier: " + modifier
+            + ", anotherModifier: " + anotherModifier
+            + ", modifierList: " + modifierList + "}";
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -161,7 +161,7 @@ public final class StructureShape implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>modifier</code></p>
+         * <p>Sets the value for <code>modifier</code>.</p>
          */
         public Builder modifier(Modifier modifier) {
             this.modifier = modifier;
@@ -169,7 +169,7 @@ public final class StructureShape implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>anotherModifier</code></p>
+         * <p>Sets the value for <code>anotherModifier</code>.</p>
          */
         public Builder anotherModifier(Modifier anotherModifier) {
             this.anotherModifier = anotherModifier;
@@ -177,7 +177,7 @@ public final class StructureShape implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>modifierList</code></p>
+         * <p>Sets the value for <code>modifierList</code>.</p>
          */
         public Builder modifierList(List<Modifier> modifierList) {
             this.modifierList.clear();
@@ -186,7 +186,7 @@ public final class StructureShape implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>modifierList</code></p>
+         * <p>Adds a single value for <code>modifierList</code>.</p>
          */
         public Builder addModifierList(Modifier modifierList) {
             this.modifierList.asTransient().add(modifierList);

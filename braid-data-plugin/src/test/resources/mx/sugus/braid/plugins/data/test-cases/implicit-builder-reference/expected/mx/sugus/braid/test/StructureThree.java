@@ -24,7 +24,7 @@ public final class StructureThree {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -59,7 +59,7 @@ public final class StructureThree {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -79,7 +79,7 @@ public final class StructureThree {
         }
 
         /**
-         * <p>Sets the value for <code>structureOne</code></p>
+         * <p>Sets the value for <code>structureOne</code>.</p>
          */
         public Builder structureOne(StructureOne structureOne) {
             this.structureOne = structureOne;
@@ -92,7 +92,7 @@ public final class StructureThree {
         }
 
         /**
-         * <p>Sets the value for <code>structureTwo</code></p>
+         * <p>Sets the value for <code>structureTwo</code>.</p>
          */
         public Builder structureTwo(StructureTwo structureTwo) {
             this.structureTwo.setPersistent(structureTwo);

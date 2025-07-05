@@ -39,7 +39,7 @@ public final class StructureWithAggregates {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -83,7 +83,7 @@ public final class StructureWithAggregates {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -109,7 +109,7 @@ public final class StructureWithAggregates {
         }
 
         /**
-         * <p>Sets the value for <code>simpleMember</code></p>
+         * <p>Sets the value for <code>simpleMember</code>.</p>
          */
         public Builder simpleMember(Long simpleMember) {
             this.simpleMember = simpleMember;
@@ -117,7 +117,7 @@ public final class StructureWithAggregates {
         }
 
         /**
-         * <p>Sets the value for <code>structuresOne</code></p>
+         * <p>Sets the value for <code>structuresOne</code>.</p>
          */
         public Builder structuresOne(List<StructureOne> structuresOne) {
             this.structuresOne.clear();
@@ -126,7 +126,7 @@ public final class StructureWithAggregates {
         }
 
         /**
-         * <p>Adds a single value for <code>structuresOne</code></p>
+         * <p>Adds a single value for <code>structuresOne</code>.</p>
          */
         public Builder addStructuresOne(StructureOne structuresOne) {
             this.structuresOne.asTransient().add(structuresOne);
@@ -134,7 +134,7 @@ public final class StructureWithAggregates {
         }
 
         /**
-         * <p>Sets the value for <code>structureTwoMap</code></p>
+         * <p>Sets the value for <code>structureTwoMap</code>.</p>
          */
         public Builder structureTwoMap(Map<String, StructureTwo> structureTwoMap) {
             this.structureTwoMap.clear();
@@ -148,7 +148,7 @@ public final class StructureWithAggregates {
         }
 
         /**
-         * <p>Sets the value for <code>structureThreeSet</code></p>
+         * <p>Sets the value for <code>structureThreeSet</code>.</p>
          */
         public Builder structureThreeSet(Set<StructureThree> structureThreeSet) {
             this.structureThreeSet.clear();
@@ -157,7 +157,7 @@ public final class StructureWithAggregates {
         }
 
         /**
-         * <p>Adds a single value for <code>structureThreeSet</code></p>
+         * <p>Adds a single value for <code>structureThreeSet</code>.</p>
          */
         public Builder addStructureThreeSet(StructureThree structureThreeSet) {
             this.structureThreeSet.asTransient().add(structureThreeSet);

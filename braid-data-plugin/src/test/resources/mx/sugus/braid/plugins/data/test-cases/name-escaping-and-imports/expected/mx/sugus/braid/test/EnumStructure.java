@@ -22,7 +22,7 @@ public final class EnumStructure {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -57,7 +57,7 @@ public final class EnumStructure {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -76,7 +76,7 @@ public final class EnumStructure {
         }
 
         /**
-         * <p>Sets the value for <code>anInt</code></p>
+         * <p>Sets the value for <code>anInt</code>.</p>
          */
         public Builder anInt(Integer anInt) {
             this.anInt = anInt;
@@ -84,7 +84,7 @@ public final class EnumStructure {
         }
 
         /**
-         * <p>Sets the value for <code>aVoid</code></p>
+         * <p>Sets the value for <code>aVoid</code>.</p>
          */
         public Builder aVoid(String aVoid) {
             this.aVoid = aVoid;

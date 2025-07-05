@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.toMap;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -21,6 +22,7 @@ import software.amazon.smithy.model.knowledge.KnowledgeIndex;
 import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.shapes.ShapeId;
 import software.amazon.smithy.model.shapes.StructureShape;
+import software.amazon.smithy.utils.Pair;
 
 public final class ImplementsKnowledgeIndex implements KnowledgeIndex {
     private final Map<StructureShape, Set<StructureShape>> shapeToSuperInterfaces;
@@ -56,12 +58,24 @@ public final class ImplementsKnowledgeIndex implements KnowledgeIndex {
     public Map<MemberShape, StructureShape> polymorphicDispatchTable(StructureShape parent) {
         var dispatchMember = polymorphicDispatchMember(parent);
         var inheritors = implementers(parent);
+        var dispatchMemberName = dispatchMember.getMemberName();
+        List<Pair<String, Pair<MemberShape, StructureShape>>> allMembers = new ArrayList<>();
+        for (var inheritor : inheritors) {
+            var member = inheritor.getMember(dispatchMemberName).orElseThrow();
+            var refId = member.getTrait(ConstTrait.class).map(ConstTrait::getValue).orElse("");
+            var shapeId = ShapeId.from(refId);
+            var constMember = model.expectShape(shapeId, MemberShape.class);
+            var memberCase = Pair.of(constMember.getMemberName(), Pair.of(member, inheritor));
+            allMembers.add(memberCase);
+        }
 
-        return inheritors.stream()
-                         .collect(toMap(x -> x.getMember(dispatchMember.getMemberName()).orElseThrow(),
-                                        Function.identity(),
-                                        (left, right) -> left,
-                                        LinkedHashMap::new));
+        allMembers.sort(Map.Entry.comparingByKey());
+        var result = new LinkedHashMap<MemberShape, StructureShape>();
+        for (var member : allMembers) {
+            var kvp = member.getValue();
+            result.put(kvp.getKey(), kvp.getValue());
+        }
+        return result;
     }
 
     public MemberShape polymorphicDispatchMember(StructureShape parent) {

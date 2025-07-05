@@ -130,7 +130,7 @@ public final class StructureDataBuilder implements DirectedClass {
             builder.addStatement(stmt);
         }
         builder.addStatement("return this");
-        var doc = "Sets the value for `" + name + "`";
+        var doc = "Sets the value for `" + name + "`.";
         if (member.hasTrait(DocumentationTrait.class)) {
             doc += "\n\n" + member.expectTrait(DocumentationTrait.class).getValue();
         }
@@ -157,7 +157,7 @@ public final class StructureDataBuilder implements DirectedClass {
             addValue(state, member, body, List.of(valueArgument));
             body.addStatement("return this");
         });
-        var doc = "Adds a single value for `" + name + "`";
+        var doc = "Adds a single value for `" + name + "`.";
         builder.javadoc(JavadocExt.document(doc));
         var defaultAdder = builder.build();
         var result = new ArrayList<MethodSyntax>();

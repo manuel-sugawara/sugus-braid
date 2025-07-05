@@ -27,7 +27,7 @@ public final class StructureShape2 {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -62,7 +62,7 @@ public final class StructureShape2 {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -82,7 +82,7 @@ public final class StructureShape2 {
         }
 
         /**
-         * <p>Sets the value for <code>name</code></p>
+         * <p>Sets the value for <code>name</code>.</p>
          */
         public Builder name(String name) {
             this.name = name;
@@ -90,7 +90,7 @@ public final class StructureShape2 {
         }
 
         /**
-         * <p>Sets the value for <code>shapeOnes</code></p>
+         * <p>Sets the value for <code>shapeOnes</code>.</p>
          */
         public Builder shapeOnes(List<StructureShape1> shapeOnes) {
             this.shapeOnes.clear();
@@ -99,7 +99,7 @@ public final class StructureShape2 {
         }
 
         /**
-         * <p>Adds a single value for <code>shapeOnes</code></p>
+         * <p>Adds a single value for <code>shapeOnes</code>.</p>
          */
         public Builder addShapeOne(StructureShape1 shapeOne) {
             this.shapeOnes.asTransient().add(shapeOne);

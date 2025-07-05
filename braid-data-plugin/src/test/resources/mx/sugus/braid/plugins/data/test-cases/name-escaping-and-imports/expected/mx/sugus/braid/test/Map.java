@@ -16,7 +16,7 @@ public final class Map {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -48,7 +48,7 @@ public final class Map {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -65,7 +65,7 @@ public final class Map {
         }
 
         /**
-         * <p>Sets the value for <code>member</code></p>
+         * <p>Sets the value for <code>member</code>.</p>
          */
         public Builder member(List member) {
             this.member = member;

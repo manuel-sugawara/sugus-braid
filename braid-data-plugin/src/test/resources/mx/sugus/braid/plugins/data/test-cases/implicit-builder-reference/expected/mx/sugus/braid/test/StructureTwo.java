@@ -23,7 +23,7 @@ public final class StructureTwo {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -58,7 +58,7 @@ public final class StructureTwo {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -77,7 +77,7 @@ public final class StructureTwo {
         }
 
         /**
-         * <p>Sets the value for <code>floatMember</code></p>
+         * <p>Sets the value for <code>floatMember</code>.</p>
          */
         public Builder floatMember(Float floatMember) {
             this.floatMember = floatMember;
@@ -85,7 +85,7 @@ public final class StructureTwo {
         }
 
         /**
-         * <p>Sets the value for <code>stringMember</code></p>
+         * <p>Sets the value for <code>stringMember</code>.</p>
          */
         public Builder stringMember(String stringMember) {
             this.stringMember = stringMember;

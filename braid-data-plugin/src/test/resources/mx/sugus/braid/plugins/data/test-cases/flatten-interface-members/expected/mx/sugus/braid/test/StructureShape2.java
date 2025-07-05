@@ -25,7 +25,7 @@ public final class StructureShape2 implements StructureBase {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -60,7 +60,7 @@ public final class StructureShape2 implements StructureBase {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -79,7 +79,7 @@ public final class StructureShape2 implements StructureBase {
         }
 
         /**
-         * <p>Sets the value for <code>intValue</code></p>
+         * <p>Sets the value for <code>intValue</code>.</p>
          */
         public Builder intValue(Integer intValue) {
             this.intValue = intValue;
@@ -87,7 +87,7 @@ public final class StructureShape2 implements StructureBase {
         }
 
         /**
-         * <p>Sets the value for <code>stringValue</code></p>
+         * <p>Sets the value for <code>stringValue</code>.</p>
          */
         public Builder stringValue(String stringValue) {
             this.stringValue = stringValue;

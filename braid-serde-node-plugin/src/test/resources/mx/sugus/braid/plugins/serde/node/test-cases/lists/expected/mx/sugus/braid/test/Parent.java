@@ -114,7 +114,7 @@ public final class Parent implements ToNode {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -130,20 +130,20 @@ public final class Parent implements ToNode {
         }
         Parent that = (Parent) obj;
         return Objects.equals(this.stringMember, that.stringMember)
-               && this.children.equals(that.children)
-               && this.booleans.equals(that.booleans)
-               && this.bytes.equals(that.bytes)
-               && this.shorts.equals(that.shorts)
-               && this.integers.equals(that.integers)
-               && this.bigIntegers.equals(that.bigIntegers)
-               && this.longs.equals(that.longs)
-               && this.floats.equals(that.floats)
-               && this.doubles.equals(that.doubles)
-               && this.strings.equals(that.strings)
-               && this.bigDecimals.equals(that.bigDecimals)
-               && this.enumValues.equals(that.enumValues)
-               && this.nestedIntegers.equals(that.nestedIntegers)
-               && this.nestedNestedIntegers.equals(that.nestedNestedIntegers);
+            && this.children.equals(that.children)
+            && this.booleans.equals(that.booleans)
+            && this.bytes.equals(that.bytes)
+            && this.shorts.equals(that.shorts)
+            && this.integers.equals(that.integers)
+            && this.bigIntegers.equals(that.bigIntegers)
+            && this.longs.equals(that.longs)
+            && this.floats.equals(that.floats)
+            && this.doubles.equals(that.doubles)
+            && this.strings.equals(that.strings)
+            && this.bigDecimals.equals(that.bigDecimals)
+            && this.enumValues.equals(that.enumValues)
+            && this.nestedIntegers.equals(that.nestedIntegers)
+            && this.nestedNestedIntegers.equals(that.nestedNestedIntegers);
     }
 
     @Override
@@ -173,25 +173,25 @@ public final class Parent implements ToNode {
     @Override
     public String toString() {
         return "Parent{"
-               + "stringMember: " + stringMember
-               + ", children: " + children
-               + ", booleans: " + booleans
-               + ", bytes: " + bytes
-               + ", shorts: " + shorts
-               + ", integers: " + integers
-               + ", bigIntegers: " + bigIntegers
-               + ", longs: " + longs
-               + ", floats: " + floats
-               + ", doubles: " + doubles
-               + ", strings: " + strings
-               + ", bigDecimals: " + bigDecimals
-               + ", enumValues: " + enumValues
-               + ", nestedIntegers: " + nestedIntegers
-               + ", nestedNestedIntegers: " + nestedNestedIntegers + "}";
+            + "stringMember: " + stringMember
+            + ", children: " + children
+            + ", booleans: " + booleans
+            + ", bytes: " + bytes
+            + ", shorts: " + shorts
+            + ", integers: " + integers
+            + ", bigIntegers: " + bigIntegers
+            + ", longs: " + longs
+            + ", floats: " + floats
+            + ", doubles: " + doubles
+            + ", strings: " + strings
+            + ", bigDecimals: " + bigDecimals
+            + ", enumValues: " + enumValues
+            + ", nestedIntegers: " + nestedIntegers
+            + ", nestedNestedIntegers: " + nestedNestedIntegers + "}";
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -483,7 +483,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>stringMember</code></p>
+         * <p>Sets the value for <code>stringMember</code>.</p>
          */
         public Builder stringMember(String stringMember) {
             this.stringMember = stringMember;
@@ -491,7 +491,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>children</code></p>
+         * <p>Sets the value for <code>children</code>.</p>
          */
         public Builder children(List<Child> children) {
             this.children.clear();
@@ -500,7 +500,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>children</code></p>
+         * <p>Adds a single value for <code>children</code>.</p>
          */
         public Builder addChildren(Child children) {
             this.children.asTransient().add(children);
@@ -508,7 +508,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>booleans</code></p>
+         * <p>Sets the value for <code>booleans</code>.</p>
          */
         public Builder booleans(List<Boolean> booleans) {
             this.booleans.clear();
@@ -517,7 +517,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>booleans</code></p>
+         * <p>Adds a single value for <code>booleans</code>.</p>
          */
         public Builder addBoolean(Boolean aBoolean) {
             this.booleans.asTransient().add(aBoolean);
@@ -525,7 +525,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>bytes</code></p>
+         * <p>Sets the value for <code>bytes</code>.</p>
          */
         public Builder bytes(List<Byte> bytes) {
             this.bytes.clear();
@@ -534,7 +534,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>bytes</code></p>
+         * <p>Adds a single value for <code>bytes</code>.</p>
          */
         public Builder addByte(Byte aByte) {
             this.bytes.asTransient().add(aByte);
@@ -542,7 +542,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>shorts</code></p>
+         * <p>Sets the value for <code>shorts</code>.</p>
          */
         public Builder shorts(List<Short> shorts) {
             this.shorts.clear();
@@ -551,7 +551,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>shorts</code></p>
+         * <p>Adds a single value for <code>shorts</code>.</p>
          */
         public Builder addShort(Short aShort) {
             this.shorts.asTransient().add(aShort);
@@ -559,7 +559,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>integers</code></p>
+         * <p>Sets the value for <code>integers</code>.</p>
          */
         public Builder integers(List<Integer> integers) {
             this.integers.clear();
@@ -568,7 +568,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>integers</code></p>
+         * <p>Adds a single value for <code>integers</code>.</p>
          */
         public Builder addInteger(Integer integer) {
             this.integers.asTransient().add(integer);
@@ -576,7 +576,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>bigIntegers</code></p>
+         * <p>Sets the value for <code>bigIntegers</code>.</p>
          */
         public Builder bigIntegers(List<BigInteger> bigIntegers) {
             this.bigIntegers.clear();
@@ -585,7 +585,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>bigIntegers</code></p>
+         * <p>Adds a single value for <code>bigIntegers</code>.</p>
          */
         public Builder addBigInteger(BigInteger bigInteger) {
             this.bigIntegers.asTransient().add(bigInteger);
@@ -593,7 +593,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>longs</code></p>
+         * <p>Sets the value for <code>longs</code>.</p>
          */
         public Builder longs(List<Long> longs) {
             this.longs.clear();
@@ -602,7 +602,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>longs</code></p>
+         * <p>Adds a single value for <code>longs</code>.</p>
          */
         public Builder addLong(Long aLong) {
             this.longs.asTransient().add(aLong);
@@ -610,7 +610,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>floats</code></p>
+         * <p>Sets the value for <code>floats</code>.</p>
          */
         public Builder floats(List<Float> floats) {
             this.floats.clear();
@@ -619,7 +619,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>floats</code></p>
+         * <p>Adds a single value for <code>floats</code>.</p>
          */
         public Builder addFloat(Float aFloat) {
             this.floats.asTransient().add(aFloat);
@@ -627,7 +627,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>doubles</code></p>
+         * <p>Sets the value for <code>doubles</code>.</p>
          */
         public Builder doubles(List<Double> doubles) {
             this.doubles.clear();
@@ -636,7 +636,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>doubles</code></p>
+         * <p>Adds a single value for <code>doubles</code>.</p>
          */
         public Builder addDouble(Double aDouble) {
             this.doubles.asTransient().add(aDouble);
@@ -644,7 +644,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>strings</code></p>
+         * <p>Sets the value for <code>strings</code>.</p>
          */
         public Builder strings(List<String> strings) {
             this.strings.clear();
@@ -653,7 +653,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>strings</code></p>
+         * <p>Adds a single value for <code>strings</code>.</p>
          */
         public Builder addString(String string) {
             this.strings.asTransient().add(string);
@@ -661,7 +661,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>bigDecimals</code></p>
+         * <p>Sets the value for <code>bigDecimals</code>.</p>
          */
         public Builder bigDecimals(List<BigDecimal> bigDecimals) {
             this.bigDecimals.clear();
@@ -670,7 +670,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>bigDecimals</code></p>
+         * <p>Adds a single value for <code>bigDecimals</code>.</p>
          */
         public Builder addBigDecimal(BigDecimal bigDecimal) {
             this.bigDecimals.asTransient().add(bigDecimal);
@@ -678,7 +678,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>enumValues</code></p>
+         * <p>Sets the value for <code>enumValues</code>.</p>
          */
         public Builder enumValues(List<EnumValue> enumValues) {
             this.enumValues.clear();
@@ -687,7 +687,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>enumValues</code></p>
+         * <p>Adds a single value for <code>enumValues</code>.</p>
          */
         public Builder addEnumValue(EnumValue enumValue) {
             this.enumValues.asTransient().add(enumValue);
@@ -695,7 +695,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>nestedIntegers</code></p>
+         * <p>Sets the value for <code>nestedIntegers</code>.</p>
          */
         public Builder nestedIntegers(List<List<Integer>> nestedIntegers) {
             this.nestedIntegers.clear();
@@ -704,7 +704,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>nestedIntegers</code></p>
+         * <p>Adds a single value for <code>nestedIntegers</code>.</p>
          */
         public Builder addNestedInteger(List<Integer> nestedInteger) {
             this.nestedIntegers.asTransient().add(nestedInteger);
@@ -712,7 +712,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>nestedNestedIntegers</code></p>
+         * <p>Sets the value for <code>nestedNestedIntegers</code>.</p>
          */
         public Builder nestedNestedIntegers(List<List<List<Integer>>> nestedNestedIntegers) {
             this.nestedNestedIntegers.clear();
@@ -721,7 +721,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>nestedNestedIntegers</code></p>
+         * <p>Adds a single value for <code>nestedNestedIntegers</code>.</p>
          */
         public Builder addNestedNestedInteger(List<List<Integer>> nestedNestedInteger) {
             this.nestedNestedIntegers.asTransient().add(nestedNestedInteger);

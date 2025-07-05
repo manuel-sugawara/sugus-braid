@@ -29,7 +29,7 @@ public final class AnotherChild implements SyntaxNode, ToNode {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -45,7 +45,7 @@ public final class AnotherChild implements SyntaxNode, ToNode {
         }
         AnotherChild that = (AnotherChild) obj;
         return Objects.equals(this.stringValue, that.stringValue)
-               && Objects.equals(this.intValue, that.intValue);
+            && Objects.equals(this.intValue, that.intValue);
     }
 
     @Override
@@ -59,12 +59,12 @@ public final class AnotherChild implements SyntaxNode, ToNode {
     @Override
     public String toString() {
         return "AnotherChild{"
-               + "stringValue: " + stringValue
-               + ", intValue: " + intValue + "}";
+            + "stringValue: " + stringValue
+            + ", intValue: " + intValue + "}";
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -130,7 +130,7 @@ public final class AnotherChild implements SyntaxNode, ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>stringValue</code></p>
+         * <p>Sets the value for <code>stringValue</code>.</p>
          */
         public Builder stringValue(String stringValue) {
             this.stringValue = stringValue;
@@ -138,7 +138,7 @@ public final class AnotherChild implements SyntaxNode, ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>intValue</code></p>
+         * <p>Sets the value for <code>intValue</code>.</p>
          */
         public Builder intValue(Integer intValue) {
             this.intValue = intValue;

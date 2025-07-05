@@ -22,7 +22,7 @@ public final class SensitiveStructure {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -55,7 +55,7 @@ public final class SensitiveStructure {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -74,7 +74,7 @@ public final class SensitiveStructure {
         }
 
         /**
-         * <p>Sets the value for <code>stringSecretMember</code></p>
+         * <p>Sets the value for <code>stringSecretMember</code>.</p>
          */
         public Builder stringSecretMember(String stringSecretMember) {
             this.stringSecretMember = stringSecretMember;
@@ -82,7 +82,7 @@ public final class SensitiveStructure {
         }
 
         /**
-         * <p>Sets the value for <code>intSecretMember</code></p>
+         * <p>Sets the value for <code>intSecretMember</code>.</p>
          */
         public Builder intSecretMember(Integer intSecretMember) {
             this.intSecretMember = intSecretMember;

@@ -27,7 +27,7 @@ public final class ChildFoo implements SyntaxNodeChild, SyntaxNode, ToNode {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -56,12 +56,12 @@ public final class ChildFoo implements SyntaxNodeChild, SyntaxNode, ToNode {
     @Override
     public String toString() {
         return "ChildFoo{"
-               + "kind: " + kind()
-               + ", foo: " + foo + "}";
+            + "kind: " + kind()
+            + ", foo: " + foo + "}";
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -122,7 +122,7 @@ public final class ChildFoo implements SyntaxNodeChild, SyntaxNode, ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>foo</code></p>
+         * <p>Sets the value for <code>foo</code>.</p>
          */
         public Builder foo(String foo) {
             this.foo = foo;

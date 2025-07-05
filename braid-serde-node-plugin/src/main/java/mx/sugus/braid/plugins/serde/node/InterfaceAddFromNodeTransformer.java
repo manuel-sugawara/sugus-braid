@@ -60,7 +60,6 @@ public final class InterfaceAddFromNodeTransformer implements ShapeTaskTransform
         if (dispatchMember == null) {
             return withoutDispatchMember(state, builder);
         }
-        var table = isaKnowledgeIndex.polymorphicDispatchTable(shape);
         var symbolProvider = state.symbolProvider();
         var dispatchTypeName = Utils.toJavaTypeName(state, dispatchMember);
         var memberName = Utils.toJavaName(state, dispatchMember);
@@ -69,12 +68,12 @@ public final class InterfaceAddFromNodeTransformer implements ShapeTaskTransform
                              memberName);
         var switchStatement = SwitchStatement.builder()
                                              .expression(CodeBlock.from("$L", memberName));
+        var table = isaKnowledgeIndex.polymorphicDispatchTable(shape);
         table.forEach((member, structureShape) -> {
             var refId = member.getTrait(ConstTrait.class).map(ConstTrait::getValue).orElse("");
             var shapeId = ShapeId.from(refId);
             var constMember = state.model().expectShape(shapeId, MemberShape.class);
             var caseType = Utils.toJavaTypeName(state, structureShape);
-            symbolProvider.toMemberName(constMember);
             switchStatement.addCase(CaseClause.builder()
                                               .addLabel(CodeBlock.from("$L", symbolProvider.toMemberName(constMember)))
                                               .body(b -> b.addStatement("return $T.fromNode(validation, node)", caseType))
