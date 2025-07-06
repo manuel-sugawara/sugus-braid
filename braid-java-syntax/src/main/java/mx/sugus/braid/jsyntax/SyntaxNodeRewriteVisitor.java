@@ -1,8 +1,8 @@
 package mx.sugus.braid.jsyntax;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import mx.sugus.braid.rt.util.annotations.Generated;
@@ -48,21 +48,22 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
     public AbstractMethodSyntax visitAbstractMethodSyntax(AbstractMethodSyntax node) {
         AbstractMethodSyntax.Builder builder = null;
         List<TypeVariableTypeName> typeParams = node.typeParams();
-        List<TypeVariableTypeName> newTypeParams = null;
-        for (int idx = 0; idx < typeParams.size(); idx++) {
+        boolean typeParamsChanged = false;
+        int typeParamsSize = typeParams.size();
+        for (int idx = 0; idx < typeParamsSize; idx++) {
             TypeVariableTypeName value = typeParams.get(idx);
             TypeVariableTypeName newValue = visitTypeVariableTypeName(value);
-            if (newTypeParams == null && !value.equals(newValue)) {
-                newTypeParams = new ArrayList<>(typeParams.size());
-                newTypeParams.addAll(typeParams.subList(0, idx));
+            if (!typeParamsChanged && value != newValue) {
+                typeParamsChanged = true;
+                builder = node.toBuilder();
+                builder.typeParams(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addTypeParam(typeParams.get(innerIdx));
+                }
             }
-            if (newTypeParams != null) {
-                newTypeParams.add(newValue);
+            if (typeParamsChanged) {
+                builder.addTypeParam(newValue);
             }
-        }
-        if (newTypeParams != null) {
-            builder = node.toBuilder();
-            builder.typeParams(newTypeParams);
         }
         TypeName returns = node.returns();
         TypeName returnsNew = (TypeName) returns.accept(this);
@@ -84,42 +85,44 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             builder.javadoc(javadocNew);
         }
         List<Annotation> annotations = node.annotations();
-        List<Annotation> newAnnotations = null;
-        for (int idx = 0; idx < annotations.size(); idx++) {
+        boolean annotationsChanged = false;
+        int annotationsSize = annotations.size();
+        for (int idx = 0; idx < annotationsSize; idx++) {
             Annotation value = annotations.get(idx);
             Annotation newValue = visitAnnotation(value);
-            if (newAnnotations == null && !value.equals(newValue)) {
-                newAnnotations = new ArrayList<>(annotations.size());
-                newAnnotations.addAll(annotations.subList(0, idx));
+            if (!annotationsChanged && value != newValue) {
+                annotationsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.annotations(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addAnnotation(annotations.get(innerIdx));
+                }
             }
-            if (newAnnotations != null) {
-                newAnnotations.add(newValue);
+            if (annotationsChanged) {
+                builder.addAnnotation(newValue);
             }
-        }
-        if (newAnnotations != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.annotations(newAnnotations);
         }
         List<Parameter> parameters = node.parameters();
-        List<Parameter> newParameters = null;
-        for (int idx = 0; idx < parameters.size(); idx++) {
+        boolean parametersChanged = false;
+        int parametersSize = parameters.size();
+        for (int idx = 0; idx < parametersSize; idx++) {
             Parameter value = parameters.get(idx);
             Parameter newValue = visitParameter(value);
-            if (newParameters == null && !value.equals(newValue)) {
-                newParameters = new ArrayList<>(parameters.size());
-                newParameters.addAll(parameters.subList(0, idx));
+            if (!parametersChanged && value != newValue) {
+                parametersChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.parameters(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addParameter(parameters.get(innerIdx));
+                }
             }
-            if (newParameters != null) {
-                newParameters.add(newValue);
+            if (parametersChanged) {
+                builder.addParameter(newValue);
             }
-        }
-        if (newParameters != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.parameters(newParameters);
         }
         if (builder != null) {
             return builder.build();
@@ -161,21 +164,22 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
     public Block visitBlock(Block node) {
         Block.Builder builder = null;
         List<Statement> statements = node.statements();
-        List<Statement> newStatements = null;
-        for (int idx = 0; idx < statements.size(); idx++) {
+        boolean statementsChanged = false;
+        int statementsSize = statements.size();
+        for (int idx = 0; idx < statementsSize; idx++) {
             Statement value = statements.get(idx);
             Statement newValue = (Statement) value.accept(this);
-            if (newStatements == null && !value.equals(newValue)) {
-                newStatements = new ArrayList<>(statements.size());
-                newStatements.addAll(statements.subList(0, idx));
+            if (!statementsChanged && value != newValue) {
+                statementsChanged = true;
+                builder = node.toBuilder();
+                builder.statements(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addStatement(statements.get(innerIdx));
+                }
             }
-            if (newStatements != null) {
-                newStatements.add(newValue);
+            if (statementsChanged) {
+                builder.addStatement(newValue);
             }
-        }
-        if (newStatements != null) {
-            builder = node.toBuilder();
-            builder.statements(newStatements);
         }
         if (builder != null) {
             return builder.build();
@@ -187,21 +191,22 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
     public CaseClause visitCaseClause(CaseClause node) {
         CaseClause.Builder builder = null;
         List<Expression> label = node.label();
-        List<Expression> newLabel = null;
-        for (int idx = 0; idx < label.size(); idx++) {
+        boolean labelChanged = false;
+        int labelSize = label.size();
+        for (int idx = 0; idx < labelSize; idx++) {
             Expression value = label.get(idx);
             Expression newValue = (Expression) value.accept(this);
-            if (newLabel == null && !value.equals(newValue)) {
-                newLabel = new ArrayList<>(label.size());
-                newLabel.addAll(label.subList(0, idx));
+            if (!labelChanged && value != newValue) {
+                labelChanged = true;
+                builder = node.toBuilder();
+                builder.label(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addLabel(label.get(innerIdx));
+                }
             }
-            if (newLabel != null) {
-                newLabel.add(newValue);
+            if (labelChanged) {
+                builder.addLabel(newValue);
             }
-        }
-        if (newLabel != null) {
-            builder = node.toBuilder();
-            builder.label(newLabel);
         }
         Block body = node.body();
         Block bodyNew = visitBlock(body);
@@ -235,23 +240,24 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             builder.superClass(superClassNew);
         }
         List<TypeVariableTypeName> typeParams = node.typeParams();
-        List<TypeVariableTypeName> newTypeParams = null;
-        for (int idx = 0; idx < typeParams.size(); idx++) {
+        boolean typeParamsChanged = false;
+        int typeParamsSize = typeParams.size();
+        for (int idx = 0; idx < typeParamsSize; idx++) {
             TypeVariableTypeName value = typeParams.get(idx);
             TypeVariableTypeName newValue = visitTypeVariableTypeName(value);
-            if (newTypeParams == null && !value.equals(newValue)) {
-                newTypeParams = new ArrayList<>(typeParams.size());
-                newTypeParams.addAll(typeParams.subList(0, idx));
+            if (!typeParamsChanged && value != newValue) {
+                typeParamsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.typeParams(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addTypeParam(typeParams.get(innerIdx));
+                }
             }
-            if (newTypeParams != null) {
-                newTypeParams.add(newValue);
+            if (typeParamsChanged) {
+                builder.addTypeParam(newValue);
             }
-        }
-        if (newTypeParams != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.typeParams(newTypeParams);
         }
         Javadoc javadoc = node.javadoc();
         Javadoc javadocNew = null;
@@ -264,100 +270,105 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             }
             builder.javadoc(javadocNew);
         }
-        List<BaseMethodSyntax> methods = node.methods();
-        List<BaseMethodSyntax> newMethods = null;
-        for (int idx = 0; idx < methods.size(); idx++) {
-            BaseMethodSyntax value = methods.get(idx);
-            BaseMethodSyntax newValue = (BaseMethodSyntax) value.accept(this);
-            if (newMethods == null && !value.equals(newValue)) {
-                newMethods = new ArrayList<>(methods.size());
-                newMethods.addAll(methods.subList(0, idx));
-            }
-            if (newMethods != null) {
-                newMethods.add(newValue);
-            }
-        }
-        if (newMethods != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.methods(newMethods);
-        }
         List<Annotation> annotations = node.annotations();
-        List<Annotation> newAnnotations = null;
-        for (int idx = 0; idx < annotations.size(); idx++) {
+        boolean annotationsChanged = false;
+        int annotationsSize = annotations.size();
+        for (int idx = 0; idx < annotationsSize; idx++) {
             Annotation value = annotations.get(idx);
             Annotation newValue = visitAnnotation(value);
-            if (newAnnotations == null && !value.equals(newValue)) {
-                newAnnotations = new ArrayList<>(annotations.size());
-                newAnnotations.addAll(annotations.subList(0, idx));
+            if (!annotationsChanged && value != newValue) {
+                annotationsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.annotations(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addAnnotation(annotations.get(innerIdx));
+                }
             }
-            if (newAnnotations != null) {
-                newAnnotations.add(newValue);
+            if (annotationsChanged) {
+                builder.addAnnotation(newValue);
             }
-        }
-        if (newAnnotations != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.annotations(newAnnotations);
-        }
-        List<FieldSyntax> fields = node.fields();
-        List<FieldSyntax> newFields = null;
-        for (int idx = 0; idx < fields.size(); idx++) {
-            FieldSyntax value = fields.get(idx);
-            FieldSyntax newValue = visitFieldSyntax(value);
-            if (newFields == null && !value.equals(newValue)) {
-                newFields = new ArrayList<>(fields.size());
-                newFields.addAll(fields.subList(0, idx));
-            }
-            if (newFields != null) {
-                newFields.add(newValue);
-            }
-        }
-        if (newFields != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.fields(newFields);
         }
         List<TypeName> superInterfaces = node.superInterfaces();
-        List<TypeName> newSuperInterfaces = null;
-        for (int idx = 0; idx < superInterfaces.size(); idx++) {
+        boolean superInterfacesChanged = false;
+        int superInterfacesSize = superInterfaces.size();
+        for (int idx = 0; idx < superInterfacesSize; idx++) {
             TypeName value = superInterfaces.get(idx);
             TypeName newValue = (TypeName) value.accept(this);
-            if (newSuperInterfaces == null && !value.equals(newValue)) {
-                newSuperInterfaces = new ArrayList<>(superInterfaces.size());
-                newSuperInterfaces.addAll(superInterfaces.subList(0, idx));
+            if (!superInterfacesChanged && value != newValue) {
+                superInterfacesChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.superInterfaces(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addSuperInterface(superInterfaces.get(innerIdx));
+                }
             }
-            if (newSuperInterfaces != null) {
-                newSuperInterfaces.add(newValue);
+            if (superInterfacesChanged) {
+                builder.addSuperInterface(newValue);
             }
         }
-        if (newSuperInterfaces != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
+        List<FieldSyntax> fields = node.fields();
+        boolean fieldsChanged = false;
+        int fieldsSize = fields.size();
+        for (int idx = 0; idx < fieldsSize; idx++) {
+            FieldSyntax value = fields.get(idx);
+            FieldSyntax newValue = visitFieldSyntax(value);
+            if (!fieldsChanged && value != newValue) {
+                fieldsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.fields(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addField(fields.get(innerIdx));
+                }
             }
-            builder.superInterfaces(newSuperInterfaces);
+            if (fieldsChanged) {
+                builder.addField(newValue);
+            }
+        }
+        List<BaseMethodSyntax> methods = node.methods();
+        boolean methodsChanged = false;
+        int methodsSize = methods.size();
+        for (int idx = 0; idx < methodsSize; idx++) {
+            BaseMethodSyntax value = methods.get(idx);
+            BaseMethodSyntax newValue = (BaseMethodSyntax) value.accept(this);
+            if (!methodsChanged && value != newValue) {
+                methodsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.methods(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addMethod(methods.get(innerIdx));
+                }
+            }
+            if (methodsChanged) {
+                builder.addMethod(newValue);
+            }
         }
         List<TypeSyntax> innerTypes = node.innerTypes();
-        List<TypeSyntax> newInnerTypes = null;
-        for (int idx = 0; idx < innerTypes.size(); idx++) {
+        boolean innerTypesChanged = false;
+        int innerTypesSize = innerTypes.size();
+        for (int idx = 0; idx < innerTypesSize; idx++) {
             TypeSyntax value = innerTypes.get(idx);
             TypeSyntax newValue = (TypeSyntax) value.accept(this);
-            if (newInnerTypes == null && !value.equals(newValue)) {
-                newInnerTypes = new ArrayList<>(innerTypes.size());
-                newInnerTypes.addAll(innerTypes.subList(0, idx));
+            if (!innerTypesChanged && value != newValue) {
+                innerTypesChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.innerTypes(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addInnerType(innerTypes.get(innerIdx));
+                }
             }
-            if (newInnerTypes != null) {
-                newInnerTypes.add(newValue);
+            if (innerTypesChanged) {
+                builder.addInnerType(newValue);
             }
-        }
-        if (newInnerTypes != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.innerTypes(newInnerTypes);
         }
         if (builder != null) {
             return builder.build();
@@ -374,25 +385,23 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
     public CompilationUnit visitCompilationUnit(CompilationUnit node) {
         CompilationUnit.Builder builder = null;
         Set<ClassName> imports = node.imports();
-        Set<ClassName> newImports = null;
+        boolean importsChanged = false;
         for (ClassName value : imports) {
             ClassName newValue = visitClassName(value);
-            if (newImports == null && !value.equals(newValue)) {
-                newImports = new LinkedHashSet<>(imports.size());
+            if (!importsChanged && value != newValue) {
+                importsChanged = true;
+                builder = node.toBuilder();
+                builder.imports(Collections.emptySet());
                 for (ClassName innerValue : imports) {
                     if (innerValue == value) {
                         break;
                     }
-                    newImports.add(innerValue);
+                    builder.addImport(innerValue);
                 }
             }
-            if (newImports != null) {
-                newImports.add(newValue);
+            if (importsChanged) {
+                builder.addImport(newValue);
             }
-        }
-        if (newImports != null) {
-            builder = node.toBuilder();
-            builder.imports(newImports);
         }
         TypeSyntax type = node.type();
         TypeSyntax typeNew = (TypeSyntax) type.accept(this);
@@ -401,6 +410,28 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
                 builder = node.toBuilder();
             }
             builder.type(typeNew);
+        }
+        Map<String, ClassName> definedNames = node.definedNames();
+        boolean definedNamesChanged = false;
+        for (Map.Entry<String, ClassName> kvp : definedNames.entrySet()) {
+            ClassName value = kvp.getValue();
+            ClassName newValue = visitClassName(value);
+            if (!definedNamesChanged && value != newValue) {
+                definedNamesChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.definedNames(Collections.emptyMap());
+                for (Map.Entry<String, ClassName> innerKvp : definedNames.entrySet()) {
+                    if (innerKvp.getValue() == value) {
+                        break;
+                    }
+                    builder.putDefinedName(innerKvp.getKey(), innerKvp.getValue());
+                }
+            }
+            if (definedNamesChanged) {
+                builder.putDefinedName(kvp.getKey(), newValue);
+            }
         }
         if (builder != null) {
             return builder.build();
@@ -429,42 +460,44 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             builder.javadoc(javadocNew);
         }
         List<Annotation> annotations = node.annotations();
-        List<Annotation> newAnnotations = null;
-        for (int idx = 0; idx < annotations.size(); idx++) {
+        boolean annotationsChanged = false;
+        int annotationsSize = annotations.size();
+        for (int idx = 0; idx < annotationsSize; idx++) {
             Annotation value = annotations.get(idx);
             Annotation newValue = visitAnnotation(value);
-            if (newAnnotations == null && !value.equals(newValue)) {
-                newAnnotations = new ArrayList<>(annotations.size());
-                newAnnotations.addAll(annotations.subList(0, idx));
+            if (!annotationsChanged && value != newValue) {
+                annotationsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.annotations(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addAnnotation(annotations.get(innerIdx));
+                }
             }
-            if (newAnnotations != null) {
-                newAnnotations.add(newValue);
+            if (annotationsChanged) {
+                builder.addAnnotation(newValue);
             }
-        }
-        if (newAnnotations != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.annotations(newAnnotations);
         }
         List<Parameter> parameters = node.parameters();
-        List<Parameter> newParameters = null;
-        for (int idx = 0; idx < parameters.size(); idx++) {
+        boolean parametersChanged = false;
+        int parametersSize = parameters.size();
+        for (int idx = 0; idx < parametersSize; idx++) {
             Parameter value = parameters.get(idx);
             Parameter newValue = visitParameter(value);
-            if (newParameters == null && !value.equals(newValue)) {
-                newParameters = new ArrayList<>(parameters.size());
-                newParameters.addAll(parameters.subList(0, idx));
+            if (!parametersChanged && value != newValue) {
+                parametersChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.parameters(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addParameter(parameters.get(innerIdx));
+                }
             }
-            if (newParameters != null) {
-                newParameters.add(newValue);
+            if (parametersChanged) {
+                builder.addParameter(newValue);
             }
-        }
-        if (newParameters != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.parameters(newParameters);
         }
         if (builder != null) {
             return builder.build();
@@ -520,21 +553,22 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
     public EnumSyntax visitEnumSyntax(EnumSyntax node) {
         EnumSyntax.Builder builder = null;
         List<EnumConstant> enumConstants = node.enumConstants();
-        List<EnumConstant> newEnumConstants = null;
-        for (int idx = 0; idx < enumConstants.size(); idx++) {
+        boolean enumConstantsChanged = false;
+        int enumConstantsSize = enumConstants.size();
+        for (int idx = 0; idx < enumConstantsSize; idx++) {
             EnumConstant value = enumConstants.get(idx);
             EnumConstant newValue = visitEnumConstant(value);
-            if (newEnumConstants == null && !value.equals(newValue)) {
-                newEnumConstants = new ArrayList<>(enumConstants.size());
-                newEnumConstants.addAll(enumConstants.subList(0, idx));
+            if (!enumConstantsChanged && value != newValue) {
+                enumConstantsChanged = true;
+                builder = node.toBuilder();
+                builder.enumConstants(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addEnumConstant(enumConstants.get(innerIdx));
+                }
             }
-            if (newEnumConstants != null) {
-                newEnumConstants.add(newValue);
+            if (enumConstantsChanged) {
+                builder.addEnumConstant(newValue);
             }
-        }
-        if (newEnumConstants != null) {
-            builder = node.toBuilder();
-            builder.enumConstants(newEnumConstants);
         }
         Javadoc javadoc = node.javadoc();
         Javadoc javadocNew = null;
@@ -547,100 +581,105 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             }
             builder.javadoc(javadocNew);
         }
-        List<BaseMethodSyntax> methods = node.methods();
-        List<BaseMethodSyntax> newMethods = null;
-        for (int idx = 0; idx < methods.size(); idx++) {
-            BaseMethodSyntax value = methods.get(idx);
-            BaseMethodSyntax newValue = (BaseMethodSyntax) value.accept(this);
-            if (newMethods == null && !value.equals(newValue)) {
-                newMethods = new ArrayList<>(methods.size());
-                newMethods.addAll(methods.subList(0, idx));
-            }
-            if (newMethods != null) {
-                newMethods.add(newValue);
-            }
-        }
-        if (newMethods != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.methods(newMethods);
-        }
         List<Annotation> annotations = node.annotations();
-        List<Annotation> newAnnotations = null;
-        for (int idx = 0; idx < annotations.size(); idx++) {
+        boolean annotationsChanged = false;
+        int annotationsSize = annotations.size();
+        for (int idx = 0; idx < annotationsSize; idx++) {
             Annotation value = annotations.get(idx);
             Annotation newValue = visitAnnotation(value);
-            if (newAnnotations == null && !value.equals(newValue)) {
-                newAnnotations = new ArrayList<>(annotations.size());
-                newAnnotations.addAll(annotations.subList(0, idx));
+            if (!annotationsChanged && value != newValue) {
+                annotationsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.annotations(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addAnnotation(annotations.get(innerIdx));
+                }
             }
-            if (newAnnotations != null) {
-                newAnnotations.add(newValue);
+            if (annotationsChanged) {
+                builder.addAnnotation(newValue);
             }
-        }
-        if (newAnnotations != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.annotations(newAnnotations);
-        }
-        List<FieldSyntax> fields = node.fields();
-        List<FieldSyntax> newFields = null;
-        for (int idx = 0; idx < fields.size(); idx++) {
-            FieldSyntax value = fields.get(idx);
-            FieldSyntax newValue = visitFieldSyntax(value);
-            if (newFields == null && !value.equals(newValue)) {
-                newFields = new ArrayList<>(fields.size());
-                newFields.addAll(fields.subList(0, idx));
-            }
-            if (newFields != null) {
-                newFields.add(newValue);
-            }
-        }
-        if (newFields != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.fields(newFields);
         }
         List<TypeName> superInterfaces = node.superInterfaces();
-        List<TypeName> newSuperInterfaces = null;
-        for (int idx = 0; idx < superInterfaces.size(); idx++) {
+        boolean superInterfacesChanged = false;
+        int superInterfacesSize = superInterfaces.size();
+        for (int idx = 0; idx < superInterfacesSize; idx++) {
             TypeName value = superInterfaces.get(idx);
             TypeName newValue = (TypeName) value.accept(this);
-            if (newSuperInterfaces == null && !value.equals(newValue)) {
-                newSuperInterfaces = new ArrayList<>(superInterfaces.size());
-                newSuperInterfaces.addAll(superInterfaces.subList(0, idx));
+            if (!superInterfacesChanged && value != newValue) {
+                superInterfacesChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.superInterfaces(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addSuperInterface(superInterfaces.get(innerIdx));
+                }
             }
-            if (newSuperInterfaces != null) {
-                newSuperInterfaces.add(newValue);
+            if (superInterfacesChanged) {
+                builder.addSuperInterface(newValue);
             }
         }
-        if (newSuperInterfaces != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
+        List<FieldSyntax> fields = node.fields();
+        boolean fieldsChanged = false;
+        int fieldsSize = fields.size();
+        for (int idx = 0; idx < fieldsSize; idx++) {
+            FieldSyntax value = fields.get(idx);
+            FieldSyntax newValue = visitFieldSyntax(value);
+            if (!fieldsChanged && value != newValue) {
+                fieldsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.fields(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addField(fields.get(innerIdx));
+                }
             }
-            builder.superInterfaces(newSuperInterfaces);
+            if (fieldsChanged) {
+                builder.addField(newValue);
+            }
+        }
+        List<BaseMethodSyntax> methods = node.methods();
+        boolean methodsChanged = false;
+        int methodsSize = methods.size();
+        for (int idx = 0; idx < methodsSize; idx++) {
+            BaseMethodSyntax value = methods.get(idx);
+            BaseMethodSyntax newValue = (BaseMethodSyntax) value.accept(this);
+            if (!methodsChanged && value != newValue) {
+                methodsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.methods(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addMethod(methods.get(innerIdx));
+                }
+            }
+            if (methodsChanged) {
+                builder.addMethod(newValue);
+            }
         }
         List<TypeSyntax> innerTypes = node.innerTypes();
-        List<TypeSyntax> newInnerTypes = null;
-        for (int idx = 0; idx < innerTypes.size(); idx++) {
+        boolean innerTypesChanged = false;
+        int innerTypesSize = innerTypes.size();
+        for (int idx = 0; idx < innerTypesSize; idx++) {
             TypeSyntax value = innerTypes.get(idx);
             TypeSyntax newValue = (TypeSyntax) value.accept(this);
-            if (newInnerTypes == null && !value.equals(newValue)) {
-                newInnerTypes = new ArrayList<>(innerTypes.size());
-                newInnerTypes.addAll(innerTypes.subList(0, idx));
+            if (!innerTypesChanged && value != newValue) {
+                innerTypesChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.innerTypes(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addInnerType(innerTypes.get(innerIdx));
+                }
             }
-            if (newInnerTypes != null) {
-                newInnerTypes.add(newValue);
+            if (innerTypesChanged) {
+                builder.addInnerType(newValue);
             }
-        }
-        if (newInnerTypes != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.innerTypes(newInnerTypes);
         }
         if (builder != null) {
             return builder.build();
@@ -669,23 +708,24 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             builder.type(typeNew);
         }
         List<Annotation> annotations = node.annotations();
-        List<Annotation> newAnnotations = null;
-        for (int idx = 0; idx < annotations.size(); idx++) {
+        boolean annotationsChanged = false;
+        int annotationsSize = annotations.size();
+        for (int idx = 0; idx < annotationsSize; idx++) {
             Annotation value = annotations.get(idx);
             Annotation newValue = visitAnnotation(value);
-            if (newAnnotations == null && !value.equals(newValue)) {
-                newAnnotations = new ArrayList<>(annotations.size());
-                newAnnotations.addAll(annotations.subList(0, idx));
+            if (!annotationsChanged && value != newValue) {
+                annotationsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.annotations(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addAnnotation(annotations.get(innerIdx));
+                }
             }
-            if (newAnnotations != null) {
-                newAnnotations.add(newValue);
+            if (annotationsChanged) {
+                builder.addAnnotation(newValue);
             }
-        }
-        if (newAnnotations != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.annotations(newAnnotations);
         }
         Expression initializer = node.initializer();
         Expression initializerNew = null;
@@ -765,21 +805,22 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
     public InterfaceSyntax visitInterfaceSyntax(InterfaceSyntax node) {
         InterfaceSyntax.Builder builder = null;
         List<TypeVariableTypeName> typeParams = node.typeParams();
-        List<TypeVariableTypeName> newTypeParams = null;
-        for (int idx = 0; idx < typeParams.size(); idx++) {
+        boolean typeParamsChanged = false;
+        int typeParamsSize = typeParams.size();
+        for (int idx = 0; idx < typeParamsSize; idx++) {
             TypeVariableTypeName value = typeParams.get(idx);
             TypeVariableTypeName newValue = visitTypeVariableTypeName(value);
-            if (newTypeParams == null && !value.equals(newValue)) {
-                newTypeParams = new ArrayList<>(typeParams.size());
-                newTypeParams.addAll(typeParams.subList(0, idx));
+            if (!typeParamsChanged && value != newValue) {
+                typeParamsChanged = true;
+                builder = node.toBuilder();
+                builder.typeParams(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addTypeParam(typeParams.get(innerIdx));
+                }
             }
-            if (newTypeParams != null) {
-                newTypeParams.add(newValue);
+            if (typeParamsChanged) {
+                builder.addTypeParam(newValue);
             }
-        }
-        if (newTypeParams != null) {
-            builder = node.toBuilder();
-            builder.typeParams(newTypeParams);
         }
         Javadoc javadoc = node.javadoc();
         Javadoc javadocNew = null;
@@ -792,100 +833,105 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             }
             builder.javadoc(javadocNew);
         }
-        List<BaseMethodSyntax> methods = node.methods();
-        List<BaseMethodSyntax> newMethods = null;
-        for (int idx = 0; idx < methods.size(); idx++) {
-            BaseMethodSyntax value = methods.get(idx);
-            BaseMethodSyntax newValue = (BaseMethodSyntax) value.accept(this);
-            if (newMethods == null && !value.equals(newValue)) {
-                newMethods = new ArrayList<>(methods.size());
-                newMethods.addAll(methods.subList(0, idx));
-            }
-            if (newMethods != null) {
-                newMethods.add(newValue);
-            }
-        }
-        if (newMethods != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.methods(newMethods);
-        }
         List<Annotation> annotations = node.annotations();
-        List<Annotation> newAnnotations = null;
-        for (int idx = 0; idx < annotations.size(); idx++) {
+        boolean annotationsChanged = false;
+        int annotationsSize = annotations.size();
+        for (int idx = 0; idx < annotationsSize; idx++) {
             Annotation value = annotations.get(idx);
             Annotation newValue = visitAnnotation(value);
-            if (newAnnotations == null && !value.equals(newValue)) {
-                newAnnotations = new ArrayList<>(annotations.size());
-                newAnnotations.addAll(annotations.subList(0, idx));
+            if (!annotationsChanged && value != newValue) {
+                annotationsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.annotations(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addAnnotation(annotations.get(innerIdx));
+                }
             }
-            if (newAnnotations != null) {
-                newAnnotations.add(newValue);
+            if (annotationsChanged) {
+                builder.addAnnotation(newValue);
             }
-        }
-        if (newAnnotations != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.annotations(newAnnotations);
-        }
-        List<FieldSyntax> fields = node.fields();
-        List<FieldSyntax> newFields = null;
-        for (int idx = 0; idx < fields.size(); idx++) {
-            FieldSyntax value = fields.get(idx);
-            FieldSyntax newValue = visitFieldSyntax(value);
-            if (newFields == null && !value.equals(newValue)) {
-                newFields = new ArrayList<>(fields.size());
-                newFields.addAll(fields.subList(0, idx));
-            }
-            if (newFields != null) {
-                newFields.add(newValue);
-            }
-        }
-        if (newFields != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.fields(newFields);
         }
         List<TypeName> superInterfaces = node.superInterfaces();
-        List<TypeName> newSuperInterfaces = null;
-        for (int idx = 0; idx < superInterfaces.size(); idx++) {
+        boolean superInterfacesChanged = false;
+        int superInterfacesSize = superInterfaces.size();
+        for (int idx = 0; idx < superInterfacesSize; idx++) {
             TypeName value = superInterfaces.get(idx);
             TypeName newValue = (TypeName) value.accept(this);
-            if (newSuperInterfaces == null && !value.equals(newValue)) {
-                newSuperInterfaces = new ArrayList<>(superInterfaces.size());
-                newSuperInterfaces.addAll(superInterfaces.subList(0, idx));
+            if (!superInterfacesChanged && value != newValue) {
+                superInterfacesChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.superInterfaces(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addSuperInterface(superInterfaces.get(innerIdx));
+                }
             }
-            if (newSuperInterfaces != null) {
-                newSuperInterfaces.add(newValue);
+            if (superInterfacesChanged) {
+                builder.addSuperInterface(newValue);
             }
         }
-        if (newSuperInterfaces != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
+        List<FieldSyntax> fields = node.fields();
+        boolean fieldsChanged = false;
+        int fieldsSize = fields.size();
+        for (int idx = 0; idx < fieldsSize; idx++) {
+            FieldSyntax value = fields.get(idx);
+            FieldSyntax newValue = visitFieldSyntax(value);
+            if (!fieldsChanged && value != newValue) {
+                fieldsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.fields(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addField(fields.get(innerIdx));
+                }
             }
-            builder.superInterfaces(newSuperInterfaces);
+            if (fieldsChanged) {
+                builder.addField(newValue);
+            }
+        }
+        List<BaseMethodSyntax> methods = node.methods();
+        boolean methodsChanged = false;
+        int methodsSize = methods.size();
+        for (int idx = 0; idx < methodsSize; idx++) {
+            BaseMethodSyntax value = methods.get(idx);
+            BaseMethodSyntax newValue = (BaseMethodSyntax) value.accept(this);
+            if (!methodsChanged && value != newValue) {
+                methodsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.methods(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addMethod(methods.get(innerIdx));
+                }
+            }
+            if (methodsChanged) {
+                builder.addMethod(newValue);
+            }
         }
         List<TypeSyntax> innerTypes = node.innerTypes();
-        List<TypeSyntax> newInnerTypes = null;
-        for (int idx = 0; idx < innerTypes.size(); idx++) {
+        boolean innerTypesChanged = false;
+        int innerTypesSize = innerTypes.size();
+        for (int idx = 0; idx < innerTypesSize; idx++) {
             TypeSyntax value = innerTypes.get(idx);
             TypeSyntax newValue = (TypeSyntax) value.accept(this);
-            if (newInnerTypes == null && !value.equals(newValue)) {
-                newInnerTypes = new ArrayList<>(innerTypes.size());
-                newInnerTypes.addAll(innerTypes.subList(0, idx));
+            if (!innerTypesChanged && value != newValue) {
+                innerTypesChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.innerTypes(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addInnerType(innerTypes.get(innerIdx));
+                }
             }
-            if (newInnerTypes != null) {
-                newInnerTypes.add(newValue);
+            if (innerTypesChanged) {
+                builder.addInnerType(newValue);
             }
-        }
-        if (newInnerTypes != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.innerTypes(newInnerTypes);
         }
         if (builder != null) {
             return builder.build();
@@ -897,21 +943,22 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
     public MethodSyntax visitMethodSyntax(MethodSyntax node) {
         MethodSyntax.Builder builder = null;
         List<TypeVariableTypeName> typeParams = node.typeParams();
-        List<TypeVariableTypeName> newTypeParams = null;
-        for (int idx = 0; idx < typeParams.size(); idx++) {
+        boolean typeParamsChanged = false;
+        int typeParamsSize = typeParams.size();
+        for (int idx = 0; idx < typeParamsSize; idx++) {
             TypeVariableTypeName value = typeParams.get(idx);
             TypeVariableTypeName newValue = visitTypeVariableTypeName(value);
-            if (newTypeParams == null && !value.equals(newValue)) {
-                newTypeParams = new ArrayList<>(typeParams.size());
-                newTypeParams.addAll(typeParams.subList(0, idx));
+            if (!typeParamsChanged && value != newValue) {
+                typeParamsChanged = true;
+                builder = node.toBuilder();
+                builder.typeParams(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addTypeParam(typeParams.get(innerIdx));
+                }
             }
-            if (newTypeParams != null) {
-                newTypeParams.add(newValue);
+            if (typeParamsChanged) {
+                builder.addTypeParam(newValue);
             }
-        }
-        if (newTypeParams != null) {
-            builder = node.toBuilder();
-            builder.typeParams(newTypeParams);
         }
         TypeName returns = node.returns();
         TypeName returnsNew = (TypeName) returns.accept(this);
@@ -941,42 +988,44 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             builder.javadoc(javadocNew);
         }
         List<Annotation> annotations = node.annotations();
-        List<Annotation> newAnnotations = null;
-        for (int idx = 0; idx < annotations.size(); idx++) {
+        boolean annotationsChanged = false;
+        int annotationsSize = annotations.size();
+        for (int idx = 0; idx < annotationsSize; idx++) {
             Annotation value = annotations.get(idx);
             Annotation newValue = visitAnnotation(value);
-            if (newAnnotations == null && !value.equals(newValue)) {
-                newAnnotations = new ArrayList<>(annotations.size());
-                newAnnotations.addAll(annotations.subList(0, idx));
+            if (!annotationsChanged && value != newValue) {
+                annotationsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.annotations(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addAnnotation(annotations.get(innerIdx));
+                }
             }
-            if (newAnnotations != null) {
-                newAnnotations.add(newValue);
+            if (annotationsChanged) {
+                builder.addAnnotation(newValue);
             }
-        }
-        if (newAnnotations != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.annotations(newAnnotations);
         }
         List<Parameter> parameters = node.parameters();
-        List<Parameter> newParameters = null;
-        for (int idx = 0; idx < parameters.size(); idx++) {
+        boolean parametersChanged = false;
+        int parametersSize = parameters.size();
+        for (int idx = 0; idx < parametersSize; idx++) {
             Parameter value = parameters.get(idx);
             Parameter newValue = visitParameter(value);
-            if (newParameters == null && !value.equals(newValue)) {
-                newParameters = new ArrayList<>(parameters.size());
-                newParameters.addAll(parameters.subList(0, idx));
+            if (!parametersChanged && value != newValue) {
+                parametersChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.parameters(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addParameter(parameters.get(innerIdx));
+                }
             }
-            if (newParameters != null) {
-                newParameters.add(newValue);
+            if (parametersChanged) {
+                builder.addParameter(newValue);
             }
-        }
-        if (newParameters != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.parameters(newParameters);
         }
         if (builder != null) {
             return builder.build();
@@ -1009,23 +1058,24 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             builder.rawType(rawTypeNew);
         }
         List<TypeName> typeArguments = node.typeArguments();
-        List<TypeName> newTypeArguments = null;
-        for (int idx = 0; idx < typeArguments.size(); idx++) {
+        boolean typeArgumentsChanged = false;
+        int typeArgumentsSize = typeArguments.size();
+        for (int idx = 0; idx < typeArgumentsSize; idx++) {
             TypeName value = typeArguments.get(idx);
             TypeName newValue = (TypeName) value.accept(this);
-            if (newTypeArguments == null && !value.equals(newValue)) {
-                newTypeArguments = new ArrayList<>(typeArguments.size());
-                newTypeArguments.addAll(typeArguments.subList(0, idx));
+            if (!typeArgumentsChanged && value != newValue) {
+                typeArgumentsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.typeArguments(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addTypeArgument(typeArguments.get(innerIdx));
+                }
             }
-            if (newTypeArguments != null) {
-                newTypeArguments.add(newValue);
+            if (typeArgumentsChanged) {
+                builder.addTypeArgument(newValue);
             }
-        }
-        if (newTypeArguments != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.typeArguments(newTypeArguments);
         }
         if (builder != null) {
             return builder.build();
@@ -1048,23 +1098,24 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             builder.expression(expressionNew);
         }
         List<CaseClause> cases = node.cases();
-        List<CaseClause> newCases = null;
-        for (int idx = 0; idx < cases.size(); idx++) {
+        boolean casesChanged = false;
+        int casesSize = cases.size();
+        for (int idx = 0; idx < casesSize; idx++) {
             CaseClause value = cases.get(idx);
             CaseClause newValue = visitCaseClause(value);
-            if (newCases == null && !value.equals(newValue)) {
-                newCases = new ArrayList<>(cases.size());
-                newCases.addAll(cases.subList(0, idx));
+            if (!casesChanged && value != newValue) {
+                casesChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.cases(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addCase(cases.get(innerIdx));
+                }
             }
-            if (newCases != null) {
-                newCases.add(newValue);
+            if (casesChanged) {
+                builder.addCase(newValue);
             }
-        }
-        if (newCases != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.cases(newCases);
         }
         DefaultCaseClause defaultCase = node.defaultCase();
         DefaultCaseClause defaultCaseNew = null;
@@ -1087,21 +1138,22 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
     public TypeVariableTypeName visitTypeVariableTypeName(TypeVariableTypeName node) {
         TypeVariableTypeName.Builder builder = null;
         List<TypeName> bounds = node.bounds();
-        List<TypeName> newBounds = null;
-        for (int idx = 0; idx < bounds.size(); idx++) {
+        boolean boundsChanged = false;
+        int boundsSize = bounds.size();
+        for (int idx = 0; idx < boundsSize; idx++) {
             TypeName value = bounds.get(idx);
             TypeName newValue = (TypeName) value.accept(this);
-            if (newBounds == null && !value.equals(newValue)) {
-                newBounds = new ArrayList<>(bounds.size());
-                newBounds.addAll(bounds.subList(0, idx));
+            if (!boundsChanged && value != newValue) {
+                boundsChanged = true;
+                builder = node.toBuilder();
+                builder.bounds(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addBound(bounds.get(innerIdx));
+                }
             }
-            if (newBounds != null) {
-                newBounds.add(newValue);
+            if (boundsChanged) {
+                builder.addBound(newValue);
             }
-        }
-        if (newBounds != null) {
-            builder = node.toBuilder();
-            builder.bounds(newBounds);
         }
         if (builder != null) {
             return builder.build();
@@ -1122,42 +1174,44 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             builder.rawType(rawTypeNew);
         }
         List<TypeName> upperBounds = node.upperBounds();
-        List<TypeName> newUpperBounds = null;
-        for (int idx = 0; idx < upperBounds.size(); idx++) {
+        boolean upperBoundsChanged = false;
+        int upperBoundsSize = upperBounds.size();
+        for (int idx = 0; idx < upperBoundsSize; idx++) {
             TypeName value = upperBounds.get(idx);
             TypeName newValue = (TypeName) value.accept(this);
-            if (newUpperBounds == null && !value.equals(newValue)) {
-                newUpperBounds = new ArrayList<>(upperBounds.size());
-                newUpperBounds.addAll(upperBounds.subList(0, idx));
+            if (!upperBoundsChanged && value != newValue) {
+                upperBoundsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.upperBounds(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addUpperBound(upperBounds.get(innerIdx));
+                }
             }
-            if (newUpperBounds != null) {
-                newUpperBounds.add(newValue);
+            if (upperBoundsChanged) {
+                builder.addUpperBound(newValue);
             }
-        }
-        if (newUpperBounds != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.upperBounds(newUpperBounds);
         }
         List<TypeName> lowerBounds = node.lowerBounds();
-        List<TypeName> newLowerBounds = null;
-        for (int idx = 0; idx < lowerBounds.size(); idx++) {
+        boolean lowerBoundsChanged = false;
+        int lowerBoundsSize = lowerBounds.size();
+        for (int idx = 0; idx < lowerBoundsSize; idx++) {
             TypeName value = lowerBounds.get(idx);
             TypeName newValue = (TypeName) value.accept(this);
-            if (newLowerBounds == null && !value.equals(newValue)) {
-                newLowerBounds = new ArrayList<>(lowerBounds.size());
-                newLowerBounds.addAll(lowerBounds.subList(0, idx));
+            if (!lowerBoundsChanged && value != newValue) {
+                lowerBoundsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.lowerBounds(Collections.emptyList());
+                for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
+                    builder.addLowerBound(lowerBounds.get(innerIdx));
+                }
             }
-            if (newLowerBounds != null) {
-                newLowerBounds.add(newValue);
+            if (lowerBoundsChanged) {
+                builder.addLowerBound(newValue);
             }
-        }
-        if (newLowerBounds != null) {
-            if (builder == null) {
-                builder = node.toBuilder();
-            }
-            builder.lowerBounds(newLowerBounds);
         }
         if (builder != null) {
             return builder.build();

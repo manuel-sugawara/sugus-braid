@@ -23,7 +23,7 @@ public final class PrimitiveTypeName implements TypeName {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -62,7 +62,7 @@ public final class PrimitiveTypeName implements TypeName {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -79,7 +79,7 @@ public final class PrimitiveTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>name</code></p>
+         * <p>Sets the value for <code>name</code>.</p>
          */
         public Builder name(TypePrimitiveName name) {
             this.name = name;

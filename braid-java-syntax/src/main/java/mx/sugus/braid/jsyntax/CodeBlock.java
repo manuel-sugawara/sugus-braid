@@ -22,7 +22,7 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -61,7 +61,7 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -83,7 +83,7 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
         }
 
         /**
-         * <p>Sets the value for <code>parts</code></p>
+         * <p>Sets the value for <code>parts</code>.</p>
          */
         public Builder parts(List<FormatterNode> parts) {
             this.parts.clear();
@@ -92,7 +92,7 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
         }
 
         /**
-         * <p>Adds a single value for <code>parts</code></p>
+         * <p>Adds a single value for <code>parts</code>.</p>
          */
         public Builder addPart(FormatterNode part) {
             this.parts.asTransient().add(part);

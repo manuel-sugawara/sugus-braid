@@ -31,7 +31,7 @@ public final class TypeVariableTypeName implements TypeName {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -73,7 +73,7 @@ public final class TypeVariableTypeName implements TypeName {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -97,7 +97,7 @@ public final class TypeVariableTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>name</code></p>
+         * <p>Sets the value for <code>name</code>.</p>
          */
         public Builder name(String name) {
             this.name = name;
@@ -105,7 +105,7 @@ public final class TypeVariableTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>bounds</code></p>
+         * <p>Sets the value for <code>bounds</code>.</p>
          */
         public Builder bounds(List<TypeName> bounds) {
             this.bounds.clear();
@@ -114,7 +114,7 @@ public final class TypeVariableTypeName implements TypeName {
         }
 
         /**
-         * <p>Adds a single value for <code>bounds</code></p>
+         * <p>Adds a single value for <code>bounds</code>.</p>
          */
         public Builder addBound(TypeName bound) {
             this.bounds.asTransient().add(bound);

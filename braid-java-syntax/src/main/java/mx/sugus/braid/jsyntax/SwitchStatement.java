@@ -38,7 +38,7 @@ public final class SwitchStatement implements Statement {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -86,7 +86,7 @@ public final class SwitchStatement implements Statement {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -108,7 +108,7 @@ public final class SwitchStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>expression</code></p>
+         * <p>Sets the value for <code>expression</code>.</p>
          */
         public Builder expression(Expression expression) {
             this.expression = expression;
@@ -116,7 +116,7 @@ public final class SwitchStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>cases</code></p>
+         * <p>Sets the value for <code>cases</code>.</p>
          */
         public Builder cases(List<CaseClause> cases) {
             this.cases.clear();
@@ -125,7 +125,7 @@ public final class SwitchStatement implements Statement {
         }
 
         /**
-         * <p>Adds a single value for <code>cases</code></p>
+         * <p>Adds a single value for <code>cases</code>.</p>
          */
         public Builder addCase(CaseClause aCase) {
             this.cases.asTransient().add(aCase);
@@ -133,7 +133,7 @@ public final class SwitchStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>defaultCase</code></p>
+         * <p>Sets the value for <code>defaultCase</code>.</p>
          */
         public Builder defaultCase(DefaultCaseClause defaultCase) {
             this.defaultCase = defaultCase;

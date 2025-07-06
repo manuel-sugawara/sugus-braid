@@ -1,5 +1,6 @@
 package mx.sugus.braid.plugins.syntax;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import javax.lang.model.element.Modifier;
@@ -123,7 +124,6 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
 
     void addCollectionOfSyntaxNode(CodegenState state, MemberShape member, BodyBuilder builder, boolean isBuilderNull) {
         var memberName = Utils.toJavaName(state, member);
-        var memberNameNew = memberName.withPrefix("new");
         var memberType = Utils.toJavaTypeName(state, member);
         var getterName = Utils.toGetterName(state, member);
         builder.addStatement("$T $L = node.$L()", memberType, memberName, getterName);
@@ -148,7 +148,8 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
         var memberInnerType = Utils.toJavaTypeName(state, memberInnerTypeShape);
         var memberChanged = memberName.withSuffix("changed");
         var memberSize = memberName.withSuffix("size");
-        var addMethodName = Utils.toAdderName(state, member).toString();
+        var addMethodName = Utils.toAdderName(state, member);
+        var setMethodName = Utils.toSetterName(state, member);
         builder.addStatement("boolean $L = false", memberChanged);
         builder.addStatement("int $L = $L.size()", memberSize, memberName);
         builder.forStatement("int idx = 0; idx < $L; idx++", memberSize, b -> {
@@ -164,6 +165,7 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
                         builderIsNull.addStatement("builder = node.toBuilder()");
                     });
                 }
+                valueChanged.addStatement("builder.$L($T.emptyList())", setMethodName, Collections.class);
                 valueChanged.forStatement("int innerIdx = 0; innerIdx < idx; innerIdx++", memberSize, copyMembers -> {
                     copyMembers.addStatement("builder.$L($L.get(innerIdx))", addMethodName, memberName);
                 });
@@ -179,7 +181,8 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
         var memberInnerTypeShape = memberInnerType(state, member);
         var memberInnerType = Utils.toJavaTypeName(state, memberInnerTypeShape);
         var memberChanged = memberName.withSuffix("changed");
-        var addMethodName = Utils.toAdderName(state, member).toString();
+        var addMethodName = Utils.toAdderName(state, member);
+        var setMethodName = Utils.toSetterName(state, member);
         builder.addStatement("boolean $L = false", memberChanged);
         builder.forStatement("$T value : $L", memberInnerType, memberName, b -> {
             var acceptBlock = acceptBlock(state, memberInnerTypeShape, "value");
@@ -193,6 +196,7 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
                         builderIsNull.addStatement("builder = node.toBuilder()");
                     });
                 }
+                valueChanged.addStatement("builder.$L($T.emptySet())", setMethodName, Collections.class);
                 valueChanged.forStatement("$T innerValue : $L", memberInnerType, memberName, copyMembers -> {
                     copyMembers.ifStatement("innerValue == value", done -> done.addStatement("break"));
                     copyMembers.addStatement("builder.$L(innerValue)", addMethodName);
@@ -214,7 +218,8 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
                                              .addTypeArgument(String.class)
                                              .addTypeArgument(memberInnerType)
                                              .build();
-        var putMethodName = Utils.toAdderName(state, member).toString();
+        var putMethodName = Utils.toAdderName(state, member);
+        var setMethodName = Utils.toSetterName(state, member);
         builder.addStatement("boolean $L = false", memberChanged);
         builder.forStatement("$T kvp : $L.entrySet()", entryType, memberName, b -> {
             b.addStatement("$T value = kvp.getValue()", memberInnerType);
@@ -229,6 +234,7 @@ public final class SyntaxRewriteVisitorJavaProducer implements NonShapeProducerT
                         builderIsNull.addStatement("builder = node.toBuilder()");
                     });
                 }
+                valueChanged.addStatement("builder.$L($T.emptyMap())", setMethodName, Collections.class);
                 valueChanged.forStatement("$T innerKvp : $L.entrySet()", entryType, memberName, copyMembers -> {
                     copyMembers.ifStatement("innerKvp.getValue() == value", done -> done.addStatement("break"));
                     copyMembers.addStatement("builder.$L(innerKvp.getKey(), innerKvp.getValue())", putMethodName);

@@ -1,5 +1,6 @@
 package mx.sugus.braid.test;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 import mx.sugus.braid.rt.util.annotations.Generated;
@@ -18,6 +19,7 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             if (!membersChanged && value != newValue) {
                 membersChanged = true;
                 builder = node.toBuilder();
+                builder.members(Collections.emptyMap());
                 for (Map.Entry<String, StructureSimple> innerKvp : members.entrySet()) {
                     if (innerKvp.getValue() == value) {
                         break;
@@ -57,6 +59,7 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
                 if (builder == null) {
                     builder = node.toBuilder();
                 }
+                builder.members(Collections.emptyMap());
                 for (Map.Entry<String, StructureSimple> innerKvp : members.entrySet()) {
                     if (innerKvp.getValue() == value) {
                         break;

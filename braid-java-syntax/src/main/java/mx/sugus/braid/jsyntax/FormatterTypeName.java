@@ -20,7 +20,7 @@ public final class FormatterTypeName implements FormatterNode {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -54,7 +54,7 @@ public final class FormatterTypeName implements FormatterNode {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -71,7 +71,7 @@ public final class FormatterTypeName implements FormatterNode {
         }
 
         /**
-         * <p>Sets the value for <code>value</code></p>
+         * <p>Sets the value for <code>value</code>.</p>
          */
         public Builder value(TypeName value) {
             this.value = value;

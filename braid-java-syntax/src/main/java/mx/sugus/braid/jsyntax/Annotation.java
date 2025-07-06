@@ -33,7 +33,7 @@ public final class Annotation implements SyntaxNode {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -73,7 +73,7 @@ public final class Annotation implements SyntaxNode {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -116,7 +116,7 @@ public final class Annotation implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>type</code></p>
+         * <p>Sets the value for <code>type</code>.</p>
          * <p>The class for the annotation</p>
          */
         public Builder type(ClassName type) {
@@ -125,7 +125,7 @@ public final class Annotation implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>members</code></p>
+         * <p>Sets the value for <code>members</code>.</p>
          * <p>The members of the annotation</p>
          */
         public Builder members(Map<java.lang.String, MemberValue> members) {

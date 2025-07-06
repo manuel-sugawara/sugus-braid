@@ -40,7 +40,7 @@ public final class ForStatement implements Statement {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -82,7 +82,7 @@ public final class ForStatement implements Statement {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -102,7 +102,7 @@ public final class ForStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>initializer</code></p>
+         * <p>Sets the value for <code>initializer</code>.</p>
          * <p>Represents the initialization block of the <code>for</code> statement.</p>
          * <p>Accommodates traditional <code>for</code> and enhanced <code>for</code> statements.</p>
          */
@@ -117,7 +117,7 @@ public final class ForStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>statement</code></p>
+         * <p>Sets the value for <code>statement</code>.</p>
          * <p>The body of the <code>for</code> statement.</p>
          */
         public Builder statement(Block statement) {

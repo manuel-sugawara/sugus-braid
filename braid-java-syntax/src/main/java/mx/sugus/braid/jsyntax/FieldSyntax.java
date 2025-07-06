@@ -72,7 +72,7 @@ public final class FieldSyntax implements SyntaxNode {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -127,7 +127,7 @@ public final class FieldSyntax implements SyntaxNode {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -188,7 +188,7 @@ public final class FieldSyntax implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>javadoc</code></p>
+         * <p>Sets the value for <code>javadoc</code>.</p>
          * <p>The javadoc for the type.</p>
          */
         public Builder javadoc(Javadoc javadoc) {
@@ -202,7 +202,7 @@ public final class FieldSyntax implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>name</code></p>
+         * <p>Sets the value for <code>name</code>.</p>
          * <p>The name of the field.</p>
          */
         public Builder name(String name) {
@@ -211,7 +211,7 @@ public final class FieldSyntax implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>type</code></p>
+         * <p>Sets the value for <code>type</code>.</p>
          * <p>The type of the field.</p>
          */
         public Builder type(TypeName type) {
@@ -225,7 +225,7 @@ public final class FieldSyntax implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>modifiers</code></p>
+         * <p>Sets the value for <code>modifiers</code>.</p>
          * <p>A list of modifiers for the field.</p>
          */
         public Builder modifiers(Set<Modifier> modifiers) {
@@ -235,7 +235,7 @@ public final class FieldSyntax implements SyntaxNode {
         }
 
         /**
-         * <p>Adds a single value for <code>modifiers</code></p>
+         * <p>Adds a single value for <code>modifiers</code>.</p>
          */
         public Builder addModifier(Modifier modifier) {
             this.modifiers.asTransient().add(modifier);
@@ -262,7 +262,7 @@ public final class FieldSyntax implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>annotations</code></p>
+         * <p>Sets the value for <code>annotations</code>.</p>
          * <p>A list of annotations for the field.</p>
          */
         public Builder annotations(List<Annotation> annotations) {
@@ -272,7 +272,7 @@ public final class FieldSyntax implements SyntaxNode {
         }
 
         /**
-         * <p>Adds a single value for <code>annotations</code></p>
+         * <p>Adds a single value for <code>annotations</code>.</p>
          */
         public Builder addAnnotation(Annotation annotation) {
             this.annotations.asTransient().add(annotation);
@@ -296,7 +296,7 @@ public final class FieldSyntax implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>initializer</code></p>
+         * <p>Sets the value for <code>initializer</code>.</p>
          * <p>A initialization expression</p>
          */
         public Builder initializer(Expression initializer) {
