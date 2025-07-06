@@ -6,7 +6,9 @@ import mx.sugus.braid.rt.util.annotations.Generated;
 public interface EnumBody extends SyntaxNode {
 
     /**
-     * Creates a new {@link Builder} to modify a copy of this instance
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     Builder toBuilder();
 
@@ -14,6 +16,8 @@ public interface EnumBody extends SyntaxNode {
 
         /**
          * Builds a new instance of {@link EnumBody}
+         * 
+         * @return The new instance of of {@link EnumBody}
          */
         EnumBody build();
     }

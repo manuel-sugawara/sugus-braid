@@ -3,18 +3,20 @@ package mx.sugus.braid.jsyntax;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents a Java statement.</p>
+ * Represents a Java statement.
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 public interface Statement extends SyntaxNode {
 
     /**
-     * <p>The concrete type of statement.</p>
+     * The concrete type of statement.
      */
     StatementKind stmtKind();
 
     /**
-     * Creates a new {@link Builder} to modify a copy of this instance
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     Builder toBuilder();
 
@@ -22,6 +24,8 @@ public interface Statement extends SyntaxNode {
 
         /**
          * Builds a new instance of {@link Statement}
+         * 
+         * @return The new instance of of {@link Statement}
          */
         Statement build();
     }

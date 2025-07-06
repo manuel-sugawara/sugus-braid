@@ -1,6 +1,7 @@
 package mx.sugus.braid.plugins.data.producers;
 
 import static mx.sugus.braid.plugins.data.producers.CodegenUtils.BUILDER_TYPE;
+import static mx.sugus.braid.plugins.data.producers.StructureData.toBuilderDoc;
 
 import java.util.List;
 import javax.lang.model.element.Modifier;
@@ -53,8 +54,9 @@ public final class InterfaceData implements DirectedInterface {
 
     private AbstractMethodSyntax toBuilderMethod(ShapeCodegenState state) {
         var type = BUILDER_TYPE;
+        var doc = toBuilderDoc();
         return AbstractMethodSyntax.builder()
-                                   .javadoc("Creates a new {@link $T} to modify a copy of this instance", type)
+                                   .javadoc(doc)
                                    .name("toBuilder")
                                    .returns(type)
                                    .build();

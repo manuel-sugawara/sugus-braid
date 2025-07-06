@@ -10,8 +10,10 @@ import mx.sugus.braid.core.ImplementsKnowledgeIndex;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
+import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.ConstructorMethodSyntax;
 import mx.sugus.braid.jsyntax.FieldSyntax;
+import mx.sugus.braid.jsyntax.Javadoc;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeName;
@@ -20,7 +22,6 @@ import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.traits.ConstTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
-import software.amazon.smithy.model.traits.DocumentationTrait;
 
 public final class StructureDataBuilder implements DirectedClass {
     static final StructureDataBuilder INSTANCE = new StructureDataBuilder();
@@ -110,8 +111,13 @@ public final class StructureDataBuilder implements DirectedClass {
 
     private MethodSyntax buildMethod(ShapeCodegenState state) {
         var shapeType = Utils.toJavaTypeName(state, state.shape());
+        var doc = Javadoc.builder()
+                         .body(CodeBlock.from("Returns a new instance of {@link $T}", shapeType))
+                         .returns(CodeBlock.from("A new instance of {@link $T}", shapeType))
+                         .build();
         return MethodSyntax.builder("build")
                            .addModifier(Modifier.PUBLIC)
+                           .javadoc(doc)
                            .returns(shapeType)
                            .body(b -> b.addStatement("return new $T(this)", shapeType))
                            .build();
@@ -130,11 +136,12 @@ public final class StructureDataBuilder implements DirectedClass {
             builder.addStatement(stmt);
         }
         builder.addStatement("return this");
-        var doc = "Sets the value for `" + name + "`.";
-        if (member.hasTrait(DocumentationTrait.class)) {
-            doc += "\n\n" + member.expectTrait(DocumentationTrait.class).getValue();
-        }
-        builder.javadoc(JavadocExt.document(doc));
+        var doc = Javadoc.builder()
+                         .body(CodeBlock.from("Sets the value for `" + name + "`."))
+                         .returns(CodeBlock.from("This instance for chain calling."))
+                         .putParam(name.toString(), CodeBlock.from("The value to be set."))
+                         .build();
+        builder.javadoc(doc);
         return builder.build();
     }
 
@@ -169,6 +176,14 @@ public final class StructureDataBuilder implements DirectedClass {
         var methodName = Utils.toAdderName(state, member).toString();
         var builder = methodBuilder(methodName);
         addKeyValueParam(state, member, builder);
+        var paramName = Utils.toJavaSingularName(state, member).toString();
+        var doc = Javadoc.builder()
+                         .body("Puts a new entry to the `$L` map with the given key and value.", member.getMemberName())
+                         .putParam("key", "The key for the new entry")
+                         .putParam(paramName, "The value for the map entry")
+                         .returns("This instance for chain calling.")
+                         .build();
+        builder.javadoc(doc);
         builder.body(body -> {
             addKeyValue(state, member, body);
             body.addStatement("return this");

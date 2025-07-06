@@ -29,23 +29,31 @@ public final class SensitiveUnion {
     }
 
     /**
-     * <p>Returns an enum value representing which member of this object is populated.</p>
-     * <p>This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.</p>
+     * Returns the enum value representing which member of this object is populated.
+     * <p>
+     * This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.
+     * 
+     * @return The enum value representing which member of this object is populated
      */
     public VariantTag variantTag() {
         return this.variantTag;
     }
 
     /**
-     * <p>Returns the untyped value of the union.</p>
-     * <p>Use {@link #type()} to get the member currently set.</p>
+     * Returns the untyped value of the union.
+     * <p>
+     * Use {@link #type()} to get the member currently set.
+     * 
+     * @return The untyped value of the union.
      */
     public Object variantValue() {
         return this.variantValue;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -74,7 +82,9 @@ public final class SensitiveUnion {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -112,7 +122,7 @@ public final class SensitiveUnion {
         }
 
         /**
-         * <p>Sets the value for <code>stringSecretMember</code></p>
+         * Sets the value for {@code stringSecretMember}
          */
         public Builder stringSecretMember(String stringSecretMember) {
             this.variantTag = VariantTag.STRING_SECRET_MEMBER;
@@ -121,7 +131,7 @@ public final class SensitiveUnion {
         }
 
         /**
-         * <p>Sets the value for <code>intSecretMember</code></p>
+         * Sets the value for {@code intSecretMember}
          */
         public Builder intSecretMember(Integer intSecretMember) {
             this.variantTag = VariantTag.INT_SECRET_MEMBER;

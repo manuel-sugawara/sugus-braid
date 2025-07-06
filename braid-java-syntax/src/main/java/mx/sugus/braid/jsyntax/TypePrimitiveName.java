@@ -14,7 +14,7 @@ public enum TypePrimitiveName {
     FLOAT("float"),
     DOUBLE("double"),
     /**
-     * <p>Unknown enum constant</p>
+     * Unknown enum constant
      */
     UNKNOWN_TO_VERSION(null);
 
@@ -25,8 +25,9 @@ public enum TypePrimitiveName {
     }
 
     /**
-     * <p>Returns the corresponding enum constant from the given value.</p>
-     * <p>If the value is unknown it returns <code>UNKNOWN_TO_VERSION</code>.</p>
+     * Returns the corresponding enum constant from the given value.
+     * <p>
+     * If the value is unknown it returns {@code UNKNOWN_TO_VERSION}.
      */
     public static TypePrimitiveName from(String value) {
         if (value == null) {

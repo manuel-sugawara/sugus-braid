@@ -11,12 +11,18 @@ public final class List {
         this.aVoid = builder.aVoid;
     }
 
+    /**
+     * 
+     * @return The value of the {@code void} member
+     */
     public VoidStructure aVoid() {
         return this.aVoid;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -48,7 +54,9 @@ public final class List {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -65,13 +73,21 @@ public final class List {
         }
 
         /**
-         * <p>Sets the value for <code>aVoid</code>.</p>
+         * Sets the value for {@code aVoid}.
+         * 
+         * @param aVoid The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aVoid(VoidStructure aVoid) {
             this.aVoid = aVoid;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link List}
+         * 
+         * @return A new instance of {@link List}
+         */
         public List build() {
             return new List(this);
         }

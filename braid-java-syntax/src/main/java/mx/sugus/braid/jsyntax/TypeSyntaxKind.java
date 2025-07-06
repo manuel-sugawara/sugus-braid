@@ -3,24 +3,24 @@ package mx.sugus.braid.jsyntax;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Kind of the supported Java types</p>
+ * Kind of the supported Java types
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 public enum TypeSyntaxKind {
     /**
-     * <p>A class type</p>
+     * A class type
      */
     CLASS("class"),
     /**
-     * <p>A interface</p>
+     * A interface
      */
     INTERFACE("interface"),
     /**
-     * <p>A enum type</p>
+     * A enum type
      */
     ENUM("enum"),
     /**
-     * <p>Unknown enum constant</p>
+     * Unknown enum constant
      */
     UNKNOWN_TO_VERSION(null);
 
@@ -31,8 +31,9 @@ public enum TypeSyntaxKind {
     }
 
     /**
-     * <p>Returns the corresponding enum constant from the given value.</p>
-     * <p>If the value is unknown it returns <code>UNKNOWN_TO_VERSION</code>.</p>
+     * Returns the corresponding enum constant from the given value.
+     * <p>
+     * If the value is unknown it returns {@code UNKNOWN_TO_VERSION}.
      */
     public static TypeSyntaxKind from(String value) {
         if (value == null) {

@@ -4,7 +4,7 @@ import java.util.Objects;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents a parameter of a method.</p>
+ * Represents a parameter of a method.
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class Parameter implements SyntaxNode {
@@ -19,25 +19,46 @@ public final class Parameter implements SyntaxNode {
         this.varargs = Objects.requireNonNull(builder.varargs, "varargs");
     }
 
+    /**
+     * 
+     * @return The value of the {@code name} member
+     */
     public String name() {
         return this.name;
     }
 
+    /**
+     * 
+     * @return The value of the {@code type} member
+     */
     public TypeName type() {
         return this.type;
     }
 
+    /**
+     * 
+     * @return The value of the {@code varargs} member
+     */
     public Boolean varargs() {
         return this.varargs;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitParameter(this);
@@ -78,7 +99,9 @@ public final class Parameter implements SyntaxNode {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -100,7 +123,10 @@ public final class Parameter implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>name</code>.</p>
+         * Sets the value for {@code name}.
+         * 
+         * @param name The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder name(String name) {
             this.name = name;
@@ -108,7 +134,10 @@ public final class Parameter implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>type</code>.</p>
+         * Sets the value for {@code type}.
+         * 
+         * @param type The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder type(TypeName type) {
             this.type = type;
@@ -121,13 +150,21 @@ public final class Parameter implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>varargs</code>.</p>
+         * Sets the value for {@code varargs}.
+         * 
+         * @param varargs The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder varargs(Boolean varargs) {
             this.varargs = varargs;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link Parameter}
+         * 
+         * @return A new instance of {@link Parameter}
+         */
         public Parameter build() {
             return new Parameter(this);
         }

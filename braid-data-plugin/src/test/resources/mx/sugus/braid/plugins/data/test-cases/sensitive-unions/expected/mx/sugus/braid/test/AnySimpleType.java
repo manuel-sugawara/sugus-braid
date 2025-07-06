@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>A union of all simple types, but int is sensitive</p>
+ * A union of all simple types, but int is sensitive
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 @SuppressWarnings("unchecked")
@@ -21,7 +21,7 @@ public final class AnySimpleType {
     }
 
     /**
-     * <p>byte variant</p>
+     * byte variant
      */
     public Byte aByte() {
         if (this.variantTag == VariantTag.BYTE) {
@@ -31,7 +31,7 @@ public final class AnySimpleType {
     }
 
     /**
-     * <p>short variant</p>
+     * short variant
      */
     public Short aShort() {
         if (this.variantTag == VariantTag.SHORT) {
@@ -41,7 +41,7 @@ public final class AnySimpleType {
     }
 
     /**
-     * <p>int variant</p>
+     * int variant
      */
     public Integer anInt() {
         if (this.variantTag == VariantTag.INT) {
@@ -51,7 +51,7 @@ public final class AnySimpleType {
     }
 
     /**
-     * <p>long variant</p>
+     * long variant
      */
     public Long aLong() {
         if (this.variantTag == VariantTag.LONG) {
@@ -61,7 +61,7 @@ public final class AnySimpleType {
     }
 
     /**
-     * <p>bigInteger variant</p>
+     * bigInteger variant
      */
     public BigInteger bigInteger() {
         if (this.variantTag == VariantTag.BIG_INTEGER) {
@@ -71,7 +71,7 @@ public final class AnySimpleType {
     }
 
     /**
-     * <p>float variant</p>
+     * float variant
      */
     public Float aFloat() {
         if (this.variantTag == VariantTag.FLOAT) {
@@ -81,7 +81,7 @@ public final class AnySimpleType {
     }
 
     /**
-     * <p>double variant</p>
+     * double variant
      */
     public Double aDouble() {
         if (this.variantTag == VariantTag.DOUBLE) {
@@ -91,7 +91,7 @@ public final class AnySimpleType {
     }
 
     /**
-     * <p>bigDecimal variant</p>
+     * bigDecimal variant
      */
     public BigDecimal bigDecimal() {
         if (this.variantTag == VariantTag.BIG_DECIMAL) {
@@ -101,7 +101,7 @@ public final class AnySimpleType {
     }
 
     /**
-     * <p>string variant</p>
+     * string variant
      */
     public String string() {
         if (this.variantTag == VariantTag.STRING) {
@@ -111,7 +111,7 @@ public final class AnySimpleType {
     }
 
     /**
-     * <p>instant variant</p>
+     * instant variant
      */
     public Instant instant() {
         if (this.variantTag == VariantTag.INSTANT) {
@@ -121,23 +121,31 @@ public final class AnySimpleType {
     }
 
     /**
-     * <p>Returns an enum value representing which member of this object is populated.</p>
-     * <p>This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.</p>
+     * Returns the enum value representing which member of this object is populated.
+     * <p>
+     * This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.
+     * 
+     * @return The enum value representing which member of this object is populated
      */
     public VariantTag variantTag() {
         return this.variantTag;
     }
 
     /**
-     * <p>Returns the untyped value of the union.</p>
-     * <p>Use {@link #type()} to get the member currently set.</p>
+     * Returns the untyped value of the union.
+     * <p>
+     * Use {@link #type()} to get the member currently set.
+     * 
+     * @return The untyped value of the union.
      */
     public Object variantValue() {
         return this.variantValue;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -200,7 +208,9 @@ public final class AnySimpleType {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -246,8 +256,9 @@ public final class AnySimpleType {
         }
 
         /**
-         * <p>Sets the value for <code>aByte</code></p>
-         * <p>byte variant</p>
+         * Sets the value for {@code aByte}
+         * <p>
+         * byte variant
          */
         public Builder aByte(Byte aByte) {
             this.variantTag = VariantTag.BYTE;
@@ -256,8 +267,9 @@ public final class AnySimpleType {
         }
 
         /**
-         * <p>Sets the value for <code>aShort</code></p>
-         * <p>short variant</p>
+         * Sets the value for {@code aShort}
+         * <p>
+         * short variant
          */
         public Builder aShort(Short aShort) {
             this.variantTag = VariantTag.SHORT;
@@ -266,8 +278,9 @@ public final class AnySimpleType {
         }
 
         /**
-         * <p>Sets the value for <code>anInt</code></p>
-         * <p>int variant</p>
+         * Sets the value for {@code anInt}
+         * <p>
+         * int variant
          */
         public Builder anInt(Integer anInt) {
             this.variantTag = VariantTag.INT;
@@ -276,8 +289,9 @@ public final class AnySimpleType {
         }
 
         /**
-         * <p>Sets the value for <code>aLong</code></p>
-         * <p>long variant</p>
+         * Sets the value for {@code aLong}
+         * <p>
+         * long variant
          */
         public Builder aLong(Long aLong) {
             this.variantTag = VariantTag.LONG;
@@ -286,8 +300,9 @@ public final class AnySimpleType {
         }
 
         /**
-         * <p>Sets the value for <code>bigInteger</code></p>
-         * <p>bigInteger variant</p>
+         * Sets the value for {@code bigInteger}
+         * <p>
+         * bigInteger variant
          */
         public Builder bigInteger(BigInteger bigInteger) {
             this.variantTag = VariantTag.BIG_INTEGER;
@@ -296,8 +311,9 @@ public final class AnySimpleType {
         }
 
         /**
-         * <p>Sets the value for <code>aFloat</code></p>
-         * <p>float variant</p>
+         * Sets the value for {@code aFloat}
+         * <p>
+         * float variant
          */
         public Builder aFloat(Float aFloat) {
             this.variantTag = VariantTag.FLOAT;
@@ -306,8 +322,9 @@ public final class AnySimpleType {
         }
 
         /**
-         * <p>Sets the value for <code>aDouble</code></p>
-         * <p>double variant</p>
+         * Sets the value for {@code aDouble}
+         * <p>
+         * double variant
          */
         public Builder aDouble(Double aDouble) {
             this.variantTag = VariantTag.DOUBLE;
@@ -316,8 +333,9 @@ public final class AnySimpleType {
         }
 
         /**
-         * <p>Sets the value for <code>bigDecimal</code></p>
-         * <p>bigDecimal variant</p>
+         * Sets the value for {@code bigDecimal}
+         * <p>
+         * bigDecimal variant
          */
         public Builder bigDecimal(BigDecimal bigDecimal) {
             this.variantTag = VariantTag.BIG_DECIMAL;
@@ -326,8 +344,9 @@ public final class AnySimpleType {
         }
 
         /**
-         * <p>Sets the value for <code>string</code></p>
-         * <p>string variant</p>
+         * Sets the value for {@code string}
+         * <p>
+         * string variant
          */
         public Builder string(String string) {
             this.variantTag = VariantTag.STRING;
@@ -336,8 +355,9 @@ public final class AnySimpleType {
         }
 
         /**
-         * <p>Sets the value for <code>instant</code></p>
-         * <p>instant variant</p>
+         * Sets the value for {@code instant}
+         * <p>
+         * instant variant
          */
         public Builder instant(Instant instant) {
             this.variantTag = VariantTag.INSTANT;

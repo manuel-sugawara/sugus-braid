@@ -11,12 +11,18 @@ public final class Map {
         this.member = builder.member;
     }
 
+    /**
+     * 
+     * @return The value of the {@code member} member
+     */
     public List member() {
         return this.member;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -48,7 +54,9 @@ public final class Map {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -65,13 +73,21 @@ public final class Map {
         }
 
         /**
-         * <p>Sets the value for <code>member</code>.</p>
+         * Sets the value for {@code member}.
+         * 
+         * @param member The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder member(List member) {
             this.member = member;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link Map}
+         * 
+         * @return A new instance of {@link Map}
+         */
         public Map build() {
             return new Map(this);
         }

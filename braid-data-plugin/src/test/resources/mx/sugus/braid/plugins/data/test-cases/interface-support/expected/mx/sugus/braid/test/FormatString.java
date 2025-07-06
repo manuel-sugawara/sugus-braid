@@ -4,7 +4,7 @@ import java.util.Objects;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Format string</p>
+ * Format string
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 public final class FormatString implements Format {
@@ -19,14 +19,18 @@ public final class FormatString implements Format {
     }
 
     /**
-     * <p>The string value</p>
+     * The string value
+     * 
+     * @return The value of the {@code value} member
      */
     public String value() {
         return this.value;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -60,7 +64,9 @@ public final class FormatString implements Format {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -77,14 +83,21 @@ public final class FormatString implements Format {
         }
 
         /**
-         * <p>Sets the value for <code>value</code>.</p>
-         * <p>The string value</p>
+         * Sets the value for {@code value}.
+         * 
+         * @param value The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder value(String value) {
             this.value = value;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link FormatString}
+         * 
+         * @return A new instance of {@link FormatString}
+         */
         public FormatString build() {
             return new FormatString(this);
         }

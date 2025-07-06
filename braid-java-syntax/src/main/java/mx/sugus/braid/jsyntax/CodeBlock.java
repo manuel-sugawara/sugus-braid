@@ -6,7 +6,7 @@ import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
-public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statement, Javadoc {
+public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statement {
     private final List<FormatterNode> parts;
 
     private CodeBlock(Builder builder) {
@@ -17,17 +17,30 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
         return StatementKind.FORMAT;
     }
 
+    /**
+     * 
+     * @return The value of the {@code parts} member
+     */
     public List<FormatterNode> parts() {
         return this.parts;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitCodeBlock(this);
@@ -61,7 +74,9 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -71,7 +86,7 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
         return builder().parts(FormatParser.parseFormat(format, args)).build();
     }
 
-    public static final class Builder implements SyntaxNode.Builder, Expression.Builder, EnumBody.Builder, Statement.Builder, Javadoc.Builder {
+    public static final class Builder implements SyntaxNode.Builder, Expression.Builder, EnumBody.Builder, Statement.Builder {
         private CollectionBuilderReference<List<FormatterNode>> parts;
 
         Builder() {
@@ -83,7 +98,10 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
         }
 
         /**
-         * <p>Sets the value for <code>parts</code>.</p>
+         * Sets the value for {@code parts}.
+         * 
+         * @param parts The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder parts(List<FormatterNode> parts) {
             this.parts.clear();
@@ -92,7 +110,7 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
         }
 
         /**
-         * <p>Adds a single value for <code>parts</code>.</p>
+         * Adds a single value for {@code parts}.
          */
         public Builder addPart(FormatterNode part) {
             this.parts.asTransient().add(part);
@@ -100,13 +118,18 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
         }
 
         /**
-         * <p>Adds the formatted code to the block builder</p>
+         * Adds the formatted code to the block builder
          */
         public Builder addCode(String format, Object... args) {
             this.parts.asTransient().addAll(FormatParser.parseFormat(format, args));
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link CodeBlock}
+         * 
+         * @return A new instance of {@link CodeBlock}
+         */
         public CodeBlock build() {
             return new CodeBlock(this);
         }

@@ -26,40 +26,74 @@ public final class DefaultValues {
         this.string = Objects.requireNonNull(builder.string, "string");
     }
 
+    /**
+     * 
+     * @return The value of the {@code boolean} member
+     */
     public Boolean aBoolean() {
         return this.aBoolean;
     }
 
+    /**
+     * 
+     * @return The value of the {@code byte} member
+     */
     public Byte aByte() {
         return this.aByte;
     }
 
+    /**
+     * 
+     * @return The value of the {@code short} member
+     */
     public Short aShort() {
         return this.aShort;
     }
 
+    /**
+     * 
+     * @return The value of the {@code int} member
+     */
     public Integer anInt() {
         return this.anInt;
     }
 
+    /**
+     * 
+     * @return The value of the {@code long} member
+     */
     public Long aLong() {
         return this.aLong;
     }
 
+    /**
+     * 
+     * @return The value of the {@code float} member
+     */
     public Float aFloat() {
         return this.aFloat;
     }
 
+    /**
+     * 
+     * @return The value of the {@code double} member
+     */
     public Double aDouble() {
         return this.aDouble;
     }
 
+    /**
+     * 
+     * @return The value of the {@code string} member
+     */
     public String string() {
         return this.string;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -115,7 +149,9 @@ public final class DefaultValues {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -154,7 +190,10 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>aBoolean</code>.</p>
+         * Sets the value for {@code aBoolean}.
+         * 
+         * @param aBoolean The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aBoolean(Boolean aBoolean) {
             this.aBoolean = aBoolean;
@@ -162,7 +201,10 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>aByte</code>.</p>
+         * Sets the value for {@code aByte}.
+         * 
+         * @param aByte The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aByte(Byte aByte) {
             this.aByte = aByte;
@@ -170,7 +212,10 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>aShort</code>.</p>
+         * Sets the value for {@code aShort}.
+         * 
+         * @param aShort The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aShort(Short aShort) {
             this.aShort = aShort;
@@ -178,7 +223,10 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>anInt</code>.</p>
+         * Sets the value for {@code anInt}.
+         * 
+         * @param anInt The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder anInt(Integer anInt) {
             this.anInt = anInt;
@@ -186,7 +234,10 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>aLong</code>.</p>
+         * Sets the value for {@code aLong}.
+         * 
+         * @param aLong The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aLong(Long aLong) {
             this.aLong = aLong;
@@ -194,7 +245,10 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>aFloat</code>.</p>
+         * Sets the value for {@code aFloat}.
+         * 
+         * @param aFloat The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aFloat(Float aFloat) {
             this.aFloat = aFloat;
@@ -202,7 +256,10 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>aDouble</code>.</p>
+         * Sets the value for {@code aDouble}.
+         * 
+         * @param aDouble The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aDouble(Double aDouble) {
             this.aDouble = aDouble;
@@ -210,13 +267,21 @@ public final class DefaultValues {
         }
 
         /**
-         * <p>Sets the value for <code>string</code>.</p>
+         * Sets the value for {@code string}.
+         * 
+         * @param string The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder string(String string) {
             this.string = string;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link DefaultValues}
+         * 
+         * @return A new instance of {@link DefaultValues}
+         */
         public DefaultValues build() {
             return new DefaultValues(this);
         }

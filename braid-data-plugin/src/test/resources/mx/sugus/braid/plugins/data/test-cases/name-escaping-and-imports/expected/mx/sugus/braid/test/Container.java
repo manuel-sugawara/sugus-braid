@@ -22,32 +22,58 @@ public final class Container {
         this.objects = builder.objects;
     }
 
+    /**
+     * 
+     * @return The value of the {@code list} member
+     */
     public List list() {
         return this.list;
     }
 
+    /**
+     * 
+     * @return The value of the {@code const} member
+     */
     public String aConst() {
         return this.aConst;
     }
 
+    /**
+     * 
+     * @return The value of the {@code listOfLists} member
+     */
     public java.util.List<List> listOfLists() {
         return this.listOfLists;
     }
 
+    /**
+     * 
+     * @return The value of the {@code mapOfMaps} member
+     */
     public java.util.Map<String, Map> mapOfMaps() {
         return this.mapOfMaps;
     }
 
+    /**
+     * 
+     * @return The value of the {@code object} member
+     */
     public ObjectStructure object() {
         return this.object;
     }
 
+    /**
+     * 
+     * @return The value of the {@code objects} member
+     */
     public Objects objects() {
         return this.objects;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -97,7 +123,9 @@ public final class Container {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -126,7 +154,10 @@ public final class Container {
         }
 
         /**
-         * <p>Sets the value for <code>list</code>.</p>
+         * Sets the value for {@code list}.
+         * 
+         * @param list The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder list(List list) {
             this.list = list;
@@ -134,7 +165,10 @@ public final class Container {
         }
 
         /**
-         * <p>Sets the value for <code>aConst</code>.</p>
+         * Sets the value for {@code aConst}.
+         * 
+         * @param aConst The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aConst(String aConst) {
             this.aConst = aConst;
@@ -142,7 +176,10 @@ public final class Container {
         }
 
         /**
-         * <p>Sets the value for <code>listOfLists</code>.</p>
+         * Sets the value for {@code listOfLists}.
+         * 
+         * @param listOfLists The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder listOfLists(java.util.List<List> listOfLists) {
             this.listOfLists.clear();
@@ -151,7 +188,7 @@ public final class Container {
         }
 
         /**
-         * <p>Adds a single value for <code>listOfLists</code>.</p>
+         * Adds a single value for {@code listOfLists}.
          */
         public Builder addListOfList(List listOfList) {
             this.listOfLists.asTransient().add(listOfList);
@@ -159,7 +196,10 @@ public final class Container {
         }
 
         /**
-         * <p>Sets the value for <code>mapOfMaps</code>.</p>
+         * Sets the value for {@code mapOfMaps}.
+         * 
+         * @param mapOfMaps The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder mapOfMaps(java.util.Map<String, Map> mapOfMaps) {
             this.mapOfMaps.clear();
@@ -167,13 +207,23 @@ public final class Container {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code mapOfMaps} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param mapOfMap The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putMapOfMap(String key, Map mapOfMap) {
             this.mapOfMaps.asTransient().put(key, mapOfMap);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>object</code>.</p>
+         * Sets the value for {@code object}.
+         * 
+         * @param object The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder object(ObjectStructure object) {
             this.object = object;
@@ -181,13 +231,21 @@ public final class Container {
         }
 
         /**
-         * <p>Sets the value for <code>objects</code>.</p>
+         * Sets the value for {@code objects}.
+         * 
+         * @param objects The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder objects(Objects objects) {
             this.objects = objects;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link Container}
+         * 
+         * @return A new instance of {@link Container}
+         */
         public Container build() {
             return new Container(this);
         }

@@ -36,7 +36,8 @@ public class JavaSyntaxModelPlugin implements SmithyGeneratorPlugin<ObjectNode> 
 
     static CodegenModuleConfig.Builder newBaseConfig() {
         var builder = CodegenModuleConfig.builder()
-                                         .addTransformer(new BlockBuilderTransformer());
+                                         .addTransformer(new BlockBuilderTransformer())
+                                         .addTransformer(new JavadocBuilderTransform());
         return builder;
     }
 }

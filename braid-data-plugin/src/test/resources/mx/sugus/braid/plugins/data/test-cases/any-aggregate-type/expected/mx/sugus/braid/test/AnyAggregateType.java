@@ -9,7 +9,7 @@ import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>A union of all aggregate types.</p>
+ * A union of all aggregate types.
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 @SuppressWarnings("unchecked")
@@ -23,7 +23,7 @@ public final class AnyAggregateType {
     }
 
     /**
-     * <p>structure member</p>
+     * structure member
      */
     public AllSimpleTypes structure() {
         if (this.variantTag == VariantTag.STRUCTURE) {
@@ -33,7 +33,7 @@ public final class AnyAggregateType {
     }
 
     /**
-     * <p>union member</p>
+     * union member
      */
     public AnySimpleType union() {
         if (this.variantTag == VariantTag.UNION) {
@@ -43,7 +43,7 @@ public final class AnyAggregateType {
     }
 
     /**
-     * <p>list member</p>
+     * list member
      */
     public List<AllSimpleTypes> list() {
         if (this.variantTag == VariantTag.LIST) {
@@ -53,7 +53,7 @@ public final class AnyAggregateType {
     }
 
     /**
-     * <p>map member</p>
+     * map member
      */
     public Map<String, AnySimpleType> map() {
         if (this.variantTag == VariantTag.MAP) {
@@ -63,23 +63,31 @@ public final class AnyAggregateType {
     }
 
     /**
-     * <p>Returns an enum value representing which member of this object is populated.</p>
-     * <p>This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.</p>
+     * Returns the enum value representing which member of this object is populated.
+     * <p>
+     * This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.
+     * 
+     * @return The enum value representing which member of this object is populated
      */
     public VariantTag variantTag() {
         return this.variantTag;
     }
 
     /**
-     * <p>Returns the untyped value of the union.</p>
-     * <p>Use {@link #type()} to get the member currently set.</p>
+     * Returns the untyped value of the union.
+     * <p>
+     * Use {@link #type()} to get the member currently set.
+     * 
+     * @return The untyped value of the union.
      */
     public Object variantValue() {
         return this.variantValue;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -124,7 +132,9 @@ public final class AnyAggregateType {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -176,8 +186,9 @@ public final class AnyAggregateType {
         }
 
         /**
-         * <p>Sets the value for <code>structure</code></p>
-         * <p>structure member</p>
+         * Sets the value for {@code structure}
+         * <p>
+         * structure member
          */
         public Builder structure(AllSimpleTypes structure) {
             structure().setPersistent(structure);
@@ -201,8 +212,9 @@ public final class AnyAggregateType {
         }
 
         /**
-         * <p>Sets the value for <code>union</code></p>
-         * <p>union member</p>
+         * Sets the value for {@code union}
+         * <p>
+         * union member
          */
         public Builder union(AnySimpleType union) {
             this.variantTag = VariantTag.UNION;
@@ -222,8 +234,9 @@ public final class AnyAggregateType {
         }
 
         /**
-         * <p>Sets the value for <code>list</code></p>
-         * <p>list member</p>
+         * Sets the value for {@code list}
+         * <p>
+         * list member
          */
         public Builder list(List<AllSimpleTypes> list) {
             CollectionBuilderReference<List<AllSimpleTypes>> tmp = list();
@@ -233,7 +246,7 @@ public final class AnyAggregateType {
         }
 
         /**
-         * <p>Adds a single value for <code>list</code></p>
+         * Adds a single value for {@code list}
          */
         public Builder addList(AllSimpleTypes list) {
             list().asTransient().add(list);
@@ -252,8 +265,9 @@ public final class AnyAggregateType {
         }
 
         /**
-         * <p>Sets the value for <code>map</code></p>
-         * <p>map member</p>
+         * Sets the value for {@code map}
+         * <p>
+         * map member
          */
         public Builder map(Map<String, AnySimpleType> map) {
             CollectionBuilderReference<Map<String, AnySimpleType>> tmp = map();

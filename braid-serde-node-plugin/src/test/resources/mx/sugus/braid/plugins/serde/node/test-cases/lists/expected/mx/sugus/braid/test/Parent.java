@@ -53,68 +53,130 @@ public final class Parent implements ToNode {
         this.nestedNestedIntegers = Objects.requireNonNull(builder.nestedNestedIntegers.asPersistent(), "nestedNestedIntegers");
     }
 
+    /**
+     * 
+     * @return The value of the {@code stringMember} member
+     */
     public String stringMember() {
         return this.stringMember;
     }
 
+    /**
+     * 
+     * @return The value of the {@code children} member
+     */
     public List<Child> children() {
         return this.children;
     }
 
+    /**
+     * 
+     * @return The value of the {@code booleans} member
+     */
     public List<Boolean> booleans() {
         return this.booleans;
     }
 
+    /**
+     * 
+     * @return The value of the {@code bytes} member
+     */
     public List<Byte> bytes() {
         return this.bytes;
     }
 
+    /**
+     * 
+     * @return The value of the {@code shorts} member
+     */
     public List<Short> shorts() {
         return this.shorts;
     }
 
+    /**
+     * 
+     * @return The value of the {@code integers} member
+     */
     public List<Integer> integers() {
         return this.integers;
     }
 
+    /**
+     * 
+     * @return The value of the {@code bigIntegers} member
+     */
     public List<BigInteger> bigIntegers() {
         return this.bigIntegers;
     }
 
+    /**
+     * 
+     * @return The value of the {@code longs} member
+     */
     public List<Long> longs() {
         return this.longs;
     }
 
+    /**
+     * 
+     * @return The value of the {@code floats} member
+     */
     public List<Float> floats() {
         return this.floats;
     }
 
+    /**
+     * 
+     * @return The value of the {@code doubles} member
+     */
     public List<Double> doubles() {
         return this.doubles;
     }
 
+    /**
+     * 
+     * @return The value of the {@code strings} member
+     */
     public List<String> strings() {
         return this.strings;
     }
 
+    /**
+     * 
+     * @return The value of the {@code bigDecimals} member
+     */
     public List<BigDecimal> bigDecimals() {
         return this.bigDecimals;
     }
 
+    /**
+     * 
+     * @return The value of the {@code enumValues} member
+     */
     public List<EnumValue> enumValues() {
         return this.enumValues;
     }
 
+    /**
+     * 
+     * @return The value of the {@code nestedIntegers} member
+     */
     public List<List<Integer>> nestedIntegers() {
         return this.nestedIntegers;
     }
 
+    /**
+     * 
+     * @return The value of the {@code nestedNestedIntegers} member
+     */
     public List<List<List<Integer>>> nestedNestedIntegers() {
         return this.nestedNestedIntegers;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -191,14 +253,16 @@ public final class Parent implements ToNode {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
     }
 
     /**
-     * <p>Converts this instance to Node.</p>
+     * Converts this instance to Node.
      */
     @Override
     public Node toNode() {
@@ -320,14 +384,14 @@ public final class Parent implements ToNode {
     }
 
     /**
-     * <p>Converts a {@link Node} to Parent.</p>
+     * Converts a {@link Node} to Parent.
      */
     public static Parent fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * <p>Converts a {@link Node} to Parent.</p>
+     * Converts a {@link Node} to Parent.
      */
     public static Parent fromNode(Validation validator, Node node) {
         validator = validator.with("Parent");
@@ -483,7 +547,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>stringMember</code>.</p>
+         * Sets the value for {@code stringMember}.
+         * 
+         * @param stringMember The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder stringMember(String stringMember) {
             this.stringMember = stringMember;
@@ -491,7 +558,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>children</code>.</p>
+         * Sets the value for {@code children}.
+         * 
+         * @param children The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder children(List<Child> children) {
             this.children.clear();
@@ -500,7 +570,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>children</code>.</p>
+         * Adds a single value for {@code children}.
          */
         public Builder addChildren(Child children) {
             this.children.asTransient().add(children);
@@ -508,7 +578,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>booleans</code>.</p>
+         * Sets the value for {@code booleans}.
+         * 
+         * @param booleans The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder booleans(List<Boolean> booleans) {
             this.booleans.clear();
@@ -517,7 +590,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>booleans</code>.</p>
+         * Adds a single value for {@code booleans}.
          */
         public Builder addBoolean(Boolean aBoolean) {
             this.booleans.asTransient().add(aBoolean);
@@ -525,7 +598,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>bytes</code>.</p>
+         * Sets the value for {@code bytes}.
+         * 
+         * @param bytes The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder bytes(List<Byte> bytes) {
             this.bytes.clear();
@@ -534,7 +610,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>bytes</code>.</p>
+         * Adds a single value for {@code bytes}.
          */
         public Builder addByte(Byte aByte) {
             this.bytes.asTransient().add(aByte);
@@ -542,7 +618,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>shorts</code>.</p>
+         * Sets the value for {@code shorts}.
+         * 
+         * @param shorts The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder shorts(List<Short> shorts) {
             this.shorts.clear();
@@ -551,7 +630,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>shorts</code>.</p>
+         * Adds a single value for {@code shorts}.
          */
         public Builder addShort(Short aShort) {
             this.shorts.asTransient().add(aShort);
@@ -559,7 +638,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>integers</code>.</p>
+         * Sets the value for {@code integers}.
+         * 
+         * @param integers The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder integers(List<Integer> integers) {
             this.integers.clear();
@@ -568,7 +650,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>integers</code>.</p>
+         * Adds a single value for {@code integers}.
          */
         public Builder addInteger(Integer integer) {
             this.integers.asTransient().add(integer);
@@ -576,7 +658,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>bigIntegers</code>.</p>
+         * Sets the value for {@code bigIntegers}.
+         * 
+         * @param bigIntegers The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder bigIntegers(List<BigInteger> bigIntegers) {
             this.bigIntegers.clear();
@@ -585,7 +670,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>bigIntegers</code>.</p>
+         * Adds a single value for {@code bigIntegers}.
          */
         public Builder addBigInteger(BigInteger bigInteger) {
             this.bigIntegers.asTransient().add(bigInteger);
@@ -593,7 +678,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>longs</code>.</p>
+         * Sets the value for {@code longs}.
+         * 
+         * @param longs The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder longs(List<Long> longs) {
             this.longs.clear();
@@ -602,7 +690,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>longs</code>.</p>
+         * Adds a single value for {@code longs}.
          */
         public Builder addLong(Long aLong) {
             this.longs.asTransient().add(aLong);
@@ -610,7 +698,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>floats</code>.</p>
+         * Sets the value for {@code floats}.
+         * 
+         * @param floats The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder floats(List<Float> floats) {
             this.floats.clear();
@@ -619,7 +710,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>floats</code>.</p>
+         * Adds a single value for {@code floats}.
          */
         public Builder addFloat(Float aFloat) {
             this.floats.asTransient().add(aFloat);
@@ -627,7 +718,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>doubles</code>.</p>
+         * Sets the value for {@code doubles}.
+         * 
+         * @param doubles The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder doubles(List<Double> doubles) {
             this.doubles.clear();
@@ -636,7 +730,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>doubles</code>.</p>
+         * Adds a single value for {@code doubles}.
          */
         public Builder addDouble(Double aDouble) {
             this.doubles.asTransient().add(aDouble);
@@ -644,7 +738,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>strings</code>.</p>
+         * Sets the value for {@code strings}.
+         * 
+         * @param strings The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder strings(List<String> strings) {
             this.strings.clear();
@@ -653,7 +750,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>strings</code>.</p>
+         * Adds a single value for {@code strings}.
          */
         public Builder addString(String string) {
             this.strings.asTransient().add(string);
@@ -661,7 +758,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>bigDecimals</code>.</p>
+         * Sets the value for {@code bigDecimals}.
+         * 
+         * @param bigDecimals The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder bigDecimals(List<BigDecimal> bigDecimals) {
             this.bigDecimals.clear();
@@ -670,7 +770,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>bigDecimals</code>.</p>
+         * Adds a single value for {@code bigDecimals}.
          */
         public Builder addBigDecimal(BigDecimal bigDecimal) {
             this.bigDecimals.asTransient().add(bigDecimal);
@@ -678,7 +778,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>enumValues</code>.</p>
+         * Sets the value for {@code enumValues}.
+         * 
+         * @param enumValues The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder enumValues(List<EnumValue> enumValues) {
             this.enumValues.clear();
@@ -687,7 +790,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>enumValues</code>.</p>
+         * Adds a single value for {@code enumValues}.
          */
         public Builder addEnumValue(EnumValue enumValue) {
             this.enumValues.asTransient().add(enumValue);
@@ -695,7 +798,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>nestedIntegers</code>.</p>
+         * Sets the value for {@code nestedIntegers}.
+         * 
+         * @param nestedIntegers The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder nestedIntegers(List<List<Integer>> nestedIntegers) {
             this.nestedIntegers.clear();
@@ -704,7 +810,7 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>nestedIntegers</code>.</p>
+         * Adds a single value for {@code nestedIntegers}.
          */
         public Builder addNestedInteger(List<Integer> nestedInteger) {
             this.nestedIntegers.asTransient().add(nestedInteger);
@@ -712,7 +818,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>nestedNestedIntegers</code>.</p>
+         * Sets the value for {@code nestedNestedIntegers}.
+         * 
+         * @param nestedNestedIntegers The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder nestedNestedIntegers(List<List<List<Integer>>> nestedNestedIntegers) {
             this.nestedNestedIntegers.clear();
@@ -721,13 +830,18 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>nestedNestedIntegers</code>.</p>
+         * Adds a single value for {@code nestedNestedIntegers}.
          */
         public Builder addNestedNestedInteger(List<List<Integer>> nestedNestedInteger) {
             this.nestedNestedIntegers.asTransient().add(nestedNestedInteger);
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link Parent}
+         * 
+         * @return A new instance of {@link Parent}
+         */
         public Parent build() {
             return new Parent(this);
         }

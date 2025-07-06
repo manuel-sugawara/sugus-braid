@@ -6,7 +6,7 @@ import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents a wildcard type name.</p>
+ * Represents a wildcard type name.
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class WildcardTypeName implements TypeName {
@@ -25,25 +25,46 @@ public final class WildcardTypeName implements TypeName {
         return TypeKind.WILDCARD;
     }
 
+    /**
+     * 
+     * @return The value of the {@code rawType} member
+     */
     public ClassName rawType() {
         return this.rawType;
     }
 
+    /**
+     * 
+     * @return The value of the {@code upperBounds} member
+     */
     public List<TypeName> upperBounds() {
         return this.upperBounds;
     }
 
+    /**
+     * 
+     * @return The value of the {@code lowerBounds} member
+     */
     public List<TypeName> lowerBounds() {
         return this.lowerBounds;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitWildcardTypeName(this);
@@ -86,7 +107,9 @@ public final class WildcardTypeName implements TypeName {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -109,7 +132,10 @@ public final class WildcardTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>rawType</code>.</p>
+         * Sets the value for {@code rawType}.
+         * 
+         * @param rawType The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder rawType(ClassName rawType) {
             this.rawType = rawType;
@@ -117,7 +143,10 @@ public final class WildcardTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>upperBounds</code>.</p>
+         * Sets the value for {@code upperBounds}.
+         * 
+         * @param upperBounds The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder upperBounds(List<TypeName> upperBounds) {
             this.upperBounds.clear();
@@ -126,7 +155,7 @@ public final class WildcardTypeName implements TypeName {
         }
 
         /**
-         * <p>Adds a single value for <code>upperBounds</code>.</p>
+         * Adds a single value for {@code upperBounds}.
          */
         public Builder addUpperBound(TypeName upperBound) {
             this.upperBounds.asTransient().add(upperBound);
@@ -134,7 +163,7 @@ public final class WildcardTypeName implements TypeName {
         }
 
         /**
-         * <p>Creates a new TypeName instance out of the given class.</p>
+         * Creates a new TypeName instance out of the given class.
          */
         public Builder addUpperBound(Class<?> kclass) {
             this.upperBounds.asTransient().add(TypeName.from(kclass));
@@ -142,7 +171,10 @@ public final class WildcardTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>lowerBounds</code>.</p>
+         * Sets the value for {@code lowerBounds}.
+         * 
+         * @param lowerBounds The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder lowerBounds(List<TypeName> lowerBounds) {
             this.lowerBounds.clear();
@@ -151,7 +183,7 @@ public final class WildcardTypeName implements TypeName {
         }
 
         /**
-         * <p>Adds a single value for <code>lowerBounds</code>.</p>
+         * Adds a single value for {@code lowerBounds}.
          */
         public Builder addLowerBound(TypeName lowerBound) {
             this.lowerBounds.asTransient().add(lowerBound);
@@ -159,13 +191,18 @@ public final class WildcardTypeName implements TypeName {
         }
 
         /**
-         * <p>Creates a new TypeName instance out of the given class.</p>
+         * Creates a new TypeName instance out of the given class.
          */
         public Builder addLowerBound(Class<?> kclass) {
             this.lowerBounds.asTransient().add(TypeName.from(kclass));
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link WildcardTypeName}
+         * 
+         * @return A new instance of {@link WildcardTypeName}
+         */
         public WildcardTypeName build() {
             return new WildcardTypeName(this);
         }

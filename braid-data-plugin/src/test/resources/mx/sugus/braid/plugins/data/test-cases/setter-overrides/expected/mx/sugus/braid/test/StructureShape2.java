@@ -4,7 +4,7 @@ import java.util.Objects;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>A simple structure shape two</p>
+ * A simple structure shape two
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 public final class StructureShape2 {
@@ -16,16 +16,26 @@ public final class StructureShape2 {
         this.shapeOne = builder.shapeOne;
     }
 
+    /**
+     * 
+     * @return The value of the {@code name} member
+     */
     public String name() {
         return this.name;
     }
 
+    /**
+     * 
+     * @return The value of the {@code shapeOne} member
+     */
     public StructureShape1 shapeOne() {
         return this.shapeOne;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -60,7 +70,9 @@ public final class StructureShape2 {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -79,7 +91,10 @@ public final class StructureShape2 {
         }
 
         /**
-         * <p>Sets the value for <code>name</code>.</p>
+         * Sets the value for {@code name}.
+         * 
+         * @param name The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder name(String name) {
             this.name = name;
@@ -87,7 +102,10 @@ public final class StructureShape2 {
         }
 
         /**
-         * <p>Sets the value for <code>shapeOne</code>.</p>
+         * Sets the value for {@code shapeOne}.
+         * 
+         * @param shapeOne The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder shapeOne(StructureShape1 shapeOne) {
             this.shapeOne = shapeOne;
@@ -99,6 +117,11 @@ public final class StructureShape2 {
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link StructureShape2}
+         * 
+         * @return A new instance of {@link StructureShape2}
+         */
         public StructureShape2 build() {
             return new StructureShape2(this);
         }

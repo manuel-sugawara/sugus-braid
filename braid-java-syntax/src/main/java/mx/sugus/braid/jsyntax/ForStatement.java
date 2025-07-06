@@ -8,7 +8,7 @@ import mx.sugus.braid.rt.util.BuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents an <code>for</code> statement.</p>
+ * Represents an {@code for} statement.
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class ForStatement implements Statement {
@@ -25,27 +25,41 @@ public final class ForStatement implements Statement {
     }
 
     /**
-     * <p>Represents the initialization block of the <code>for</code> statement.</p>
-     * <p>Accommodates traditional <code>for</code> and enhanced <code>for</code> statements.</p>
+     * Represents the initialization block of the {@code for} statement.
+     * <p>
+     * Accommodates traditional {@code for} and enhanced {@code for} statements.
+     * 
+     * @return The value of the {@code initializer} member
      */
     public CodeBlock initializer() {
         return this.initializer;
     }
 
     /**
-     * <p>The body of the <code>for</code> statement.</p>
+     * The body of the {@code for} statement.
+     * 
+     * @return The value of the {@code statement} member
      */
     public Block statement() {
         return this.statement;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitForStatement(this);
@@ -82,7 +96,9 @@ public final class ForStatement implements Statement {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -102,9 +118,10 @@ public final class ForStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>initializer</code>.</p>
-         * <p>Represents the initialization block of the <code>for</code> statement.</p>
-         * <p>Accommodates traditional <code>for</code> and enhanced <code>for</code> statements.</p>
+         * Sets the value for {@code initializer}.
+         * 
+         * @param initializer The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder initializer(CodeBlock initializer) {
             this.initializer = initializer;
@@ -117,8 +134,10 @@ public final class ForStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>statement</code>.</p>
-         * <p>The body of the <code>for</code> statement.</p>
+         * Sets the value for {@code statement}.
+         * 
+         * @param statement The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder statement(Block statement) {
             this.statement.setPersistent(statement);
@@ -170,6 +189,11 @@ public final class ForStatement implements Statement {
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link ForStatement}
+         * 
+         * @return A new instance of {@link ForStatement}
+         */
         public ForStatement build() {
             return new ForStatement(this);
         }

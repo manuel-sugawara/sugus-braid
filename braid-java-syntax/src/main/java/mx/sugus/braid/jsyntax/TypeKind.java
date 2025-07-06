@@ -3,36 +3,36 @@ package mx.sugus.braid.jsyntax;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Kind of the supported Java types</p>
+ * Kind of the supported Java types
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 public enum TypeKind {
     /**
-     * <p>A primitive type</p>
+     * A primitive type
      */
     PRIMITIVE("primitive"),
     /**
-     * <p>A Java Class type</p>
+     * A Java Class type
      */
     CLASS("class"),
     /**
-     * <p>An array type</p>
+     * An array type
      */
     ARRAY("array"),
     /**
-     * <p>A generic Java class</p>
+     * A generic Java class
      */
     PARAMETERIZED("parameterized"),
     /**
-     * <p>A type variable</p>
+     * A type variable
      */
     TYPE_VARIABLE("type-variable"),
     /**
-     * <p>A wildcard type bound</p>
+     * A wildcard type bound
      */
     WILDCARD("wildcard"),
     /**
-     * <p>Unknown enum constant</p>
+     * Unknown enum constant
      */
     UNKNOWN_TO_VERSION(null);
 
@@ -43,8 +43,9 @@ public enum TypeKind {
     }
 
     /**
-     * <p>Returns the corresponding enum constant from the given value.</p>
-     * <p>If the value is unknown it returns <code>UNKNOWN_TO_VERSION</code>.</p>
+     * Returns the corresponding enum constant from the given value.
+     * <p>
+     * If the value is unknown it returns {@code UNKNOWN_TO_VERSION}.
      */
     public static TypeKind from(String value) {
         if (value == null) {

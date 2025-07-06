@@ -12,7 +12,7 @@ import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents a constructor method</p>
+ * Represents a constructor method
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class ConstructorMethodSyntax implements BaseMethodSyntax {
@@ -35,45 +35,66 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         return MethodKind.CONSTRUCTOR;
     }
 
+    /**
+     * 
+     * @return The value of the {@code body} member
+     */
     public Block body() {
         return this.body;
     }
 
     /**
-     * <p>The javadoc for the type.</p>
+     * The javadoc for the type.
+     * 
+     * @return The value of the {@code javadoc} member
      */
     public Javadoc javadoc() {
         return this.javadoc;
     }
 
     /**
-     * <p>A list of annotations for this method</p>
+     * A list of annotations for this method
+     * 
+     * @return The value of the {@code annotations} member
      */
     public List<Annotation> annotations() {
         return this.annotations;
     }
 
     /**
-     * <p>A list of modifiers for this method</p>
+     * A list of modifiers for this method
+     * 
+     * @return The value of the {@code modifiers} member
      */
     public Set<Modifier> modifiers() {
         return this.modifiers;
     }
 
     /**
-     * <p>A list of parameters method</p>
+     * A list of parameters method
+     * 
+     * @return The value of the {@code parameters} member
      */
     public List<Parameter> parameters() {
         return this.parameters;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitConstructorMethodSyntax(this);
@@ -122,7 +143,9 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -156,7 +179,10 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>body</code>.</p>
+         * Sets the value for {@code body}.
+         * 
+         * @param body The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder body(Block body) {
             this.body.setPersistent(body);
@@ -209,22 +235,21 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>javadoc</code>.</p>
-         * <p>The javadoc for the type.</p>
+         * Sets the value for {@code javadoc}.
+         * 
+         * @param javadoc The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder javadoc(Javadoc javadoc) {
             this.javadoc = javadoc;
             return this;
         }
 
-        public Builder javadoc(String format, Object... args) {
-            this.javadoc = CodeBlock.from(format, args);
-            return this;
-        }
-
         /**
-         * <p>Sets the value for <code>annotations</code>.</p>
-         * <p>A list of annotations for this method</p>
+         * Sets the value for {@code annotations}.
+         * 
+         * @param annotations The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder annotations(List<Annotation> annotations) {
             this.annotations.clear();
@@ -233,7 +258,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Adds a single value for <code>annotations</code>.</p>
+         * Adds a single value for {@code annotations}.
          */
         public Builder addAnnotation(Annotation annotation) {
             this.annotations.asTransient().add(annotation);
@@ -241,7 +266,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Adds to <code>annotations</code> building the value using the given arguments</p>
+         * Adds to {@code annotations} building the value using the given arguments
          */
         public Builder addAnnotation(ClassName type) {
             this.annotations.asTransient().add(Annotation.builder(type).build());
@@ -249,7 +274,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Adds to <code>annotations</code> building the value using the given arguments</p>
+         * Adds to {@code annotations} building the value using the given arguments
          */
         public Builder addAnnotation(Class<?> kclass) {
             this.annotations.asTransient().add(Annotation.builder(kclass).build());
@@ -257,8 +282,10 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>modifiers</code>.</p>
-         * <p>A list of modifiers for this method</p>
+         * Sets the value for {@code modifiers}.
+         * 
+         * @param modifiers The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder modifiers(Set<Modifier> modifiers) {
             this.modifiers.clear();
@@ -267,7 +294,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Adds a single value for <code>modifiers</code>.</p>
+         * Adds a single value for {@code modifiers}.
          */
         public Builder addModifier(Modifier modifier) {
             this.modifiers.asTransient().add(modifier);
@@ -275,7 +302,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Adds the given values to <code>modifiers</code></p>
+         * Adds the given values to {@code modifiers}
          */
         public Builder addModifiers(Modifier modifier1, Modifier modifier2) {
             this.modifiers.asTransient().add(modifier1);
@@ -284,7 +311,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Adds the given values to <code>modifiers</code></p>
+         * Adds the given values to {@code modifiers}
          */
         public Builder addModifiers(Modifier modifier1, Modifier modifier2, Modifier modifier3) {
             this.modifiers.asTransient().add(modifier1);
@@ -294,8 +321,10 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>parameters</code>.</p>
-         * <p>A list of parameters method</p>
+         * Sets the value for {@code parameters}.
+         * 
+         * @param parameters The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder parameters(List<Parameter> parameters) {
             this.parameters.clear();
@@ -304,7 +333,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Adds a single value for <code>parameters</code>.</p>
+         * Adds a single value for {@code parameters}.
          */
         public Builder addParameter(Parameter parameter) {
             this.parameters.asTransient().add(parameter);
@@ -312,7 +341,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Adds to <code>parameters</code> building the value using the given arguments</p>
+         * Adds to {@code parameters} building the value using the given arguments
          */
         public Builder addParameter(Class<?> kclass, String name) {
             this.parameters.asTransient().add(Parameter.builder().name(name).type(TypeName.from(kclass)).build());
@@ -320,13 +349,18 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Adds to <code>parameters</code> building the value using the given arguments</p>
+         * Adds to {@code parameters} building the value using the given arguments
          */
         public Builder addParameter(TypeName type, String name) {
             this.parameters.asTransient().add(Parameter.builder().name(name).type(type).build());
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link ConstructorMethodSyntax}
+         * 
+         * @return A new instance of {@link ConstructorMethodSyntax}
+         */
         public ConstructorMethodSyntax build() {
             return new ConstructorMethodSyntax(this);
         }

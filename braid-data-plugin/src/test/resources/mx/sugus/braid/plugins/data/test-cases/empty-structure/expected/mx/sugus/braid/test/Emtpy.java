@@ -9,7 +9,9 @@ public final class Emtpy {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -39,7 +41,9 @@ public final class Emtpy {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -53,6 +57,11 @@ public final class Emtpy {
         Builder(Emtpy data) {
         }
 
+        /**
+         * Returns a new instance of {@link Emtpy}
+         * 
+         * @return A new instance of {@link Emtpy}
+         */
         public Emtpy build() {
             return new Emtpy(this);
         }

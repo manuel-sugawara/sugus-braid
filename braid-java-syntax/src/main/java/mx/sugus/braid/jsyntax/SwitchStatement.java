@@ -6,7 +6,7 @@ import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents a <code>switch</code> statement.</p>
+ * Represents a {@code switch} statement.
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class SwitchStatement implements Statement {
@@ -25,25 +25,46 @@ public final class SwitchStatement implements Statement {
         return StatementKind.SWITCH_STATEMENT;
     }
 
+    /**
+     * 
+     * @return The value of the {@code expression} member
+     */
     public Expression expression() {
         return this.expression;
     }
 
+    /**
+     * 
+     * @return The value of the {@code cases} member
+     */
     public List<CaseClause> cases() {
         return this.cases;
     }
 
+    /**
+     * 
+     * @return The value of the {@code defaultCase} member
+     */
     public DefaultCaseClause defaultCase() {
         return this.defaultCase;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitSwitchStatement(this);
@@ -86,7 +107,9 @@ public final class SwitchStatement implements Statement {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -108,7 +131,10 @@ public final class SwitchStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>expression</code>.</p>
+         * Sets the value for {@code expression}.
+         * 
+         * @param expression The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder expression(Expression expression) {
             this.expression = expression;
@@ -116,7 +142,10 @@ public final class SwitchStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>cases</code>.</p>
+         * Sets the value for {@code cases}.
+         * 
+         * @param cases The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder cases(List<CaseClause> cases) {
             this.cases.clear();
@@ -125,7 +154,7 @@ public final class SwitchStatement implements Statement {
         }
 
         /**
-         * <p>Adds a single value for <code>cases</code>.</p>
+         * Adds a single value for {@code cases}.
          */
         public Builder addCase(CaseClause aCase) {
             this.cases.asTransient().add(aCase);
@@ -133,13 +162,21 @@ public final class SwitchStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>defaultCase</code>.</p>
+         * Sets the value for {@code defaultCase}.
+         * 
+         * @param defaultCase The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder defaultCase(DefaultCaseClause defaultCase) {
             this.defaultCase = defaultCase;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link SwitchStatement}
+         * 
+         * @return A new instance of {@link SwitchStatement}
+         */
         public SwitchStatement build() {
             return new SwitchStatement(this);
         }

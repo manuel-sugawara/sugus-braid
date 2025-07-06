@@ -28,20 +28,34 @@ public final class StructureShape implements ToNode {
         this.modifierList = Objects.requireNonNull(builder.modifierList.asPersistent(), "modifierList");
     }
 
+    /**
+     * 
+     * @return The value of the {@code modifier} member
+     */
     public Modifier modifier() {
         return this.modifier;
     }
 
+    /**
+     * 
+     * @return The value of the {@code anotherModifier} member
+     */
     public Modifier anotherModifier() {
         return this.anotherModifier;
     }
 
+    /**
+     * 
+     * @return The value of the {@code modifierList} member
+     */
     public List<Modifier> modifierList() {
         return this.modifierList;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -82,14 +96,16 @@ public final class StructureShape implements ToNode {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
     }
 
     /**
-     * <p>Converts this instance to Node.</p>
+     * Converts this instance to Node.
      */
     @Override
     public Node toNode() {
@@ -109,14 +125,14 @@ public final class StructureShape implements ToNode {
     }
 
     /**
-     * <p>Converts a {@link Node} to StructureShape.</p>
+     * Converts a {@link Node} to StructureShape.
      */
     public static StructureShape fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * <p>Converts a {@link Node} to StructureShape.</p>
+     * Converts a {@link Node} to StructureShape.
      */
     public static StructureShape fromNode(Validation validator, Node node) {
         validator = validator.with("StructureShape");
@@ -161,7 +177,10 @@ public final class StructureShape implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>modifier</code>.</p>
+         * Sets the value for {@code modifier}.
+         * 
+         * @param modifier The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder modifier(Modifier modifier) {
             this.modifier = modifier;
@@ -169,7 +188,10 @@ public final class StructureShape implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>anotherModifier</code>.</p>
+         * Sets the value for {@code anotherModifier}.
+         * 
+         * @param anotherModifier The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder anotherModifier(Modifier anotherModifier) {
             this.anotherModifier = anotherModifier;
@@ -177,7 +199,10 @@ public final class StructureShape implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>modifierList</code>.</p>
+         * Sets the value for {@code modifierList}.
+         * 
+         * @param modifierList The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder modifierList(List<Modifier> modifierList) {
             this.modifierList.clear();
@@ -186,13 +211,18 @@ public final class StructureShape implements ToNode {
         }
 
         /**
-         * <p>Adds a single value for <code>modifierList</code>.</p>
+         * Adds a single value for {@code modifierList}.
          */
         public Builder addModifierList(Modifier modifierList) {
             this.modifierList.asTransient().add(modifierList);
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link StructureShape}
+         * 
+         * @return A new instance of {@link StructureShape}
+         */
         public StructureShape build() {
             return new StructureShape(this);
         }

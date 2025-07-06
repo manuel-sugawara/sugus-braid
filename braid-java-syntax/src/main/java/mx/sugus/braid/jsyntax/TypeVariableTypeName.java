@@ -6,7 +6,7 @@ import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents a type variable name.</p>
+ * Represents a type variable name.
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class TypeVariableTypeName implements TypeName {
@@ -22,21 +22,38 @@ public final class TypeVariableTypeName implements TypeName {
         return TypeKind.TYPE_VARIABLE;
     }
 
+    /**
+     * 
+     * @return The value of the {@code name} member
+     */
     public String name() {
         return this.name;
     }
 
+    /**
+     * 
+     * @return The value of the {@code bounds} member
+     */
     public List<TypeName> bounds() {
         return this.bounds;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitTypeVariableTypeName(this);
@@ -73,7 +90,9 @@ public final class TypeVariableTypeName implements TypeName {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -97,7 +116,10 @@ public final class TypeVariableTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>name</code>.</p>
+         * Sets the value for {@code name}.
+         * 
+         * @param name The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder name(String name) {
             this.name = name;
@@ -105,7 +127,10 @@ public final class TypeVariableTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>bounds</code>.</p>
+         * Sets the value for {@code bounds}.
+         * 
+         * @param bounds The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder bounds(List<TypeName> bounds) {
             this.bounds.clear();
@@ -114,7 +139,7 @@ public final class TypeVariableTypeName implements TypeName {
         }
 
         /**
-         * <p>Adds a single value for <code>bounds</code>.</p>
+         * Adds a single value for {@code bounds}.
          */
         public Builder addBound(TypeName bound) {
             this.bounds.asTransient().add(bound);
@@ -122,13 +147,18 @@ public final class TypeVariableTypeName implements TypeName {
         }
 
         /**
-         * <p>Creates a new TypeName instance out of the given class.</p>
+         * Creates a new TypeName instance out of the given class.
          */
         public Builder addBound(Class<?> kclass) {
             this.bounds.asTransient().add(TypeName.from(kclass));
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link TypeVariableTypeName}
+         * 
+         * @return A new instance of {@link TypeVariableTypeName}
+         */
         public TypeVariableTypeName build() {
             return new TypeVariableTypeName(this);
         }

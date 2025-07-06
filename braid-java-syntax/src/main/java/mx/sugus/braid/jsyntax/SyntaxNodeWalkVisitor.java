@@ -294,6 +294,19 @@ public class SyntaxNodeWalkVisitor implements SyntaxNodeVisitor<SyntaxNode> {
     }
 
     @Override
+    public SyntaxNode visitJavadoc(Javadoc node) {
+        CodeBlock body = node.body();
+        if (body != null) {
+            body.accept(this);
+        }
+        CodeBlock returns = node.returns();
+        if (returns != null) {
+            returns.accept(this);
+        }
+        return node;
+    }
+
+    @Override
     public SyntaxNode visitMethodSyntax(MethodSyntax node) {
         List<TypeVariableTypeName> typeParams = node.typeParams();
         for (int idx = 0; idx < typeParams.size(); idx++) {

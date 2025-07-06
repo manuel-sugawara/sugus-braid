@@ -1,10 +1,11 @@
 package mx.sugus.braid.jsyntax.writer;
 
+import java.io.StringWriter;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
+import java.util.Set;
 import mx.sugus.braid.jsyntax.AbstractControlFlow;
 import mx.sugus.braid.jsyntax.AbstractMethodSyntax;
 import mx.sugus.braid.jsyntax.Annotation;
@@ -43,13 +44,23 @@ import mx.sugus.braid.jsyntax.TypeSyntax;
 import mx.sugus.braid.jsyntax.TypeVariableTypeName;
 import mx.sugus.braid.jsyntax.WildcardTypeName;
 import mx.sugus.braid.jsyntax.ext.TypeNameExt;
+import org.commonmark.node.Code;
+import org.commonmark.node.Document;
+import org.commonmark.node.IndentedCodeBlock;
+import org.commonmark.node.Node;
+import org.commonmark.node.Paragraph;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.NodeRenderer;
+import org.commonmark.renderer.html.HtmlNodeRendererContext;
+import org.commonmark.renderer.html.HtmlRenderer;
+import org.commonmark.renderer.html.HtmlWriter;
 
 public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
-    private final CodeWriter writer;
     private final Deque<TypeSyntax> types;
     private final Deque<CodeBlockContext> codeBlockContexts;
     private final Map<String, ClassName> simpleNames;
     private final String containingPackage;
+    private CodeWriter writer;
 
     public CodeWriterWalkVisitor(CodeWriter writer, String containingPackage, Map<String, ClassName> simpleNames) {
         this.writer = writer;
@@ -177,11 +188,12 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
     private void renderAnnotationMemberValue(MemberValue memberValue) {
         switch (memberValue.variantTag()) {
             case EXPRESSION -> memberValue.expression().accept(this);
-            case ARRAY_EXPRESSION ->  {
+            case ARRAY_EXPRESSION -> {
                 var arrayExpression = memberValue.arrayExpression();
                 if (arrayExpression.size() == 1) {
                     arrayExpression.get(0).accept(this);
-                } if (arrayExpression.size() > 1) {
+                }
+                if (arrayExpression.size() > 1) {
                     writer.write("{");
                     var isFirst = true;
                     for (var expr : arrayExpression) {
@@ -201,14 +213,9 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
     @Override
     public SyntaxNode visitCodeBlock(CodeBlock node) {
         if (codeBlockContexts.peekFirst() == CodeBlockContext.JAVADOC) {
-            writer.writeln("/**");
-            writer.linePrefix(" * ");
             for (var part : node.parts()) {
                 visitFormatterNode(part);
             }
-            writer.ensureNewline();
-            writer.resetLinePrefix();
-            writer.writeln(" */");
             return node;
         }
         if (codeBlockContexts.peekFirst() == CodeBlockContext.STATEMENT) {
@@ -221,6 +228,41 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
             writer.writeln(";");
             writer.resetIndentFollowingLines();
         }
+        return node;
+    }
+
+    @Override
+    public SyntaxNode visitJavadoc(Javadoc node) {
+        codeBlockContexts.push(CodeBlockContext.JAVADOC);
+
+        writer.writeln("/**");
+        writer.linePrefix(" * ");
+        CodeBlock body = node.body();
+        if (body != null) {
+            renderingJavadoc(() -> body.accept(this));
+            writer.ensureNewline();
+        }
+        var hasParams = !node.params().isEmpty();
+        if (hasParams) {
+            writer.write("").ensureNewline();
+        }
+        for (Map.Entry<String, CodeBlock> kvp : node.params().entrySet()) {
+            writer.write("@param ").write(kvp.getKey()).write(" ");
+            renderingJavadoc(() -> kvp.getValue().accept(this));
+            writer.ensureNewline();
+        }
+        CodeBlock returns = node.returns();
+        if (returns != null) {
+            if (!hasParams) {
+                writer.write("").ensureNewline();
+            }
+            writer.write("@return ");
+            renderingJavadoc(() -> returns.accept(this));
+        }
+        writer.ensureNewline();
+        writer.resetLinePrefix();
+        writer.writeln(" */");
+        codeBlockContexts.pop();
         return node;
     }
 
@@ -259,7 +301,7 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
         types.push(node);
         Javadoc doc = node.javadoc();
         if (doc != null) {
-            withJavaDocContext(() -> doc.accept(this));
+            doc.accept(this);
         }
         List<Annotation> annotations = node.annotations();
         for (int idx = 0; idx < annotations.size(); idx++) {
@@ -397,7 +439,7 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
     ) {
         Javadoc doc = node.javadoc();
         if (doc != null) {
-            withJavaDocContext(() -> doc.accept(this));
+            doc.accept(this);
         }
         List<Annotation> annotations = node.annotations();
         for (int idx = 0; idx < annotations.size(); idx++) {
@@ -496,7 +538,7 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
     public SyntaxNode visitEnumConstant(EnumConstant node) {
         var doc = node.javadoc();
         if (doc != null) {
-            withJavaDocContext(() -> doc.accept(this));
+            doc.accept(this);
         }
         writer.write(node.name());
 
@@ -633,12 +675,6 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
         writer.write("}");
     }
 
-    private void withJavaDocContext(Runnable r) {
-        codeBlockContexts.push(CodeBlockContext.JAVADOC);
-        r.run();
-        codeBlockContexts.pop();
-    }
-
     private void withStatementContext(Runnable r) {
         codeBlockContexts.push(CodeBlockContext.STATEMENT);
         r.run();
@@ -651,6 +687,21 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
         codeBlockContexts.pop();
     }
 
+    private void renderingJavadoc(Runnable r) {
+        var orgWriter = writer;
+        var stringWriter = new StringWriter();
+        var newWriter = new CodeWriter(stringWriter);
+        this.writer = newWriter;
+        r.run();
+        var source = stringWriter.toString();
+        var parser = Parser.builder().build();
+        var document = parser.parse(source);
+        var rendered = createRenderer().render(document);
+        rendered = rendered.replace("*/", "*&#47;");
+        this.writer = orgWriter;
+        writer.write(rendered);
+    }
+
     private static String toString(ClassName className) {
         if (className.packageName() == null) {
             return "#" + className.name();
@@ -658,8 +709,87 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
         return className.packageName() + "#" + className.name();
     }
 
+    static HtmlRenderer createRenderer() {
+        return HtmlRenderer.builder()
+                           .nodeRendererFactory(JavadocHtmlRenderer::new)
+                           .build();
+    }
+
     enum CodeBlockContext {
         NONE, EXPRESSION, JAVADOC, STATEMENT
+    }
+
+    static class JavadocHtmlRenderer implements NodeRenderer {
+
+        private final HtmlNodeRendererContext context;
+        private final HtmlWriter html;
+
+        JavadocHtmlRenderer(HtmlNodeRendererContext context) {
+            this.context = context;
+            this.html = context.getWriter();
+        }
+
+        @Override
+        public Set<Class<? extends Node>> getNodeTypes() {
+            return Set.of(IndentedCodeBlock.class, Paragraph.class, Code.class);
+        }
+
+        @Override
+        public void render(Node node) {
+            if (node instanceof IndentedCodeBlock b) {
+                renderIndentedCodeBlock(b);
+            } else if (node instanceof Paragraph p) {
+                renderParagraph(p);
+            } else if (node instanceof Code c) {
+                renderCode(c);
+            }
+        }
+
+        void renderIndentedCodeBlock(IndentedCodeBlock node) {
+            var literal = node.getLiteral();
+            html.line();
+            if (literal.contains("@")) {
+                html.tag("pre");
+                html.tag("code");
+                html.text(literal);
+                html.tag("/code");
+                html.tag("/pre");
+            } else {
+                html.tag("pre");
+                html.raw("{@code ");
+                html.text(literal);
+                html.raw("}");
+                html.tag("/pre");
+            }
+            html.line();
+        }
+
+        void renderParagraph(Paragraph node) {
+            var parent = node.getParent();
+            if (parent instanceof Document) {
+                if (node.getPrevious() != null) {
+                    html.line();
+                    html.tag("p");
+                    html.line();
+                }
+                renderChildren(node);
+            }
+        }
+
+        void renderCode(Code node) {
+            html.raw("{@code ");
+            html.text(node.getLiteral());
+            html.raw("}");
+        }
+
+        private void renderChildren(Node parent) {
+            Node node = parent.getFirstChild();
+            while (node != null) {
+                Node next = node.getNext();
+                context.render(node);
+                node = next;
+            }
+        }
     }
 }
 

@@ -22,24 +22,42 @@ public final class StructureWithAggregates {
         this.structureThreeSet = Objects.requireNonNull(builder.structureThreeSet.asPersistent(), "structureThreeSet");
     }
 
+    /**
+     * 
+     * @return The value of the {@code simpleMember} member
+     */
     public Long simpleMember() {
         return this.simpleMember;
     }
 
+    /**
+     * 
+     * @return The value of the {@code structuresOne} member
+     */
     public List<StructureOne> structuresOne() {
         return this.structuresOne;
     }
 
+    /**
+     * 
+     * @return The value of the {@code structureTwoMap} member
+     */
     public Map<String, StructureTwo> structureTwoMap() {
         return this.structureTwoMap;
     }
 
+    /**
+     * 
+     * @return The value of the {@code structureThreeSet} member
+     */
     public Set<StructureThree> structureThreeSet() {
         return this.structureThreeSet;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -83,7 +101,9 @@ public final class StructureWithAggregates {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -109,7 +129,10 @@ public final class StructureWithAggregates {
         }
 
         /**
-         * <p>Sets the value for <code>simpleMember</code>.</p>
+         * Sets the value for {@code simpleMember}.
+         * 
+         * @param simpleMember The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder simpleMember(Long simpleMember) {
             this.simpleMember = simpleMember;
@@ -117,7 +140,10 @@ public final class StructureWithAggregates {
         }
 
         /**
-         * <p>Sets the value for <code>structuresOne</code>.</p>
+         * Sets the value for {@code structuresOne}.
+         * 
+         * @param structuresOne The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder structuresOne(List<StructureOne> structuresOne) {
             this.structuresOne.clear();
@@ -126,7 +152,7 @@ public final class StructureWithAggregates {
         }
 
         /**
-         * <p>Adds a single value for <code>structuresOne</code>.</p>
+         * Adds a single value for {@code structuresOne}.
          */
         public Builder addStructuresOne(StructureOne structuresOne) {
             this.structuresOne.asTransient().add(structuresOne);
@@ -134,7 +160,10 @@ public final class StructureWithAggregates {
         }
 
         /**
-         * <p>Sets the value for <code>structureTwoMap</code>.</p>
+         * Sets the value for {@code structureTwoMap}.
+         * 
+         * @param structureTwoMap The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder structureTwoMap(Map<String, StructureTwo> structureTwoMap) {
             this.structureTwoMap.clear();
@@ -142,13 +171,23 @@ public final class StructureWithAggregates {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code structureTwoMap} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param structureTwoMap The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putStructureTwoMap(String key, StructureTwo structureTwoMap) {
             this.structureTwoMap.asTransient().put(key, structureTwoMap);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>structureThreeSet</code>.</p>
+         * Sets the value for {@code structureThreeSet}.
+         * 
+         * @param structureThreeSet The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder structureThreeSet(Set<StructureThree> structureThreeSet) {
             this.structureThreeSet.clear();
@@ -157,13 +196,18 @@ public final class StructureWithAggregates {
         }
 
         /**
-         * <p>Adds a single value for <code>structureThreeSet</code>.</p>
+         * Adds a single value for {@code structureThreeSet}.
          */
         public Builder addStructureThreeSet(StructureThree structureThreeSet) {
             this.structureThreeSet.asTransient().add(structureThreeSet);
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link StructureWithAggregates}
+         * 
+         * @return A new instance of {@link StructureWithAggregates}
+         */
         public StructureWithAggregates build() {
             return new StructureWithAggregates(this);
         }

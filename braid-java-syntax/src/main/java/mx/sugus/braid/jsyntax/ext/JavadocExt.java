@@ -1,21 +1,19 @@
 package mx.sugus.braid.jsyntax.ext;
 
 import mx.sugus.braid.jsyntax.CodeBlock;
-import org.commonmark.node.Node;
-import org.commonmark.parser.Parser;
-import org.commonmark.renderer.html.HtmlRenderer;
+import mx.sugus.braid.jsyntax.Javadoc;
 
 public final class JavadocExt {
 
     private JavadocExt() {
     }
 
-    public static CodeBlock document(String source) {
-        var parser = Parser.builder().build();
-        var document = parser.parse(source);
-        var renderer = HtmlRenderer.builder().build();
-        var rendered = renderer.render(document);
-        rendered = rendered.replace("*/", "*&#47;");
-        return CodeBlock.from("$L", rendered);
+    public static Javadoc document(String source) {
+        return Javadoc.builder().body(CodeBlock.from("$L", source)).build();
     }
+
+    public static Javadoc document(String source, Object... args) {
+        return Javadoc.builder().body(CodeBlock.from(source, args)).build();
+    }
+
 }

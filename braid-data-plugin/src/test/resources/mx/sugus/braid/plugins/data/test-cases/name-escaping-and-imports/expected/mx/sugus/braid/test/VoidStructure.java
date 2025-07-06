@@ -11,12 +11,18 @@ public final class VoidStructure {
         this.anEnum = builder.anEnum;
     }
 
+    /**
+     * 
+     * @return The value of the {@code enum} member
+     */
     public EnumStructure anEnum() {
         return this.anEnum;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -48,7 +54,9 @@ public final class VoidStructure {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -65,13 +73,21 @@ public final class VoidStructure {
         }
 
         /**
-         * <p>Sets the value for <code>anEnum</code>.</p>
+         * Sets the value for {@code anEnum}.
+         * 
+         * @param anEnum The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder anEnum(EnumStructure anEnum) {
             this.anEnum = anEnum;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link VoidStructure}
+         * 
+         * @return A new instance of {@link VoidStructure}
+         */
         public VoidStructure build() {
             return new VoidStructure(this);
         }

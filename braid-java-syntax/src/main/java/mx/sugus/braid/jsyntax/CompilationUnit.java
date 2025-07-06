@@ -7,7 +7,7 @@ import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents a unit of compilation for the Java compiler, i.e., a single Java source file.</p>
+ * Represents a unit of compilation for the Java compiler, i.e., a single Java source file.
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class CompilationUnit implements SyntaxNode {
@@ -24,29 +24,54 @@ public final class CompilationUnit implements SyntaxNode {
         this.definedNames = Objects.requireNonNull(builder.definedNames.asPersistent(), "definedNames");
     }
 
+    /**
+     * 
+     * @return The value of the {@code packageName} member
+     */
     public String packageName() {
         return this.packageName;
     }
 
+    /**
+     * 
+     * @return The value of the {@code imports} member
+     */
     public Set<ClassName> imports() {
         return this.imports;
     }
 
+    /**
+     * 
+     * @return The value of the {@code type} member
+     */
     public TypeSyntax type() {
         return this.type;
     }
 
+    /**
+     * 
+     * @return The value of the {@code definedNames} member
+     */
     public Map<String, ClassName> definedNames() {
         return this.definedNames;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitCompilationUnit(this);
@@ -90,7 +115,9 @@ public final class CompilationUnit implements SyntaxNode {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -115,7 +142,10 @@ public final class CompilationUnit implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>packageName</code>.</p>
+         * Sets the value for {@code packageName}.
+         * 
+         * @param packageName The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder packageName(String packageName) {
             this.packageName = packageName;
@@ -123,7 +153,10 @@ public final class CompilationUnit implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>imports</code>.</p>
+         * Sets the value for {@code imports}.
+         * 
+         * @param imports The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder imports(Set<ClassName> imports) {
             this.imports.clear();
@@ -132,7 +165,7 @@ public final class CompilationUnit implements SyntaxNode {
         }
 
         /**
-         * <p>Adds a single value for <code>imports</code>.</p>
+         * Adds a single value for {@code imports}.
          */
         public Builder addImport(ClassName anImport) {
             this.imports.asTransient().add(anImport);
@@ -140,7 +173,7 @@ public final class CompilationUnit implements SyntaxNode {
         }
 
         /**
-         * <p>Creates a class name using the given java class.</p>
+         * Creates a class name using the given java class.
          */
         public Builder addImport(Class<?> kclass) {
             this.imports.asTransient().add(ClassName.from(kclass));
@@ -148,7 +181,7 @@ public final class CompilationUnit implements SyntaxNode {
         }
 
         /**
-         * <p>Creates a class name with the given package and simple name.</p>
+         * Creates a class name with the given package and simple name.
          */
         public Builder addImport(String packageName, String simpleName) {
             this.imports.asTransient().add(ClassName.from(packageName, simpleName));
@@ -156,7 +189,7 @@ public final class CompilationUnit implements SyntaxNode {
         }
 
         /**
-         * <p>Creates a class name without a package.</p>
+         * Creates a class name without a package.
          */
         public Builder addImport(String simpleName) {
             this.imports.asTransient().add(ClassName.from(simpleName));
@@ -164,7 +197,10 @@ public final class CompilationUnit implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>type</code>.</p>
+         * Sets the value for {@code type}.
+         * 
+         * @param type The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder type(TypeSyntax type) {
             this.type = type;
@@ -172,7 +208,10 @@ public final class CompilationUnit implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>definedNames</code>.</p>
+         * Sets the value for {@code definedNames}.
+         * 
+         * @param definedNames The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder definedNames(Map<String, ClassName> definedNames) {
             this.definedNames.clear();
@@ -180,11 +219,23 @@ public final class CompilationUnit implements SyntaxNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code definedNames} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param definedName The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putDefinedName(String key, ClassName definedName) {
             this.definedNames.asTransient().put(key, definedName);
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link CompilationUnit}
+         * 
+         * @return A new instance of {@link CompilationUnit}
+         */
         public CompilationUnit build() {
             return new CompilationUnit(this);
         }

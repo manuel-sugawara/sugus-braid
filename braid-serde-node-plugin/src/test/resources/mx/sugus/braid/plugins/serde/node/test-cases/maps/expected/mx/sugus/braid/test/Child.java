@@ -20,16 +20,26 @@ public final class Child implements ToNode {
         this.intValue = builder.intValue;
     }
 
+    /**
+     * 
+     * @return The value of the {@code stringValue} member
+     */
     public String stringValue() {
         return this.stringValue;
     }
 
+    /**
+     * 
+     * @return The value of the {@code intValue} member
+     */
     public Integer intValue() {
         return this.intValue;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -64,14 +74,16 @@ public final class Child implements ToNode {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
     }
 
     /**
-     * <p>Converts this instance to Node.</p>
+     * Converts this instance to Node.
      */
     @Override
     public Node toNode() {
@@ -86,14 +98,14 @@ public final class Child implements ToNode {
     }
 
     /**
-     * <p>Converts a {@link Node} to Child.</p>
+     * Converts a {@link Node} to Child.
      */
     public static Child fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * <p>Converts a {@link Node} to Child.</p>
+     * Converts a {@link Node} to Child.
      */
     public static Child fromNode(Validation validator, Node node) {
         validator = validator.with("Child");
@@ -130,7 +142,10 @@ public final class Child implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>stringValue</code>.</p>
+         * Sets the value for {@code stringValue}.
+         * 
+         * @param stringValue The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder stringValue(String stringValue) {
             this.stringValue = stringValue;
@@ -138,13 +153,21 @@ public final class Child implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>intValue</code>.</p>
+         * Sets the value for {@code intValue}.
+         * 
+         * @param intValue The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder intValue(Integer intValue) {
             this.intValue = intValue;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link Child}
+         * 
+         * @return A new instance of {@link Child}
+         */
         public Child build() {
             return new Child(this);
         }

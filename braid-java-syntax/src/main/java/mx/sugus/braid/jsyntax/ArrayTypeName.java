@@ -4,7 +4,7 @@ import java.util.Objects;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents a java array type.</p>
+ * Represents a java array type.
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class ArrayTypeName implements TypeName {
@@ -18,17 +18,30 @@ public final class ArrayTypeName implements TypeName {
         return TypeKind.ARRAY;
     }
 
+    /**
+     * 
+     * @return The value of the {@code componentType} member
+     */
     public TypeName componentType() {
         return this.componentType;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitArrayTypeName(this);
@@ -62,7 +75,9 @@ public final class ArrayTypeName implements TypeName {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -79,7 +94,10 @@ public final class ArrayTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>componentType</code>.</p>
+         * Sets the value for {@code componentType}.
+         * 
+         * @param componentType The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder componentType(TypeName componentType) {
             this.componentType = componentType;
@@ -91,6 +109,11 @@ public final class ArrayTypeName implements TypeName {
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link ArrayTypeName}
+         * 
+         * @return A new instance of {@link ArrayTypeName}
+         */
         public ArrayTypeName build() {
             return new ArrayTypeName(this);
         }

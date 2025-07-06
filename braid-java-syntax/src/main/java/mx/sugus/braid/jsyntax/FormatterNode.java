@@ -8,7 +8,9 @@ public interface FormatterNode {
     SyntaxFormatterNodeKind kind();
 
     /**
-     * Creates a new {@link Builder} to modify a copy of this instance
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     Builder toBuilder();
 
@@ -16,6 +18,8 @@ public interface FormatterNode {
 
         /**
          * Builds a new instance of {@link FormatterNode}
+         * 
+         * @return The new instance of of {@link FormatterNode}
          */
         FormatterNode build();
     }

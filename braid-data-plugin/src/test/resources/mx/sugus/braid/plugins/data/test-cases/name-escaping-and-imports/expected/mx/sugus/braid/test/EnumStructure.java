@@ -13,16 +13,26 @@ public final class EnumStructure {
         this.aVoid = builder.aVoid;
     }
 
+    /**
+     * 
+     * @return The value of the {@code int} member
+     */
     public Integer anInt() {
         return this.anInt;
     }
 
+    /**
+     * 
+     * @return The value of the {@code void} member
+     */
     public String aVoid() {
         return this.aVoid;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -57,7 +67,9 @@ public final class EnumStructure {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -76,7 +88,10 @@ public final class EnumStructure {
         }
 
         /**
-         * <p>Sets the value for <code>anInt</code>.</p>
+         * Sets the value for {@code anInt}.
+         * 
+         * @param anInt The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder anInt(Integer anInt) {
             this.anInt = anInt;
@@ -84,13 +99,21 @@ public final class EnumStructure {
         }
 
         /**
-         * <p>Sets the value for <code>aVoid</code>.</p>
+         * Sets the value for {@code aVoid}.
+         * 
+         * @param aVoid The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aVoid(String aVoid) {
             this.aVoid = aVoid;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link EnumStructure}
+         * 
+         * @return A new instance of {@link EnumStructure}
+         */
         public EnumStructure build() {
             return new EnumStructure(this);
         }

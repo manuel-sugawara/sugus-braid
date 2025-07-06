@@ -3,14 +3,14 @@ package mx.sugus.braid.test;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>This enum is sensitive</p>
+ * This enum is sensitive
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 public enum SensitiveEnum {
     SECRET1("secret one"),
     SECRET2("secret two"),
     /**
-     * <p>Unknown enum constant</p>
+     * Unknown enum constant
      */
     UNKNOWN_TO_VERSION(null);
 
@@ -21,8 +21,9 @@ public enum SensitiveEnum {
     }
 
     /**
-     * <p>Returns the corresponding enum constant from the given value.</p>
-     * <p>If the value is unknown it returns <code>UNKNOWN_TO_VERSION</code>.</p>
+     * Returns the corresponding enum constant from the given value.
+     * <p>
+     * If the value is unknown it returns {@code UNKNOWN_TO_VERSION}.
      */
     public static SensitiveEnum from(String value) {
         if (value == null) {

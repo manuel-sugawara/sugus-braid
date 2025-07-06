@@ -5,7 +5,7 @@ import java.util.Objects;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Format number</p>
+ * Format number
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 public final class FormatNumber implements Format {
@@ -20,14 +20,18 @@ public final class FormatNumber implements Format {
     }
 
     /**
-     * <p>The number value</p>
+     * The number value
+     * 
+     * @return The value of the {@code value} member
      */
     public BigDecimal value() {
         return this.value;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -61,7 +65,9 @@ public final class FormatNumber implements Format {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -78,14 +84,21 @@ public final class FormatNumber implements Format {
         }
 
         /**
-         * <p>Sets the value for <code>value</code>.</p>
-         * <p>The number value</p>
+         * Sets the value for {@code value}.
+         * 
+         * @param value The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder value(BigDecimal value) {
             this.value = value;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link FormatNumber}
+         * 
+         * @return A new instance of {@link FormatNumber}
+         */
         public FormatNumber build() {
             return new FormatNumber(this);
         }

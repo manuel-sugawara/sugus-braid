@@ -91,7 +91,7 @@ map StringToCodeBlock {
 structure Javadoc {
     body: CodeBlock
     params: StringToCodeBlock
-    return: CodeBlock
+    returns: CodeBlock
 }
 
 // --- Statements

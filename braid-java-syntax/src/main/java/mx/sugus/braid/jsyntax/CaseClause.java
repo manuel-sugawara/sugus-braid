@@ -10,7 +10,7 @@ import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents a <code>case</code> clause inside a switch statement.</p>
+ * Represents a {@code case} clause inside a switch statement.
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class CaseClause implements SyntaxNode {
@@ -22,21 +22,38 @@ public final class CaseClause implements SyntaxNode {
         this.body = Objects.requireNonNull(builder.body.asPersistent(), "body");
     }
 
+    /**
+     * 
+     * @return The value of the {@code label} member
+     */
     public List<Expression> label() {
         return this.label;
     }
 
+    /**
+     * 
+     * @return The value of the {@code body} member
+     */
     public Block body() {
         return this.body;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitCaseClause(this);
@@ -71,7 +88,9 @@ public final class CaseClause implements SyntaxNode {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -92,7 +111,10 @@ public final class CaseClause implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>label</code>.</p>
+         * Sets the value for {@code label}.
+         * 
+         * @param label The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder label(List<Expression> label) {
             this.label.clear();
@@ -101,7 +123,7 @@ public final class CaseClause implements SyntaxNode {
         }
 
         /**
-         * <p>Adds a single value for <code>label</code>.</p>
+         * Adds a single value for {@code label}.
          */
         public Builder addLabel(Expression label) {
             this.label.asTransient().add(label);
@@ -114,7 +136,10 @@ public final class CaseClause implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>body</code>.</p>
+         * Sets the value for {@code body}.
+         * 
+         * @param body The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder body(Block body) {
             this.body.setPersistent(body);
@@ -166,6 +191,11 @@ public final class CaseClause implements SyntaxNode {
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link CaseClause}
+         * 
+         * @return A new instance of {@link CaseClause}
+         */
         public CaseClause build() {
             return new CaseClause(this);
         }

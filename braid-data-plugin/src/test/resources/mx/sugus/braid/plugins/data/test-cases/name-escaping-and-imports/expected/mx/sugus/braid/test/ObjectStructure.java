@@ -11,12 +11,18 @@ public final class ObjectStructure {
         this.object = builder.object;
     }
 
+    /**
+     * 
+     * @return The value of the {@code object} member
+     */
     public String object() {
         return this.object;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -48,7 +54,9 @@ public final class ObjectStructure {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -65,13 +73,21 @@ public final class ObjectStructure {
         }
 
         /**
-         * <p>Sets the value for <code>object</code>.</p>
+         * Sets the value for {@code object}.
+         * 
+         * @param object The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder object(String object) {
             this.object = object;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link ObjectStructure}
+         * 
+         * @return A new instance of {@link ObjectStructure}
+         */
         public ObjectStructure build() {
             return new ObjectStructure(this);
         }
