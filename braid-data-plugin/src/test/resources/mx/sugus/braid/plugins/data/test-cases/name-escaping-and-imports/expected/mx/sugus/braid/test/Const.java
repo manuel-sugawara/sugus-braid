@@ -11,12 +11,18 @@ public final class Const {
         this.aConst = builder.aConst;
     }
 
+    /**
+     * 
+     * @return The value of the {@code const} member
+     */
     public String aConst() {
         return this.aConst;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -48,7 +54,9 @@ public final class Const {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -65,13 +73,21 @@ public final class Const {
         }
 
         /**
-         * <p>Sets the value for <code>aConst</code>.</p>
+         * Sets the value for {@code aConst}.
+         * 
+         * @param aConst The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aConst(String aConst) {
             this.aConst = aConst;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link Const}
+         * 
+         * @return A new instance of {@link Const}
+         */
         public Const build() {
             return new Const(this);
         }

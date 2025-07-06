@@ -19,12 +19,18 @@ public final class FormatterBlock implements FormatterNode {
         return SyntaxFormatterNodeKind.BLOCK;
     }
 
+    /**
+     * 
+     * @return The value of the {@code value} member
+     */
     public Block value() {
         return this.value;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -58,7 +64,9 @@ public final class FormatterBlock implements FormatterNode {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -81,7 +89,10 @@ public final class FormatterBlock implements FormatterNode {
         }
 
         /**
-         * <p>Sets the value for <code>value</code>.</p>
+         * Sets the value for {@code value}.
+         * 
+         * @param value The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder value(Block value) {
             this.value.setPersistent(value);
@@ -133,6 +144,11 @@ public final class FormatterBlock implements FormatterNode {
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link FormatterBlock}
+         * 
+         * @return A new instance of {@link FormatterBlock}
+         */
         public FormatterBlock build() {
             return new FormatterBlock(this);
         }

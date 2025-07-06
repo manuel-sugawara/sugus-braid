@@ -6,7 +6,7 @@ import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>A block is a collection of statements.</p>
+ * A block is a collection of statements.
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class Block implements Statement {
@@ -20,17 +20,30 @@ public final class Block implements Statement {
         return StatementKind.BLOCK;
     }
 
+    /**
+     * 
+     * @return The value of the {@code statements} member
+     */
     public List<Statement> statements() {
         return this.statements;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitBlock(this);
@@ -64,7 +77,9 @@ public final class Block implements Statement {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -82,7 +97,10 @@ public final class Block implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>statements</code>.</p>
+         * Sets the value for {@code statements}.
+         * 
+         * @param statements The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder statements(List<Statement> statements) {
             this.statements.clear();
@@ -91,13 +109,18 @@ public final class Block implements Statement {
         }
 
         /**
-         * <p>Adds a single value for <code>statements</code>.</p>
+         * Adds a single value for {@code statements}.
          */
         public Builder addStatement(Statement statement) {
             this.statements.asTransient().add(statement);
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link Block}
+         * 
+         * @return A new instance of {@link Block}
+         */
         public Block build() {
             return new Block(this);
         }

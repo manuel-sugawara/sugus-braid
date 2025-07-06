@@ -600,22 +600,6 @@ apply TypeName @fromFactories([
     }
 ])
 
-apply Javadoc @setterOverrides([
-    {
-        args: [
-            {
-                type: "java.lang#String"
-                name: "format"
-            }
-            {
-                type: "java.lang#Object..."
-                name: "args"
-            }
-        ]
-        body: "CodeBlock.from(format, args)"
-    }
-])
-
 apply TypeName @setterOverrides([
     {
         args: [

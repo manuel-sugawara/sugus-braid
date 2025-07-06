@@ -8,7 +8,7 @@ import mx.sugus.braid.rt.util.AbstractBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>A simple structure</p>
+ * A simple structure
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 public final class AllSimpleTypes {
@@ -38,77 +38,99 @@ public final class AllSimpleTypes {
     }
 
     /**
-     * <p>byte member</p>
+     * byte member
+     * 
+     * @return The value of the {@code byte} member
      */
     public Byte aByte() {
         return this.aByte;
     }
 
     /**
-     * <p>short member</p>
+     * short member
+     * 
+     * @return The value of the {@code short} member
      */
     public Short aShort() {
         return this.aShort;
     }
 
     /**
-     * <p>int member</p>
+     * int member
+     * 
+     * @return The value of the {@code int} member
      */
     public Integer anInt() {
         return this.anInt;
     }
 
     /**
-     * <p>long member</p>
+     * long member
+     * 
+     * @return The value of the {@code long} member
      */
     public Long aLong() {
         return this.aLong;
     }
 
     /**
-     * <p>bigInteger member</p>
+     * bigInteger member
+     * 
+     * @return The value of the {@code bigInteger} member
      */
     public BigInteger bigInteger() {
         return this.bigInteger;
     }
 
     /**
-     * <p>float member</p>
+     * float member
+     * 
+     * @return The value of the {@code float} member
      */
     public Float aFloat() {
         return this.aFloat;
     }
 
     /**
-     * <p>double member</p>
+     * double member
+     * 
+     * @return The value of the {@code double} member
      */
     public Double aDouble() {
         return this.aDouble;
     }
 
     /**
-     * <p>bigDecimal member</p>
+     * bigDecimal member
+     * 
+     * @return The value of the {@code bigDecimal} member
      */
     public BigDecimal bigDecimal() {
         return this.bigDecimal;
     }
 
     /**
-     * <p>string member</p>
+     * string member
+     * 
+     * @return The value of the {@code string} member
      */
     public String string() {
         return this.string;
     }
 
     /**
-     * <p>instant member</p>
+     * instant member
+     * 
+     * @return The value of the {@code instant} member
      */
     public Instant instant() {
         return this.instant;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -170,7 +192,9 @@ public final class AllSimpleTypes {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -205,8 +229,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aByte</code>.</p>
-         * <p>byte member</p>
+         * Sets the value for {@code aByte}.
+         * 
+         * @param aByte The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aByte(Byte aByte) {
             this.aByte = aByte;
@@ -214,8 +240,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aShort</code>.</p>
-         * <p>short member</p>
+         * Sets the value for {@code aShort}.
+         * 
+         * @param aShort The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aShort(Short aShort) {
             this.aShort = aShort;
@@ -223,8 +251,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>anInt</code>.</p>
-         * <p>int member</p>
+         * Sets the value for {@code anInt}.
+         * 
+         * @param anInt The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder anInt(Integer anInt) {
             this.anInt = anInt;
@@ -232,8 +262,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aLong</code>.</p>
-         * <p>long member</p>
+         * Sets the value for {@code aLong}.
+         * 
+         * @param aLong The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aLong(Long aLong) {
             this.aLong = aLong;
@@ -241,8 +273,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>bigInteger</code>.</p>
-         * <p>bigInteger member</p>
+         * Sets the value for {@code bigInteger}.
+         * 
+         * @param bigInteger The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder bigInteger(BigInteger bigInteger) {
             this.bigInteger = bigInteger;
@@ -250,8 +284,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aFloat</code>.</p>
-         * <p>float member</p>
+         * Sets the value for {@code aFloat}.
+         * 
+         * @param aFloat The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aFloat(Float aFloat) {
             this.aFloat = aFloat;
@@ -259,8 +295,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aDouble</code>.</p>
-         * <p>double member</p>
+         * Sets the value for {@code aDouble}.
+         * 
+         * @param aDouble The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aDouble(Double aDouble) {
             this.aDouble = aDouble;
@@ -268,8 +306,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>bigDecimal</code>.</p>
-         * <p>bigDecimal member</p>
+         * Sets the value for {@code bigDecimal}.
+         * 
+         * @param bigDecimal The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder bigDecimal(BigDecimal bigDecimal) {
             this.bigDecimal = bigDecimal;
@@ -277,8 +317,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>string</code>.</p>
-         * <p>string member</p>
+         * Sets the value for {@code string}.
+         * 
+         * @param string The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder string(String string) {
             this.string = string;
@@ -286,14 +328,21 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>instant</code>.</p>
-         * <p>instant member</p>
+         * Sets the value for {@code instant}.
+         * 
+         * @param instant The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder instant(Instant instant) {
             this.instant = instant;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link AllSimpleTypes}
+         * 
+         * @return A new instance of {@link AllSimpleTypes}
+         */
         public AllSimpleTypes build() {
             return new AllSimpleTypes(this);
         }

@@ -3,20 +3,20 @@ package mx.sugus.braid.test;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Enum with one constant, no value</p>
+ * Enum with one constant, no value
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 public enum EnumWithoutValue23 {
     /**
-     * <p>Screaming case</p>
+     * Screaming case
      */
     ONE("ONE"),
     /**
-     * <p>Two</p>
+     * Two
      */
     TWO("TWO"),
     /**
-     * <p>Unknown enum constant</p>
+     * Unknown enum constant
      */
     UNKNOWN_TO_VERSION(null);
 
@@ -27,8 +27,9 @@ public enum EnumWithoutValue23 {
     }
 
     /**
-     * <p>Returns the corresponding enum constant from the given value.</p>
-     * <p>If the value is unknown it returns <code>UNKNOWN_TO_VERSION</code>.</p>
+     * Returns the corresponding enum constant from the given value.
+     * <p>
+     * If the value is unknown it returns {@code UNKNOWN_TO_VERSION}.
      */
     public static EnumWithoutValue23 from(String value) {
         if (value == null) {

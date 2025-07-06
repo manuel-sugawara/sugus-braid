@@ -7,11 +7,13 @@ import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.ImplementsKnowledgeIndex;
 import mx.sugus.braid.core.SensitiveKnowledgeIndex;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
+import mx.sugus.braid.core.util.Lazy;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.ConstructorMethodSyntax;
 import mx.sugus.braid.jsyntax.FieldSyntax;
+import mx.sugus.braid.jsyntax.Javadoc;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.block.AbstractBlockBuilder;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
@@ -25,6 +27,16 @@ import software.amazon.smithy.model.shapes.ShapeType;
 import software.amazon.smithy.model.traits.DocumentationTrait;
 
 public final class StructureData implements DirectedClass {
+    static final Lazy<Javadoc> TO_BUILDER_DOC = new Lazy(
+        () -> Javadoc.builder()
+                     .body("Returns a new builder to modify a copy of this instance.")
+                     .returns("A new builder to modify a copy of this instance.")
+                     .build());
+    static final Lazy<Javadoc> BUILDER_DOC = new Lazy(
+        () -> Javadoc.builder()
+                     .body("Creates a new builder to create instances of this class.")
+                     .returns("A new builder to create instances of this class.")
+                     .build());
     static final DirectedClass INSTANCE = new StructureData();
 
     private static final List<DirectiveToTypeSyntax> INNER_TYPES =
@@ -97,14 +109,15 @@ public final class StructureData implements DirectedClass {
     private MethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
         var name = Utils.toJavaName(state, member);
         var type = Utils.toJavaTypeName(state, member);
+        var doc = Javadoc.builder()
+                         .body(member.getTrait(DocumentationTrait.class).map(DocumentationTrait::getValue).orElse(null))
+                         .returns("The value of the `$L` member", member.getMemberName())
+                         .build();
         var builder = MethodSyntax.builder(Utils.toGetterName(state, member).toString())
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(type)
+                                  .javadoc(doc)
                                   .addStatement("return this.$L", name);
-        member.getTrait(DocumentationTrait.class)
-              .map(DocumentationTrait::getValue)
-              .map(JavadocExt::document)
-              .map(builder::javadoc);
         return builder.build();
     }
 
@@ -179,7 +192,7 @@ public final class StructureData implements DirectedClass {
         var dataType = builderJavaClassName();
         return MethodSyntax.builder("toBuilder")
                            .addModifier(Modifier.PUBLIC)
-                           .javadoc(JavadocExt.document("Returns a new builder to modify a copy of this instance."))
+                           .javadoc(toBuilderDoc())
                            .returns(dataType)
                            .addStatement("return new $T(this)", dataType)
                            .build();
@@ -301,9 +314,8 @@ public final class StructureData implements DirectedClass {
 
     List<MethodSyntax> builderMethods(ShapeCodegenState state) {
         var dataType = builderJavaClassName();
-        var javadoc = JavadocExt.document("Creates a new builder.");
         var builder = MethodSyntax.builder("builder")
-                                  .javadoc(javadoc)
+                                  .javadoc(builderDoc())
                                   .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                                   .returns(dataType)
                                   .addStatement("return new $T()", dataType)
@@ -314,5 +326,13 @@ public final class StructureData implements DirectedClass {
     @Override
     public List<DirectiveToTypeSyntax> innerTypes(ShapeCodegenState state) {
         return INNER_TYPES;
+    }
+
+    public static Javadoc toBuilderDoc() {
+        return TO_BUILDER_DOC.get();
+    }
+
+    public static Javadoc builderDoc() {
+        return BUILDER_DOC.get();
     }
 }

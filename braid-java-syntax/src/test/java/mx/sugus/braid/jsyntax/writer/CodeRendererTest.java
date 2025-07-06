@@ -51,7 +51,7 @@ class CodeRendererTest {
                 .node(ClassSyntax.builder("Incrementer")
                                  .javadoc(JavadocExt.document(
                                      """
-                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do"""))
+                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do."""))
                                  .addAnnotation(Annotation.fromStringValue(Generated.class, "super-duper"))
                                  .addMethod(MethodSyntax.builder("increment")
                                                         .addModifier(Modifier.PUBLIC)
@@ -61,7 +61,7 @@ class CodeRendererTest {
                                  .build())
                 .expected("""
                               /**
-                               * <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</p>
+                               * Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do.
                                */
                               @Generated("super-duper")
                               class Incrementer {
@@ -212,13 +212,13 @@ class CodeRendererTest {
                 .node(EnumSyntax.builder("OneAndTwo")
                                 .addEnumConstant(EnumConstant
                                                      .builder()
-                                                     .javadoc("Value one")
+                                                     .javadoc(JavadocExt.document("Value one"))
                                                      .name("ONE")
                                                      .body(CodeBlock.from("1"))
                                                      .build())
                                 .addEnumConstant(EnumConstant
                                                      .builder()
-                                                     .javadoc("Value two")
+                                                     .javadoc(JavadocExt.document("Value two"))
                                                      .name("TWO")
                                                      .body(CodeBlock.from("2"))
                                                      .build())
@@ -256,7 +256,8 @@ class CodeRendererTest {
             , testCase("Simple method")
                 .node(MethodSyntax.builder("toString")
                                   .returns(String.class)
-                                  .javadoc("Returns a $T representation of the value, or none if {@code null}", String.class)
+                                  .javadoc(JavadocExt.document("Returns a String representation of the value, or none if {@code "
+                                                               + "null}"))
                                   .addAnnotation(Override.class)
                                   .addModifier(Modifier.PUBLIC)
                                   .ifStatement("value == null", then -> then.addStatement("return $S", "none"))
@@ -443,7 +444,7 @@ class CodeRendererTest {
                 .build()
             , testCase("Non-trivial types get messy rather quickly")
                 .node(MethodSyntax.builder("max")
-                                  .javadoc("Same interface as {@link $T.max}", Collections.class)
+                                  .javadoc(JavadocExt.document("Same interface as {@link $T.max}", Collections.class))
                                   .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                                   .addTypeParam(TypeVariableTypeName
                                                     .builder()

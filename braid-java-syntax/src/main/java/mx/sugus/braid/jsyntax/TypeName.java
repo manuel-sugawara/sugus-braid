@@ -3,7 +3,7 @@ package mx.sugus.braid.jsyntax;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>An marker interface for all java types.</p>
+ * An marker interface for all java types.
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 public interface TypeName extends SyntaxNode {
@@ -11,12 +11,14 @@ public interface TypeName extends SyntaxNode {
     TypeKind kind();
 
     /**
-     * Creates a new {@link Builder} to modify a copy of this instance
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     Builder toBuilder();
 
     /**
-     * <p>Creates a new TypeName instance out of the given class.</p>
+     * Creates a new TypeName instance out of the given class.
      */
     public static TypeName from(Class<?> kclass) {
         return mx.sugus.braid.jsyntax.ext.TypeNameExt.from(kclass);
@@ -26,6 +28,8 @@ public interface TypeName extends SyntaxNode {
 
         /**
          * Builds a new instance of {@link TypeName}
+         * 
+         * @return The new instance of of {@link TypeName}
          */
         TypeName build();
     }

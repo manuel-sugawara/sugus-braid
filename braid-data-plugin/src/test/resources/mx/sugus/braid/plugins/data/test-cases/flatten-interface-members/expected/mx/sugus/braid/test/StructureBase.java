@@ -8,7 +8,9 @@ public interface StructureBase {
     String stringValue();
 
     /**
-     * Creates a new {@link Builder} to modify a copy of this instance
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     Builder toBuilder();
 
@@ -18,6 +20,8 @@ public interface StructureBase {
 
         /**
          * Builds a new instance of {@link StructureBase}
+         * 
+         * @return The new instance of of {@link StructureBase}
          */
         StructureBase build();
     }

@@ -3,18 +3,20 @@ package mx.sugus.braid.test;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>A structure to test interface support</p>
+ * A structure to test interface support
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 public interface Format {
 
     /**
-     * <p>The format kind</p>
+     * The format kind
      */
     FormatKind kind();
 
     /**
-     * Creates a new {@link Builder} to modify a copy of this instance
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     Builder toBuilder();
 
@@ -22,6 +24,8 @@ public interface Format {
 
         /**
          * Builds a new instance of {@link Format}
+         * 
+         * @return The new instance of of {@link Format}
          */
         Format build();
     }

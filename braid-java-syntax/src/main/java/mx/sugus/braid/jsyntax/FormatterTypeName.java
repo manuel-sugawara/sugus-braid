@@ -15,12 +15,18 @@ public final class FormatterTypeName implements FormatterNode {
         return SyntaxFormatterNodeKind.TYPE_NAME;
     }
 
+    /**
+     * 
+     * @return The value of the {@code value} member
+     */
     public TypeName value() {
         return this.value;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -54,7 +60,9 @@ public final class FormatterTypeName implements FormatterNode {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -71,7 +79,10 @@ public final class FormatterTypeName implements FormatterNode {
         }
 
         /**
-         * <p>Sets the value for <code>value</code>.</p>
+         * Sets the value for {@code value}.
+         * 
+         * @param value The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder value(TypeName value) {
             this.value = value;
@@ -83,6 +94,11 @@ public final class FormatterTypeName implements FormatterNode {
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link FormatterTypeName}
+         * 
+         * @return A new instance of {@link FormatterTypeName}
+         */
         public FormatterTypeName build() {
             return new FormatterTypeName(this);
         }

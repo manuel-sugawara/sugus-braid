@@ -9,7 +9,7 @@ public enum SyntaxFormatterNodeKind {
     TYPE_NAME("type-name"),
     BLOCK("block"),
     /**
-     * <p>Unknown enum constant</p>
+     * Unknown enum constant
      */
     UNKNOWN_TO_VERSION(null);
 
@@ -20,8 +20,9 @@ public enum SyntaxFormatterNodeKind {
     }
 
     /**
-     * <p>Returns the corresponding enum constant from the given value.</p>
-     * <p>If the value is unknown it returns <code>UNKNOWN_TO_VERSION</code>.</p>
+     * Returns the corresponding enum constant from the given value.
+     * <p>
+     * If the value is unknown it returns {@code UNKNOWN_TO_VERSION}.
      */
     public static SyntaxFormatterNodeKind from(String value) {
         if (value == null) {

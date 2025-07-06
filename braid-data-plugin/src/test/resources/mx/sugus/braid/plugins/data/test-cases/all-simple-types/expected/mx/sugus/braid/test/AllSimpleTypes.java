@@ -33,48 +33,90 @@ public final class AllSimpleTypes {
         this.instant = builder.instant;
     }
 
+    /**
+     * 
+     * @return The value of the {@code byte} member
+     */
     public Byte aByte() {
         return this.aByte;
     }
 
+    /**
+     * 
+     * @return The value of the {@code short} member
+     */
     public Short aShort() {
         return this.aShort;
     }
 
+    /**
+     * 
+     * @return The value of the {@code int} member
+     */
     public Integer anInt() {
         return this.anInt;
     }
 
+    /**
+     * 
+     * @return The value of the {@code long} member
+     */
     public Long aLong() {
         return this.aLong;
     }
 
+    /**
+     * 
+     * @return The value of the {@code bigInteger} member
+     */
     public BigInteger bigInteger() {
         return this.bigInteger;
     }
 
+    /**
+     * 
+     * @return The value of the {@code float} member
+     */
     public Float aFloat() {
         return this.aFloat;
     }
 
+    /**
+     * 
+     * @return The value of the {@code double} member
+     */
     public Double aDouble() {
         return this.aDouble;
     }
 
+    /**
+     * 
+     * @return The value of the {@code bigDecimal} member
+     */
     public BigDecimal bigDecimal() {
         return this.bigDecimal;
     }
 
+    /**
+     * 
+     * @return The value of the {@code string} member
+     */
     public String string() {
         return this.string;
     }
 
+    /**
+     * 
+     * @return The value of the {@code instant} member
+     */
     public Instant instant() {
         return this.instant;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -136,7 +178,9 @@ public final class AllSimpleTypes {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -171,7 +215,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aByte</code>.</p>
+         * Sets the value for {@code aByte}.
+         * 
+         * @param aByte The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aByte(Byte aByte) {
             this.aByte = aByte;
@@ -179,7 +226,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aShort</code>.</p>
+         * Sets the value for {@code aShort}.
+         * 
+         * @param aShort The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aShort(Short aShort) {
             this.aShort = aShort;
@@ -187,7 +237,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>anInt</code>.</p>
+         * Sets the value for {@code anInt}.
+         * 
+         * @param anInt The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder anInt(Integer anInt) {
             this.anInt = anInt;
@@ -195,7 +248,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aLong</code>.</p>
+         * Sets the value for {@code aLong}.
+         * 
+         * @param aLong The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aLong(Long aLong) {
             this.aLong = aLong;
@@ -203,7 +259,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>bigInteger</code>.</p>
+         * Sets the value for {@code bigInteger}.
+         * 
+         * @param bigInteger The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder bigInteger(BigInteger bigInteger) {
             this.bigInteger = bigInteger;
@@ -211,7 +270,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aFloat</code>.</p>
+         * Sets the value for {@code aFloat}.
+         * 
+         * @param aFloat The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aFloat(Float aFloat) {
             this.aFloat = aFloat;
@@ -219,7 +281,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>aDouble</code>.</p>
+         * Sets the value for {@code aDouble}.
+         * 
+         * @param aDouble The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder aDouble(Double aDouble) {
             this.aDouble = aDouble;
@@ -227,7 +292,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>bigDecimal</code>.</p>
+         * Sets the value for {@code bigDecimal}.
+         * 
+         * @param bigDecimal The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder bigDecimal(BigDecimal bigDecimal) {
             this.bigDecimal = bigDecimal;
@@ -235,7 +303,10 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>string</code>.</p>
+         * Sets the value for {@code string}.
+         * 
+         * @param string The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder string(String string) {
             this.string = string;
@@ -243,13 +314,21 @@ public final class AllSimpleTypes {
         }
 
         /**
-         * <p>Sets the value for <code>instant</code>.</p>
+         * Sets the value for {@code instant}.
+         * 
+         * @param instant The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder instant(Instant instant) {
             this.instant = instant;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link AllSimpleTypes}
+         * 
+         * @return A new instance of {@link AllSimpleTypes}
+         */
         public AllSimpleTypes build() {
             return new AllSimpleTypes(this);
         }

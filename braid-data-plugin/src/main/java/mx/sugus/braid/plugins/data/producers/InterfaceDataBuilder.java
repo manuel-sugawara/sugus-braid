@@ -7,7 +7,9 @@ import mx.sugus.braid.core.ImplementsKnowledgeIndex;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.jsyntax.AbstractMethodSyntax;
 import mx.sugus.braid.jsyntax.ClassName;
+import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.InterfaceSyntax;
+import mx.sugus.braid.jsyntax.Javadoc;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.traits.ConstTrait;
@@ -52,7 +54,10 @@ public class InterfaceDataBuilder implements DirectedInterface {
     private AbstractMethodSyntax buildMethod(ShapeCodegenState state) {
         var type = Utils.toJavaTypeName(state, state.shape());
         return AbstractMethodSyntax.builder()
-                                   .javadoc("Builds a new instance of {@link $T}", type)
+                                   .javadoc(Javadoc.builder()
+                                                   .body(CodeBlock.from("Builds a new instance of {@link $T}", type))
+                                                   .returns(CodeBlock.from("The new instance of of {@link $T}", type))
+                                                   .build())
                                    .name("build")
                                    .returns(type)
                                    .build();

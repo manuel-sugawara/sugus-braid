@@ -4,7 +4,7 @@ import java.util.Objects;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents a Java enum value.</p>
+ * Represents a Java enum value.
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class EnumConstant implements SyntaxNode {
@@ -20,33 +20,48 @@ public final class EnumConstant implements SyntaxNode {
     }
 
     /**
-     * <p>The javadoc for the enum constant.</p>
+     * The javadoc for the enum constant.
+     * 
+     * @return The value of the {@code javadoc} member
      */
     public Javadoc javadoc() {
         return this.javadoc;
     }
 
     /**
-     * <p>The name for the constant.</p>
+     * The name for the constant.
+     * 
+     * @return The value of the {@code name} member
      */
     public String name() {
         return this.name;
     }
 
     /**
-     * <p>An optional body for the constant.</p>
+     * An optional body for the constant.
+     * 
+     * @return The value of the {@code body} member
      */
     public EnumBody body() {
         return this.body;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitEnumConstant(this);
@@ -87,7 +102,9 @@ public final class EnumConstant implements SyntaxNode {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -108,22 +125,21 @@ public final class EnumConstant implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>javadoc</code>.</p>
-         * <p>The javadoc for the enum constant.</p>
+         * Sets the value for {@code javadoc}.
+         * 
+         * @param javadoc The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder javadoc(Javadoc javadoc) {
             this.javadoc = javadoc;
             return this;
         }
 
-        public Builder javadoc(String format, Object... args) {
-            this.javadoc = CodeBlock.from(format, args);
-            return this;
-        }
-
         /**
-         * <p>Sets the value for <code>name</code>.</p>
-         * <p>The name for the constant.</p>
+         * Sets the value for {@code name}.
+         * 
+         * @param name The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder name(String name) {
             this.name = name;
@@ -131,14 +147,21 @@ public final class EnumConstant implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>body</code>.</p>
-         * <p>An optional body for the constant.</p>
+         * Sets the value for {@code body}.
+         * 
+         * @param body The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder body(EnumBody body) {
             this.body = body;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link EnumConstant}
+         * 
+         * @return A new instance of {@link EnumConstant}
+         */
         public EnumConstant build() {
             return new EnumConstant(this);
         }

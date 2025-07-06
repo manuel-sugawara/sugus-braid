@@ -6,12 +6,14 @@ import mx.sugus.braid.rt.util.annotations.Generated;
 public interface SyntaxNode {
 
     /**
-     * Creates a new {@link Builder} to modify a copy of this instance
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     Builder toBuilder();
 
     /**
-     * <p>Calls the appropriate visitor method for the given node</p>
+     * Calls the appropriate visitor method for the given node
      */
     <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor);
 
@@ -19,6 +21,8 @@ public interface SyntaxNode {
 
         /**
          * Builds a new instance of {@link SyntaxNode}
+         * 
+         * @return The new instance of of {@link SyntaxNode}
          */
         SyntaxNode build();
     }

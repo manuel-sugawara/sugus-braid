@@ -4,7 +4,7 @@ import java.util.Objects;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>A simple structure shape one</p>
+ * A simple structure shape one
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 public final class StructureShape1 {
@@ -16,16 +16,26 @@ public final class StructureShape1 {
         this.intValue = builder.intValue;
     }
 
+    /**
+     * 
+     * @return The value of the {@code name} member
+     */
     public String name() {
         return this.name;
     }
 
+    /**
+     * 
+     * @return The value of the {@code intValue} member
+     */
     public Integer intValue() {
         return this.intValue;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -60,14 +70,16 @@ public final class StructureShape1 {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
     }
 
     /**
-     * <p>Creates a new structure with the given value.</p>
+     * Creates a new structure with the given value.
      */
     public static StructureShape1 from(String value) {
         return builder().name(value).build();
@@ -86,7 +98,10 @@ public final class StructureShape1 {
         }
 
         /**
-         * <p>Sets the value for <code>name</code>.</p>
+         * Sets the value for {@code name}.
+         * 
+         * @param name The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder name(String name) {
             this.name = name;
@@ -94,13 +109,21 @@ public final class StructureShape1 {
         }
 
         /**
-         * <p>Sets the value for <code>intValue</code>.</p>
+         * Sets the value for {@code intValue}.
+         * 
+         * @param intValue The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder intValue(Integer intValue) {
             this.intValue = intValue;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link StructureShape1}
+         * 
+         * @return A new instance of {@link StructureShape1}
+         */
         public StructureShape1 build() {
             return new StructureShape1(this);
         }

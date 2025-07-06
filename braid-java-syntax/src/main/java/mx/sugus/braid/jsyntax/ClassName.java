@@ -4,7 +4,7 @@ import java.util.Objects;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represent the name of a Java class</p>
+ * Represent the name of a Java class
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class ClassName implements TypeName {
@@ -20,21 +20,38 @@ public final class ClassName implements TypeName {
         return TypeKind.CLASS;
     }
 
+    /**
+     * 
+     * @return The value of the {@code name} member
+     */
     public String name() {
         return this.name;
     }
 
+    /**
+     * 
+     * @return The value of the {@code packageName} member
+     */
     public String packageName() {
         return this.packageName;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitClassName(this);
@@ -71,14 +88,16 @@ public final class ClassName implements TypeName {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
     }
 
     /**
-     * <p>Creates a class name using the given java class.</p>
+     * Creates a class name using the given java class.
      */
     public static ClassName from(Class<?> kclass) {
         if (kclass.isArray()) {
@@ -98,14 +117,14 @@ public final class ClassName implements TypeName {
     }
 
     /**
-     * <p>Creates a class name with the given package and simple name.</p>
+     * Creates a class name with the given package and simple name.
      */
     public static ClassName from(String packageName, String simpleName) {
         return builder().packageName(packageName).name(simpleName).build();
     }
 
     /**
-     * <p>Creates a class name without a package.</p>
+     * Creates a class name without a package.
      */
     public static ClassName from(String simpleName) {
         return builder()
@@ -114,9 +133,9 @@ public final class ClassName implements TypeName {
     }
 
     /**
-     * <p>Parses the given name as qualified java type. Recognizes <code>#</code> as package separator to
+     * Parses the given name as qualified java type. Recognizes {@code #} as package separator to
      * distinguish the package name from the class name. If not uses dots and takes the last
-     * segment as a class name and the previous ones as package name.</p>
+     * segment as a class name and the previous ones as package name.
      */
     public static ClassName parse(String name) {
         int splitIndex = -1;
@@ -139,8 +158,8 @@ public final class ClassName implements TypeName {
     }
 
     /**
-     * <p>Returns the top level enclosing class name if this class name represents an inner class,
-     * otherwise returns this className unchanged.</p>
+     * Returns the top level enclosing class name if this class name represents an inner class,
+     * otherwise returns this className unchanged.
      */
     public static ClassName toEnclosing(ClassName className) {
         String name = className.name();
@@ -152,8 +171,8 @@ public final class ClassName implements TypeName {
     }
 
     /**
-     * <p>Returns the type name as class name. If the given type name is a parametrized type name it
-     * returns its base class, if this is an array type, the component class.</p>
+     * Returns the type name as class name. If the given type name is a parametrized type name it
+     * returns its base class, if this is an array type, the component class.
      */
     public static ClassName toClassName(TypeName type) {
         while (true) {
@@ -185,7 +204,10 @@ public final class ClassName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>name</code>.</p>
+         * Sets the value for {@code name}.
+         * 
+         * @param name The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder name(String name) {
             this.name = name;
@@ -193,13 +215,21 @@ public final class ClassName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>packageName</code>.</p>
+         * Sets the value for {@code packageName}.
+         * 
+         * @param packageName The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder packageName(String packageName) {
             this.packageName = packageName;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link ClassName}
+         * 
+         * @return A new instance of {@link ClassName}
+         */
         public ClassName build() {
             return new ClassName(this);
         }

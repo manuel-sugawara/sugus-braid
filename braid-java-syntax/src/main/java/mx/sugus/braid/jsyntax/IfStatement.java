@@ -8,7 +8,7 @@ import mx.sugus.braid.rt.util.BuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents an <code>if</code> statement.</p>
+ * Represents an {@code if} statement.
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class IfStatement implements Statement {
@@ -28,33 +28,48 @@ public final class IfStatement implements Statement {
     }
 
     /**
-     * <p>The condition of the <code>if</code> statement</p>
+     * The condition of the {@code if} statement
+     * 
+     * @return The value of the {@code expression} member
      */
     public Expression expression() {
         return this.expression;
     }
 
     /**
-     * <p>The body of the <code>if</code> statement</p>
+     * The body of the {@code if} statement
+     * 
+     * @return The value of the {@code statement} member
      */
     public Block statement() {
         return this.statement;
     }
 
     /**
-     * <p>An optional <code>else</code> block.</p>
+     * An optional {@code else} block.
+     * 
+     * @return The value of the {@code elseStatement} member
      */
     public Statement elseStatement() {
         return this.elseStatement;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitIfStatement(this);
@@ -97,7 +112,9 @@ public final class IfStatement implements Statement {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -119,8 +136,10 @@ public final class IfStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>expression</code>.</p>
-         * <p>The condition of the <code>if</code> statement</p>
+         * Sets the value for {@code expression}.
+         * 
+         * @param expression The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder expression(Expression expression) {
             this.expression = expression;
@@ -133,8 +152,10 @@ public final class IfStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>statement</code>.</p>
-         * <p>The body of the <code>if</code> statement</p>
+         * Sets the value for {@code statement}.
+         * 
+         * @param statement The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder statement(Block statement) {
             this.statement.setPersistent(statement);
@@ -187,14 +208,21 @@ public final class IfStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>elseStatement</code>.</p>
-         * <p>An optional <code>else</code> block.</p>
+         * Sets the value for {@code elseStatement}.
+         * 
+         * @param elseStatement The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder elseStatement(Statement elseStatement) {
             this.elseStatement = elseStatement;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link IfStatement}
+         * 
+         * @return A new instance of {@link IfStatement}
+         */
         public IfStatement build() {
             return new IfStatement(this);
         }

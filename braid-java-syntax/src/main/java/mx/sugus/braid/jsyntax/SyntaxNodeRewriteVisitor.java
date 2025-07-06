@@ -76,7 +76,7 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
         Javadoc javadoc = node.javadoc();
         Javadoc javadocNew = null;
         if (javadoc != null) {
-            javadocNew = (Javadoc) javadoc.accept(this);
+            javadocNew = visitJavadoc(javadoc);
         }
         if (!Objects.equals(javadoc, javadocNew)) {
             if (builder == null) {
@@ -262,7 +262,7 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
         Javadoc javadoc = node.javadoc();
         Javadoc javadocNew = null;
         if (javadoc != null) {
-            javadocNew = (Javadoc) javadoc.accept(this);
+            javadocNew = visitJavadoc(javadoc);
         }
         if (!Objects.equals(javadoc, javadocNew)) {
             if (builder == null) {
@@ -451,7 +451,7 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
         Javadoc javadoc = node.javadoc();
         Javadoc javadocNew = null;
         if (javadoc != null) {
-            javadocNew = (Javadoc) javadoc.accept(this);
+            javadocNew = visitJavadoc(javadoc);
         }
         if (!Objects.equals(javadoc, javadocNew)) {
             if (builder == null) {
@@ -526,7 +526,7 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
         Javadoc javadoc = node.javadoc();
         Javadoc javadocNew = null;
         if (javadoc != null) {
-            javadocNew = (Javadoc) javadoc.accept(this);
+            javadocNew = visitJavadoc(javadoc);
         }
         if (!Objects.equals(javadoc, javadocNew)) {
             builder = node.toBuilder();
@@ -573,7 +573,7 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
         Javadoc javadoc = node.javadoc();
         Javadoc javadocNew = null;
         if (javadoc != null) {
-            javadocNew = (Javadoc) javadoc.accept(this);
+            javadocNew = visitJavadoc(javadoc);
         }
         if (!Objects.equals(javadoc, javadocNew)) {
             if (builder == null) {
@@ -693,7 +693,7 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
         Javadoc javadoc = node.javadoc();
         Javadoc javadocNew = null;
         if (javadoc != null) {
-            javadocNew = (Javadoc) javadoc.accept(this);
+            javadocNew = visitJavadoc(javadoc);
         }
         if (!Objects.equals(javadoc, javadocNew)) {
             builder = node.toBuilder();
@@ -825,7 +825,7 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
         Javadoc javadoc = node.javadoc();
         Javadoc javadocNew = null;
         if (javadoc != null) {
-            javadocNew = (Javadoc) javadoc.accept(this);
+            javadocNew = visitJavadoc(javadoc);
         }
         if (!Objects.equals(javadoc, javadocNew)) {
             if (builder == null) {
@@ -940,6 +940,57 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
     }
 
     @Override
+    public Javadoc visitJavadoc(Javadoc node) {
+        Javadoc.Builder builder = null;
+        CodeBlock body = node.body();
+        CodeBlock bodyNew = null;
+        if (body != null) {
+            bodyNew = visitCodeBlock(body);
+        }
+        if (!Objects.equals(body, bodyNew)) {
+            builder = node.toBuilder();
+            builder.body(bodyNew);
+        }
+        Map<String, CodeBlock> params = node.params();
+        boolean paramsChanged = false;
+        for (Map.Entry<String, CodeBlock> kvp : params.entrySet()) {
+            CodeBlock value = kvp.getValue();
+            CodeBlock newValue = visitCodeBlock(value);
+            if (!paramsChanged && value != newValue) {
+                paramsChanged = true;
+                if (builder == null) {
+                    builder = node.toBuilder();
+                }
+                builder.params(Collections.emptyMap());
+                for (Map.Entry<String, CodeBlock> innerKvp : params.entrySet()) {
+                    if (innerKvp.getValue() == value) {
+                        break;
+                    }
+                    builder.putParam(innerKvp.getKey(), innerKvp.getValue());
+                }
+            }
+            if (paramsChanged) {
+                builder.putParam(kvp.getKey(), newValue);
+            }
+        }
+        CodeBlock returns = node.returns();
+        CodeBlock returnsNew = null;
+        if (returns != null) {
+            returnsNew = visitCodeBlock(returns);
+        }
+        if (!Objects.equals(returns, returnsNew)) {
+            if (builder == null) {
+                builder = node.toBuilder();
+            }
+            builder.returns(returnsNew);
+        }
+        if (builder != null) {
+            return builder.build();
+        }
+        return node;
+    }
+
+    @Override
     public MethodSyntax visitMethodSyntax(MethodSyntax node) {
         MethodSyntax.Builder builder = null;
         List<TypeVariableTypeName> typeParams = node.typeParams();
@@ -979,7 +1030,7 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
         Javadoc javadoc = node.javadoc();
         Javadoc javadocNew = null;
         if (javadoc != null) {
-            javadocNew = (Javadoc) javadoc.accept(this);
+            javadocNew = visitJavadoc(javadoc);
         }
         if (!Objects.equals(javadoc, javadocNew)) {
             if (builder == null) {

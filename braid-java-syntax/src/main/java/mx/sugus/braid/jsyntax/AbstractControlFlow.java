@@ -8,8 +8,9 @@ import mx.sugus.braid.rt.util.BuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents any unstructured control flow statement block.</p>
- * <p>The control flows are rendered as</p>
+ * Represents any unstructured control flow statement block.
+ * <p>
+ * The control flows are rendered as
  * <pre><code>  prefix {
  *       statement_0
  *          ⋮
@@ -35,33 +36,48 @@ public final class AbstractControlFlow implements Statement {
     }
 
     /**
-     * <p>The prefix for this control flow.</p>
+     * The prefix for this control flow.
+     * 
+     * @return The value of the {@code prefix} member
      */
     public CodeBlock prefix() {
         return this.prefix;
     }
 
     /**
-     * <p>The body of the abstract control flow</p>
+     * The body of the abstract control flow
+     * 
+     * @return The value of the {@code statement} member
      */
     public Block statement() {
         return this.statement;
     }
 
     /**
-     * <p>An optional <code>next</code> block.</p>
+     * An optional {@code next} block.
+     * 
+     * @return The value of the {@code next} member
      */
     public AbstractControlFlow next() {
         return this.next;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitAbstractControlFlow(this);
@@ -104,7 +120,9 @@ public final class AbstractControlFlow implements Statement {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -126,8 +144,10 @@ public final class AbstractControlFlow implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>prefix</code>.</p>
-         * <p>The prefix for this control flow.</p>
+         * Sets the value for {@code prefix}.
+         * 
+         * @param prefix The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder prefix(CodeBlock prefix) {
             this.prefix = prefix;
@@ -140,8 +160,10 @@ public final class AbstractControlFlow implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>statement</code>.</p>
-         * <p>The body of the abstract control flow</p>
+         * Sets the value for {@code statement}.
+         * 
+         * @param statement The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder statement(Block statement) {
             this.statement.setPersistent(statement);
@@ -194,14 +216,21 @@ public final class AbstractControlFlow implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>next</code>.</p>
-         * <p>An optional <code>next</code> block.</p>
+         * Sets the value for {@code next}.
+         * 
+         * @param next The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder next(AbstractControlFlow next) {
             this.next = next;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link AbstractControlFlow}
+         * 
+         * @return A new instance of {@link AbstractControlFlow}
+         */
         public AbstractControlFlow build() {
             return new AbstractControlFlow(this);
         }

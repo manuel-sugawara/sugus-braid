@@ -6,9 +6,9 @@ import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Possible values for an annotation member, either an expression or
+ * Possible values for an annotation member, either an expression or
  * a list of expressions. Annotation members are missing for the time
- * being.</p>
+ * being.
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 @SuppressWarnings("unchecked")
@@ -22,8 +22,8 @@ public final class MemberValue {
     }
 
     /**
-     * <p>An expression member, equivalent to the <code>ConditionalExpression</code> production
-     * in the java spec.</p>
+     * An expression member, equivalent to the {@code ConditionalExpression} production
+     * in the java spec.
      */
     public Expression expression() {
         if (this.variantTag == VariantTag.EXPRESSION) {
@@ -33,8 +33,8 @@ public final class MemberValue {
     }
 
     /**
-     * <p>An array initializer member, equivalent to the <code>ElementValueArrayInitializer</code>
-     * production in the java spec.</p>
+     * An array initializer member, equivalent to the {@code ElementValueArrayInitializer}
+     * production in the java spec.
      */
     public List<Expression> arrayExpression() {
         if (this.variantTag == VariantTag.ARRAY_EXPRESSION) {
@@ -44,23 +44,31 @@ public final class MemberValue {
     }
 
     /**
-     * <p>Returns an enum value representing which member of this object is populated.</p>
-     * <p>This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.</p>
+     * Returns the enum value representing which member of this object is populated.
+     * <p>
+     * This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.
+     * 
+     * @return The enum value representing which member of this object is populated
      */
     public VariantTag variantTag() {
         return this.variantTag;
     }
 
     /**
-     * <p>Returns the untyped value of the union.</p>
-     * <p>Use {@link #type()} to get the member currently set.</p>
+     * Returns the untyped value of the union.
+     * <p>
+     * Use {@link #type()} to get the member currently set.
+     * 
+     * @return The untyped value of the union.
      */
     public Object variantValue() {
         return this.variantValue;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -99,28 +107,30 @@ public final class MemberValue {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
     }
 
     /**
-     * <p>Creates a new <code>MemberValue</code> for the expression variant</p>
+     * Creates a new {@code MemberValue} for the expression variant
      */
     public static MemberValue forExpression(String format, Object... args) {
         return builder().expression(CodeBlock.from(format, args)).build();
     }
 
     /**
-     * <p>Creates a new <code>MemberValue</code> for the expression variant</p>
+     * Creates a new {@code MemberValue} for the expression variant
      */
     public static MemberValue forExpression(CodeBlock codeBlock) {
         return builder().expression(codeBlock).build();
     }
 
     /**
-     * <p>Creates a new <code>MemberValue</code> for the array expression variant</p>
+     * Creates a new {@code MemberValue} for the array expression variant
      */
     public static MemberValue forArrayExpression(CodeBlock... values) {
         return builder().arrayExpression(java.util.Arrays.asList(values)).build();
@@ -164,9 +174,10 @@ public final class MemberValue {
         }
 
         /**
-         * <p>Sets the value for <code>expression</code></p>
-         * <p>An expression member, equivalent to the <code>ConditionalExpression</code> production
-         * in the java spec.</p>
+         * Sets the value for {@code expression}
+         * <p>
+         * An expression member, equivalent to the {@code ConditionalExpression} production
+         * in the java spec.
          */
         public Builder expression(Expression expression) {
             this.variantTag = VariantTag.EXPRESSION;
@@ -186,9 +197,10 @@ public final class MemberValue {
         }
 
         /**
-         * <p>Sets the value for <code>arrayExpression</code></p>
-         * <p>An array initializer member, equivalent to the <code>ElementValueArrayInitializer</code>
-         * production in the java spec.</p>
+         * Sets the value for {@code arrayExpression}
+         * <p>
+         * An array initializer member, equivalent to the {@code ElementValueArrayInitializer}
+         * production in the java spec.
          */
         public Builder arrayExpression(List<Expression> arrayExpression) {
             CollectionBuilderReference<List<Expression>> tmp = arrayExpression();
@@ -198,7 +210,7 @@ public final class MemberValue {
         }
 
         /**
-         * <p>Adds a single value for <code>arrayExpression</code></p>
+         * Adds a single value for {@code arrayExpression}
          */
         public Builder addArrayExpression(Expression arrayExpression) {
             arrayExpression().asTransient().add(arrayExpression);

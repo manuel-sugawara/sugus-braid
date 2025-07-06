@@ -6,7 +6,7 @@ import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represent an <code>annotation</code>.</p>
+ * Represent an {@code annotation}.
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class Annotation implements SyntaxNode {
@@ -19,26 +19,39 @@ public final class Annotation implements SyntaxNode {
     }
 
     /**
-     * <p>The class for the annotation</p>
+     * The class for the annotation
+     * 
+     * @return The value of the {@code type} member
      */
     public ClassName type() {
         return this.type;
     }
 
     /**
-     * <p>The members of the annotation</p>
+     * The members of the annotation
+     * 
+     * @return The value of the {@code members} member
      */
     public Map<java.lang.String, MemberValue> members() {
         return this.members;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitAnnotation(this);
@@ -73,28 +86,30 @@ public final class Annotation implements SyntaxNode {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * Creates a new builder
      */
     public static Builder builder(ClassName type) {
         return builder().type(type);
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * Creates a new builder
      */
     public static Builder builder(Class<?> kclass) {
         return builder().type(ClassName.from(kclass));
     }
 
     /**
-     * <p>Creates a new annotation with a single string member value.</p>
+     * Creates a new annotation with a single string member value.
      */
     public static Annotation fromStringValue(Class<?> kclass, String value) {
         return builder().type(ClassName.from(kclass))
@@ -116,8 +131,10 @@ public final class Annotation implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>type</code>.</p>
-         * <p>The class for the annotation</p>
+         * Sets the value for {@code type}.
+         * 
+         * @param type The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder type(ClassName type) {
             this.type = type;
@@ -125,8 +142,10 @@ public final class Annotation implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>members</code>.</p>
-         * <p>The members of the annotation</p>
+         * Sets the value for {@code members}.
+         * 
+         * @param members The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder members(Map<java.lang.String, MemberValue> members) {
             this.members.clear();
@@ -134,11 +153,23 @@ public final class Annotation implements SyntaxNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code members} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param member The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putMember(java.lang.String key, MemberValue member) {
             this.members.asTransient().put(key, member);
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link Annotation}
+         * 
+         * @return A new instance of {@link Annotation}
+         */
         public Annotation build() {
             return new Annotation(this);
         }

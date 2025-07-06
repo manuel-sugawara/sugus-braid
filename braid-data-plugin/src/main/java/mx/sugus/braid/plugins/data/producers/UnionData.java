@@ -1,6 +1,8 @@
 package mx.sugus.braid.plugins.data.producers;
 
 import static mx.sugus.braid.plugins.data.producers.CodegenUtils.BUILDER_TYPE;
+import static mx.sugus.braid.plugins.data.producers.StructureData.builderDoc;
+import static mx.sugus.braid.plugins.data.producers.StructureData.toBuilderDoc;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.ConstructorMethodSyntax;
 import mx.sugus.braid.jsyntax.FieldSyntax;
+import mx.sugus.braid.jsyntax.Javadoc;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.SwitchStatement;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
@@ -109,10 +112,14 @@ public final class UnionData implements DirectedClass {
     }
 
     private MethodSyntax accessorForType() {
-        var doc = "Returns an enum value representing which member of this object is populated.\n\n"
+        var body = "Returns the enum value representing which member of this object is populated.\n\n"
                   + "This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.";
+        var doc = Javadoc.builder()
+            .body(body)
+            .returns("The enum value representing which member of this object is populated")
+            .build();
         return MethodSyntax.builder("variantTag")
-                           .javadoc(JavadocExt.document(doc))
+                           .javadoc(doc)
                            .addModifier(Modifier.PUBLIC)
                            .returns(UnionVariantTagEnumData.VARIANT_TAG_NAME)
                            .addStatement("return this.variantTag")
@@ -120,11 +127,14 @@ public final class UnionData implements DirectedClass {
     }
 
     private MethodSyntax accessorForValue() {
-        var doc = "Returns the untyped value of the union.\n\n"
+        var body = "Returns the untyped value of the union.\n\n"
                   + "Use {@link #type()} to get the member currently set.";
-
+        var doc = Javadoc.builder()
+                         .body(body)
+                         .returns("The untyped value of the union.")
+                         .build();
         return MethodSyntax.builder("variantValue")
-                           .javadoc(JavadocExt.document(doc))
+                           .javadoc(doc)
                            .addModifier(Modifier.PUBLIC)
                            .returns(Object.class)
                            .body(b -> b.addStatement("return this.variantValue"))
@@ -135,7 +145,7 @@ public final class UnionData implements DirectedClass {
         var dataType = builderJavaClassName();
         return MethodSyntax.builder("toBuilder")
                            .addModifier(Modifier.PUBLIC)
-                           .javadoc(JavadocExt.document("Returns a new builder to modify a copy of this instance"))
+                           .javadoc(toBuilderDoc())
                            .returns(dataType)
                            .body(b -> b.addStatement("return new $T(this)", dataType))
                            .build();
@@ -203,7 +213,7 @@ public final class UnionData implements DirectedClass {
     List<MethodSyntax> builderMethods(ShapeCodegenState state) {
         var dataType = builderJavaClassName();
         var defaultBuilder = MethodSyntax.builder("builder")
-                                         .javadoc(JavadocExt.document("Creates a new builder"))
+                                         .javadoc(builderDoc())
                                          .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                                          .returns(dataType)
                                          .body(b -> b.addStatement("return new $T()", dataType))

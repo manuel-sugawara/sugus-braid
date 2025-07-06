@@ -41,6 +41,8 @@ public interface SyntaxNodeVisitor<T> {
 
     T visitInterfaceSyntax(InterfaceSyntax node);
 
+    T visitJavadoc(Javadoc node);
+
     T visitMethodSyntax(MethodSyntax node);
 
     T visitParameter(Parameter node);
@@ -146,6 +148,11 @@ public interface SyntaxNodeVisitor<T> {
 
         @Override
         public T visitInterfaceSyntax(InterfaceSyntax node) {
+            return getDefault(node);
+        }
+
+        @Override
+        public T visitJavadoc(Javadoc node) {
             return getDefault(node);
         }
 

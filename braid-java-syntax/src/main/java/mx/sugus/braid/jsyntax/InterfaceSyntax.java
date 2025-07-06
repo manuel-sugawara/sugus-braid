@@ -8,7 +8,7 @@ import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents a java interface.</p>
+ * Represents a java interface.
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class InterfaceSyntax implements TypeSyntax {
@@ -40,75 +40,102 @@ public final class InterfaceSyntax implements TypeSyntax {
     }
 
     /**
-     * <p>A of types parameters for this type.</p>
+     * A of types parameters for this type.
+     * 
+     * @return The value of the {@code typeParams} member
      */
     public List<TypeVariableTypeName> typeParams() {
         return this.typeParams;
     }
 
     /**
-     * <p>The javadoc for the type.</p>
+     * The javadoc for the type.
+     * 
+     * @return The value of the {@code javadoc} member
      */
     public Javadoc javadoc() {
         return this.javadoc;
     }
 
     /**
-     * <p>The simple name for the type.</p>
+     * The simple name for the type.
+     * 
+     * @return The value of the {@code name} member
      */
     public String name() {
         return this.name;
     }
 
     /**
-     * <p>A list of modifiers for this type.</p>
+     * A list of modifiers for this type.
+     * 
+     * @return The value of the {@code modifiers} member
      */
     public Set<Modifier> modifiers() {
         return this.modifiers;
     }
 
     /**
-     * <p>A list of annotations for this type.</p>
+     * A list of annotations for this type.
+     * 
+     * @return The value of the {@code annotations} member
      */
     public List<Annotation> annotations() {
         return this.annotations;
     }
 
     /**
-     * <p>A list of super interfaces for this type.</p>
+     * A list of super interfaces for this type.
+     * 
+     * @return The value of the {@code superInterfaces} member
      */
     public List<TypeName> superInterfaces() {
         return this.superInterfaces;
     }
 
     /**
-     * <p>A list of fields for this type.</p>
+     * A list of fields for this type.
+     * 
+     * @return The value of the {@code fields} member
      */
     public List<FieldSyntax> fields() {
         return this.fields;
     }
 
     /**
-     * <p>A list of methods for this type.</p>
+     * A list of methods for this type.
+     * 
+     * @return The value of the {@code methods} member
      */
     public List<BaseMethodSyntax> methods() {
         return this.methods;
     }
 
     /**
-     * <p>A list of inner types enclosed by this type.</p>
+     * A list of inner types enclosed by this type.
+     * 
+     * @return The value of the {@code innerTypes} member
      */
     public List<TypeSyntax> innerTypes() {
         return this.innerTypes;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitInterfaceSyntax(this);
@@ -169,14 +196,16 @@ public final class InterfaceSyntax implements TypeSyntax {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * Creates a new builder
      */
     public static Builder builder(String name) {
         return builder().name(name);
@@ -216,8 +245,10 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>typeParams</code>.</p>
-         * <p>A of types parameters for this type.</p>
+         * Sets the value for {@code typeParams}.
+         * 
+         * @param typeParams The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder typeParams(List<TypeVariableTypeName> typeParams) {
             this.typeParams.clear();
@@ -226,7 +257,7 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Adds a single value for <code>typeParams</code>.</p>
+         * Adds a single value for {@code typeParams}.
          */
         public Builder addTypeParam(TypeVariableTypeName typeParam) {
             this.typeParams.asTransient().add(typeParam);
@@ -234,7 +265,7 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Adds to <code>typeParams</code> building the value using the given arguments</p>
+         * Adds to {@code typeParams} building the value using the given arguments
          */
         public Builder addTypeParam(String name) {
             this.typeParams.asTransient().add(TypeVariableTypeName.from(name));
@@ -242,22 +273,21 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>javadoc</code>.</p>
-         * <p>The javadoc for the type.</p>
+         * Sets the value for {@code javadoc}.
+         * 
+         * @param javadoc The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder javadoc(Javadoc javadoc) {
             this.javadoc = javadoc;
             return this;
         }
 
-        public Builder javadoc(String format, Object... args) {
-            this.javadoc = CodeBlock.from(format, args);
-            return this;
-        }
-
         /**
-         * <p>Sets the value for <code>name</code>.</p>
-         * <p>The simple name for the type.</p>
+         * Sets the value for {@code name}.
+         * 
+         * @param name The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder name(String name) {
             this.name = name;
@@ -265,8 +295,10 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>modifiers</code>.</p>
-         * <p>A list of modifiers for this type.</p>
+         * Sets the value for {@code modifiers}.
+         * 
+         * @param modifiers The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder modifiers(Set<Modifier> modifiers) {
             this.modifiers.clear();
@@ -275,7 +307,7 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Adds a single value for <code>modifiers</code>.</p>
+         * Adds a single value for {@code modifiers}.
          */
         public Builder addModifier(Modifier modifier) {
             this.modifiers.asTransient().add(modifier);
@@ -283,7 +315,7 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Adds the given values to <code>modifiers</code></p>
+         * Adds the given values to {@code modifiers}
          */
         public Builder addModifiers(Modifier modifier1, Modifier modifier2) {
             this.modifiers.asTransient().add(modifier1);
@@ -292,7 +324,7 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Adds the given values to <code>modifiers</code></p>
+         * Adds the given values to {@code modifiers}
          */
         public Builder addModifiers(Modifier modifier1, Modifier modifier2, Modifier modifier3) {
             this.modifiers.asTransient().add(modifier1);
@@ -302,8 +334,10 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>annotations</code>.</p>
-         * <p>A list of annotations for this type.</p>
+         * Sets the value for {@code annotations}.
+         * 
+         * @param annotations The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder annotations(List<Annotation> annotations) {
             this.annotations.clear();
@@ -312,7 +346,7 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Adds a single value for <code>annotations</code>.</p>
+         * Adds a single value for {@code annotations}.
          */
         public Builder addAnnotation(Annotation annotation) {
             this.annotations.asTransient().add(annotation);
@@ -320,7 +354,7 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Adds to <code>annotations</code> building the value using the given arguments</p>
+         * Adds to {@code annotations} building the value using the given arguments
          */
         public Builder addAnnotation(ClassName type) {
             this.annotations.asTransient().add(Annotation.builder(type).build());
@@ -328,7 +362,7 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Adds to <code>annotations</code> building the value using the given arguments</p>
+         * Adds to {@code annotations} building the value using the given arguments
          */
         public Builder addAnnotation(Class<?> kclass) {
             this.annotations.asTransient().add(Annotation.builder(kclass).build());
@@ -336,8 +370,10 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>superInterfaces</code>.</p>
-         * <p>A list of super interfaces for this type.</p>
+         * Sets the value for {@code superInterfaces}.
+         * 
+         * @param superInterfaces The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder superInterfaces(List<TypeName> superInterfaces) {
             this.superInterfaces.clear();
@@ -346,7 +382,7 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Adds a single value for <code>superInterfaces</code>.</p>
+         * Adds a single value for {@code superInterfaces}.
          */
         public Builder addSuperInterface(TypeName superInterface) {
             this.superInterfaces.asTransient().add(superInterface);
@@ -354,7 +390,7 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Creates a new TypeName instance out of the given class.</p>
+         * Creates a new TypeName instance out of the given class.
          */
         public Builder addSuperInterface(Class<?> kclass) {
             this.superInterfaces.asTransient().add(TypeName.from(kclass));
@@ -362,8 +398,10 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>fields</code>.</p>
-         * <p>A list of fields for this type.</p>
+         * Sets the value for {@code fields}.
+         * 
+         * @param fields The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder fields(List<FieldSyntax> fields) {
             this.fields.clear();
@@ -372,7 +410,7 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Adds a single value for <code>fields</code>.</p>
+         * Adds a single value for {@code fields}.
          */
         public Builder addField(FieldSyntax field) {
             this.fields.asTransient().add(field);
@@ -380,7 +418,7 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Adds to <code>fields</code> building the value using the given arguments</p>
+         * Adds to {@code fields} building the value using the given arguments
          */
         public Builder addField(TypeName type, String name) {
             this.fields.asTransient().add(FieldSyntax.from(type, name));
@@ -388,7 +426,7 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Adds to <code>fields</code> building the value using the given arguments</p>
+         * Adds to {@code fields} building the value using the given arguments
          */
         public Builder addField(Class<?> kclass, String name) {
             this.fields.asTransient().add(FieldSyntax.from(kclass, name));
@@ -396,8 +434,10 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>methods</code>.</p>
-         * <p>A list of methods for this type.</p>
+         * Sets the value for {@code methods}.
+         * 
+         * @param methods The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder methods(List<BaseMethodSyntax> methods) {
             this.methods.clear();
@@ -406,7 +446,7 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Adds a single value for <code>methods</code>.</p>
+         * Adds a single value for {@code methods}.
          */
         public Builder addMethod(BaseMethodSyntax method) {
             this.methods.asTransient().add(method);
@@ -414,8 +454,10 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>innerTypes</code>.</p>
-         * <p>A list of inner types enclosed by this type.</p>
+         * Sets the value for {@code innerTypes}.
+         * 
+         * @param innerTypes The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder innerTypes(List<TypeSyntax> innerTypes) {
             this.innerTypes.clear();
@@ -424,13 +466,18 @@ public final class InterfaceSyntax implements TypeSyntax {
         }
 
         /**
-         * <p>Adds a single value for <code>innerTypes</code>.</p>
+         * Adds a single value for {@code innerTypes}.
          */
         public Builder addInnerType(TypeSyntax innerType) {
             this.innerTypes.asTransient().add(innerType);
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link InterfaceSyntax}
+         * 
+         * @return A new instance of {@link InterfaceSyntax}
+         */
         public InterfaceSyntax build() {
             return new InterfaceSyntax(this);
         }

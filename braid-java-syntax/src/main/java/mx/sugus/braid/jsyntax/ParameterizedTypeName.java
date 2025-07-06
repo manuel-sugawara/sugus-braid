@@ -6,7 +6,7 @@ import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents a parametrized java type.</p>
+ * Represents a parametrized java type.
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class ParameterizedTypeName implements TypeName {
@@ -22,21 +22,38 @@ public final class ParameterizedTypeName implements TypeName {
         return TypeKind.PARAMETERIZED;
     }
 
+    /**
+     * 
+     * @return The value of the {@code rawType} member
+     */
     public ClassName rawType() {
         return this.rawType;
     }
 
+    /**
+     * 
+     * @return The value of the {@code typeArguments} member
+     */
     public List<TypeName> typeArguments() {
         return this.typeArguments;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitParameterizedTypeName(this);
@@ -73,7 +90,9 @@ public final class ParameterizedTypeName implements TypeName {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -120,7 +139,10 @@ public final class ParameterizedTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>rawType</code>.</p>
+         * Sets the value for {@code rawType}.
+         * 
+         * @param rawType The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder rawType(ClassName rawType) {
             this.rawType = rawType;
@@ -128,7 +150,10 @@ public final class ParameterizedTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>typeArguments</code>.</p>
+         * Sets the value for {@code typeArguments}.
+         * 
+         * @param typeArguments The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder typeArguments(List<TypeName> typeArguments) {
             this.typeArguments.clear();
@@ -137,7 +162,7 @@ public final class ParameterizedTypeName implements TypeName {
         }
 
         /**
-         * <p>Adds a single value for <code>typeArguments</code>.</p>
+         * Adds a single value for {@code typeArguments}.
          */
         public Builder addTypeArgument(TypeName typeArgument) {
             this.typeArguments.asTransient().add(typeArgument);
@@ -145,13 +170,18 @@ public final class ParameterizedTypeName implements TypeName {
         }
 
         /**
-         * <p>Creates a new TypeName instance out of the given class.</p>
+         * Creates a new TypeName instance out of the given class.
          */
         public Builder addTypeArgument(Class<?> kclass) {
             this.typeArguments.asTransient().add(TypeName.from(kclass));
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link ParameterizedTypeName}
+         * 
+         * @return A new instance of {@link ParameterizedTypeName}
+         */
         public ParameterizedTypeName build() {
             return new ParameterizedTypeName(this);
         }

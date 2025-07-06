@@ -56,72 +56,138 @@ public final class Parent implements ToNode {
         this.nestedNestedIntegerMap = Objects.requireNonNull(builder.nestedNestedIntegerMap.asPersistent(), "nestedNestedIntegerMap");
     }
 
+    /**
+     * 
+     * @return The value of the {@code stringMember} member
+     */
     public String stringMember() {
         return this.stringMember;
     }
 
+    /**
+     * 
+     * @return The value of the {@code children} member
+     */
     public Map<String, Child> children() {
         return this.children;
     }
 
+    /**
+     * 
+     * @return The value of the {@code booleans} member
+     */
     public Map<String, Boolean> booleans() {
         return this.booleans;
     }
 
+    /**
+     * 
+     * @return The value of the {@code bytes} member
+     */
     public Map<String, Byte> bytes() {
         return this.bytes;
     }
 
+    /**
+     * 
+     * @return The value of the {@code shorts} member
+     */
     public Map<String, Short> shorts() {
         return this.shorts;
     }
 
+    /**
+     * 
+     * @return The value of the {@code integers} member
+     */
     public Map<String, Integer> integers() {
         return this.integers;
     }
 
+    /**
+     * 
+     * @return The value of the {@code bigIntegers} member
+     */
     public Map<String, BigInteger> bigIntegers() {
         return this.bigIntegers;
     }
 
+    /**
+     * 
+     * @return The value of the {@code longs} member
+     */
     public Map<String, Long> longs() {
         return this.longs;
     }
 
+    /**
+     * 
+     * @return The value of the {@code floats} member
+     */
     public Map<String, Float> floats() {
         return this.floats;
     }
 
+    /**
+     * 
+     * @return The value of the {@code doubles} member
+     */
     public Map<String, Double> doubles() {
         return this.doubles;
     }
 
+    /**
+     * 
+     * @return The value of the {@code strings} member
+     */
     public Map<String, String> strings() {
         return this.strings;
     }
 
+    /**
+     * 
+     * @return The value of the {@code bigDecimals} member
+     */
     public Map<String, BigDecimal> bigDecimals() {
         return this.bigDecimals;
     }
 
+    /**
+     * 
+     * @return The value of the {@code enumValues} member
+     */
     public Map<String, EnumValue> enumValues() {
         return this.enumValues;
     }
 
+    /**
+     * 
+     * @return The value of the {@code integerListMap} member
+     */
     public Map<String, List<Integer>> integerListMap() {
         return this.integerListMap;
     }
 
+    /**
+     * 
+     * @return The value of the {@code nestedIntegerListMap} member
+     */
     public Map<String, Map<String, List<Integer>>> nestedIntegerListMap() {
         return this.nestedIntegerListMap;
     }
 
+    /**
+     * 
+     * @return The value of the {@code nestedNestedIntegerMap} member
+     */
     public Map<String, List<Map<String, Integer>>> nestedNestedIntegerMap() {
         return this.nestedNestedIntegerMap;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -201,14 +267,16 @@ public final class Parent implements ToNode {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
     }
 
     /**
-     * <p>Converts this instance to Node.</p>
+     * Converts this instance to Node.
      */
     @Override
     public Node toNode() {
@@ -345,14 +413,14 @@ public final class Parent implements ToNode {
     }
 
     /**
-     * <p>Converts a {@link Node} to Parent.</p>
+     * Converts a {@link Node} to Parent.
      */
     public static Parent fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * <p>Converts a {@link Node} to Parent.</p>
+     * Converts a {@link Node} to Parent.
      */
     public static Parent fromNode(Validation validator, Node node) {
         validator = validator.with("Parent");
@@ -541,7 +609,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>stringMember</code>.</p>
+         * Sets the value for {@code stringMember}.
+         * 
+         * @param stringMember The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder stringMember(String stringMember) {
             this.stringMember = stringMember;
@@ -549,7 +620,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>children</code>.</p>
+         * Sets the value for {@code children}.
+         * 
+         * @param children The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder children(Map<String, Child> children) {
             this.children.clear();
@@ -557,13 +631,23 @@ public final class Parent implements ToNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code children} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param children The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putChildren(String key, Child children) {
             this.children.asTransient().put(key, children);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>booleans</code>.</p>
+         * Sets the value for {@code booleans}.
+         * 
+         * @param booleans The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder booleans(Map<String, Boolean> booleans) {
             this.booleans.clear();
@@ -571,13 +655,23 @@ public final class Parent implements ToNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code booleans} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param aBoolean The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putBoolean(String key, Boolean aBoolean) {
             this.booleans.asTransient().put(key, aBoolean);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>bytes</code>.</p>
+         * Sets the value for {@code bytes}.
+         * 
+         * @param bytes The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder bytes(Map<String, Byte> bytes) {
             this.bytes.clear();
@@ -585,13 +679,23 @@ public final class Parent implements ToNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code bytes} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param aByte The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putByte(String key, Byte aByte) {
             this.bytes.asTransient().put(key, aByte);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>shorts</code>.</p>
+         * Sets the value for {@code shorts}.
+         * 
+         * @param shorts The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder shorts(Map<String, Short> shorts) {
             this.shorts.clear();
@@ -599,13 +703,23 @@ public final class Parent implements ToNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code shorts} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param aShort The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putShort(String key, Short aShort) {
             this.shorts.asTransient().put(key, aShort);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>integers</code>.</p>
+         * Sets the value for {@code integers}.
+         * 
+         * @param integers The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder integers(Map<String, Integer> integers) {
             this.integers.clear();
@@ -613,13 +727,23 @@ public final class Parent implements ToNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code integers} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param integer The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putInteger(String key, Integer integer) {
             this.integers.asTransient().put(key, integer);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>bigIntegers</code>.</p>
+         * Sets the value for {@code bigIntegers}.
+         * 
+         * @param bigIntegers The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder bigIntegers(Map<String, BigInteger> bigIntegers) {
             this.bigIntegers.clear();
@@ -627,13 +751,23 @@ public final class Parent implements ToNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code bigIntegers} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param bigInteger The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putBigInteger(String key, BigInteger bigInteger) {
             this.bigIntegers.asTransient().put(key, bigInteger);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>longs</code>.</p>
+         * Sets the value for {@code longs}.
+         * 
+         * @param longs The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder longs(Map<String, Long> longs) {
             this.longs.clear();
@@ -641,13 +775,23 @@ public final class Parent implements ToNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code longs} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param aLong The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putLong(String key, Long aLong) {
             this.longs.asTransient().put(key, aLong);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>floats</code>.</p>
+         * Sets the value for {@code floats}.
+         * 
+         * @param floats The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder floats(Map<String, Float> floats) {
             this.floats.clear();
@@ -655,13 +799,23 @@ public final class Parent implements ToNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code floats} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param aFloat The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putFloat(String key, Float aFloat) {
             this.floats.asTransient().put(key, aFloat);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>doubles</code>.</p>
+         * Sets the value for {@code doubles}.
+         * 
+         * @param doubles The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder doubles(Map<String, Double> doubles) {
             this.doubles.clear();
@@ -669,13 +823,23 @@ public final class Parent implements ToNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code doubles} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param aDouble The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putDouble(String key, Double aDouble) {
             this.doubles.asTransient().put(key, aDouble);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>strings</code>.</p>
+         * Sets the value for {@code strings}.
+         * 
+         * @param strings The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder strings(Map<String, String> strings) {
             this.strings.clear();
@@ -683,13 +847,23 @@ public final class Parent implements ToNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code strings} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param string The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putString(String key, String string) {
             this.strings.asTransient().put(key, string);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>bigDecimals</code>.</p>
+         * Sets the value for {@code bigDecimals}.
+         * 
+         * @param bigDecimals The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder bigDecimals(Map<String, BigDecimal> bigDecimals) {
             this.bigDecimals.clear();
@@ -697,13 +871,23 @@ public final class Parent implements ToNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code bigDecimals} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param bigDecimal The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putBigDecimal(String key, BigDecimal bigDecimal) {
             this.bigDecimals.asTransient().put(key, bigDecimal);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>enumValues</code>.</p>
+         * Sets the value for {@code enumValues}.
+         * 
+         * @param enumValues The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder enumValues(Map<String, EnumValue> enumValues) {
             this.enumValues.clear();
@@ -711,13 +895,23 @@ public final class Parent implements ToNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code enumValues} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param enumValue The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putEnumValue(String key, EnumValue enumValue) {
             this.enumValues.asTransient().put(key, enumValue);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>integerListMap</code>.</p>
+         * Sets the value for {@code integerListMap}.
+         * 
+         * @param integerListMap The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder integerListMap(Map<String, List<Integer>> integerListMap) {
             this.integerListMap.clear();
@@ -725,13 +919,23 @@ public final class Parent implements ToNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code integerListMap} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param integerListMap The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putIntegerListMap(String key, List<Integer> integerListMap) {
             this.integerListMap.asTransient().put(key, integerListMap);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>nestedIntegerListMap</code>.</p>
+         * Sets the value for {@code nestedIntegerListMap}.
+         * 
+         * @param nestedIntegerListMap The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder nestedIntegerListMap(Map<String, Map<String, List<Integer>>> nestedIntegerListMap) {
             this.nestedIntegerListMap.clear();
@@ -739,13 +943,23 @@ public final class Parent implements ToNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code nestedIntegerListMap} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param nestedIntegerListMap The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putNestedIntegerListMap(String key, Map<String, List<Integer>> nestedIntegerListMap) {
             this.nestedIntegerListMap.asTransient().put(key, nestedIntegerListMap);
             return this;
         }
 
         /**
-         * <p>Sets the value for <code>nestedNestedIntegerMap</code>.</p>
+         * Sets the value for {@code nestedNestedIntegerMap}.
+         * 
+         * @param nestedNestedIntegerMap The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder nestedNestedIntegerMap(Map<String, List<Map<String, Integer>>> nestedNestedIntegerMap) {
             this.nestedNestedIntegerMap.clear();
@@ -753,11 +967,23 @@ public final class Parent implements ToNode {
             return this;
         }
 
+        /**
+         * Puts a new entry to the {@code nestedNestedIntegerMap} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param nestedNestedIntegerMap The value for the map entry
+         * @return This instance for chain calling.
+         */
         public Builder putNestedNestedIntegerMap(String key, List<Map<String, Integer>> nestedNestedIntegerMap) {
             this.nestedNestedIntegerMap.asTransient().put(key, nestedNestedIntegerMap);
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link Parent}
+         * 
+         * @return A new instance of {@link Parent}
+         */
         public Parent build() {
             return new Parent(this);
         }

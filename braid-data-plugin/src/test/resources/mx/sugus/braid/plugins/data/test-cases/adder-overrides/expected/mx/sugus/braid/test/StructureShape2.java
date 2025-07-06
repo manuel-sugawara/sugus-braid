@@ -6,7 +6,7 @@ import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>A simple structure shape two</p>
+ * A simple structure shape two
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 public final class StructureShape2 {
@@ -18,16 +18,26 @@ public final class StructureShape2 {
         this.shapeOnes = Objects.requireNonNull(builder.shapeOnes.asPersistent(), "shapeOnes");
     }
 
+    /**
+     * 
+     * @return The value of the {@code name} member
+     */
     public String name() {
         return this.name;
     }
 
+    /**
+     * 
+     * @return The value of the {@code shapeOnes} member
+     */
     public List<StructureShape1> shapeOnes() {
         return this.shapeOnes;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -62,7 +72,9 @@ public final class StructureShape2 {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -82,7 +94,10 @@ public final class StructureShape2 {
         }
 
         /**
-         * <p>Sets the value for <code>name</code>.</p>
+         * Sets the value for {@code name}.
+         * 
+         * @param name The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder name(String name) {
             this.name = name;
@@ -90,7 +105,10 @@ public final class StructureShape2 {
         }
 
         /**
-         * <p>Sets the value for <code>shapeOnes</code>.</p>
+         * Sets the value for {@code shapeOnes}.
+         * 
+         * @param shapeOnes The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder shapeOnes(List<StructureShape1> shapeOnes) {
             this.shapeOnes.clear();
@@ -99,7 +117,7 @@ public final class StructureShape2 {
         }
 
         /**
-         * <p>Adds a single value for <code>shapeOnes</code>.</p>
+         * Adds a single value for {@code shapeOnes}.
          */
         public Builder addShapeOne(StructureShape1 shapeOne) {
             this.shapeOnes.asTransient().add(shapeOne);
@@ -107,7 +125,7 @@ public final class StructureShape2 {
         }
 
         /**
-         * <p>Adds to <code>shapeOnes</code> building the value using the given arguments</p>
+         * Adds to {@code shapeOnes} building the value using the given arguments
          */
         public Builder addFromAdderOverride(String value) {
             this.shapeOnes.asTransient().add(StructureShape1.builder().name(value).build());
@@ -115,7 +133,7 @@ public final class StructureShape2 {
         }
 
         /**
-         * <p>Adds to <code>shapeOnes</code> building the value using the given arguments</p>
+         * Adds to {@code shapeOnes} building the value using the given arguments
          */
         public Builder addFromAdderOverride(String value, Integer intValue) {
             this.shapeOnes.asTransient().add(StructureShape1.builder().name(value).intValue(intValue).build());
@@ -123,7 +141,7 @@ public final class StructureShape2 {
         }
 
         /**
-         * <p>Creates a new structure with the given value.</p>
+         * Creates a new structure with the given value.
          */
         public Builder addShapeOne(String stringValue, Integer intValue) {
             this.shapeOnes.asTransient().add(StructureShape1.from(stringValue, intValue));
@@ -131,7 +149,7 @@ public final class StructureShape2 {
         }
 
         /**
-         * <p>Adds the values</p>
+         * Adds the values
          */
         public Builder addsAllFromStructure2(StructureShape2 value) {
             this.shapeOnes.asTransient().addAll(value.shapeOnes());
@@ -139,7 +157,7 @@ public final class StructureShape2 {
         }
 
         /**
-         * <p>Adds the given values to <code>shapeOnes</code></p>
+         * Adds the given values to {@code shapeOnes}
          */
         public Builder addShapeOnes(StructureShape1 value1, StructureShape1 value2) {
             this.shapeOnes.asTransient().add(value1);
@@ -147,6 +165,11 @@ public final class StructureShape2 {
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link StructureShape2}
+         * 
+         * @return A new instance of {@link StructureShape2}
+         */
         public StructureShape2 build() {
             return new StructureShape2(this);
         }

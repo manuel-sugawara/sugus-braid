@@ -6,7 +6,7 @@ import javax.lang.model.element.Modifier;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Base type for other Java types.</p>
+ * Base type for other Java types.
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 public interface TypeSyntax extends SyntaxNode {
@@ -14,94 +14,98 @@ public interface TypeSyntax extends SyntaxNode {
     TypeSyntaxKind kind();
 
     /**
-     * <p>The javadoc for the type.</p>
+     * The javadoc for the type.
      */
     Javadoc javadoc();
 
     /**
-     * <p>The simple name for the type.</p>
+     * The simple name for the type.
      */
     String name();
 
     /**
-     * <p>A list of modifiers for this type.</p>
+     * A list of modifiers for this type.
      */
     Set<Modifier> modifiers();
 
     /**
-     * <p>A list of annotations for this type.</p>
+     * A list of annotations for this type.
      */
     List<Annotation> annotations();
 
     /**
-     * <p>A list of super interfaces for this type.</p>
+     * A list of super interfaces for this type.
      */
     List<TypeName> superInterfaces();
 
     /**
-     * <p>A list of fields for this type.</p>
+     * A list of fields for this type.
      */
     List<FieldSyntax> fields();
 
     /**
-     * <p>A list of methods for this type.</p>
+     * A list of methods for this type.
      */
     List<BaseMethodSyntax> methods();
 
     /**
-     * <p>A list of inner types enclosed by this type.</p>
+     * A list of inner types enclosed by this type.
      */
     List<TypeSyntax> innerTypes();
 
     /**
-     * Creates a new {@link Builder} to modify a copy of this instance
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     Builder toBuilder();
 
     interface Builder extends SyntaxNode.Builder {
 
         /**
-         * <p>The javadoc for the type.</p>
+         * The javadoc for the type.
          */
         Builder javadoc(Javadoc javadoc);
 
         /**
-         * <p>The simple name for the type.</p>
+         * The simple name for the type.
          */
         Builder name(String name);
 
         /**
-         * <p>A list of modifiers for this type.</p>
+         * A list of modifiers for this type.
          */
         Builder modifiers(Set<Modifier> modifiers);
 
         /**
-         * <p>A list of annotations for this type.</p>
+         * A list of annotations for this type.
          */
         Builder annotations(List<Annotation> annotations);
 
         /**
-         * <p>A list of super interfaces for this type.</p>
+         * A list of super interfaces for this type.
          */
         Builder superInterfaces(List<TypeName> superInterfaces);
 
         /**
-         * <p>A list of fields for this type.</p>
+         * A list of fields for this type.
          */
         Builder fields(List<FieldSyntax> fields);
 
         /**
-         * <p>A list of methods for this type.</p>
+         * A list of methods for this type.
          */
         Builder methods(List<BaseMethodSyntax> methods);
 
         /**
-         * <p>A list of inner types enclosed by this type.</p>
+         * A list of inner types enclosed by this type.
          */
         Builder innerTypes(List<TypeSyntax> innerTypes);
 
         /**
          * Builds a new instance of {@link TypeSyntax}
+         * 
+         * @return The new instance of of {@link TypeSyntax}
          */
         TypeSyntax build();
     }

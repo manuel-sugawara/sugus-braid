@@ -13,16 +13,26 @@ public final class StructureTwo {
         this.stringMember = builder.stringMember;
     }
 
+    /**
+     * 
+     * @return The value of the {@code intMember} member
+     */
     public Integer intMember() {
         return this.intMember;
     }
 
+    /**
+     * 
+     * @return The value of the {@code stringMember} member
+     */
     public String stringMember() {
         return this.stringMember;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -57,7 +67,9 @@ public final class StructureTwo {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -76,7 +88,10 @@ public final class StructureTwo {
         }
 
         /**
-         * <p>Sets the value for <code>intMember</code>.</p>
+         * Sets the value for {@code intMember}.
+         * 
+         * @param intMember The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder intMember(Integer intMember) {
             this.intMember = intMember;
@@ -84,13 +99,21 @@ public final class StructureTwo {
         }
 
         /**
-         * <p>Sets the value for <code>stringMember</code>.</p>
+         * Sets the value for {@code stringMember}.
+         * 
+         * @param stringMember The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder stringMember(String stringMember) {
             this.stringMember = stringMember;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link StructureTwo}
+         * 
+         * @return A new instance of {@link StructureTwo}
+         */
         public StructureTwo build() {
             return new StructureTwo(this);
         }

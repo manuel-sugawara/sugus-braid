@@ -20,16 +20,26 @@ public final class Parent implements SyntaxNode, ToNode {
         this.anotherChild = builder.anotherChild;
     }
 
+    /**
+     * 
+     * @return The value of the {@code child} member
+     */
     public SyntaxNodeChild child() {
         return this.child;
     }
 
+    /**
+     * 
+     * @return The value of the {@code anotherChild} member
+     */
     public AnotherChild anotherChild() {
         return this.anotherChild;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -64,14 +74,16 @@ public final class Parent implements SyntaxNode, ToNode {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
     }
 
     /**
-     * <p>Converts this instance to Node.</p>
+     * Converts this instance to Node.
      */
     @Override
     public Node toNode() {
@@ -86,14 +98,14 @@ public final class Parent implements SyntaxNode, ToNode {
     }
 
     /**
-     * <p>Converts a {@link Node} to Parent.</p>
+     * Converts a {@link Node} to Parent.
      */
     public static Parent fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * <p>Converts a {@link Node} to Parent.</p>
+     * Converts a {@link Node} to Parent.
      */
     public static Parent fromNode(Validation validator, Node node) {
         validator = validator.with("Parent");
@@ -130,7 +142,10 @@ public final class Parent implements SyntaxNode, ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>child</code>.</p>
+         * Sets the value for {@code child}.
+         * 
+         * @param child The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder child(SyntaxNodeChild child) {
             this.child = child;
@@ -138,13 +153,21 @@ public final class Parent implements SyntaxNode, ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>anotherChild</code>.</p>
+         * Sets the value for {@code anotherChild}.
+         * 
+         * @param anotherChild The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder anotherChild(AnotherChild anotherChild) {
             this.anotherChild = anotherChild;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link Parent}
+         * 
+         * @return A new instance of {@link Parent}
+         */
         public Parent build() {
             return new Parent(this);
         }

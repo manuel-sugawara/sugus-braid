@@ -8,6 +8,7 @@ import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
+import mx.sugus.braid.jsyntax.Javadoc;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeVariableTypeName;
@@ -68,9 +69,16 @@ public record SyntaxAddAcceptVisitorTransformer(String syntaxNode) implements Sh
     }
 
     private MethodSyntax acceptMethod(ParameterizedTypeName visitor, Name name) {
+        var doc = Javadoc.builder()
+                         .body("Accepts a {@link $T} visitor", visitor)
+                         .putParam("visitor", "The visitor to accept")
+                         .putParam("<VisitorR>", "The result type from the visitor")
+                         .returns("The result from the visitor")
+                         .build();
         return MethodSyntax.builder("accept")
                            .addAnnotation(Override.class)
                            .addModifier(Modifier.PUBLIC)
+                           .javadoc(doc)
                            .returns(TypeVariableTypeName.builder()
                                                         .name("VisitorR")
                                                         .addBound(TypeNameExt.OBJECT)

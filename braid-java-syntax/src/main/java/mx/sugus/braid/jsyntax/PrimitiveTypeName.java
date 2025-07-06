@@ -4,7 +4,7 @@ import java.util.Objects;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
 /**
- * <p>Represents a java primitive type.</p>
+ * Represents a java primitive type.
  */
 @Generated({"mx.sugus.braid.plugins.data#DataPlugin", "mx.sugus.braid.plugins.syntax#SyntaxModelPlugin"})
 public final class PrimitiveTypeName implements TypeName {
@@ -18,17 +18,30 @@ public final class PrimitiveTypeName implements TypeName {
         return TypeKind.PRIMITIVE;
     }
 
+    /**
+     * 
+     * @return The value of the {@code name} member
+     */
     public TypePrimitiveName name() {
         return this.name;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
     }
 
+    /**
+     * Accepts a {@link SyntaxNodeVisitor<VisitorR>} visitor
+     * 
+     * @param visitor The visitor to accept
+     * @param <VisitorR> The result type from the visitor
+     * @return The result from the visitor
+     */
     @Override
     public <VisitorR> VisitorR accept(SyntaxNodeVisitor<VisitorR> visitor) {
         return visitor.visitPrimitiveTypeName(this);
@@ -62,7 +75,9 @@ public final class PrimitiveTypeName implements TypeName {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
@@ -79,13 +94,21 @@ public final class PrimitiveTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>name</code>.</p>
+         * Sets the value for {@code name}.
+         * 
+         * @param name The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder name(TypePrimitiveName name) {
             this.name = name;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link PrimitiveTypeName}
+         * 
+         * @return A new instance of {@link PrimitiveTypeName}
+         */
         public PrimitiveTypeName build() {
             return new PrimitiveTypeName(this);
         }

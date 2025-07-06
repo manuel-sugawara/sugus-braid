@@ -23,20 +23,34 @@ public final class StructureShape implements ToNode {
         this.structureShape = Objects.requireNonNull(builder.structureShape, "structureShape");
     }
 
+    /**
+     * 
+     * @return The value of the {@code enumValue} member
+     */
     public EnumShape enumValue() {
         return this.enumValue;
     }
 
+    /**
+     * 
+     * @return The value of the {@code stringMember} member
+     */
     public String stringMember() {
         return this.stringMember;
     }
 
+    /**
+     * 
+     * @return The value of the {@code structureShape} member
+     */
     public SimpleStructure structureShape() {
         return this.structureShape;
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance.</p>
+     * Returns a new builder to modify a copy of this instance.
+     * 
+     * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -77,14 +91,16 @@ public final class StructureShape implements ToNode {
     }
 
     /**
-     * <p>Creates a new builder.</p>
+     * Creates a new builder to create instances of this class.
+     * 
+     * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
         return new Builder();
     }
 
     /**
-     * <p>Converts this instance to Node.</p>
+     * Converts this instance to Node.
      */
     @Override
     public Node toNode() {
@@ -96,14 +112,14 @@ public final class StructureShape implements ToNode {
     }
 
     /**
-     * <p>Converts a {@link Node} to StructureShape.</p>
+     * Converts a {@link Node} to StructureShape.
      */
     public static StructureShape fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * <p>Converts a {@link Node} to StructureShape.</p>
+     * Converts a {@link Node} to StructureShape.
      */
     public static StructureShape fromNode(Validation validator, Node node) {
         validator = validator.with("StructureShape");
@@ -145,7 +161,10 @@ public final class StructureShape implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>enumValue</code>.</p>
+         * Sets the value for {@code enumValue}.
+         * 
+         * @param enumValue The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder enumValue(EnumShape enumValue) {
             this.enumValue = enumValue;
@@ -153,7 +172,10 @@ public final class StructureShape implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>stringMember</code>.</p>
+         * Sets the value for {@code stringMember}.
+         * 
+         * @param stringMember The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder stringMember(String stringMember) {
             this.stringMember = stringMember;
@@ -161,13 +183,21 @@ public final class StructureShape implements ToNode {
         }
 
         /**
-         * <p>Sets the value for <code>structureShape</code>.</p>
+         * Sets the value for {@code structureShape}.
+         * 
+         * @param structureShape The value to be set.
+         * @return This instance for chain calling.
          */
         public Builder structureShape(SimpleStructure structureShape) {
             this.structureShape = structureShape;
             return this;
         }
 
+        /**
+         * Returns a new instance of {@link StructureShape}
+         * 
+         * @return A new instance of {@link StructureShape}
+         */
         public StructureShape build() {
             return new StructureShape(this);
         }
