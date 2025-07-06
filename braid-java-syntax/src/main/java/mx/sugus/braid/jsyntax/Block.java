@@ -25,7 +25,7 @@ public final class Block implements Statement {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -64,7 +64,7 @@ public final class Block implements Statement {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -82,7 +82,7 @@ public final class Block implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>statements</code></p>
+         * <p>Sets the value for <code>statements</code>.</p>
          */
         public Builder statements(List<Statement> statements) {
             this.statements.clear();
@@ -91,7 +91,7 @@ public final class Block implements Statement {
         }
 
         /**
-         * <p>Adds a single value for <code>statements</code></p>
+         * <p>Adds a single value for <code>statements</code>.</p>
          */
         public Builder addStatement(Statement statement) {
             this.statements.asTransient().add(statement);

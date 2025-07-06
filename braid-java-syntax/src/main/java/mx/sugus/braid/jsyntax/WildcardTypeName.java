@@ -38,7 +38,7 @@ public final class WildcardTypeName implements TypeName {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -86,7 +86,7 @@ public final class WildcardTypeName implements TypeName {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -109,7 +109,7 @@ public final class WildcardTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>rawType</code></p>
+         * <p>Sets the value for <code>rawType</code>.</p>
          */
         public Builder rawType(ClassName rawType) {
             this.rawType = rawType;
@@ -117,7 +117,7 @@ public final class WildcardTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>upperBounds</code></p>
+         * <p>Sets the value for <code>upperBounds</code>.</p>
          */
         public Builder upperBounds(List<TypeName> upperBounds) {
             this.upperBounds.clear();
@@ -126,7 +126,7 @@ public final class WildcardTypeName implements TypeName {
         }
 
         /**
-         * <p>Adds a single value for <code>upperBounds</code></p>
+         * <p>Adds a single value for <code>upperBounds</code>.</p>
          */
         public Builder addUpperBound(TypeName upperBound) {
             this.upperBounds.asTransient().add(upperBound);
@@ -142,7 +142,7 @@ public final class WildcardTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>lowerBounds</code></p>
+         * <p>Sets the value for <code>lowerBounds</code>.</p>
          */
         public Builder lowerBounds(List<TypeName> lowerBounds) {
             this.lowerBounds.clear();
@@ -151,7 +151,7 @@ public final class WildcardTypeName implements TypeName {
         }
 
         /**
-         * <p>Adds a single value for <code>lowerBounds</code></p>
+         * <p>Adds a single value for <code>lowerBounds</code>.</p>
          */
         public Builder addLowerBound(TypeName lowerBound) {
             this.lowerBounds.asTransient().add(lowerBound);

@@ -41,7 +41,7 @@ public final class CompilationUnit implements SyntaxNode {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -90,7 +90,7 @@ public final class CompilationUnit implements SyntaxNode {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -115,7 +115,7 @@ public final class CompilationUnit implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>packageName</code></p>
+         * <p>Sets the value for <code>packageName</code>.</p>
          */
         public Builder packageName(String packageName) {
             this.packageName = packageName;
@@ -123,7 +123,7 @@ public final class CompilationUnit implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>imports</code></p>
+         * <p>Sets the value for <code>imports</code>.</p>
          */
         public Builder imports(Set<ClassName> imports) {
             this.imports.clear();
@@ -132,7 +132,7 @@ public final class CompilationUnit implements SyntaxNode {
         }
 
         /**
-         * <p>Adds a single value for <code>imports</code></p>
+         * <p>Adds a single value for <code>imports</code>.</p>
          */
         public Builder addImport(ClassName anImport) {
             this.imports.asTransient().add(anImport);
@@ -164,7 +164,7 @@ public final class CompilationUnit implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>type</code></p>
+         * <p>Sets the value for <code>type</code>.</p>
          */
         public Builder type(TypeSyntax type) {
             this.type = type;
@@ -172,7 +172,7 @@ public final class CompilationUnit implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>definedNames</code></p>
+         * <p>Sets the value for <code>definedNames</code>.</p>
          */
         public Builder definedNames(Map<String, ClassName> definedNames) {
             this.definedNames.clear();

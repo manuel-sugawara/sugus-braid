@@ -1,5 +1,6 @@
 package mx.sugus.braid.test;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -31,6 +32,7 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
                 if (builder == null) {
                     builder = node.toBuilder();
                 }
+                builder.listMember(Collections.emptyList());
                 for (int innerIdx = 0; innerIdx < idx; innerIdx++) {
                     builder.addListMember(listMember.get(innerIdx));
                 }
@@ -48,6 +50,7 @@ public class SyntaxNodeRewriteVisitor implements SyntaxNodeVisitor<SyntaxNode> {
                 if (builder == null) {
                     builder = node.toBuilder();
                 }
+                builder.setMember(Collections.emptySet());
                 for (StructureSimple innerValue : setMember) {
                     if (innerValue == value) {
                         break;

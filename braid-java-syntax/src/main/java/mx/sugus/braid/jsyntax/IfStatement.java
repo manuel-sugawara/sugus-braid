@@ -49,7 +49,7 @@ public final class IfStatement implements Statement {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -97,7 +97,7 @@ public final class IfStatement implements Statement {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -119,7 +119,7 @@ public final class IfStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>expression</code></p>
+         * <p>Sets the value for <code>expression</code>.</p>
          * <p>The condition of the <code>if</code> statement</p>
          */
         public Builder expression(Expression expression) {
@@ -133,7 +133,7 @@ public final class IfStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>statement</code></p>
+         * <p>Sets the value for <code>statement</code>.</p>
          * <p>The body of the <code>if</code> statement</p>
          */
         public Builder statement(Block statement) {
@@ -187,7 +187,7 @@ public final class IfStatement implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>elseStatement</code></p>
+         * <p>Sets the value for <code>elseStatement</code>.</p>
          * <p>An optional <code>else</code> block.</p>
          */
         public Builder elseStatement(Statement elseStatement) {

@@ -96,14 +96,14 @@ public class SyntaxNodeWalkVisitor implements SyntaxNodeVisitor<SyntaxNode> {
         if (javadoc != null) {
             javadoc.accept(this);
         }
-        List<BaseMethodSyntax> methods = node.methods();
-        for (int idx = 0; idx < methods.size(); idx++) {
-            BaseMethodSyntax value = methods.get(idx);
-            value.accept(this);
-        }
         List<Annotation> annotations = node.annotations();
         for (int idx = 0; idx < annotations.size(); idx++) {
             Annotation value = annotations.get(idx);
+            value.accept(this);
+        }
+        List<TypeName> superInterfaces = node.superInterfaces();
+        for (int idx = 0; idx < superInterfaces.size(); idx++) {
+            TypeName value = superInterfaces.get(idx);
             value.accept(this);
         }
         List<FieldSyntax> fields = node.fields();
@@ -111,9 +111,9 @@ public class SyntaxNodeWalkVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             FieldSyntax value = fields.get(idx);
             value.accept(this);
         }
-        List<TypeName> superInterfaces = node.superInterfaces();
-        for (int idx = 0; idx < superInterfaces.size(); idx++) {
-            TypeName value = superInterfaces.get(idx);
+        List<BaseMethodSyntax> methods = node.methods();
+        for (int idx = 0; idx < methods.size(); idx++) {
+            BaseMethodSyntax value = methods.get(idx);
             value.accept(this);
         }
         List<TypeSyntax> innerTypes = node.innerTypes();
@@ -189,14 +189,14 @@ public class SyntaxNodeWalkVisitor implements SyntaxNodeVisitor<SyntaxNode> {
         if (javadoc != null) {
             javadoc.accept(this);
         }
-        List<BaseMethodSyntax> methods = node.methods();
-        for (int idx = 0; idx < methods.size(); idx++) {
-            BaseMethodSyntax value = methods.get(idx);
-            value.accept(this);
-        }
         List<Annotation> annotations = node.annotations();
         for (int idx = 0; idx < annotations.size(); idx++) {
             Annotation value = annotations.get(idx);
+            value.accept(this);
+        }
+        List<TypeName> superInterfaces = node.superInterfaces();
+        for (int idx = 0; idx < superInterfaces.size(); idx++) {
+            TypeName value = superInterfaces.get(idx);
             value.accept(this);
         }
         List<FieldSyntax> fields = node.fields();
@@ -204,9 +204,9 @@ public class SyntaxNodeWalkVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             FieldSyntax value = fields.get(idx);
             value.accept(this);
         }
-        List<TypeName> superInterfaces = node.superInterfaces();
-        for (int idx = 0; idx < superInterfaces.size(); idx++) {
-            TypeName value = superInterfaces.get(idx);
+        List<BaseMethodSyntax> methods = node.methods();
+        for (int idx = 0; idx < methods.size(); idx++) {
+            BaseMethodSyntax value = methods.get(idx);
             value.accept(this);
         }
         List<TypeSyntax> innerTypes = node.innerTypes();
@@ -265,14 +265,14 @@ public class SyntaxNodeWalkVisitor implements SyntaxNodeVisitor<SyntaxNode> {
         if (javadoc != null) {
             javadoc.accept(this);
         }
-        List<BaseMethodSyntax> methods = node.methods();
-        for (int idx = 0; idx < methods.size(); idx++) {
-            BaseMethodSyntax value = methods.get(idx);
-            value.accept(this);
-        }
         List<Annotation> annotations = node.annotations();
         for (int idx = 0; idx < annotations.size(); idx++) {
             Annotation value = annotations.get(idx);
+            value.accept(this);
+        }
+        List<TypeName> superInterfaces = node.superInterfaces();
+        for (int idx = 0; idx < superInterfaces.size(); idx++) {
+            TypeName value = superInterfaces.get(idx);
             value.accept(this);
         }
         List<FieldSyntax> fields = node.fields();
@@ -280,9 +280,9 @@ public class SyntaxNodeWalkVisitor implements SyntaxNodeVisitor<SyntaxNode> {
             FieldSyntax value = fields.get(idx);
             value.accept(this);
         }
-        List<TypeName> superInterfaces = node.superInterfaces();
-        for (int idx = 0; idx < superInterfaces.size(); idx++) {
-            TypeName value = superInterfaces.get(idx);
+        List<BaseMethodSyntax> methods = node.methods();
+        for (int idx = 0; idx < methods.size(); idx++) {
+            BaseMethodSyntax value = methods.get(idx);
             value.accept(this);
         }
         List<TypeSyntax> innerTypes = node.innerTypes();

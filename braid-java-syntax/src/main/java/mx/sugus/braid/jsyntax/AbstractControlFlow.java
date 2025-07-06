@@ -56,7 +56,7 @@ public final class AbstractControlFlow implements Statement {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -104,7 +104,7 @@ public final class AbstractControlFlow implements Statement {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -126,7 +126,7 @@ public final class AbstractControlFlow implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>prefix</code></p>
+         * <p>Sets the value for <code>prefix</code>.</p>
          * <p>The prefix for this control flow.</p>
          */
         public Builder prefix(CodeBlock prefix) {
@@ -140,7 +140,7 @@ public final class AbstractControlFlow implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>statement</code></p>
+         * <p>Sets the value for <code>statement</code>.</p>
          * <p>The body of the abstract control flow</p>
          */
         public Builder statement(Block statement) {
@@ -194,7 +194,7 @@ public final class AbstractControlFlow implements Statement {
         }
 
         /**
-         * <p>Sets the value for <code>next</code></p>
+         * <p>Sets the value for <code>next</code>.</p>
          * <p>An optional <code>next</code> block.</p>
          */
         public Builder next(AbstractControlFlow next) {

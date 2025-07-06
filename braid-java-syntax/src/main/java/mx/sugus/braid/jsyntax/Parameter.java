@@ -32,7 +32,7 @@ public final class Parameter implements SyntaxNode {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -78,7 +78,7 @@ public final class Parameter implements SyntaxNode {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -100,7 +100,7 @@ public final class Parameter implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>name</code></p>
+         * <p>Sets the value for <code>name</code>.</p>
          */
         public Builder name(String name) {
             this.name = name;
@@ -108,7 +108,7 @@ public final class Parameter implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>type</code></p>
+         * <p>Sets the value for <code>type</code>.</p>
          */
         public Builder type(TypeName type) {
             this.type = type;
@@ -121,7 +121,7 @@ public final class Parameter implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>varargs</code></p>
+         * <p>Sets the value for <code>varargs</code>.</p>
          */
         public Builder varargs(Boolean varargs) {
             this.varargs = varargs;

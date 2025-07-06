@@ -68,7 +68,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -122,7 +122,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -156,7 +156,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>body</code></p>
+         * <p>Sets the value for <code>body</code>.</p>
          */
         public Builder body(Block body) {
             this.body.setPersistent(body);
@@ -209,7 +209,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>javadoc</code></p>
+         * <p>Sets the value for <code>javadoc</code>.</p>
          * <p>The javadoc for the type.</p>
          */
         public Builder javadoc(Javadoc javadoc) {
@@ -223,7 +223,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>annotations</code></p>
+         * <p>Sets the value for <code>annotations</code>.</p>
          * <p>A list of annotations for this method</p>
          */
         public Builder annotations(List<Annotation> annotations) {
@@ -233,7 +233,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Adds a single value for <code>annotations</code></p>
+         * <p>Adds a single value for <code>annotations</code>.</p>
          */
         public Builder addAnnotation(Annotation annotation) {
             this.annotations.asTransient().add(annotation);
@@ -257,7 +257,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>modifiers</code></p>
+         * <p>Sets the value for <code>modifiers</code>.</p>
          * <p>A list of modifiers for this method</p>
          */
         public Builder modifiers(Set<Modifier> modifiers) {
@@ -267,7 +267,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Adds a single value for <code>modifiers</code></p>
+         * <p>Adds a single value for <code>modifiers</code>.</p>
          */
         public Builder addModifier(Modifier modifier) {
             this.modifiers.asTransient().add(modifier);
@@ -294,7 +294,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Sets the value for <code>parameters</code></p>
+         * <p>Sets the value for <code>parameters</code>.</p>
          * <p>A list of parameters method</p>
          */
         public Builder parameters(List<Parameter> parameters) {
@@ -304,7 +304,7 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * <p>Adds a single value for <code>parameters</code></p>
+         * <p>Adds a single value for <code>parameters</code>.</p>
          */
         public Builder addParameter(Parameter parameter) {
             this.parameters.asTransient().add(parameter);

@@ -41,7 +41,7 @@ public final class EnumConstant implements SyntaxNode {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -87,7 +87,7 @@ public final class EnumConstant implements SyntaxNode {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -108,7 +108,7 @@ public final class EnumConstant implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>javadoc</code></p>
+         * <p>Sets the value for <code>javadoc</code>.</p>
          * <p>The javadoc for the enum constant.</p>
          */
         public Builder javadoc(Javadoc javadoc) {
@@ -122,7 +122,7 @@ public final class EnumConstant implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>name</code></p>
+         * <p>Sets the value for <code>name</code>.</p>
          * <p>The name for the constant.</p>
          */
         public Builder name(String name) {
@@ -131,7 +131,7 @@ public final class EnumConstant implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>body</code></p>
+         * <p>Sets the value for <code>body</code>.</p>
          * <p>An optional body for the constant.</p>
          */
         public Builder body(EnumBody body) {

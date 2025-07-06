@@ -31,7 +31,7 @@ public final class ParameterizedTypeName implements TypeName {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -73,7 +73,7 @@ public final class ParameterizedTypeName implements TypeName {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -120,7 +120,7 @@ public final class ParameterizedTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>rawType</code></p>
+         * <p>Sets the value for <code>rawType</code>.</p>
          */
         public Builder rawType(ClassName rawType) {
             this.rawType = rawType;
@@ -128,7 +128,7 @@ public final class ParameterizedTypeName implements TypeName {
         }
 
         /**
-         * <p>Sets the value for <code>typeArguments</code></p>
+         * <p>Sets the value for <code>typeArguments</code>.</p>
          */
         public Builder typeArguments(List<TypeName> typeArguments) {
             this.typeArguments.clear();
@@ -137,7 +137,7 @@ public final class ParameterizedTypeName implements TypeName {
         }
 
         /**
-         * <p>Adds a single value for <code>typeArguments</code></p>
+         * <p>Adds a single value for <code>typeArguments</code>.</p>
          */
         public Builder addTypeArgument(TypeName typeArgument) {
             this.typeArguments.asTransient().add(typeArgument);

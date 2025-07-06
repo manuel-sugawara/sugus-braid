@@ -31,7 +31,7 @@ public final class CaseClause implements SyntaxNode {
     }
 
     /**
-     * <p>Returns a new builder to modify a copy of this instance</p>
+     * <p>Returns a new builder to modify a copy of this instance.</p>
      */
     public Builder toBuilder() {
         return new Builder(this);
@@ -71,7 +71,7 @@ public final class CaseClause implements SyntaxNode {
     }
 
     /**
-     * <p>Creates a new builder</p>
+     * <p>Creates a new builder.</p>
      */
     public static Builder builder() {
         return new Builder();
@@ -92,7 +92,7 @@ public final class CaseClause implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>label</code></p>
+         * <p>Sets the value for <code>label</code>.</p>
          */
         public Builder label(List<Expression> label) {
             this.label.clear();
@@ -101,7 +101,7 @@ public final class CaseClause implements SyntaxNode {
         }
 
         /**
-         * <p>Adds a single value for <code>label</code></p>
+         * <p>Adds a single value for <code>label</code>.</p>
          */
         public Builder addLabel(Expression label) {
             this.label.asTransient().add(label);
@@ -114,7 +114,7 @@ public final class CaseClause implements SyntaxNode {
         }
 
         /**
-         * <p>Sets the value for <code>body</code></p>
+         * <p>Sets the value for <code>body</code>.</p>
          */
         public Builder body(Block body) {
             this.body.setPersistent(body);
