@@ -7,6 +7,7 @@ use mx.sugus.braid.traits#implements
 use mx.sugus.braid.traits#interface
 use mx.sugus.braid.traits#java
 use mx.sugus.braid.traits#optional
+use mx.sugus.braid.traits#ordered
 use mx.sugus.braid.traits#useBuilderReference
 
 @interface
@@ -62,7 +63,7 @@ list FormatterNodeList {
     member: FormatterNode
 }
 
-@implements([SyntaxNode, Expression, EnumBody, Statement, Javadoc])
+@implements([SyntaxNode, Expression, EnumBody, Statement])
 structure CodeBlock {
     @const(StatementKind$FORMAT)
     stmtKind: StatementKind
@@ -77,11 +78,21 @@ structure Expression {}
 
 @implements([SyntaxNode])
 @interface
-structure Javadoc {}
+structure EnumBody {}
+
+// --- Javadoc
+@ordered
+map StringToCodeBlock {
+    key: String
+    value: CodeBlock
+}
 
 @implements([SyntaxNode])
-@interface
-structure EnumBody {}
+structure Javadoc {
+    body: CodeBlock
+    params: StringToCodeBlock
+    return: CodeBlock
+}
 
 // --- Statements
 /// The type of statement

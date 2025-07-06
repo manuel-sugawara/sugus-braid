@@ -612,7 +612,7 @@ apply Javadoc @setterOverrides([
                 name: "args"
             }
         ]
-        body: "CodeBlock.from(format, args)"
+        body: "Javadoc.builder().body(CodeBlock.from(format, args)).build()"
     }
 ])
 
