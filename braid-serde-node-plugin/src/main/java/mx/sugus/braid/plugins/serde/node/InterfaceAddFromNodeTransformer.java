@@ -6,9 +6,11 @@ import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
 import mx.sugus.braid.jsyntax.CaseClause;
+import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.DefaultCaseClause;
 import mx.sugus.braid.jsyntax.InterfaceSyntax;
+import mx.sugus.braid.jsyntax.Javadoc;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.SwitchStatement;
 import mx.sugus.braid.plugins.data.TypeSyntaxResult;
@@ -52,7 +54,13 @@ public final class InterfaceAddFromNodeTransformer implements ShapeTaskTransform
         var shape = state.shape().asStructureShape().orElseThrow();
         var dispatchMember = isaKnowledgeIndex.polymorphicDispatchMember(shape);
         var className = Utils.toJavaTypeName(state, state.shape());
+        var doc = Javadoc.builder()
+                         .body("Deserialize a $T from a {@link Node}.", ClassName.toClassName(className))
+                         .putParam("node", "The node to deserialize from.")
+                         .returns("The deserialized instance.")
+                         .build();
         var builder = MethodSyntax.builder("fromNode")
+                                  .javadoc(doc)
                                   .addModifier(Modifier.STATIC)
                                   .addParameter(Validation.class, "validation")
                                   .addParameter(Node.class, "node")
