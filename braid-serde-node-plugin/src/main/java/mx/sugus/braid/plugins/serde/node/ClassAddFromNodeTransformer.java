@@ -62,7 +62,7 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
     static MethodSyntax defaultFromNodeMethod(ShapeCodegenState state) {
         var className = Utils.toJavaTypeName(state, state.shape());
         var doc = Javadoc.builder()
-                         .body("Deserialize a $T from a {@link Node}.", ClassName.toClassName(className).name())
+                         .body("Deserialize a $T from a {@link Node}.", ClassName.toClassName(className))
                          .putParam("node", "The node to deserialize from.")
                          .returns("The deserialized instance.")
                          .build();
