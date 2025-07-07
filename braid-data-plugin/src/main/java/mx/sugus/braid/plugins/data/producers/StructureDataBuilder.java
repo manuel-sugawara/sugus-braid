@@ -18,7 +18,6 @@ import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
-import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.traits.ConstTrait;
 import software.amazon.smithy.model.shapes.MemberShape;
@@ -36,7 +35,12 @@ public final class StructureDataBuilder implements DirectedClass {
 
     @Override
     public ClassSyntax.Builder typeSpec(ShapeCodegenState state) {
+        var shapeType = Utils.toJavaTypeName(state, state.shape());
+        var doc = Javadoc.builder()
+                         .body("A class to build instances of $T", shapeType)
+                         .build();
         var builder = ClassSyntax.builder("Builder")
+                                 .javadoc(doc)
                                  .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL);
         var shape = state.shape().asStructureShape().orElseThrow();
         var superInterfaces = ImplementsKnowledgeIndex.of(state.model()).superInterfaces(shape);
