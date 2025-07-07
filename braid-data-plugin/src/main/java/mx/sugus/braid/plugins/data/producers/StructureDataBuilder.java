@@ -164,8 +164,12 @@ public final class StructureDataBuilder implements DirectedClass {
             addValue(state, member, body, List.of(valueArgument));
             body.addStatement("return this");
         });
-        var doc = "Adds a single value for `" + name + "`.";
-        builder.javadoc(JavadocExt.document(doc));
+        var doc = Javadoc.builder()
+                         .body("Adds a value to `$L`.", name)
+                         .putParam(name, "The value tp add")
+                         .returns("This instance for chain calling.")
+                         .build();
+        builder.javadoc(doc);
         var defaultAdder = builder.build();
         var result = new ArrayList<MethodSyntax>();
         result.add(defaultAdder);
