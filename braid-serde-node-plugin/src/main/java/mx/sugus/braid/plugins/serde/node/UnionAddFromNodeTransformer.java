@@ -60,6 +60,7 @@ public final class UnionAddFromNodeTransformer implements ShapeTaskTransformer<T
         var className = Utils.toJavaTypeName(state, state.shape());
         var doc = Javadoc.builder()
                          .body("Deserialize a $T from a {@link Node}.", ClassName.toClassName(className))
+                         .putParam("validator", "A validator to collect any issues found during deserialization.")
                          .putParam("node", "The node to deserialize from.")
                          .returns("The deserialized instance.")
                          .build();

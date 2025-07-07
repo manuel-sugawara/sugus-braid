@@ -16,7 +16,6 @@ import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.SwitchStatement;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
-import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
 import mx.sugus.braid.plugins.data.producers.Utils;
@@ -77,9 +76,14 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
 
     static MethodSyntax fromNodeMethod(ShapeCodegenState state) {
         var className = Utils.toJavaTypeName(state, state.shape());
-        var javadoc = "Converts a {@link Node} to " + ClassName.toClassName(className).name() + ".";
+        var doc = Javadoc.builder()
+                         .body("Deserialize a $T from a {@link Node}.", ClassName.toClassName(className))
+                         .putParam("validator", "A validator to collect any issues found during deserialization.")
+                         .putParam("node", "The node to deserialize from.")
+                         .returns("The deserialized instance.")
+                         .build();
         var builder = MethodSyntax.builder("fromNode")
-                                  .javadoc(JavadocExt.document(javadoc))
+                                  .javadoc(doc)
                                   .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                                   .addParameter(Validation.class, "validator")
                                   .addParameter(Node.class, "node")
