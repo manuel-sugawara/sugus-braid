@@ -257,6 +257,4 @@ public final class StructureDataBuilder implements DirectedClass {
         var innerType = Utils.toJavaTypeName(state, member);
         return ParameterizedTypeName.from(CollectionBuilderReference.class, innerType);
     }
-
-
 }
