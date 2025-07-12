@@ -384,14 +384,21 @@ public final class Parent implements ToNode {
     }
 
     /**
-     * Converts a {@link Node} to Parent.
+     * Deserialize a Parent from a {@link Node}.
+     * 
+     * @param node The node to deserialize from.
+     * @return The deserialized instance.
      */
     public static Parent fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * Converts a {@link Node} to Parent.
+     * Deserialize a Parent from a {@link Node}.
+     * 
+     * @param validator A validator to collect any issues found during deserialization.
+     * @param node The node to deserialize from.
+     * @return The deserialized instance.
      */
     public static Parent fromNode(Validation validator, Node node) {
         validator = validator.with("Parent");
@@ -494,6 +501,9 @@ public final class Parent implements ToNode {
         return builder.build();
     }
 
+    /**
+     * A class to build instances of Parent
+     */
     public static final class Builder {
         private String stringMember;
         private CollectionBuilderReference<List<Child>> children;
@@ -570,7 +580,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * Adds a single value for {@code children}.
+         * Adds a value to {@code children}.
+         * 
+         * @param children The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addChildren(Child children) {
             this.children.asTransient().add(children);
@@ -590,7 +603,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * Adds a single value for {@code booleans}.
+         * Adds a value to {@code booleans}.
+         * 
+         * @param booleans The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addBoolean(Boolean aBoolean) {
             this.booleans.asTransient().add(aBoolean);
@@ -610,7 +626,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * Adds a single value for {@code bytes}.
+         * Adds a value to {@code bytes}.
+         * 
+         * @param bytes The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addByte(Byte aByte) {
             this.bytes.asTransient().add(aByte);
@@ -630,7 +649,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * Adds a single value for {@code shorts}.
+         * Adds a value to {@code shorts}.
+         * 
+         * @param shorts The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addShort(Short aShort) {
             this.shorts.asTransient().add(aShort);
@@ -650,7 +672,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * Adds a single value for {@code integers}.
+         * Adds a value to {@code integers}.
+         * 
+         * @param integers The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addInteger(Integer integer) {
             this.integers.asTransient().add(integer);
@@ -670,7 +695,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * Adds a single value for {@code bigIntegers}.
+         * Adds a value to {@code bigIntegers}.
+         * 
+         * @param bigIntegers The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addBigInteger(BigInteger bigInteger) {
             this.bigIntegers.asTransient().add(bigInteger);
@@ -690,7 +718,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * Adds a single value for {@code longs}.
+         * Adds a value to {@code longs}.
+         * 
+         * @param longs The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addLong(Long aLong) {
             this.longs.asTransient().add(aLong);
@@ -710,7 +741,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * Adds a single value for {@code floats}.
+         * Adds a value to {@code floats}.
+         * 
+         * @param floats The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addFloat(Float aFloat) {
             this.floats.asTransient().add(aFloat);
@@ -730,7 +764,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * Adds a single value for {@code doubles}.
+         * Adds a value to {@code doubles}.
+         * 
+         * @param doubles The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addDouble(Double aDouble) {
             this.doubles.asTransient().add(aDouble);
@@ -750,7 +787,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * Adds a single value for {@code strings}.
+         * Adds a value to {@code strings}.
+         * 
+         * @param strings The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addString(String string) {
             this.strings.asTransient().add(string);
@@ -770,7 +810,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * Adds a single value for {@code bigDecimals}.
+         * Adds a value to {@code bigDecimals}.
+         * 
+         * @param bigDecimals The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addBigDecimal(BigDecimal bigDecimal) {
             this.bigDecimals.asTransient().add(bigDecimal);
@@ -790,7 +833,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * Adds a single value for {@code enumValues}.
+         * Adds a value to {@code enumValues}.
+         * 
+         * @param enumValues The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addEnumValue(EnumValue enumValue) {
             this.enumValues.asTransient().add(enumValue);
@@ -810,7 +856,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * Adds a single value for {@code nestedIntegers}.
+         * Adds a value to {@code nestedIntegers}.
+         * 
+         * @param nestedIntegers The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addNestedInteger(List<Integer> nestedInteger) {
             this.nestedIntegers.asTransient().add(nestedInteger);
@@ -830,7 +879,10 @@ public final class Parent implements ToNode {
         }
 
         /**
-         * Adds a single value for {@code nestedNestedIntegers}.
+         * Adds a value to {@code nestedNestedIntegers}.
+         * 
+         * @param nestedNestedIntegers The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addNestedNestedInteger(List<List<Integer>> nestedNestedInteger) {
             this.nestedNestedIntegers.asTransient().add(nestedNestedInteger);

@@ -73,6 +73,9 @@ public final class FormatNumber implements Format {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of FormatNumber
+     */
     public static final class Builder implements Format.Builder {
         private BigDecimal value;
 

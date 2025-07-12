@@ -62,6 +62,9 @@ public final class Map {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of Map
+     */
     public static final class Builder {
         private List member;
 

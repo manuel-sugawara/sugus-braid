@@ -62,6 +62,9 @@ public final class StructureWithSensitiveMember {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of StructureWithSensitiveMember
+     */
     public static final class Builder {
         private String stringSecretMember;
 

@@ -80,6 +80,9 @@ public final class StructureShape2 {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of StructureShape2
+     */
     public static final class Builder {
         private String name;
         private CollectionBuilderReference<List<StructureShape1>> shapeOnes;
@@ -117,7 +120,10 @@ public final class StructureShape2 {
         }
 
         /**
-         * Adds a single value for {@code shapeOnes}.
+         * Adds a value to {@code shapeOnes}.
+         * 
+         * @param shapeOnes The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addShapeOne(StructureShape1 shapeOne) {
             this.shapeOnes.asTransient().add(shapeOne);

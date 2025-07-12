@@ -109,6 +109,9 @@ public final class StructureWithAggregates {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of StructureWithAggregates
+     */
     public static final class Builder {
         private Long simpleMember;
         private CollectionBuilderReference<List<StructureOne>> structuresOne;
@@ -152,7 +155,10 @@ public final class StructureWithAggregates {
         }
 
         /**
-         * Adds a single value for {@code structuresOne}.
+         * Adds a value to {@code structuresOne}.
+         * 
+         * @param structuresOne The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addStructuresOne(StructureOne structuresOne) {
             this.structuresOne.asTransient().add(structuresOne);
@@ -196,7 +202,10 @@ public final class StructureWithAggregates {
         }
 
         /**
-         * Adds a single value for {@code structureThreeSet}.
+         * Adds a value to {@code structureThreeSet}.
+         * 
+         * @param structureThreeSet The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addStructureThreeSet(StructureThree structureThreeSet) {
             this.structureThreeSet.asTransient().add(structureThreeSet);

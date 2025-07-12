@@ -78,6 +78,9 @@ public final class StructureShape2 {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of StructureShape2
+     */
     public static final class Builder {
         private String name;
         private StructureShape1 shapeOne;

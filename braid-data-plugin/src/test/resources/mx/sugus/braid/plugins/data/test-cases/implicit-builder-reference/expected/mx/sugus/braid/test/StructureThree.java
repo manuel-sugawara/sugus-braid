@@ -77,6 +77,9 @@ public final class StructureThree {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of StructureThree
+     */
     public static final class Builder {
         private StructureOne structureOne;
         private BuilderReference<StructureTwo, StructureTwo.Builder> structureTwo;

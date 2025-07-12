@@ -98,14 +98,21 @@ public final class Parent implements SyntaxNode, ToNode {
     }
 
     /**
-     * Converts a {@link Node} to Parent.
+     * Deserialize a Parent from a {@link Node}.
+     * 
+     * @param node The node to deserialize from.
+     * @return The deserialized instance.
      */
     public static Parent fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * Converts a {@link Node} to Parent.
+     * Deserialize a Parent from a {@link Node}.
+     * 
+     * @param validator A validator to collect any issues found during deserialization.
+     * @param node The node to deserialize from.
+     * @return The deserialized instance.
      */
     public static Parent fromNode(Validation validator, Node node) {
         validator = validator.with("Parent");
@@ -129,6 +136,9 @@ public final class Parent implements SyntaxNode, ToNode {
         return builder.build();
     }
 
+    /**
+     * A class to build instances of Parent
+     */
     public static final class Builder implements SyntaxNode.Builder {
         private SyntaxNodeChild child;
         private AnotherChild anotherChild;

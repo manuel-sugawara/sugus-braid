@@ -89,14 +89,21 @@ public final class ChildFoo implements SyntaxNodeChild, SyntaxNode, ToNode {
     }
 
     /**
-     * Converts a {@link Node} to ChildFoo.
+     * Deserialize a ChildFoo from a {@link Node}.
+     * 
+     * @param node The node to deserialize from.
+     * @return The deserialized instance.
      */
     public static ChildFoo fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * Converts a {@link Node} to ChildFoo.
+     * Deserialize a ChildFoo from a {@link Node}.
+     * 
+     * @param validator A validator to collect any issues found during deserialization.
+     * @param node The node to deserialize from.
+     * @return The deserialized instance.
      */
     public static ChildFoo fromNode(Validation validator, Node node) {
         validator = validator.with("ChildFoo");
@@ -119,6 +126,9 @@ public final class ChildFoo implements SyntaxNodeChild, SyntaxNode, ToNode {
         return builder.build();
     }
 
+    /**
+     * A class to build instances of ChildFoo
+     */
     public static final class Builder implements SyntaxNodeChild.Builder, SyntaxNode.Builder {
         private String foo;
 

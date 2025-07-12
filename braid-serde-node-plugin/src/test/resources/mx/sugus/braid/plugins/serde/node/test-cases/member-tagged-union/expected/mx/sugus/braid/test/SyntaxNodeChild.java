@@ -18,6 +18,12 @@ public interface SyntaxNodeChild extends ToNode {
      */
     Builder toBuilder();
 
+    /**
+     * Deserialize a SyntaxNodeChild from a {@link Node}.
+     * 
+     * @param node The node to deserialize from.
+     * @return The deserialized instance.
+     */
     static SyntaxNodeChild fromNode(Validation validation, Node node) {
         ObjectNode objectNode = node.expectObjectNode();
         ChildKind kind = ChildKind.from(objectNode.expectStringMember("kind").getValue());

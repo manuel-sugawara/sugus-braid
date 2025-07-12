@@ -49,6 +49,9 @@ public final class Emtpy {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of Emtpy
+     */
     public static final class Builder {
 
         Builder() {

@@ -131,6 +131,9 @@ public final class Container {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of Container
+     */
     public static final class Builder {
         private List list;
         private String aConst;
@@ -188,7 +191,10 @@ public final class Container {
         }
 
         /**
-         * Adds a single value for {@code listOfLists}.
+         * Adds a value to {@code listOfLists}.
+         * 
+         * @param listOfLists The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addListOfList(List listOfList) {
             this.listOfLists.asTransient().add(listOfList);

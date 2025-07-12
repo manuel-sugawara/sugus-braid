@@ -186,6 +186,9 @@ public final class AllSimpleTypes {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of AllSimpleTypes
+     */
     public static final class Builder {
         private Byte aByte;
         private Short aShort;

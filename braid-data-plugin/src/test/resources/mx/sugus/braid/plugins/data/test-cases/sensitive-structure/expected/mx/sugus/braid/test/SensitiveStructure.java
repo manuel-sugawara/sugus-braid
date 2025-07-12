@@ -73,6 +73,9 @@ public final class SensitiveStructure {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of SensitiveStructure
+     */
     public static final class Builder {
         private String stringSecretMember;
         private Integer intSecretMember;
