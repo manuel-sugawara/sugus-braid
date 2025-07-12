@@ -125,14 +125,21 @@ public final class StructureShape implements ToNode {
     }
 
     /**
-     * Converts a {@link Node} to StructureShape.
+     * Deserialize a StructureShape from a {@link Node}.
+     * 
+     * @param node The node to deserialize from.
+     * @return The deserialized instance.
      */
     public static StructureShape fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * Converts a {@link Node} to StructureShape.
+     * Deserialize a StructureShape from a {@link Node}.
+     * 
+     * @param validator A validator to collect any issues found during deserialization.
+     * @param node The node to deserialize from.
+     * @return The deserialized instance.
      */
     public static StructureShape fromNode(Validation validator, Node node) {
         validator = validator.with("StructureShape");
@@ -161,6 +168,9 @@ public final class StructureShape implements ToNode {
         return builder.build();
     }
 
+    /**
+     * A class to build instances of StructureShape
+     */
     public static final class Builder {
         private Modifier modifier;
         private Modifier anotherModifier;
@@ -211,7 +221,10 @@ public final class StructureShape implements ToNode {
         }
 
         /**
-         * Adds a single value for {@code modifierList}.
+         * Adds a value to {@code modifierList}.
+         * 
+         * @param modifierList The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addModifierList(Modifier modifierList) {
             this.modifierList.asTransient().add(modifierList);

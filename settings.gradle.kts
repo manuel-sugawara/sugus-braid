@@ -1,4 +1,4 @@
-rootProject.name = "sugus-smithy-codegen"
+rootProject.name = "sugus-braid-codegen"
 
 // Include subpackages
 include(":braid-syntax-plugin")

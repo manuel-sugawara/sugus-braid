@@ -75,6 +75,9 @@ public final class EnumStructure {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of EnumStructure
+     */
     public static final class Builder {
         private Integer anInt;
         private String aVoid;

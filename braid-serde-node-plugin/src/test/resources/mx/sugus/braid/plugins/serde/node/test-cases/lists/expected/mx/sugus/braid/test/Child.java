@@ -98,14 +98,21 @@ public final class Child implements ToNode {
     }
 
     /**
-     * Converts a {@link Node} to Child.
+     * Deserialize a Child from a {@link Node}.
+     * 
+     * @param node The node to deserialize from.
+     * @return The deserialized instance.
      */
     public static Child fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * Converts a {@link Node} to Child.
+     * Deserialize a Child from a {@link Node}.
+     * 
+     * @param validator A validator to collect any issues found during deserialization.
+     * @param node The node to deserialize from.
+     * @return The deserialized instance.
      */
     public static Child fromNode(Validation validator, Node node) {
         validator = validator.with("Child");
@@ -129,6 +136,9 @@ public final class Child implements ToNode {
         return builder.build();
     }
 
+    /**
+     * A class to build instances of Child
+     */
     public static final class Builder {
         private String stringValue;
         private Integer intValue;

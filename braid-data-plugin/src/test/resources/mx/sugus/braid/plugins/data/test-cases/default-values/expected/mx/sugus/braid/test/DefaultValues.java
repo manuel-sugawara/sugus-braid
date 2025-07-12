@@ -157,6 +157,9 @@ public final class DefaultValues {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of DefaultValues
+     */
     public static final class Builder {
         private Boolean aBoolean;
         private Byte aByte;

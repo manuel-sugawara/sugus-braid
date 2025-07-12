@@ -62,6 +62,9 @@ public final class VoidStructure {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of VoidStructure
+     */
     public static final class Builder {
         private EnumStructure anEnum;
 

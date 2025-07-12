@@ -62,6 +62,9 @@ public final class Const {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of Const
+     */
     public static final class Builder {
         private String aConst;
 

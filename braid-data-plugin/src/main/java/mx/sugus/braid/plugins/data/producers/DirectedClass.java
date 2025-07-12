@@ -1,6 +1,5 @@
 package mx.sugus.braid.plugins.data.producers;
 
-import java.util.Collections;
 import java.util.List;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.jsyntax.AbstractMethodSyntax;
@@ -23,31 +22,31 @@ public interface DirectedClass extends DirectiveToTypeSyntax {
     List<FieldSyntax> fieldsFor(ShapeCodegenState state, MemberShape member);
 
     default List<FieldSyntax> extraFields(ShapeCodegenState state) {
-        return Collections.emptyList();
+        return List.of();
     }
 
     default List<ConstructorMethodSyntax> constructors(ShapeCodegenState state) {
-        return Collections.emptyList();
+        return List.of();
     }
 
     default List<MethodSyntax> methodsFor(ShapeCodegenState state, MemberShape member) {
-        return Collections.emptyList();
+        return List.of();
     }
 
     default List<AbstractMethodSyntax> abstractMethodsFor(ShapeCodegenState state, MemberShape member) {
-        return Collections.emptyList();
+        return List.of();
     }
 
     default List<MethodSyntax> extraMethods(ShapeCodegenState state) {
-        return Collections.emptyList();
+        return List.of();
     }
 
     default List<AbstractMethodSyntax> extraAbstractMethods(ShapeCodegenState state) {
-        return Collections.emptyList();
+        return List.of();
     }
 
     default List<DirectiveToTypeSyntax> innerTypes(ShapeCodegenState state) {
-        return Collections.emptyList();
+        return List.of();
     }
 
     @Override

@@ -98,14 +98,21 @@ public final class AnotherChild implements SyntaxNode, ToNode {
     }
 
     /**
-     * Converts a {@link Node} to AnotherChild.
+     * Deserialize a AnotherChild from a {@link Node}.
+     * 
+     * @param node The node to deserialize from.
+     * @return The deserialized instance.
      */
     public static AnotherChild fromNode(Node node) {
         return fromNode(SinkValidator.instance(), node);
     }
 
     /**
-     * Converts a {@link Node} to AnotherChild.
+     * Deserialize a AnotherChild from a {@link Node}.
+     * 
+     * @param validator A validator to collect any issues found during deserialization.
+     * @param node The node to deserialize from.
+     * @return The deserialized instance.
      */
     public static AnotherChild fromNode(Validation validator, Node node) {
         validator = validator.with("AnotherChild");
@@ -129,6 +136,9 @@ public final class AnotherChild implements SyntaxNode, ToNode {
         return builder.build();
     }
 
+    /**
+     * A class to build instances of AnotherChild
+     */
     public static final class Builder implements SyntaxNode.Builder {
         private String stringValue;
         private Integer intValue;

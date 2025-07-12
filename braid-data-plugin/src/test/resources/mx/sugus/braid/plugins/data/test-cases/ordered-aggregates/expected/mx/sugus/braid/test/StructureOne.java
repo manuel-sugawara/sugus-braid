@@ -62,6 +62,9 @@ public final class StructureOne {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of StructureOne
+     */
     public static final class Builder {
         private Integer intMember;
 

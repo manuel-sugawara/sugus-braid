@@ -62,6 +62,9 @@ public final class List {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of List
+     */
     public static final class Builder {
         private VoidStructure aVoid;
 

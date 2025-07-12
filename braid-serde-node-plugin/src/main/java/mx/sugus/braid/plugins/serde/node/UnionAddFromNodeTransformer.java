@@ -14,6 +14,7 @@ import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.DefaultCaseClause;
+import mx.sugus.braid.jsyntax.Javadoc;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.SwitchStatement;
@@ -57,9 +58,14 @@ public final class UnionAddFromNodeTransformer implements ShapeTaskTransformer<T
 
     static MethodSyntax fromNodeMethod(ShapeCodegenState state) {
         var className = Utils.toJavaTypeName(state, state.shape());
-        var javadoc = "Converts a {@link Node} to " + ClassName.toClassName(className).name() + ".";
+        var doc = Javadoc.builder()
+                         .body("Deserialize a $T from a {@link Node}.", ClassName.toClassName(className))
+                         .putParam("validator", "A validator to collect any issues found during deserialization.")
+                         .putParam("node", "The node to deserialize from.")
+                         .returns("The deserialized instance.")
+                         .build();
         var builder = MethodSyntax.builder("fromNode")
-                                  .javadoc(JavadocExt.document(javadoc))
+                                  .javadoc(doc)
                                   .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                                   .addParameter(Validation.class, "validator")
                                   .addParameter(Node.class, "node")

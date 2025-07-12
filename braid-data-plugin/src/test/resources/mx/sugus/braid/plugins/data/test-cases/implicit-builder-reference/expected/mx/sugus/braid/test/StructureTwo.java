@@ -76,6 +76,9 @@ public final class StructureTwo {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of StructureTwo
+     */
     public static final class Builder {
         private Float floatMember;
         private String stringMember;

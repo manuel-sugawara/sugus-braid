@@ -61,6 +61,9 @@ public final class Objects {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of Objects
+     */
     public static final class Builder {
         private String object;
 

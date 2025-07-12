@@ -225,9 +225,7 @@ public final class UnionDataBuilder implements DirectedClass {
         var doc = "Adds a single value for `" + name + "`";
         builder.javadoc(JavadocExt.document(doc));
         var defaultAdder = builder.build();
-        var result = new ArrayList<MethodSyntax>();
-        result.add(defaultAdder);
-        return Collections.unmodifiableList(result);
+        return List.of(defaultAdder);
     }
 
     private List<MethodSyntax> mapAdder(ShapeCodegenState state, MemberShape member) {
