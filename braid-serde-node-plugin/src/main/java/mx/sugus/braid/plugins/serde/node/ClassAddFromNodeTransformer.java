@@ -1,5 +1,6 @@
 package mx.sugus.braid.plugins.serde.node;
 
+import java.time.Instant;
 import java.util.Locale;
 import java.util.Map;
 import javax.lang.model.element.Modifier;
@@ -261,9 +262,10 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
 
     private static String addNestedMap(ShapeCodegenState state, MapShape shape, String source, int depth,
                                        CaseClause.Builder body) {
-        var name = "mapValue" + (depth == 0 ? "" : Integer.toString(depth));
-        var entryName = "innerKvp" + (depth == 0 ? "" : Integer.toString(depth));
-        var valueName = "innerValue" + (depth == 0 ? "" : Integer.toString(depth));
+        String suffix = depth == 0 ? "" : Integer.toString(depth);
+        var name = "mapValue" + suffix;
+        var entryName = "innerKvp" + suffix;
+        var valueName = "innerValue" + suffix;
         var aggregateType = Utils.aggregateType(state, shape);
         var type = Utils.toJavaTypeName(state, shape);
         var member = shape.getValue();
@@ -323,6 +325,8 @@ public final class ClassAddFromNodeTransformer implements ShapeTaskTransformer<T
             case BOOLEAN -> CodeBlock.from("$L.expectBooleanNode().getValue()", nodeVar);
             case ENUM -> CodeBlock.from("$T.from($L.expectStringNode().getValue())",
                                         Utils.toJavaTypeName(state, target), nodeVar);
+            case TIMESTAMP -> CodeBlock.from("$T.parse($L.expectStringNode().getValue())",
+                                             Instant.class, nodeVar);
             default -> CodeBlock.from("null /* $L */", target.getType());
         };
     }

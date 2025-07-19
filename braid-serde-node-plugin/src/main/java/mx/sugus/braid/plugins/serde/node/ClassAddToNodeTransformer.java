@@ -257,7 +257,7 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
                  FLOAT, DOUBLE,
                  BOOLEAN -> CodeBlock.from("$T.from($L)", Node.class, source);
             case BIG_INTEGER,
-                 BIG_DECIMAL,
+                 BIG_DECIMAL, TIMESTAMP,
                  ENUM -> CodeBlock.from("$T.from($L.toString())", Node.class, source);
             default -> CodeBlock.from("null /* $L */", target.getType());
         };
