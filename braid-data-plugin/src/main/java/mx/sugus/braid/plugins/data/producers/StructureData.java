@@ -28,12 +28,12 @@ import software.amazon.smithy.model.shapes.ShapeType;
 import software.amazon.smithy.model.traits.DocumentationTrait;
 
 public final class StructureData implements DirectedClass {
-    static final Lazy<Javadoc> TO_BUILDER_DOC = new Lazy(
+    static final Lazy<Javadoc> TO_BUILDER_DOC = new Lazy<>(
         () -> Javadoc.builder()
                      .body("Returns a new builder to modify a copy of this instance.")
                      .returns("A new builder to modify a copy of this instance.")
                      .build());
-    static final Lazy<Javadoc> BUILDER_DOC = new Lazy(
+    static final Lazy<Javadoc> BUILDER_DOC = new Lazy<>(
         () -> Javadoc.builder()
                      .body("Creates a new builder to create instances of this class.")
                      .returns("A new builder to create instances of this class.")

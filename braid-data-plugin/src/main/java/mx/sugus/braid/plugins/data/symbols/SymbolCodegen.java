@@ -3,6 +3,9 @@ package mx.sugus.braid.plugins.data.symbols;
 import static mx.sugus.braid.plugins.data.symbols.SymbolProperties.BUILDER_REFERENCE_FROM_PERSISTENT;
 import static mx.sugus.braid.plugins.data.symbols.SymbolProperties.BUILDER_REFERENCE_JAVA_TYPE;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.Instant;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import mx.sugus.braid.core.plugin.CodegenState;
@@ -218,6 +221,13 @@ public final class SymbolCodegen {
                 return CodeBlock.from("$LL", defaultValueNode.expectNumberNode().getValue().toString());
             case FLOAT:
                 return CodeBlock.from("$LF", defaultValueNode.expectNumberNode().getValue().toString());
+            case BIG_DECIMAL:
+                return CodeBlock.from("new $T($S)", BigDecimal.class, defaultValueNode.expectNumberNode().getValue().toString());
+            case BIG_INTEGER:
+                return CodeBlock.from("new $T($S)", BigInteger.class, defaultValueNode.expectNumberNode().getValue().toString());
+            case TIMESTAMP:
+                return CodeBlock.from("$T.ofEpochMilli((long) ($LD * 1000))", Instant.class,
+                                      defaultValueNode.expectNumberNode().getValue().toString());
             case STRING:
                 return CodeBlock.from("$S", defaultValueNode.expectStringNode().getValue());
             case BOOLEAN:
