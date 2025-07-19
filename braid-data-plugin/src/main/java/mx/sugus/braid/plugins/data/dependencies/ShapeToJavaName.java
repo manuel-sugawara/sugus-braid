@@ -19,7 +19,7 @@ public interface ShapeToJavaName {
 
     /**
      * Converts the given shape to an idiomatic name, the name is expected to be usable within java, meaning that reserved words
-     * should be converted into a usable name.
+     * will be converted into a usable name.
      *
      * @param shape The shape to covert.
      * @param model The model containing the shape.

@@ -111,7 +111,7 @@ public final class StructureShape2 implements StructureBase {
          * @return This instance for chain calling.
          */
         public Builder stringValue(String stringValue) {
-            this.stringValue = stringValue;
+            this.stringValue = Objects.requireNonNull(stringValue, "stringValue");
             return this;
         }
 

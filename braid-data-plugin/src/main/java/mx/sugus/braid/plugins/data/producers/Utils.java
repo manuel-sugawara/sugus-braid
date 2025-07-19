@@ -112,6 +112,12 @@ public final class Utils {
         return escapeNameIfNeeded(state, name, shape);
     }
 
+    public static Name toSourceName(CodegenState state, Shape shape) {
+        var symbol = state.symbolProvider().toSymbol(shape);
+        return symbol.getProperty(SymbolProperties.SIMPLE_NAME)
+                         .orElseThrow(() -> new NoSuchElementException(shape.toString()));
+    }
+
     public static Name toJavaName(CodegenState state, Shape shape, Name.Convention kind) {
         var name = state.symbolProvider()
                         .toSymbol(shape)

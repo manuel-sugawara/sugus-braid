@@ -204,7 +204,7 @@ public final class StructureShape implements ToNode {
          * @return This instance for chain calling.
          */
         public Builder anotherModifier(Modifier anotherModifier) {
-            this.anotherModifier = anotherModifier;
+            this.anotherModifier = Objects.requireNonNull(anotherModifier, "anotherModifier");
             return this;
         }
 

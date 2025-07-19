@@ -164,8 +164,8 @@ public final class AnyAggregateType {
         private VariantTag variantTag;
 
         Builder() {
-            this.variantTag = null;
-            this.variantValue = VariantTag.UNKNOWN_TO_VERSION;
+            this.variantTag = VariantTag.UNKNOWN_TO_VERSION;
+            this.variantValue = null;
         }
 
         Builder(AnyAggregateType data) {

@@ -76,7 +76,7 @@ public final class VoidStructure {
         }
 
         /**
-         * Sets the value for {@code anEnum}.
+         * Sets the value for {@code enum}.
          * 
          * @param anEnum The value to be set.
          * @return This instance for chain calling.

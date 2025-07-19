@@ -40,6 +40,13 @@ class NameTest {
         assertEquals(Name.Convention.UNKNOWN, name.convention());
     }
 
+    @Test
+    public void accptsDollarSign() {
+        var name = Name.ofLiteral("$");
+        assertEquals("$", name.toString());
+        assertEquals(Name.Convention.UNKNOWN, name.convention());
+    }
+
     public static Collection<TestCase> testCases2() {
         return Arrays.asList(
             TestCase.builder()

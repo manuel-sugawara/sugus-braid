@@ -76,7 +76,7 @@ public final class Const {
         }
 
         /**
-         * Sets the value for {@code aConst}.
+         * Sets the value for {@code const}.
          * 
          * @param aConst The value to be set.
          * @return This instance for chain calling.

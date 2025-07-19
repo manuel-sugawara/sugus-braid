@@ -91,7 +91,7 @@ public final class EnumStructure {
         }
 
         /**
-         * Sets the value for {@code anInt}.
+         * Sets the value for {@code int}.
          * 
          * @param anInt The value to be set.
          * @return This instance for chain calling.
@@ -102,7 +102,7 @@ public final class EnumStructure {
         }
 
         /**
-         * Sets the value for {@code aVoid}.
+         * Sets the value for {@code void}.
          * 
          * @param aVoid The value to be set.
          * @return This instance for chain calling.
