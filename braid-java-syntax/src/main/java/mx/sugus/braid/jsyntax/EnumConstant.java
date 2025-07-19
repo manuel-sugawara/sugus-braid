@@ -110,6 +110,9 @@ public final class EnumConstant implements SyntaxNode {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of EnumConstant
+     */
     public static final class Builder implements SyntaxNode.Builder {
         private Javadoc javadoc;
         private String name;
@@ -142,7 +145,7 @@ public final class EnumConstant implements SyntaxNode {
          * @return This instance for chain calling.
          */
         public Builder name(String name) {
-            this.name = name;
+            this.name = Objects.requireNonNull(name, "name");
             return this;
         }
 

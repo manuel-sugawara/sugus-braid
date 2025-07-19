@@ -123,6 +123,9 @@ public final class CompilationUnit implements SyntaxNode {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of CompilationUnit
+     */
     public static final class Builder implements SyntaxNode.Builder {
         private String packageName;
         private CollectionBuilderReference<Set<ClassName>> imports;
@@ -148,7 +151,7 @@ public final class CompilationUnit implements SyntaxNode {
          * @return This instance for chain calling.
          */
         public Builder packageName(String packageName) {
-            this.packageName = packageName;
+            this.packageName = Objects.requireNonNull(packageName, "packageName");
             return this;
         }
 
@@ -165,7 +168,10 @@ public final class CompilationUnit implements SyntaxNode {
         }
 
         /**
-         * Adds a single value for {@code imports}.
+         * Adds a value to {@code imports}.
+         * 
+         * @param imports The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addImport(ClassName anImport) {
             this.imports.asTransient().add(anImport);
@@ -203,7 +209,7 @@ public final class CompilationUnit implements SyntaxNode {
          * @return This instance for chain calling.
          */
         public Builder type(TypeSyntax type) {
-            this.type = type;
+            this.type = Objects.requireNonNull(type, "type");
             return this;
         }
 

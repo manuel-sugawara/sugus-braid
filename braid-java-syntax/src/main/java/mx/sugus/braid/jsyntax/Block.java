@@ -85,6 +85,9 @@ public final class Block implements Statement {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of Block
+     */
     public static final class Builder implements Statement.Builder {
         private CollectionBuilderReference<List<Statement>> statements;
 
@@ -109,7 +112,10 @@ public final class Block implements Statement {
         }
 
         /**
-         * Adds a single value for {@code statements}.
+         * Adds a value to {@code statements}.
+         * 
+         * @param statements The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addStatement(Statement statement) {
             this.statements.asTransient().add(statement);

@@ -107,6 +107,9 @@ public final class Parameter implements SyntaxNode {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of Parameter
+     */
     public static final class Builder implements SyntaxNode.Builder {
         private String name;
         private TypeName type;
@@ -129,7 +132,7 @@ public final class Parameter implements SyntaxNode {
          * @return This instance for chain calling.
          */
         public Builder name(String name) {
-            this.name = name;
+            this.name = Objects.requireNonNull(name, "name");
             return this;
         }
 
@@ -140,7 +143,7 @@ public final class Parameter implements SyntaxNode {
          * @return This instance for chain calling.
          */
         public Builder type(TypeName type) {
-            this.type = type;
+            this.type = Objects.requireNonNull(type, "type");
             return this;
         }
 
@@ -156,7 +159,7 @@ public final class Parameter implements SyntaxNode {
          * @return This instance for chain calling.
          */
         public Builder varargs(Boolean varargs) {
-            this.varargs = varargs;
+            this.varargs = Objects.requireNonNull(varargs, "varargs");
             return this;
         }
 

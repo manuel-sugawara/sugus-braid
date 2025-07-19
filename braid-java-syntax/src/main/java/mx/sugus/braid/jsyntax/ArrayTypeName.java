@@ -83,6 +83,9 @@ public final class ArrayTypeName implements TypeName {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of ArrayTypeName
+     */
     public static final class Builder implements TypeName.Builder {
         private TypeName componentType;
 
@@ -100,7 +103,7 @@ public final class ArrayTypeName implements TypeName {
          * @return This instance for chain calling.
          */
         public Builder componentType(TypeName componentType) {
-            this.componentType = componentType;
+            this.componentType = Objects.requireNonNull(componentType, "componentType");
             return this;
         }
 

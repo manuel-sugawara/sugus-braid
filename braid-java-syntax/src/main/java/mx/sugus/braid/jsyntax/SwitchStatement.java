@@ -115,6 +115,9 @@ public final class SwitchStatement implements Statement {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of SwitchStatement
+     */
     public static final class Builder implements Statement.Builder {
         private Expression expression;
         private CollectionBuilderReference<List<CaseClause>> cases;
@@ -137,7 +140,7 @@ public final class SwitchStatement implements Statement {
          * @return This instance for chain calling.
          */
         public Builder expression(Expression expression) {
-            this.expression = expression;
+            this.expression = Objects.requireNonNull(expression, "expression");
             return this;
         }
 
@@ -154,7 +157,10 @@ public final class SwitchStatement implements Statement {
         }
 
         /**
-         * Adds a single value for {@code cases}.
+         * Adds a value to {@code cases}.
+         * 
+         * @param cases The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addCase(CaseClause aCase) {
             this.cases.asTransient().add(aCase);

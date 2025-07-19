@@ -102,6 +102,9 @@ public final class TypeVariableTypeName implements TypeName {
         return TypeVariableTypeName.builder().name(name).build();
     }
 
+    /**
+     * A class to build instances of TypeVariableTypeName
+     */
     public static final class Builder implements TypeName.Builder {
         private String name;
         private CollectionBuilderReference<List<TypeName>> bounds;
@@ -122,7 +125,7 @@ public final class TypeVariableTypeName implements TypeName {
          * @return This instance for chain calling.
          */
         public Builder name(String name) {
-            this.name = name;
+            this.name = Objects.requireNonNull(name, "name");
             return this;
         }
 
@@ -139,7 +142,10 @@ public final class TypeVariableTypeName implements TypeName {
         }
 
         /**
-         * Adds a single value for {@code bounds}.
+         * Adds a value to {@code bounds}.
+         * 
+         * @param bounds The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addBound(TypeName bound) {
             this.bounds.asTransient().add(bound);

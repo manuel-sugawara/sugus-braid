@@ -125,6 +125,9 @@ public final class ParameterizedTypeName implements TypeName {
             return builder.build();
     }
 
+    /**
+     * A class to build instances of ParameterizedTypeName
+     */
     public static final class Builder implements TypeName.Builder {
         private ClassName rawType;
         private CollectionBuilderReference<List<TypeName>> typeArguments;
@@ -145,7 +148,7 @@ public final class ParameterizedTypeName implements TypeName {
          * @return This instance for chain calling.
          */
         public Builder rawType(ClassName rawType) {
-            this.rawType = rawType;
+            this.rawType = Objects.requireNonNull(rawType, "rawType");
             return this;
         }
 
@@ -162,7 +165,10 @@ public final class ParameterizedTypeName implements TypeName {
         }
 
         /**
-         * Adds a single value for {@code typeArguments}.
+         * Adds a value to {@code typeArguments}.
+         * 
+         * @param typeArguments The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addTypeArgument(TypeName typeArgument) {
             this.typeArguments.asTransient().add(typeArgument);

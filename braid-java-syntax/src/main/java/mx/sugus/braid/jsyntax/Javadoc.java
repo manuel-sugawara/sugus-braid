@@ -106,6 +106,9 @@ public final class Javadoc implements SyntaxNode {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of Javadoc
+     */
     public static final class Builder implements SyntaxNode.Builder {
         private CodeBlock body;
         private CollectionBuilderReference<Map<String, CodeBlock>> params;

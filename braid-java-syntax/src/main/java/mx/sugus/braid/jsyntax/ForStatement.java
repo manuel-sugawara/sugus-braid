@@ -104,6 +104,9 @@ public final class ForStatement implements Statement {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of ForStatement
+     */
     public static final class Builder implements Statement.Builder {
         private CodeBlock initializer;
         private BuilderReference<Block, BodyBuilder> statement;
@@ -124,7 +127,7 @@ public final class ForStatement implements Statement {
          * @return This instance for chain calling.
          */
         public Builder initializer(CodeBlock initializer) {
-            this.initializer = initializer;
+            this.initializer = Objects.requireNonNull(initializer, "initializer");
             return this;
         }
 

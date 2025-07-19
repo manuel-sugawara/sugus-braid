@@ -211,6 +211,9 @@ public final class EnumSyntax implements TypeSyntax {
         return builder().name(name);
     }
 
+    /**
+     * A class to build instances of EnumSyntax
+     */
     public static final class Builder implements TypeSyntax.Builder {
         private CollectionBuilderReference<List<EnumConstant>> enumConstants;
         private Javadoc javadoc;
@@ -257,7 +260,10 @@ public final class EnumSyntax implements TypeSyntax {
         }
 
         /**
-         * Adds a single value for {@code enumConstants}.
+         * Adds a value to {@code enumConstants}.
+         * 
+         * @param enumConstants The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addEnumConstant(EnumConstant enumConstant) {
             this.enumConstants.asTransient().add(enumConstant);
@@ -282,7 +288,7 @@ public final class EnumSyntax implements TypeSyntax {
          * @return This instance for chain calling.
          */
         public Builder name(String name) {
-            this.name = name;
+            this.name = Objects.requireNonNull(name, "name");
             return this;
         }
 
@@ -299,7 +305,10 @@ public final class EnumSyntax implements TypeSyntax {
         }
 
         /**
-         * Adds a single value for {@code modifiers}.
+         * Adds a value to {@code modifiers}.
+         * 
+         * @param modifiers The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addModifier(Modifier modifier) {
             this.modifiers.asTransient().add(modifier);
@@ -338,7 +347,10 @@ public final class EnumSyntax implements TypeSyntax {
         }
 
         /**
-         * Adds a single value for {@code annotations}.
+         * Adds a value to {@code annotations}.
+         * 
+         * @param annotations The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addAnnotation(Annotation annotation) {
             this.annotations.asTransient().add(annotation);
@@ -374,7 +386,10 @@ public final class EnumSyntax implements TypeSyntax {
         }
 
         /**
-         * Adds a single value for {@code superInterfaces}.
+         * Adds a value to {@code superInterfaces}.
+         * 
+         * @param superInterfaces The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addSuperInterface(TypeName superInterface) {
             this.superInterfaces.asTransient().add(superInterface);
@@ -402,7 +417,10 @@ public final class EnumSyntax implements TypeSyntax {
         }
 
         /**
-         * Adds a single value for {@code fields}.
+         * Adds a value to {@code fields}.
+         * 
+         * @param fields The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addField(FieldSyntax field) {
             this.fields.asTransient().add(field);
@@ -438,7 +456,10 @@ public final class EnumSyntax implements TypeSyntax {
         }
 
         /**
-         * Adds a single value for {@code methods}.
+         * Adds a value to {@code methods}.
+         * 
+         * @param methods The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addMethod(BaseMethodSyntax method) {
             this.methods.asTransient().add(method);
@@ -458,7 +479,10 @@ public final class EnumSyntax implements TypeSyntax {
         }
 
         /**
-         * Adds a single value for {@code innerTypes}.
+         * Adds a value to {@code innerTypes}.
+         * 
+         * @param innerTypes The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addInnerType(TypeSyntax innerType) {
             this.innerTypes.asTransient().add(innerType);

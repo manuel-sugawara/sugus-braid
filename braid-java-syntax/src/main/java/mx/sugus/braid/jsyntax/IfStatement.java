@@ -120,6 +120,9 @@ public final class IfStatement implements Statement {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of IfStatement
+     */
     public static final class Builder implements Statement.Builder {
         private Expression expression;
         private BuilderReference<Block, BodyBuilder> statement;
@@ -142,7 +145,7 @@ public final class IfStatement implements Statement {
          * @return This instance for chain calling.
          */
         public Builder expression(Expression expression) {
-            this.expression = expression;
+            this.expression = Objects.requireNonNull(expression, "expression");
             return this;
         }
 

@@ -83,6 +83,9 @@ public final class PrimitiveTypeName implements TypeName {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of PrimitiveTypeName
+     */
     public static final class Builder implements TypeName.Builder {
         private TypePrimitiveName name;
 
@@ -100,7 +103,7 @@ public final class PrimitiveTypeName implements TypeName {
          * @return This instance for chain calling.
          */
         public Builder name(TypePrimitiveName name) {
-            this.name = name;
+            this.name = Objects.requireNonNull(name, "name");
             return this;
         }
 

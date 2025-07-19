@@ -151,6 +151,9 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of ConstructorMethodSyntax
+     */
     public static final class Builder implements BaseMethodSyntax.Builder {
         private BuilderReference<Block, BodyBuilder> body;
         private Javadoc javadoc;
@@ -258,7 +261,10 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * Adds a single value for {@code annotations}.
+         * Adds a value to {@code annotations}.
+         * 
+         * @param annotations The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addAnnotation(Annotation annotation) {
             this.annotations.asTransient().add(annotation);
@@ -294,7 +300,10 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * Adds a single value for {@code modifiers}.
+         * Adds a value to {@code modifiers}.
+         * 
+         * @param modifiers The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addModifier(Modifier modifier) {
             this.modifiers.asTransient().add(modifier);
@@ -333,7 +342,10 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * Adds a single value for {@code parameters}.
+         * Adds a value to {@code parameters}.
+         * 
+         * @param parameters The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addParameter(Parameter parameter) {
             this.parameters.asTransient().add(parameter);

@@ -128,6 +128,9 @@ public final class AbstractControlFlow implements Statement {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of AbstractControlFlow
+     */
     public static final class Builder implements Statement.Builder {
         private CodeBlock prefix;
         private BuilderReference<Block, BodyBuilder> statement;
@@ -150,7 +153,7 @@ public final class AbstractControlFlow implements Statement {
          * @return This instance for chain calling.
          */
         public Builder prefix(CodeBlock prefix) {
-            this.prefix = prefix;
+            this.prefix = Objects.requireNonNull(prefix, "prefix");
             return this;
         }
 

@@ -86,6 +86,9 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
         return builder().parts(FormatParser.parseFormat(format, args)).build();
     }
 
+    /**
+     * A class to build instances of CodeBlock
+     */
     public static final class Builder implements SyntaxNode.Builder, Expression.Builder, EnumBody.Builder, Statement.Builder {
         private CollectionBuilderReference<List<FormatterNode>> parts;
 
@@ -110,7 +113,10 @@ public final class CodeBlock implements SyntaxNode, Expression, EnumBody, Statem
         }
 
         /**
-         * Adds a single value for {@code parts}.
+         * Adds a value to {@code parts}.
+         * 
+         * @param parts The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addPart(FormatterNode part) {
             this.parts.asTransient().add(part);

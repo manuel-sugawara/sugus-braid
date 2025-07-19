@@ -81,6 +81,9 @@ public final class DefaultCaseClause implements SyntaxNode {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of DefaultCaseClause
+     */
     public static final class Builder implements SyntaxNode.Builder {
         private BuilderReference<Block, BodyBuilder> body;
 

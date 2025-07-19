@@ -201,6 +201,9 @@ public final class MethodSyntax implements BaseMethodSyntax {
         return builder().name(name);
     }
 
+    /**
+     * A class to build instances of MethodSyntax
+     */
     public static final class Builder implements BaseMethodSyntax.Builder {
         private String name;
         private CollectionBuilderReference<List<TypeVariableTypeName>> typeParams;
@@ -237,7 +240,7 @@ public final class MethodSyntax implements BaseMethodSyntax {
          * @return This instance for chain calling.
          */
         public Builder name(String name) {
-            this.name = name;
+            this.name = Objects.requireNonNull(name, "name");
             return this;
         }
 
@@ -254,7 +257,10 @@ public final class MethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * Adds a single value for {@code typeParams}.
+         * Adds a value to {@code typeParams}.
+         * 
+         * @param typeParams The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addTypeParam(TypeVariableTypeName typeParam) {
             this.typeParams.asTransient().add(typeParam);
@@ -276,7 +282,7 @@ public final class MethodSyntax implements BaseMethodSyntax {
          * @return This instance for chain calling.
          */
         public Builder returns(TypeName returns) {
-            this.returns = returns;
+            this.returns = Objects.requireNonNull(returns, "returns");
             return this;
         }
 
@@ -370,7 +376,10 @@ public final class MethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * Adds a single value for {@code annotations}.
+         * Adds a value to {@code annotations}.
+         * 
+         * @param annotations The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addAnnotation(Annotation annotation) {
             this.annotations.asTransient().add(annotation);
@@ -406,7 +415,10 @@ public final class MethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * Adds a single value for {@code modifiers}.
+         * Adds a value to {@code modifiers}.
+         * 
+         * @param modifiers The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addModifier(Modifier modifier) {
             this.modifiers.asTransient().add(modifier);
@@ -445,7 +457,10 @@ public final class MethodSyntax implements BaseMethodSyntax {
         }
 
         /**
-         * Adds a single value for {@code parameters}.
+         * Adds a value to {@code parameters}.
+         * 
+         * @param parameters The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addParameter(Parameter parameter) {
             this.parameters.asTransient().add(parameter);

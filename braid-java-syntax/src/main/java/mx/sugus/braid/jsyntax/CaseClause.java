@@ -96,6 +96,9 @@ public final class CaseClause implements SyntaxNode {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of CaseClause
+     */
     public static final class Builder implements SyntaxNode.Builder {
         private CollectionBuilderReference<List<Expression>> label;
         private BuilderReference<Block, BodyBuilder> body;
@@ -123,7 +126,10 @@ public final class CaseClause implements SyntaxNode {
         }
 
         /**
-         * Adds a single value for {@code label}.
+         * Adds a value to {@code label}.
+         * 
+         * @param label The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addLabel(Expression label) {
             this.label.asTransient().add(label);

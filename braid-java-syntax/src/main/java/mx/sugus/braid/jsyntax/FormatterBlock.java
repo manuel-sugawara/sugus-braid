@@ -72,6 +72,9 @@ public final class FormatterBlock implements FormatterNode {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of FormatterBlock
+     */
     public static final class Builder implements FormatterNode.Builder {
         private BuilderReference<Block, BodyBuilder> value;
 

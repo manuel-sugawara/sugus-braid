@@ -117,6 +117,9 @@ public final class Annotation implements SyntaxNode {
                 .build();
     }
 
+    /**
+     * A class to build instances of Annotation
+     */
     public static final class Builder implements SyntaxNode.Builder {
         private ClassName type;
         private CollectionBuilderReference<Map<java.lang.String, MemberValue>> members;
@@ -137,7 +140,7 @@ public final class Annotation implements SyntaxNode {
          * @return This instance for chain calling.
          */
         public Builder type(ClassName type) {
-            this.type = type;
+            this.type = Objects.requireNonNull(type, "type");
             return this;
         }
 

@@ -191,6 +191,9 @@ public final class ClassName implements TypeName {
             throw new IllegalArgumentException("Cannot convert type: " + type.kind() + ", to java class");
     }
 
+    /**
+     * A class to build instances of ClassName
+     */
     public static final class Builder implements TypeName.Builder {
         private String name;
         private String packageName;
@@ -210,7 +213,7 @@ public final class ClassName implements TypeName {
          * @return This instance for chain calling.
          */
         public Builder name(String name) {
-            this.name = name;
+            this.name = Objects.requireNonNull(name, "name");
             return this;
         }
 

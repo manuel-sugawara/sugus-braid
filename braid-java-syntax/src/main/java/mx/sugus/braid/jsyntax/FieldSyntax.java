@@ -188,6 +188,9 @@ public final class FieldSyntax implements SyntaxNode {
                        .build();
     }
 
+    /**
+     * A class to build instances of FieldSyntax
+     */
     public static final class Builder implements SyntaxNode.Builder {
         private Javadoc javadoc;
         private String name;
@@ -228,7 +231,7 @@ public final class FieldSyntax implements SyntaxNode {
          * @return This instance for chain calling.
          */
         public Builder name(String name) {
-            this.name = name;
+            this.name = Objects.requireNonNull(name, "name");
             return this;
         }
 
@@ -239,7 +242,7 @@ public final class FieldSyntax implements SyntaxNode {
          * @return This instance for chain calling.
          */
         public Builder type(TypeName type) {
-            this.type = type;
+            this.type = Objects.requireNonNull(type, "type");
             return this;
         }
 
@@ -261,7 +264,10 @@ public final class FieldSyntax implements SyntaxNode {
         }
 
         /**
-         * Adds a single value for {@code modifiers}.
+         * Adds a value to {@code modifiers}.
+         * 
+         * @param modifiers The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addModifier(Modifier modifier) {
             this.modifiers.asTransient().add(modifier);
@@ -300,7 +306,10 @@ public final class FieldSyntax implements SyntaxNode {
         }
 
         /**
-         * Adds a single value for {@code annotations}.
+         * Adds a value to {@code annotations}.
+         * 
+         * @param annotations The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addAnnotation(Annotation annotation) {
             this.annotations.asTransient().add(annotation);

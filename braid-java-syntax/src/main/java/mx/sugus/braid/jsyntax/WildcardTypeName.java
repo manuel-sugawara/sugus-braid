@@ -115,6 +115,9 @@ public final class WildcardTypeName implements TypeName {
         return new Builder();
     }
 
+    /**
+     * A class to build instances of WildcardTypeName
+     */
     public static final class Builder implements TypeName.Builder {
         private ClassName rawType;
         private CollectionBuilderReference<List<TypeName>> upperBounds;
@@ -155,7 +158,10 @@ public final class WildcardTypeName implements TypeName {
         }
 
         /**
-         * Adds a single value for {@code upperBounds}.
+         * Adds a value to {@code upperBounds}.
+         * 
+         * @param upperBounds The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addUpperBound(TypeName upperBound) {
             this.upperBounds.asTransient().add(upperBound);
@@ -183,7 +189,10 @@ public final class WildcardTypeName implements TypeName {
         }
 
         /**
-         * Adds a single value for {@code lowerBounds}.
+         * Adds a value to {@code lowerBounds}.
+         * 
+         * @param lowerBounds The value tp add
+         * @return This instance for chain calling.
          */
         public Builder addLowerBound(TypeName lowerBound) {
             this.lowerBounds.asTransient().add(lowerBound);
