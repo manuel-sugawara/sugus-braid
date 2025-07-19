@@ -155,20 +155,17 @@ public final class SymbolCodegen {
         var builderReference = Utils.builderReference(state, member);
         var type = Utils.aggregateType(state, member);
         var builderProperty = CodeBlock.builder().addCode("builder.$L", name);
-        if (type != SymbolConstants.AggregateType.NONE) {
+        if (type != SymbolConstants.AggregateType.NONE || builderReference != null) {
             builderProperty.addCode(".asPersistent()");
         }
-        if (builderReference != null) {
-            builderProperty.addCode(".asPersistent()");
-        }
-        if (!Utils.isImplicitlyRequired(state, member)) {
+        if (Utils.isImplicitlyRequired(state, member)) {
             return BodyBuilder.create()
-                              .addStatement("this.$L = $C", name, builderProperty.build())
+                              .addStatement("this.$1L = $2T.requireNonNull($3C, $1S)",
+                                            name, Objects.class, builderProperty.build())
                               .build();
         }
         return BodyBuilder.create()
-                          .addStatement("this.$1L = $2T.requireNonNull($3C, $1S)",
-                                        name, Objects.class, builderProperty.build())
+                          .addStatement("this.$L = $C", name, builderProperty.build())
                           .build();
     }
 
@@ -189,6 +186,10 @@ public final class SymbolCodegen {
         var builderReference = Utils.builderReference(state, member);
         if (builderReference != null) {
             return builder.addStatement("this.$1L.setPersistent($1L)", name)
+                          .build();
+        }
+        if (Utils.isExplicitlyRequired(state, member)) {
+            return builder.addStatement("this.$1L = $2T.requireNonNull($1L, $1S)", name, Objects.class)
                           .build();
         }
         return builder.addStatement("this.$1L = $1L", name)

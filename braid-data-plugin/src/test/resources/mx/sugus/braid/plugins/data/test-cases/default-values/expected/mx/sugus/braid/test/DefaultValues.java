@@ -193,7 +193,7 @@ public final class DefaultValues {
         }
 
         /**
-         * Sets the value for {@code aBoolean}.
+         * Sets the value for {@code boolean}.
          * 
          * @param aBoolean The value to be set.
          * @return This instance for chain calling.
@@ -204,7 +204,7 @@ public final class DefaultValues {
         }
 
         /**
-         * Sets the value for {@code aByte}.
+         * Sets the value for {@code byte}.
          * 
          * @param aByte The value to be set.
          * @return This instance for chain calling.
@@ -215,7 +215,7 @@ public final class DefaultValues {
         }
 
         /**
-         * Sets the value for {@code aShort}.
+         * Sets the value for {@code short}.
          * 
          * @param aShort The value to be set.
          * @return This instance for chain calling.
@@ -226,7 +226,7 @@ public final class DefaultValues {
         }
 
         /**
-         * Sets the value for {@code anInt}.
+         * Sets the value for {@code int}.
          * 
          * @param anInt The value to be set.
          * @return This instance for chain calling.
@@ -237,7 +237,7 @@ public final class DefaultValues {
         }
 
         /**
-         * Sets the value for {@code aLong}.
+         * Sets the value for {@code long}.
          * 
          * @param aLong The value to be set.
          * @return This instance for chain calling.
@@ -248,7 +248,7 @@ public final class DefaultValues {
         }
 
         /**
-         * Sets the value for {@code aFloat}.
+         * Sets the value for {@code float}.
          * 
          * @param aFloat The value to be set.
          * @return This instance for chain calling.
@@ -259,7 +259,7 @@ public final class DefaultValues {
         }
 
         /**
-         * Sets the value for {@code aDouble}.
+         * Sets the value for {@code double}.
          * 
          * @param aDouble The value to be set.
          * @return This instance for chain calling.

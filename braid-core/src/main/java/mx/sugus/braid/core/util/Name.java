@@ -138,7 +138,7 @@ public final class Name {
     }
 
     public Name withSuffix(String suffix) {
-        var suffixName = of(suffix);
+        var suffixName = "$".equals(suffix) ? ofLiteral(suffix) : of(suffix);
         return concat(suffixName);
     }
 
@@ -148,6 +148,10 @@ public final class Name {
 
     public static Name of(String value, Convention kind) {
         return new Name(splitOnWordBoundaries(value), kind);
+    }
+
+    static Name ofLiteral(String value) {
+        return new Name(new String[]{value}, Convention.UNKNOWN);
     }
 
     // Adapted from

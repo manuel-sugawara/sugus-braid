@@ -76,7 +76,7 @@ public final class List {
         }
 
         /**
-         * Sets the value for {@code aVoid}.
+         * Sets the value for {@code void}.
          * 
          * @param aVoid The value to be set.
          * @return This instance for chain calling.

@@ -140,8 +140,9 @@ public final class StructureDataBuilder implements DirectedClass {
             builder.addStatement(stmt);
         }
         builder.addStatement("return this");
+        var sourceName = Utils.toSourceName(state, member);
         var doc = Javadoc.builder()
-                         .body(CodeBlock.from("Sets the value for `" + name + "`."))
+                         .body(CodeBlock.from("Sets the value for `" + sourceName + "`."))
                          .returns(CodeBlock.from("This instance for chain calling."))
                          .putParam(name.toString(), CodeBlock.from("The value to be set."))
                          .build();

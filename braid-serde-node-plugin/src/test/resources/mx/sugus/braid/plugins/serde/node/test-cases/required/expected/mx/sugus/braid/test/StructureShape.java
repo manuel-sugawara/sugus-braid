@@ -177,7 +177,7 @@ public final class StructureShape implements ToNode {
          * @return This instance for chain calling.
          */
         public Builder enumValue(EnumShape enumValue) {
-            this.enumValue = enumValue;
+            this.enumValue = Objects.requireNonNull(enumValue, "enumValue");
             return this;
         }
 
@@ -188,7 +188,7 @@ public final class StructureShape implements ToNode {
          * @return This instance for chain calling.
          */
         public Builder stringMember(String stringMember) {
-            this.stringMember = stringMember;
+            this.stringMember = Objects.requireNonNull(stringMember, "stringMember");
             return this;
         }
 
@@ -199,7 +199,7 @@ public final class StructureShape implements ToNode {
          * @return This instance for chain calling.
          */
         public Builder structureShape(SimpleStructure structureShape) {
-            this.structureShape = structureShape;
+            this.structureShape = Objects.requireNonNull(structureShape, "structureShape");
             return this;
         }
 

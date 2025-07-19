@@ -55,6 +55,11 @@ public final class SymbolProperties {
     public static final Property<Name> JAVA_NAME = from(Name.class);
 
     /**
+     * Property for the java field name for a given symbol.
+     */
+    public static final Property<Name> JAVA_FIELD_NAME = from(Name.class);
+
+    /**
      * Property for the setter name for a given symbol.
      */
     public static final Property<Name> SETTER_NAME = Property.named("setter-name");

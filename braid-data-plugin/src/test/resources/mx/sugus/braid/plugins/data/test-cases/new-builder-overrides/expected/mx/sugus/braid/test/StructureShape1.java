@@ -107,7 +107,7 @@ public final class StructureShape1 {
          * @return This instance for chain calling.
          */
         public Builder name(String name) {
-            this.name = name;
+            this.name = Objects.requireNonNull(name, "name");
             return this;
         }
 
