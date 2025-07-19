@@ -9,6 +9,7 @@ import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.jsyntax.Block;
 import mx.sugus.braid.jsyntax.CodeBlock;
+import mx.sugus.braid.jsyntax.TypeKind;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
@@ -153,12 +154,13 @@ public final class SymbolCodegen {
         }
         var name = Utils.toJavaName(state, member);
         var builderReference = Utils.builderReference(state, member);
-        var type = Utils.aggregateType(state, member);
+        var aggregateType = Utils.aggregateType(state, member);
         var builderProperty = CodeBlock.builder().addCode("builder.$L", name);
-        if (type != SymbolConstants.AggregateType.NONE || builderReference != null) {
+        if (aggregateType != SymbolConstants.AggregateType.NONE || builderReference != null) {
             builderProperty.addCode(".asPersistent()");
         }
-        if (Utils.isImplicitlyRequired(state, member)) {
+        var type = Utils.toJavaTypeName(state, member);
+        if (Utils.isImplicitlyRequired(state, member) && type.kind() != TypeKind.PRIMITIVE) {
             return BodyBuilder.create()
                               .addStatement("this.$1L = $2T.requireNonNull($3C, $1S)",
                                             name, Objects.class, builderProperty.build())
