@@ -5,24 +5,24 @@ import mx.sugus.braid.rt.util.annotations.Generated;
 
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 public final class DefaultValues {
-    private final Boolean aBoolean;
-    private final Byte aByte;
-    private final Short aShort;
-    private final Integer anInt;
-    private final Long aLong;
-    private final Float aFloat;
-    private final Double aDouble;
+    private final boolean aBoolean;
+    private final byte aByte;
+    private final short aShort;
+    private final int anInt;
+    private final long aLong;
+    private final float aFloat;
+    private final double aDouble;
     private final String string;
     private int _hashCode = 0;
 
     private DefaultValues(Builder builder) {
-        this.aBoolean = Objects.requireNonNull(builder.aBoolean, "aBoolean");
-        this.aByte = Objects.requireNonNull(builder.aByte, "aByte");
-        this.aShort = Objects.requireNonNull(builder.aShort, "aShort");
-        this.anInt = Objects.requireNonNull(builder.anInt, "anInt");
-        this.aLong = Objects.requireNonNull(builder.aLong, "aLong");
-        this.aFloat = Objects.requireNonNull(builder.aFloat, "aFloat");
-        this.aDouble = Objects.requireNonNull(builder.aDouble, "aDouble");
+        this.aBoolean = builder.aBoolean;
+        this.aByte = builder.aByte;
+        this.aShort = builder.aShort;
+        this.anInt = builder.anInt;
+        this.aLong = builder.aLong;
+        this.aFloat = builder.aFloat;
+        this.aDouble = builder.aDouble;
         this.string = Objects.requireNonNull(builder.string, "string");
     }
 
@@ -30,7 +30,7 @@ public final class DefaultValues {
      * 
      * @return The value of the {@code boolean} member
      */
-    public Boolean aBoolean() {
+    public boolean aBoolean() {
         return this.aBoolean;
     }
 
@@ -38,7 +38,7 @@ public final class DefaultValues {
      * 
      * @return The value of the {@code byte} member
      */
-    public Byte aByte() {
+    public byte aByte() {
         return this.aByte;
     }
 
@@ -46,7 +46,7 @@ public final class DefaultValues {
      * 
      * @return The value of the {@code short} member
      */
-    public Short aShort() {
+    public short aShort() {
         return this.aShort;
     }
 
@@ -54,7 +54,7 @@ public final class DefaultValues {
      * 
      * @return The value of the {@code int} member
      */
-    public Integer anInt() {
+    public int anInt() {
         return this.anInt;
     }
 
@@ -62,7 +62,7 @@ public final class DefaultValues {
      * 
      * @return The value of the {@code long} member
      */
-    public Long aLong() {
+    public long aLong() {
         return this.aLong;
     }
 
@@ -70,7 +70,7 @@ public final class DefaultValues {
      * 
      * @return The value of the {@code float} member
      */
-    public Float aFloat() {
+    public float aFloat() {
         return this.aFloat;
     }
 
@@ -78,7 +78,7 @@ public final class DefaultValues {
      * 
      * @return The value of the {@code double} member
      */
-    public Double aDouble() {
+    public double aDouble() {
         return this.aDouble;
     }
 
@@ -108,13 +108,13 @@ public final class DefaultValues {
             return false;
         }
         DefaultValues that = (DefaultValues) obj;
-        return this.aBoolean.equals(that.aBoolean)
-            && this.aByte.equals(that.aByte)
-            && this.aShort.equals(that.aShort)
-            && this.anInt.equals(that.anInt)
-            && this.aLong.equals(that.aLong)
-            && this.aFloat.equals(that.aFloat)
-            && this.aDouble.equals(that.aDouble)
+        return this.aBoolean == that.aBoolean
+            && this.aByte == that.aByte
+            && this.aShort == that.aShort
+            && this.anInt == that.anInt
+            && this.aLong == that.aLong
+            && Float.compare(this.aFloat, that.aFloat) == 0
+            && Double.compare(this.aDouble, that.aDouble) == 0
             && this.string.equals(that.string);
     }
 
@@ -122,13 +122,13 @@ public final class DefaultValues {
     public int hashCode() {
         if (_hashCode == 0) {
             int hashCode = 17;
-            hashCode = 31 * hashCode + aBoolean.hashCode();
-            hashCode = 31 * hashCode + aByte.hashCode();
-            hashCode = 31 * hashCode + aShort.hashCode();
-            hashCode = 31 * hashCode + anInt.hashCode();
-            hashCode = 31 * hashCode + aLong.hashCode();
-            hashCode = 31 * hashCode + aFloat.hashCode();
-            hashCode = 31 * hashCode + aDouble.hashCode();
+            hashCode = 31 * hashCode + Boolean.hashCode(aBoolean);
+            hashCode = 31 * hashCode + aByte;
+            hashCode = 31 * hashCode + aShort;
+            hashCode = 31 * hashCode + anInt;
+            hashCode = 31 * hashCode + Long.hashCode(aLong);
+            hashCode = 31 * hashCode + Float.hashCode(aFloat);
+            hashCode = 31 * hashCode + Double.hashCode(aDouble);
             hashCode = 31 * hashCode + string.hashCode();
             _hashCode = hashCode;
         }
@@ -161,13 +161,13 @@ public final class DefaultValues {
      * A class to build instances of DefaultValues
      */
     public static final class Builder {
-        private Boolean aBoolean;
-        private Byte aByte;
-        private Short aShort;
-        private Integer anInt;
-        private Long aLong;
-        private Float aFloat;
-        private Double aDouble;
+        private boolean aBoolean;
+        private byte aByte;
+        private short aShort;
+        private int anInt;
+        private long aLong;
+        private float aFloat;
+        private double aDouble;
         private String string;
 
         Builder() {
@@ -198,7 +198,7 @@ public final class DefaultValues {
          * @param aBoolean The value to be set.
          * @return This instance for chain calling.
          */
-        public Builder aBoolean(Boolean aBoolean) {
+        public Builder aBoolean(boolean aBoolean) {
             this.aBoolean = aBoolean;
             return this;
         }
@@ -209,7 +209,7 @@ public final class DefaultValues {
          * @param aByte The value to be set.
          * @return This instance for chain calling.
          */
-        public Builder aByte(Byte aByte) {
+        public Builder aByte(byte aByte) {
             this.aByte = aByte;
             return this;
         }
@@ -220,7 +220,7 @@ public final class DefaultValues {
          * @param aShort The value to be set.
          * @return This instance for chain calling.
          */
-        public Builder aShort(Short aShort) {
+        public Builder aShort(short aShort) {
             this.aShort = aShort;
             return this;
         }
@@ -231,7 +231,7 @@ public final class DefaultValues {
          * @param anInt The value to be set.
          * @return This instance for chain calling.
          */
-        public Builder anInt(Integer anInt) {
+        public Builder anInt(int anInt) {
             this.anInt = anInt;
             return this;
         }
@@ -242,7 +242,7 @@ public final class DefaultValues {
          * @param aLong The value to be set.
          * @return This instance for chain calling.
          */
-        public Builder aLong(Long aLong) {
+        public Builder aLong(long aLong) {
             this.aLong = aLong;
             return this;
         }
@@ -253,7 +253,7 @@ public final class DefaultValues {
          * @param aFloat The value to be set.
          * @return This instance for chain calling.
          */
-        public Builder aFloat(Float aFloat) {
+        public Builder aFloat(float aFloat) {
             this.aFloat = aFloat;
             return this;
         }
@@ -264,7 +264,7 @@ public final class DefaultValues {
          * @param aDouble The value to be set.
          * @return This instance for chain calling.
          */
-        public Builder aDouble(Double aDouble) {
+        public Builder aDouble(double aDouble) {
             this.aDouble = aDouble;
             return this;
         }

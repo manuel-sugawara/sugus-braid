@@ -57,6 +57,34 @@ public final class TypeNameExt {
         return ParameterizedTypeName.from(MAP, keyType, valueType);
     }
 
+    public static TypeName toPrimitiveIfPossible(TypeName typeName) {
+        if (typeName instanceof ClassName c) {
+            if ("java.lang".equals(c.packageName())) {
+                switch (c.name()) {
+                    case "Void":
+                        return P_VOID;
+                    case "Boolean":
+                        return P_BOOLEAN;
+                    case "Byte":
+                        return P_BYTE;
+                    case "Short":
+                        return P_SHORT;
+                    case "Integer":
+                        return P_INT;
+                    case "Long":
+                        return P_LONG;
+                    case "Character":
+                        return P_CHAR;
+                    case "Float":
+                        return P_FLOAT;
+                    case "Double":
+                        return P_DOUBLE;
+                }
+            }
+        }
+        return typeName;
+    }
+
     public static TypeName from(Class<?> kclass) {
         if (kclass.isArray()) {
             var arrayClass = kclass;

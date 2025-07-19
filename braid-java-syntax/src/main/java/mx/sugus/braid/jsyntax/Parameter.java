@@ -10,13 +10,13 @@ import mx.sugus.braid.rt.util.annotations.Generated;
 public final class Parameter implements SyntaxNode {
     private final String name;
     private final TypeName type;
-    private final Boolean varargs;
+    private final boolean varargs;
     private int _hashCode = 0;
 
     private Parameter(Builder builder) {
         this.name = Objects.requireNonNull(builder.name, "name");
         this.type = Objects.requireNonNull(builder.type, "type");
-        this.varargs = Objects.requireNonNull(builder.varargs, "varargs");
+        this.varargs = builder.varargs;
     }
 
     /**
@@ -39,7 +39,7 @@ public final class Parameter implements SyntaxNode {
      * 
      * @return The value of the {@code varargs} member
      */
-    public Boolean varargs() {
+    public boolean varargs() {
         return this.varargs;
     }
 
@@ -75,7 +75,7 @@ public final class Parameter implements SyntaxNode {
         Parameter that = (Parameter) obj;
         return this.name.equals(that.name)
             && this.type.equals(that.type)
-            && this.varargs.equals(that.varargs);
+            && this.varargs == that.varargs;
     }
 
     @Override
@@ -84,7 +84,7 @@ public final class Parameter implements SyntaxNode {
             int hashCode = 17;
             hashCode = 31 * hashCode + name.hashCode();
             hashCode = 31 * hashCode + type.hashCode();
-            hashCode = 31 * hashCode + varargs.hashCode();
+            hashCode = 31 * hashCode + Boolean.hashCode(varargs);
             _hashCode = hashCode;
         }
         return _hashCode;
@@ -113,7 +113,7 @@ public final class Parameter implements SyntaxNode {
     public static final class Builder implements SyntaxNode.Builder {
         private String name;
         private TypeName type;
-        private Boolean varargs;
+        private boolean varargs;
 
         Builder() {
             this.varargs = false;
@@ -158,7 +158,7 @@ public final class Parameter implements SyntaxNode {
          * @param varargs The value to be set.
          * @return This instance for chain calling.
          */
-        public Builder varargs(Boolean varargs) {
+        public Builder varargs(boolean varargs) {
             this.varargs = Objects.requireNonNull(varargs, "varargs");
             return this;
         }

@@ -15,6 +15,7 @@ import mx.sugus.braid.jsyntax.ConstructorMethodSyntax;
 import mx.sugus.braid.jsyntax.FieldSyntax;
 import mx.sugus.braid.jsyntax.Javadoc;
 import mx.sugus.braid.jsyntax.MethodSyntax;
+import mx.sugus.braid.jsyntax.PrimitiveTypeName;
 import mx.sugus.braid.jsyntax.block.AbstractBlockBuilder;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
@@ -214,6 +215,7 @@ public final class StructureData implements DirectedClass {
             var isFirst = true;
             expressionBuilder.addCode("return ");
             for (var member : state.shape().members()) {
+                var type = Utils.toJavaTypeName(state, member);
                 if (member.hasTrait(ConstTrait.class)) {
                     continue;
                 }
@@ -221,7 +223,21 @@ public final class StructureData implements DirectedClass {
                 if (!isFirst) {
                     expressionBuilder.addCode("\n&& ");
                 }
-                if (Utils.isImplicitlyRequired(state, member)) {
+                if (type instanceof PrimitiveTypeName c) {
+                    switch (c.name()) {
+                        case CHAR, BYTE, SHORT, INT, LONG, BOOLEAN:
+                            expressionBuilder.addCode("this.$1L == that.$1L", name);
+                            break;
+                        case FLOAT:
+                            expressionBuilder.addCode("Float.compare(this.$1L, that.$1L) == 0", name);
+                            break;
+                        case DOUBLE:
+                            expressionBuilder.addCode("Double.compare(this.$1L, that.$1L) == 0", name);
+                            break;
+                        default:
+                            throw new UnsupportedOperationException("Unsupported primitive: " + c);
+                    }
+                } else if (Utils.isImplicitlyRequired(state, member)) {
                     expressionBuilder.addCode("this.$1L.equals(that.$1L)", name);
                 } else {
                     expressionBuilder.addCode("$1T.equals(this.$2L, that.$2L)", Objects.class, name);
@@ -262,11 +278,32 @@ public final class StructureData implements DirectedClass {
         builder.addStatement("int hashCode = 17");
         for (var member : state.shape().members()) {
             var name = Utils.toJavaName(state, member);
+            var type = Utils.toJavaTypeName(state, member);
             if (member.hasTrait(ConstTrait.class)) {
                 builder.addStatement("hashCode = 31 * hashCode + this.$L().hashCode()", Utils.toGetterName(state, member));
                 continue;
             }
-            if (Utils.isImplicitlyRequired(state, member)) {
+            if (type instanceof PrimitiveTypeName c) {
+                switch (c.name()) {
+                    case CHAR, BYTE, SHORT, INT:
+                        builder.addStatement("hashCode = 31 * hashCode + $L", name);
+                        break;
+                    case LONG:
+                        builder.addStatement("hashCode = 31 * hashCode + Long.hashCode($L)", name);
+                        break;
+                    case FLOAT:
+                        builder.addStatement("hashCode = 31 * hashCode + Float.hashCode($L)", name);
+                        break;
+                    case DOUBLE:
+                        builder.addStatement("hashCode = 31 * hashCode + Double.hashCode($L)", name);
+                        break;
+                    case BOOLEAN:
+                        builder.addStatement("hashCode = 31 * hashCode + Boolean.hashCode($L)", name);
+                        break;
+                    default:
+                        throw new UnsupportedOperationException("Unsupported primitive: " + c);
+                }
+            } else if (Utils.isImplicitlyRequired(state, member)) {
                 builder.addStatement("hashCode = 31 * hashCode + $L.hashCode()", name);
             } else {
                 builder.addStatement("hashCode = 31 * hashCode + ($1L != null ? $1L.hashCode() : 0)", name);

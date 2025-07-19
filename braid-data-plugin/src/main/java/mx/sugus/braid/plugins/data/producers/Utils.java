@@ -16,6 +16,7 @@ import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.MemberValue;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.TypeSyntax;
+import mx.sugus.braid.jsyntax.ext.TypeNameExt;
 import mx.sugus.braid.plugins.data.symbols.SymbolConstants;
 import mx.sugus.braid.plugins.data.symbols.SymbolProperties;
 import mx.sugus.braid.rt.util.annotations.Generated;
@@ -132,11 +133,15 @@ public final class Utils {
     }
 
     public static TypeName toJavaTypeName(CodegenState state, Shape shape) {
-        return state.symbolProvider().toSymbol(shape).getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
+        return toJavaTypeName(state, state.symbolProvider().toSymbol(shape));
     }
 
-    public static TypeName toJavaTypeName(CodegenState state, Symbol shape) {
-        return shape.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
+    public static TypeName toJavaTypeName(CodegenState state, Symbol symbol) {
+        var typeName = symbol.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
+        if (symbol.getProperty(SymbolProperties.IS_REQUIRED).orElse(false)) {
+            return TypeNameExt.toPrimitiveIfPossible(typeName);
+        }
+        return typeName;
     }
 
     public static boolean isNullable(CodegenState state, MemberShape shape) {
@@ -173,6 +178,11 @@ public final class Utils {
 
     public static TypeName toBuilderTypeName(ShapeCodegenState state, Shape shape) {
         var symbol = state.symbolProvider().toSymbol(shape);
+        var typeName = symbol.getProperty(SymbolProperties.JAVA_TYPE).orElseThrow();
+        var typeNameMaybePrimitive = toJavaTypeName(state, symbol);
+        if (typeName != typeNameMaybePrimitive) {
+            return typeNameMaybePrimitive;
+        }
         return symbol.getProperty(SymbolProperties.BUILDER_JAVA_TYPE).orElseGet(() -> toJavaTypeName(state, shape));
     }
 
