@@ -122,6 +122,11 @@ public abstract class MemberValue {
         }
 
         @Override
+        public String toString() {
+            return "MemberValue{expression: " + expression + "}";
+        }
+
+        @Override
         @SuppressWarnings("unchecked")
         public <T extends MemberValue> T asMember(Class<T> memberType) {
             if (memberType != getClass()) {
@@ -179,6 +184,11 @@ public abstract class MemberValue {
         @Override
         public VariantTag variantTag() {
             return VariantTag.ARRAY_EXPRESSION;
+        }
+
+        @Override
+        public String toString() {
+            return "MemberValue{arrayExpression: " + arrayExpression + "}";
         }
 
         @Override
