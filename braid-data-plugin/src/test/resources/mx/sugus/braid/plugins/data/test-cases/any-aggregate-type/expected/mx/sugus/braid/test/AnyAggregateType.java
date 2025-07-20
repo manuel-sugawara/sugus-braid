@@ -44,6 +44,13 @@ public abstract class AnyAggregateType {
 
     public abstract <T> T variantValue();
 
+    /**
+     * Returns the specific member type.
+     * 
+     * @return The specific member type
+     */
+    public abstract <T extends AnyAggregateType> T asMember(Class<T> memberType);
+
     public enum VariantTag {
         STRUCTURE("structure"),
         UNION("union"),
@@ -92,6 +99,15 @@ public abstract class AnyAggregateType {
         @Override
         public VariantTag variantTag() {
             return VariantTag.STRUCTURE;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnyAggregateType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
         }
 
         @Override
@@ -144,6 +160,15 @@ public abstract class AnyAggregateType {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnyAggregateType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
+        }
+
+        @Override
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -190,6 +215,15 @@ public abstract class AnyAggregateType {
         @Override
         public VariantTag variantTag() {
             return VariantTag.LIST;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnyAggregateType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
         }
 
         @Override
@@ -242,6 +276,15 @@ public abstract class AnyAggregateType {
         }
 
         @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnyAggregateType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
+        }
+
+        @Override
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -279,6 +322,15 @@ public abstract class AnyAggregateType {
         @SuppressWarnings("unchecked")
         public <T> T variantValue() {
             return (T) this.unknownVariantName;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnyAggregateType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
         }
     }
 
