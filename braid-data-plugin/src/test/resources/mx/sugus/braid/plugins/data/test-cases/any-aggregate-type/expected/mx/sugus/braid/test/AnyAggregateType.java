@@ -2,7 +2,7 @@ package mx.sugus.braid.test;
 
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.function.Consumer;
 import mx.sugus.braid.rt.util.BuilderReference;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
@@ -13,76 +13,7 @@ import mx.sugus.braid.rt.util.annotations.Generated;
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 @SuppressWarnings("unchecked")
-public final class AnyAggregateType {
-    private final Object variantValue;
-    private final VariantTag variantTag;
-
-    private AnyAggregateType(Builder builder) {
-        this.variantValue = builder.getValue();
-        this.variantTag = builder.variantTag;
-    }
-
-    /**
-     * structure member
-     */
-    public AllSimpleTypes structure() {
-        if (this.variantTag == VariantTag.STRUCTURE) {
-            return (AllSimpleTypes) this.variantValue;
-        }
-        throw new NoSuchElementException("Union element `structure` not set, currently set `" + this.variantTag + "`");
-    }
-
-    /**
-     * union member
-     */
-    public AnySimpleType union() {
-        if (this.variantTag == VariantTag.UNION) {
-            return (AnySimpleType) this.variantValue;
-        }
-        throw new NoSuchElementException("Union element `union` not set, currently set `" + this.variantTag + "`");
-    }
-
-    /**
-     * list member
-     */
-    public List<AllSimpleTypes> list() {
-        if (this.variantTag == VariantTag.LIST) {
-            return (List<AllSimpleTypes>) this.variantValue;
-        }
-        throw new NoSuchElementException("Union element `list` not set, currently set `" + this.variantTag + "`");
-    }
-
-    /**
-     * map member
-     */
-    public Map<String, AnySimpleType> map() {
-        if (this.variantTag == VariantTag.MAP) {
-            return (Map<String, AnySimpleType>) this.variantValue;
-        }
-        throw new NoSuchElementException("Union element `map` not set, currently set `" + this.variantTag + "`");
-    }
-
-    /**
-     * Returns the enum value representing which member of this object is populated.
-     * <p>
-     * This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.
-     * 
-     * @return The enum value representing which member of this object is populated
-     */
-    public VariantTag variantTag() {
-        return this.variantTag;
-    }
-
-    /**
-     * Returns the untyped value of the union.
-     * <p>
-     * Use {@link #type()} to get the member currently set.
-     * 
-     * @return The untyped value of the union.
-     */
-    public Object variantValue() {
-        return this.variantValue;
-    }
+public abstract class AnyAggregateType {
 
     /**
      * Returns a new builder to modify a copy of this instance.
@@ -93,44 +24,6 @@ public final class AnyAggregateType {
         return new Builder(this);
     }
 
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-        if (!(other instanceof AnyAggregateType)) {
-            return false;
-        }
-        AnyAggregateType that = (AnyAggregateType) other;
-        return this.variantTag == that.variantTag && this.variantValue.equals(that.variantValue);
-    }
-
-    @Override
-    public int hashCode() {
-        return this.variantTag.hashCode() + 31 * this.variantValue.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder buf = new StringBuilder("AnyAggregateType{variantTag: ");
-        buf.append(this.variantTag);
-        switch (this.variantTag) {
-            case STRUCTURE:
-                buf.append(", structure: ").append(this.variantValue);
-                break;
-            case UNION:
-                buf.append(", union: ").append(this.variantValue);
-                break;
-            case LIST:
-                buf.append(", list: ").append(this.variantValue);
-                break;
-            case MAP:
-                buf.append(", map: ").append(this.variantValue);
-                break;
-        }
-        return buf.append("}").toString();
-    }
-
     /**
      * Creates a new builder to create instances of this class.
      * 
@@ -139,6 +32,17 @@ public final class AnyAggregateType {
     public static Builder builder() {
         return new Builder();
     }
+
+    /**
+     * Returns the enum value representing which member of this object is populated.
+     * <p>
+     * This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.
+     * 
+     * @return The enum value representing which member of this object is populated
+     */
+    public abstract VariantTag variantTag();
+
+    public abstract <T> T variantValue();
 
     public enum VariantTag {
         STRUCTURE("structure"),
@@ -159,6 +63,225 @@ public final class AnyAggregateType {
         }
     }
 
+    /**
+     * structure member
+     */
+    @Generated("mx.sugus.braid.plugins.data#DataPlugin")
+    public static final class StructureMember extends AnyAggregateType {
+        private final AllSimpleTypes structure;
+
+        private StructureMember(AllSimpleTypes structure) {
+            this.structure = Objects.requireNonNull(structure, "structure");
+        }
+
+        /**
+         * structure member
+         * 
+         * @return The value of the {@code structure} member
+         */
+        public AllSimpleTypes structure() {
+            return this.structure;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> T variantValue() {
+            return (T) this.structure;
+        }
+
+        @Override
+        public VariantTag variantTag() {
+            return VariantTag.STRUCTURE;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+            if (other == null || getClass() != other.getClass()) {
+                return false;
+            }
+            StructureMember that = (StructureMember) other;
+            return this.structure.equals(that.structure);
+        }
+
+        @Override
+        public int hashCode() {
+            return this.structure.hashCode();
+        }
+    }
+
+    /**
+     * union member
+     */
+    @Generated("mx.sugus.braid.plugins.data#DataPlugin")
+    public static final class UnionMember extends AnyAggregateType {
+        private final AnySimpleType union;
+
+        private UnionMember(AnySimpleType union) {
+            this.union = Objects.requireNonNull(union, "union");
+        }
+
+        /**
+         * union member
+         * 
+         * @return The value of the {@code union} member
+         */
+        public AnySimpleType union() {
+            return this.union;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> T variantValue() {
+            return (T) this.union;
+        }
+
+        @Override
+        public VariantTag variantTag() {
+            return VariantTag.UNION;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+            if (other == null || getClass() != other.getClass()) {
+                return false;
+            }
+            UnionMember that = (UnionMember) other;
+            return this.union.equals(that.union);
+        }
+
+        @Override
+        public int hashCode() {
+            return this.union.hashCode();
+        }
+    }
+
+    /**
+     * list member
+     */
+    @Generated("mx.sugus.braid.plugins.data#DataPlugin")
+    public static final class ListMember extends AnyAggregateType {
+        private final List<AllSimpleTypes> list;
+
+        private ListMember(List<AllSimpleTypes> list) {
+            this.list = Objects.requireNonNull(list, "list");
+        }
+
+        /**
+         * list member
+         * 
+         * @return The value of the {@code list} member
+         */
+        public List<AllSimpleTypes> list() {
+            return this.list;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> T variantValue() {
+            return (T) this.list;
+        }
+
+        @Override
+        public VariantTag variantTag() {
+            return VariantTag.LIST;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+            if (other == null || getClass() != other.getClass()) {
+                return false;
+            }
+            ListMember that = (ListMember) other;
+            return this.list.equals(that.list);
+        }
+
+        @Override
+        public int hashCode() {
+            return this.list.hashCode();
+        }
+    }
+
+    /**
+     * map member
+     */
+    @Generated("mx.sugus.braid.plugins.data#DataPlugin")
+    public static final class MapMember extends AnyAggregateType {
+        private final Map<String, AnySimpleType> map;
+
+        private MapMember(Map<String, AnySimpleType> map) {
+            this.map = Objects.requireNonNull(map, "map");
+        }
+
+        /**
+         * map member
+         * 
+         * @return The value of the {@code map} member
+         */
+        public Map<String, AnySimpleType> map() {
+            return this.map;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> T variantValue() {
+            return (T) this.map;
+        }
+
+        @Override
+        public VariantTag variantTag() {
+            return VariantTag.MAP;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+            if (other == null || getClass() != other.getClass()) {
+                return false;
+            }
+            MapMember that = (MapMember) other;
+            return this.map.equals(that.map);
+        }
+
+        @Override
+        public int hashCode() {
+            return this.map.hashCode();
+        }
+    }
+
+    /**
+     * Unknown variant type.
+     */
+    @Generated("mx.sugus.braid.plugins.data#DataPlugin")
+    public static final class $UnknownVariant extends AnyAggregateType {
+        private final String unknownVariantName;
+
+        private $UnknownVariant(String name) {
+            this.unknownVariantName = Objects.requireNonNull(name);
+        }
+
+        @Override
+        public VariantTag variantTag() {
+            return VariantTag.UNKNOWN_TO_VERSION;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> T variantValue() {
+            return (T) this.unknownVariantName;
+        }
+    }
+
     public static final class Builder {
         private Object variantValue;
         private VariantTag variantTag;
@@ -169,19 +292,19 @@ public final class AnyAggregateType {
         }
 
         Builder(AnyAggregateType data) {
-            this.variantTag = data.variantTag;
-            switch (data.variantTag) {
+            this.variantTag = data.variantTag();
+            switch (this.variantTag) {
                 case STRUCTURE:
-                    this.variantValue = AllSimpleTypes.AllSimpleTypesBuilderReference.from(data.structure());
+                    this.variantValue = AllSimpleTypes.AllSimpleTypesBuilderReference.from(data.variantValue());
                     break;
                 case LIST:
-                    this.variantValue = CollectionBuilderReference.fromPersistentList(data.list());
+                    this.variantValue = CollectionBuilderReference.fromPersistentList(data.variantValue());
                     break;
                 case MAP:
-                    this.variantValue = CollectionBuilderReference.fromPersistentOrderedMap(data.map());
+                    this.variantValue = CollectionBuilderReference.fromPersistentOrderedMap(data.variantValue());
                     break;
                 default:
-                    this.variantValue = data.variantValue;
+                    this.variantValue = data.variantValue();
             }
         }
 
@@ -218,7 +341,7 @@ public final class AnyAggregateType {
          */
         public Builder union(AnySimpleType union) {
             this.variantTag = VariantTag.UNION;
-            this.variantValue = union;
+            this.variantValue = Objects.requireNonNull(union);
             return this;
         }
 
@@ -241,7 +364,7 @@ public final class AnyAggregateType {
         public Builder list(List<AllSimpleTypes> list) {
             CollectionBuilderReference<List<AllSimpleTypes>> tmp = list();
             tmp.clear();
-            tmp.asTransient().addAll(list);
+            tmp.asTransient().addAll(Objects.requireNonNull(list));
             return this;
         }
 
@@ -272,7 +395,7 @@ public final class AnyAggregateType {
         public Builder map(Map<String, AnySimpleType> map) {
             CollectionBuilderReference<Map<String, AnySimpleType>> tmp = map();
             tmp.clear();
-            tmp.asTransient().putAll(map);
+            tmp.asTransient().putAll(Objects.requireNonNull(map));
             return this;
         }
 
@@ -297,7 +420,21 @@ public final class AnyAggregateType {
         }
 
         public AnyAggregateType build() {
-            return new AnyAggregateType(this);
+            switch (this.variantTag) {
+                case STRUCTURE:
+                    return new StructureMember((AllSimpleTypes) getValue());
+                case UNION:
+                    return new UnionMember((AnySimpleType) getValue());
+                case LIST:
+                    return new ListMember((List<AllSimpleTypes>) getValue());
+                case MAP:
+                    return new MapMember((Map<String, AnySimpleType>) getValue());
+                default:
+                    if (this.variantValue == null) {
+                        throw new NullPointerException("no value set");
+                    }
+                    return new $UnknownVariant((String) this.variantValue);
+            }
         }
     }
 }

@@ -40,14 +40,14 @@ public final class ChildFoo implements SyntaxNodeChild, SyntaxNode, ToNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        ChildFoo that = (ChildFoo) obj;
+        ChildFoo that = (ChildFoo) other;
         return Objects.equals(this.foo, that.foo);
     }
 
@@ -82,9 +82,7 @@ public final class ChildFoo implements SyntaxNodeChild, SyntaxNode, ToNode {
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
         builder.withMember("kind", Node.from(kind().toString()));
-        if (this.foo != null) {
-            builder.withMember("foo", Node.from(foo()));
-        }
+        builder.withMember("foo", Node.from(foo()));
         return builder.build();
     }
 

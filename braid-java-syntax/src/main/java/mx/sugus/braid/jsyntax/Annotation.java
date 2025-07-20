@@ -58,14 +58,14 @@ public final class Annotation implements SyntaxNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        Annotation that = (Annotation) obj;
+        Annotation that = (Annotation) other;
         return this.type.equals(that.type)
             && this.members.equals(that.members);
     }

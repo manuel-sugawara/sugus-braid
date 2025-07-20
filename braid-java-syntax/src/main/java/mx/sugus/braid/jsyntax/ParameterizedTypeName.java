@@ -60,14 +60,14 @@ public final class ParameterizedTypeName implements TypeName {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        ParameterizedTypeName that = (ParameterizedTypeName) obj;
+        ParameterizedTypeName that = (ParameterizedTypeName) other;
         return this.rawType.equals(that.rawType)
             && this.typeArguments.equals(that.typeArguments);
     }

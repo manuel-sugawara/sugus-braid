@@ -33,14 +33,14 @@ public final class FormatterLiteral implements FormatterNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        FormatterLiteral that = (FormatterLiteral) obj;
+        FormatterLiteral that = (FormatterLiteral) other;
         return Objects.equals(this.value, that.value);
     }
 

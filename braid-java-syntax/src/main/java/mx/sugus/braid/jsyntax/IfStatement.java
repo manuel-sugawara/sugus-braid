@@ -76,14 +76,14 @@ public final class IfStatement implements Statement {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        IfStatement that = (IfStatement) obj;
+        IfStatement that = (IfStatement) other;
         return this.expression.equals(that.expression)
             && this.statement.equals(that.statement)
             && Objects.equals(this.elseStatement, that.elseStatement);

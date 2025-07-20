@@ -154,8 +154,6 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
 
     @Override
     public Symbol memberShape(MemberShape shape) {
-        var container = model.expectShape(shape.getContainer());
-        var isStructure = container.isStructureShape();
         var targetShape = model.expectShape(shape.getTarget());
         var targetSymbol = targetShape.accept(this);
         var builderReference = targetShape.getTrait(UseBuilderReferenceTrait.class).orElse(null);
@@ -168,7 +166,7 @@ public class BraidSymbolProvider implements SymbolProvider, ShapeVisitor<Symbol>
             .putProperty(SymbolProperties.SETTER_NAME, javaName)
             .putProperty(SymbolProperties.GETTER_NAME, javaName)
             .putProperty(SymbolProperties.JAVA_FIELD_NAME, simpleName.withSuffix("$"))
-            .putProperty(SymbolProperties.IS_REQUIRED, isStructure && nullabilityIndex.isRequired(shape))
+            .putProperty(SymbolProperties.IS_REQUIRED, nullabilityIndex.isRequired(shape))
             .putProperty(SymbolProperties.IS_EXPLICITLY_REQUIRED, nullabilityIndex.isExplicitlyRequired(shape))
             .putProperty(SymbolProperties.BUILDER_REFERENCE, builderReference)
             .putProperty(SymbolProperties.IS_CONSTANT, shape.hasTrait(ConstTrait.class))

@@ -40,14 +40,14 @@ public final class StructureTwo {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        StructureTwo that = (StructureTwo) obj;
+        StructureTwo that = (StructureTwo) other;
         return Objects.equals(this.floatMember, that.floatMember)
             && Objects.equals(this.stringMember, that.stringMember);
     }

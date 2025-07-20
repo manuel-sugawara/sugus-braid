@@ -1,5 +1,8 @@
 package mx.sugus.braid.plugins.data.producers;
 
+import static mx.sugus.braid.plugins.data.producers.CodegenUtils.equalsTemplate;
+import static mx.sugus.braid.plugins.data.producers.CodegenUtils.hashCodeTemplate;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -107,7 +110,7 @@ public final class StructureData implements DirectedClass {
         return List.of(accessor(state, member));
     }
 
-    private MethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
+    static MethodSyntax accessor(ShapeCodegenState state, MemberShape member) {
         var name = Utils.toJavaName(state, member);
         var type = Utils.toJavaTypeName(state, member);
         var doc = Javadoc.builder()
@@ -200,17 +203,10 @@ public final class StructureData implements DirectedClass {
     }
 
     public MethodSyntax equalsMethod(ShapeCodegenState state) {
-        var result = MethodSyntax.builder("equals")
-                                 .addAnnotation(Override.class)
-                                 .addModifier(Modifier.PUBLIC)
-                                 .returns(boolean.class)
-                                 .addParameter(Object.class, "obj");
-        result.body(body -> {
-            body.ifStatement("this == obj", b -> b.addStatement("return true"));
+        var builder = equalsTemplate();
+        builder.body(body -> {
             var className = className(state);
-            body.ifStatement("obj == null || getClass() != obj.getClass()",
-                             then -> then.addStatement("return false"));
-            body.addStatement("$1T that = ($1T) obj", className);
+            body.addStatement("$1T that = ($1T) other", className);
             var expressionBuilder = CodeBlock.builder();
             var isFirst = true;
             expressionBuilder.addCode("return ");
@@ -250,28 +246,24 @@ public final class StructureData implements DirectedClass {
             }
             body.addStatement(expressionBuilder.build());
         });
-        return result.build();
+        return builder.build();
     }
 
     MethodSyntax hashCodeMethod(ShapeCodegenState state) {
-        var result = MethodSyntax.builder("hashCode")
-                                 .addAnnotation(Override.class)
-                                 .addModifier(Modifier.PUBLIC)
-                                 .returns(int.class);
-
+        var builder = hashCodeTemplate();
         if (cacheHashCode(state)) {
-            result.ifStatement("_hashCode == 0", then -> {
+            builder.ifStatement("_hashCode == 0", then -> {
                       addComputeHashCode(state, then);
                       then.addStatement("_hashCode = hashCode");
                   })
                   .addStatement("return _hashCode");
         } else {
-            result.body(b -> {
+            builder.body(b -> {
                 addComputeHashCode(state, b);
                 b.addStatement("return hashCode");
             });
         }
-        return result.build();
+        return builder.build();
     }
 
     private AbstractBlockBuilder<?, ?> addComputeHashCode(ShapeCodegenState state, AbstractBlockBuilder<?, ?> builder) {

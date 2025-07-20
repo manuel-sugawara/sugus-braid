@@ -42,14 +42,14 @@ public final class StructureShape1 {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        StructureShape1 that = (StructureShape1) obj;
+        StructureShape1 that = (StructureShape1) other;
         return this.name.equals(that.name)
             && Objects.equals(this.intValue, that.intValue);
     }

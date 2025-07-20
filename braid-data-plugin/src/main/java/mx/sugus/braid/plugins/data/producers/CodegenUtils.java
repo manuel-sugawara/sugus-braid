@@ -78,4 +78,24 @@ public final class CodegenUtils {
                            .addModifier(Modifier.PUBLIC)
                            .returns(String.class);
     }
+
+    public static MethodSyntax.Builder equalsTemplate() {
+        var builder = MethodSyntax.builder("equals")
+                                  .addAnnotation(Override.class)
+                                  .addModifier(Modifier.PUBLIC)
+                                  .returns(boolean.class)
+                                  .addParameter(Object.class, "other");
+        builder.ifStatement("this == other", b -> b.addStatement("return true"));
+        builder.ifStatement("other == null || getClass() != other.getClass()",
+                            then -> then.addStatement("return false"));
+        return builder;
+    }
+
+    public static MethodSyntax.Builder hashCodeTemplate() {
+        return MethodSyntax.builder("hashCode")
+                           .addAnnotation(Override.class)
+                           .addModifier(Modifier.PUBLIC)
+                           .returns(int.class);
+
+    }
 }

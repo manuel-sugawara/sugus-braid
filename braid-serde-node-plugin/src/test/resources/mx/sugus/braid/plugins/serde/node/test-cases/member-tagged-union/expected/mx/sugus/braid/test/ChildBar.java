@@ -40,14 +40,14 @@ public final class ChildBar implements SyntaxNodeChild, SyntaxNode, ToNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        ChildBar that = (ChildBar) obj;
+        ChildBar that = (ChildBar) other;
         return Objects.equals(this.bar, that.bar);
     }
 
@@ -82,9 +82,7 @@ public final class ChildBar implements SyntaxNodeChild, SyntaxNode, ToNode {
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
         builder.withMember("kind", Node.from(kind().toString()));
-        if (this.bar != null) {
-            builder.withMember("bar", Node.from(bar()));
-        }
+        builder.withMember("bar", Node.from(bar()));
         return builder.build();
     }
 

@@ -78,14 +78,14 @@ public final class CompilationUnit implements SyntaxNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        CompilationUnit that = (CompilationUnit) obj;
+        CompilationUnit that = (CompilationUnit) other;
         return this.packageName.equals(that.packageName)
             && this.imports.equals(that.imports)
             && this.type.equals(that.type)

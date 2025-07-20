@@ -183,14 +183,14 @@ public final class Parent implements ToNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        Parent that = (Parent) obj;
+        Parent that = (Parent) other;
         return Objects.equals(this.stringMember, that.stringMember)
             && this.children.equals(that.children)
             && this.booleans.equals(that.booleans)
@@ -267,9 +267,7 @@ public final class Parent implements ToNode {
     @Override
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
-        if (this.stringMember != null) {
-            builder.withMember("stringMember", Node.from(stringMember()));
-        }
+        builder.withMember("stringMember", Node.from(stringMember()));
         if (!children().isEmpty()) {
             ArrayNode.Builder childrenBuilder = ArrayNode.builder();
             for (Child item : children()) {
@@ -608,7 +606,7 @@ public final class Parent implements ToNode {
          * @param booleans The value tp add
          * @return This instance for chain calling.
          */
-        public Builder addBoolean(Boolean aBoolean) {
+        public Builder addBoolean(boolean aBoolean) {
             this.booleans.asTransient().add(aBoolean);
             return this;
         }
@@ -631,7 +629,7 @@ public final class Parent implements ToNode {
          * @param bytes The value tp add
          * @return This instance for chain calling.
          */
-        public Builder addByte(Byte aByte) {
+        public Builder addByte(byte aByte) {
             this.bytes.asTransient().add(aByte);
             return this;
         }
@@ -654,7 +652,7 @@ public final class Parent implements ToNode {
          * @param shorts The value tp add
          * @return This instance for chain calling.
          */
-        public Builder addShort(Short aShort) {
+        public Builder addShort(short aShort) {
             this.shorts.asTransient().add(aShort);
             return this;
         }
@@ -677,7 +675,7 @@ public final class Parent implements ToNode {
          * @param integers The value tp add
          * @return This instance for chain calling.
          */
-        public Builder addInteger(Integer integer) {
+        public Builder addInteger(int integer) {
             this.integers.asTransient().add(integer);
             return this;
         }
@@ -723,7 +721,7 @@ public final class Parent implements ToNode {
          * @param longs The value tp add
          * @return This instance for chain calling.
          */
-        public Builder addLong(Long aLong) {
+        public Builder addLong(long aLong) {
             this.longs.asTransient().add(aLong);
             return this;
         }
@@ -746,7 +744,7 @@ public final class Parent implements ToNode {
          * @param floats The value tp add
          * @return This instance for chain calling.
          */
-        public Builder addFloat(Float aFloat) {
+        public Builder addFloat(float aFloat) {
             this.floats.asTransient().add(aFloat);
             return this;
         }
@@ -769,7 +767,7 @@ public final class Parent implements ToNode {
          * @param doubles The value tp add
          * @return This instance for chain calling.
          */
-        public Builder addDouble(Double aDouble) {
+        public Builder addDouble(double aDouble) {
             this.doubles.asTransient().add(aDouble);
             return this;
         }

@@ -194,14 +194,14 @@ public final class Parent implements ToNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        Parent that = (Parent) obj;
+        Parent that = (Parent) other;
         return Objects.equals(this.stringMember, that.stringMember)
             && this.children.equals(that.children)
             && this.booleans.equals(that.booleans)
@@ -281,9 +281,7 @@ public final class Parent implements ToNode {
     @Override
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
-        if (this.stringMember != null) {
-            builder.withMember("stringMember", Node.from(stringMember()));
-        }
+        builder.withMember("stringMember", Node.from(stringMember()));
         if (!this.children.isEmpty()) {
             ObjectNode.Builder childrenBuilder = ObjectNode.builder();
             for (Map.Entry<String, Child> kvp : children().entrySet()) {
@@ -672,7 +670,7 @@ public final class Parent implements ToNode {
          * @param aBoolean The value for the map entry
          * @return This instance for chain calling.
          */
-        public Builder putBoolean(String key, Boolean aBoolean) {
+        public Builder putBoolean(String key, boolean aBoolean) {
             this.booleans.asTransient().put(key, aBoolean);
             return this;
         }
@@ -696,7 +694,7 @@ public final class Parent implements ToNode {
          * @param aByte The value for the map entry
          * @return This instance for chain calling.
          */
-        public Builder putByte(String key, Byte aByte) {
+        public Builder putByte(String key, byte aByte) {
             this.bytes.asTransient().put(key, aByte);
             return this;
         }
@@ -720,7 +718,7 @@ public final class Parent implements ToNode {
          * @param aShort The value for the map entry
          * @return This instance for chain calling.
          */
-        public Builder putShort(String key, Short aShort) {
+        public Builder putShort(String key, short aShort) {
             this.shorts.asTransient().put(key, aShort);
             return this;
         }
@@ -744,7 +742,7 @@ public final class Parent implements ToNode {
          * @param integer The value for the map entry
          * @return This instance for chain calling.
          */
-        public Builder putInteger(String key, Integer integer) {
+        public Builder putInteger(String key, int integer) {
             this.integers.asTransient().put(key, integer);
             return this;
         }
@@ -792,7 +790,7 @@ public final class Parent implements ToNode {
          * @param aLong The value for the map entry
          * @return This instance for chain calling.
          */
-        public Builder putLong(String key, Long aLong) {
+        public Builder putLong(String key, long aLong) {
             this.longs.asTransient().put(key, aLong);
             return this;
         }
@@ -816,7 +814,7 @@ public final class Parent implements ToNode {
          * @param aFloat The value for the map entry
          * @return This instance for chain calling.
          */
-        public Builder putFloat(String key, Float aFloat) {
+        public Builder putFloat(String key, float aFloat) {
             this.floats.asTransient().put(key, aFloat);
             return this;
         }
@@ -840,7 +838,7 @@ public final class Parent implements ToNode {
          * @param aDouble The value for the map entry
          * @return This instance for chain calling.
          */
-        public Builder putDouble(String key, Double aDouble) {
+        public Builder putDouble(String key, double aDouble) {
             this.doubles.asTransient().put(key, aDouble);
             return this;
         }

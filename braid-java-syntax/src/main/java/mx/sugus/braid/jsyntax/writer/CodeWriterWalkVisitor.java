@@ -187,9 +187,9 @@ public final class CodeWriterWalkVisitor extends SyntaxNodeWalkVisitor {
 
     private void renderAnnotationMemberValue(MemberValue memberValue) {
         switch (memberValue.variantTag()) {
-            case EXPRESSION -> memberValue.expression().accept(this);
+            case EXPRESSION -> ((MemberValue.ExpressionMember) memberValue).expression().accept(this);
             case ARRAY_EXPRESSION -> {
-                var arrayExpression = memberValue.arrayExpression();
+                var arrayExpression =  ((MemberValue.ArrayExpressionMember) memberValue).arrayExpression();
                 if (arrayExpression.size() == 1) {
                     arrayExpression.get(0).accept(this);
                 }

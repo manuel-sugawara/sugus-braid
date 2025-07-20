@@ -84,14 +84,14 @@ public final class AbstractControlFlow implements Statement {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        AbstractControlFlow that = (AbstractControlFlow) obj;
+        AbstractControlFlow that = (AbstractControlFlow) other;
         return this.prefix.equals(that.prefix)
             && this.statement.equals(that.statement)
             && Objects.equals(this.next, that.next);

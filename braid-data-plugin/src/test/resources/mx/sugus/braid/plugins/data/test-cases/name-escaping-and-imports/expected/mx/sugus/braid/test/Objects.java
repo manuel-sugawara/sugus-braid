@@ -28,14 +28,14 @@ public final class Objects {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        Objects that = (Objects) obj;
+        Objects that = (Objects) other;
         return java.util.Objects.equals(this.object, that.object);
     }
 

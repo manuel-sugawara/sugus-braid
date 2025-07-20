@@ -46,14 +46,14 @@ public final class Parent implements SyntaxNode, ToNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        Parent that = (Parent) obj;
+        Parent that = (Parent) other;
         return Objects.equals(this.child, that.child)
             && Objects.equals(this.anotherChild, that.anotherChild);
     }

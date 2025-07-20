@@ -57,14 +57,14 @@ public final class StructureShape implements ToNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        StructureShape that = (StructureShape) obj;
+        StructureShape that = (StructureShape) other;
         return this.enumValue.equals(that.enumValue)
             && this.stringMember.equals(that.stringMember)
             && this.structureShape.equals(that.structureShape);

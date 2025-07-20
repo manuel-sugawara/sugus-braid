@@ -1,7 +1,7 @@
 package mx.sugus.braid.jsyntax;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Objects;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
@@ -12,58 +12,7 @@ import mx.sugus.braid.rt.util.annotations.Generated;
  */
 @Generated("mx.sugus.braid.plugins.data#DataPlugin")
 @SuppressWarnings("unchecked")
-public final class MemberValue {
-    private final Object variantValue;
-    private final VariantTag variantTag;
-
-    private MemberValue(Builder builder) {
-        this.variantValue = builder.getValue();
-        this.variantTag = builder.variantTag;
-    }
-
-    /**
-     * An expression member, equivalent to the {@code ConditionalExpression} production
-     * in the java spec.
-     */
-    public Expression expression() {
-        if (this.variantTag == VariantTag.EXPRESSION) {
-            return (Expression) this.variantValue;
-        }
-        throw new NoSuchElementException("Union element `expression` not set, currently set `" + this.variantTag + "`");
-    }
-
-    /**
-     * An array initializer member, equivalent to the {@code ElementValueArrayInitializer}
-     * production in the java spec.
-     */
-    public List<Expression> arrayExpression() {
-        if (this.variantTag == VariantTag.ARRAY_EXPRESSION) {
-            return (List<Expression>) this.variantValue;
-        }
-        throw new NoSuchElementException("Union element `arrayExpression` not set, currently set `" + this.variantTag + "`");
-    }
-
-    /**
-     * Returns the enum value representing which member of this object is populated.
-     * <p>
-     * This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.
-     * 
-     * @return The enum value representing which member of this object is populated
-     */
-    public VariantTag variantTag() {
-        return this.variantTag;
-    }
-
-    /**
-     * Returns the untyped value of the union.
-     * <p>
-     * Use {@link #type()} to get the member currently set.
-     * 
-     * @return The untyped value of the union.
-     */
-    public Object variantValue() {
-        return this.variantValue;
-    }
+public abstract class MemberValue {
 
     /**
      * Returns a new builder to modify a copy of this instance.
@@ -72,38 +21,6 @@ public final class MemberValue {
      */
     public Builder toBuilder() {
         return new Builder(this);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-        if (!(other instanceof MemberValue)) {
-            return false;
-        }
-        MemberValue that = (MemberValue) other;
-        return this.variantTag == that.variantTag && this.variantValue.equals(that.variantValue);
-    }
-
-    @Override
-    public int hashCode() {
-        return this.variantTag.hashCode() + 31 * this.variantValue.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder buf = new StringBuilder("MemberValue{variantTag: ");
-        buf.append(this.variantTag);
-        switch (this.variantTag) {
-            case EXPRESSION:
-                buf.append(", expression: ").append(this.variantValue);
-                break;
-            case ARRAY_EXPRESSION:
-                buf.append(", arrayExpression: ").append(this.variantValue);
-                break;
-        }
-        return buf.append("}").toString();
     }
 
     /**
@@ -136,6 +53,17 @@ public final class MemberValue {
         return builder().arrayExpression(java.util.Arrays.asList(values)).build();
     }
 
+    /**
+     * Returns the enum value representing which member of this object is populated.
+     * <p>
+     * This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.
+     * 
+     * @return The enum value representing which member of this object is populated
+     */
+    public abstract VariantTag variantTag();
+
+    public abstract <T> T variantValue();
+
     public enum VariantTag {
         EXPRESSION("expression"),
         ARRAY_EXPRESSION("arrayExpression"),
@@ -153,6 +81,131 @@ public final class MemberValue {
         }
     }
 
+    /**
+     * An expression member, equivalent to the {@code ConditionalExpression} production
+     * in the java spec.
+     */
+    @Generated("mx.sugus.braid.plugins.data#DataPlugin")
+    public static final class ExpressionMember extends MemberValue {
+        private final Expression expression;
+
+        private ExpressionMember(Expression expression) {
+            this.expression = Objects.requireNonNull(expression, "expression");
+        }
+
+        /**
+         * An expression member, equivalent to the {@code ConditionalExpression} production
+         * in the java spec.
+         * 
+         * @return The value of the {@code expression} member
+         */
+        public Expression expression() {
+            return this.expression;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> T variantValue() {
+            return (T) this.expression;
+        }
+
+        @Override
+        public VariantTag variantTag() {
+            return VariantTag.EXPRESSION;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+            if (other == null || getClass() != other.getClass()) {
+                return false;
+            }
+            ExpressionMember that = (ExpressionMember) other;
+            return this.expression.equals(that.expression);
+        }
+
+        @Override
+        public int hashCode() {
+            return this.expression.hashCode();
+        }
+    }
+
+    /**
+     * An array initializer member, equivalent to the {@code ElementValueArrayInitializer}
+     * production in the java spec.
+     */
+    @Generated("mx.sugus.braid.plugins.data#DataPlugin")
+    public static final class ArrayExpressionMember extends MemberValue {
+        private final List<Expression> arrayExpression;
+
+        private ArrayExpressionMember(List<Expression> arrayExpression) {
+            this.arrayExpression = Objects.requireNonNull(arrayExpression, "arrayExpression");
+        }
+
+        /**
+         * An array initializer member, equivalent to the {@code ElementValueArrayInitializer}
+         * production in the java spec.
+         * 
+         * @return The value of the {@code arrayExpression} member
+         */
+        public List<Expression> arrayExpression() {
+            return this.arrayExpression;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> T variantValue() {
+            return (T) this.arrayExpression;
+        }
+
+        @Override
+        public VariantTag variantTag() {
+            return VariantTag.ARRAY_EXPRESSION;
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (this == other) {
+                return true;
+            }
+            if (other == null || getClass() != other.getClass()) {
+                return false;
+            }
+            ArrayExpressionMember that = (ArrayExpressionMember) other;
+            return this.arrayExpression.equals(that.arrayExpression);
+        }
+
+        @Override
+        public int hashCode() {
+            return this.arrayExpression.hashCode();
+        }
+    }
+
+    /**
+     * Unknown variant type.
+     */
+    @Generated("mx.sugus.braid.plugins.data#DataPlugin")
+    public static final class $UnknownVariant extends MemberValue {
+        private final String unknownVariantName;
+
+        private $UnknownVariant(String name) {
+            this.unknownVariantName = Objects.requireNonNull(name);
+        }
+
+        @Override
+        public VariantTag variantTag() {
+            return VariantTag.UNKNOWN_TO_VERSION;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T> T variantValue() {
+            return (T) this.unknownVariantName;
+        }
+    }
+
     public static final class Builder {
         private Object variantValue;
         private VariantTag variantTag;
@@ -163,13 +216,13 @@ public final class MemberValue {
         }
 
         Builder(MemberValue data) {
-            this.variantTag = data.variantTag;
-            switch (data.variantTag) {
+            this.variantTag = data.variantTag();
+            switch (this.variantTag) {
                 case ARRAY_EXPRESSION:
-                    this.variantValue = CollectionBuilderReference.fromPersistentList(data.arrayExpression());
+                    this.variantValue = CollectionBuilderReference.fromPersistentList(data.variantValue());
                     break;
                 default:
-                    this.variantValue = data.variantValue;
+                    this.variantValue = data.variantValue();
             }
         }
 
@@ -181,7 +234,7 @@ public final class MemberValue {
          */
         public Builder expression(Expression expression) {
             this.variantTag = VariantTag.EXPRESSION;
-            this.variantValue = expression;
+            this.variantValue = Objects.requireNonNull(expression);
             return this;
         }
 
@@ -205,7 +258,7 @@ public final class MemberValue {
         public Builder arrayExpression(List<Expression> arrayExpression) {
             CollectionBuilderReference<List<Expression>> tmp = arrayExpression();
             tmp.clear();
-            tmp.asTransient().addAll(arrayExpression);
+            tmp.asTransient().addAll(Objects.requireNonNull(arrayExpression));
             return this;
         }
 
@@ -229,7 +282,17 @@ public final class MemberValue {
         }
 
         public MemberValue build() {
-            return new MemberValue(this);
+            switch (this.variantTag) {
+                case EXPRESSION:
+                    return new ExpressionMember((Expression) getValue());
+                case ARRAY_EXPRESSION:
+                    return new ArrayExpressionMember((List<Expression>) getValue());
+                default:
+                    if (this.variantValue == null) {
+                        throw new NullPointerException("no value set");
+                    }
+                    return new $UnknownVariant((String) this.variantValue);
+            }
         }
     }
 }

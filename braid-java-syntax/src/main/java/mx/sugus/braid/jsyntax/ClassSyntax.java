@@ -153,14 +153,14 @@ public final class ClassSyntax implements TypeSyntax {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        ClassSyntax that = (ClassSyntax) obj;
+        ClassSyntax that = (ClassSyntax) other;
         return Objects.equals(this.superClass, that.superClass)
             && this.typeParams.equals(that.typeParams)
             && Objects.equals(this.javadoc, that.javadoc)

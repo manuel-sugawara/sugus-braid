@@ -37,14 +37,14 @@ public final class FormatterBlock implements FormatterNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        FormatterBlock that = (FormatterBlock) obj;
+        FormatterBlock that = (FormatterBlock) other;
         return Objects.equals(this.value, that.value);
     }
 

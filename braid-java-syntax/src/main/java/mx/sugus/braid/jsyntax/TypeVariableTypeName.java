@@ -60,14 +60,14 @@ public final class TypeVariableTypeName implements TypeName {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        TypeVariableTypeName that = (TypeVariableTypeName) obj;
+        TypeVariableTypeName that = (TypeVariableTypeName) other;
         return this.name.equals(that.name)
             && this.bounds.equals(that.bounds);
     }

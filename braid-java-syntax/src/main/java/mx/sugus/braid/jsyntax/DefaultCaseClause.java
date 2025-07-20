@@ -48,14 +48,14 @@ public final class DefaultCaseClause implements SyntaxNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        DefaultCaseClause that = (DefaultCaseClause) obj;
+        DefaultCaseClause that = (DefaultCaseClause) other;
         return this.body.equals(that.body);
     }
 

@@ -105,14 +105,14 @@ public final class FieldSyntax implements SyntaxNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        FieldSyntax that = (FieldSyntax) obj;
+        FieldSyntax that = (FieldSyntax) other;
         return Objects.equals(this.javadoc, that.javadoc)
             && this.name.equals(that.name)
             && this.type.equals(that.type)

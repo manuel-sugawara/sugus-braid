@@ -46,14 +46,14 @@ public final class AnotherChild implements SyntaxNode, ToNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        AnotherChild that = (AnotherChild) obj;
+        AnotherChild that = (AnotherChild) other;
         return Objects.equals(this.stringValue, that.stringValue)
             && Objects.equals(this.intValue, that.intValue);
     }
@@ -88,12 +88,8 @@ public final class AnotherChild implements SyntaxNode, ToNode {
     @Override
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
-        if (this.stringValue != null) {
-            builder.withMember("stringValue", Node.from(stringValue()));
-        }
-        if (this.intValue != null) {
-            builder.withMember("intValue", Node.from(intValue()));
-        }
+        builder.withMember("stringValue", Node.from(stringValue()));
+        builder.withMember("intValue", Node.from(intValue()));
         return builder.build();
     }
 
