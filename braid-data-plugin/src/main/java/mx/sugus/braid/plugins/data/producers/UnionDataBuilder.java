@@ -4,6 +4,7 @@ package mx.sugus.braid.plugins.data.producers;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Consumer;
 import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
@@ -108,11 +109,32 @@ public final class UnionDataBuilder implements DirectedClass {
 
     private MethodSyntax buildMethod(ShapeCodegenState state) {
         var shapeType = Utils.toJavaTypeName(state, state.shape());
-        return MethodSyntax.builder("build")
-                           .addModifier(Modifier.PUBLIC)
-                           .returns(shapeType)
-                           .addStatement("return new $T(this)", shapeType)
-                           .build();
+        var builder = MethodSyntax.builder("build")
+                                  .addModifier(Modifier.PUBLIC)
+                                  .returns(shapeType);
+
+        var variantSwitch = SwitchStatement.builder()
+                                           .expression(CodeBlock.from("this.variantTag"));
+        for (var member : state.shape().members()) {
+            var unionVariant = Utils.toSourceName(state, member, Name.Convention.SCREAM_CASE).toString();
+            var memberName = Utils.toJavaName(state, member);
+            var memberType = Utils.toJavaTypeName(state, member);
+            var memberCase = CaseClause.builder()
+                                       .addLabel(CodeBlock.from("$L", unionVariant))
+                                       .addStatement("return new $L(($T) getValue())",
+                                                     memberName.withSuffix("Member").toPascalCase(),
+                                                     memberType)
+                                       .build();
+            variantSwitch.addCase(memberCase);
+        }
+        var defaultCase = DefaultCaseClause.builder();
+        defaultCase.ifStatement("this.variantValue == null", then -> {
+                       then.addStatement("throw new $T(\"no value set\")", NullPointerException.class);
+                   })
+                   .addStatement("return new $$UnknownVariant((String) this.variantValue)");
+        variantSwitch.defaultCase(defaultCase.build());
+        builder.addStatement(variantSwitch.build());
+        return builder.build();
     }
 
     @Override
@@ -186,7 +208,7 @@ public final class UnionDataBuilder implements DirectedClass {
         var getterName = Utils.toGetterName(state, member);
         builder.addStatement("$T tmp = $L()", type, getterName);
         builder.addStatement("tmp.clear()");
-        builder.addStatement("tmp.asTransient().addAll($L)", name);
+        builder.addStatement("tmp.asTransient().addAll($T.requireNonNull($L))", Objects.class, name);
     }
 
     private void setMapValue(ShapeCodegenState state, MemberShape member, BodyBuilder builder) {
@@ -195,7 +217,7 @@ public final class UnionDataBuilder implements DirectedClass {
         var getterName = Utils.toGetterName(state, member);
         builder.addStatement("$T tmp = $L()", type, getterName);
         builder.addStatement("tmp.clear()");
-        builder.addStatement("tmp.asTransient().putAll($L)", name);
+        builder.addStatement("tmp.asTransient().putAll($T.requireNonNull($L))", Objects.class, name);
     }
 
     private List<MethodSyntax> adder(ShapeCodegenState state, MemberShape member) {
@@ -291,7 +313,7 @@ public final class UnionDataBuilder implements DirectedClass {
         } else {
             var unionVariant = Utils.toSourceName(state, member, Name.Convention.SCREAM_CASE);
             builder.addStatement("this.variantTag = VariantTag.$1L", unionVariant);
-            builder.addStatement("this.variantValue = $L", name);
+            builder.addStatement("this.variantValue = $T.requireNonNull($L)", Objects.class, name);
         }
     }
 
@@ -326,8 +348,8 @@ public final class UnionDataBuilder implements DirectedClass {
                                              .addParameter(paramType, "data");
         var withReferenceMember = membersUsingBuilderReference(state);
         if (withReferenceMember.isEmpty()) {
-            builder.addStatement("this.variantTag = data.variantTag")
-                   .addStatement("this.variantValue = data.variantValue");
+            builder.addStatement("this.variantTag = data.variantTag()")
+                   .addStatement("this.variantValue = data.variantValue()");
         } else {
             builder.body(b -> initBuilderReferences(state, withReferenceMember, b));
         }
@@ -339,8 +361,8 @@ public final class UnionDataBuilder implements DirectedClass {
         List<MemberShape> withReferenceMember,
         BodyBuilder builder
     ) {
-        builder.addStatement("this.variantTag = data.variantTag");
-        var typeSwitch = SwitchStatement.builder().expression(CodeBlock.from("data.variantTag"));
+        builder.addStatement("this.variantTag = data.variantTag()");
+        var typeSwitch = SwitchStatement.builder().expression(CodeBlock.from("this.variantTag"));
         for (var member : withReferenceMember) {
             var unionVariant = Utils.toSourceName(state, member, Name.Convention.SCREAM_CASE).toString();
             typeSwitch.addCase(CaseClause.builder()
@@ -352,7 +374,7 @@ public final class UnionDataBuilder implements DirectedClass {
                                          .build());
         }
         typeSwitch.defaultCase(DefaultCaseClause.builder()
-                                                .addStatement("this.variantValue = data.variantValue")
+                                                .addStatement("this.variantValue = data.variantValue()")
                                                 .build());
         builder.addStatement(typeSwitch.build());
     }

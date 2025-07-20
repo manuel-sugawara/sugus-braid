@@ -80,14 +80,14 @@ public final class Container {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        Container that = (Container) obj;
+        Container that = (Container) other;
         return java.util.Objects.equals(this.list, that.list)
             && java.util.Objects.equals(this.aConst, that.aConst)
             && this.listOfLists.equals(that.listOfLists)

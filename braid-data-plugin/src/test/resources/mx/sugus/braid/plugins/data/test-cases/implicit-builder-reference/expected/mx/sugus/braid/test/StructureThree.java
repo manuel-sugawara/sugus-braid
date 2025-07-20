@@ -41,14 +41,14 @@ public final class StructureThree {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        StructureThree that = (StructureThree) obj;
+        StructureThree that = (StructureThree) other;
         return Objects.equals(this.structureOne, that.structureOne)
             && Objects.equals(this.structureTwo, that.structureTwo);
     }

@@ -100,14 +100,14 @@ public final class DefaultValues {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        DefaultValues that = (DefaultValues) obj;
+        DefaultValues that = (DefaultValues) other;
         return this.aBoolean == that.aBoolean
             && this.aByte == that.aByte
             && this.aShort == that.aShort

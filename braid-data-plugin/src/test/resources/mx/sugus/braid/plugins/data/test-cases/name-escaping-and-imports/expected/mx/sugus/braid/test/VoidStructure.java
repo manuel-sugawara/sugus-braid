@@ -29,14 +29,14 @@ public final class VoidStructure {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        VoidStructure that = (VoidStructure) obj;
+        VoidStructure that = (VoidStructure) other;
         return Objects.equals(this.anEnum, that.anEnum);
     }
 

@@ -71,14 +71,14 @@ public final class SwitchStatement implements Statement {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        SwitchStatement that = (SwitchStatement) obj;
+        SwitchStatement that = (SwitchStatement) other;
         return this.expression.equals(that.expression)
             && this.cases.equals(that.cases)
             && Objects.equals(this.defaultCase, that.defaultCase);

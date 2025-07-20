@@ -142,14 +142,14 @@ public final class InterfaceSyntax implements TypeSyntax {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        InterfaceSyntax that = (InterfaceSyntax) obj;
+        InterfaceSyntax that = (InterfaceSyntax) other;
         return this.typeParams.equals(that.typeParams)
             && Objects.equals(this.javadoc, that.javadoc)
             && this.name.equals(that.name)

@@ -142,14 +142,14 @@ public final class EnumSyntax implements TypeSyntax {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        EnumSyntax that = (EnumSyntax) obj;
+        EnumSyntax that = (EnumSyntax) other;
         return this.enumConstants.equals(that.enumConstants)
             && Objects.equals(this.javadoc, that.javadoc)
             && this.name.equals(that.name)

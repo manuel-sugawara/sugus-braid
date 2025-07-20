@@ -48,14 +48,14 @@ public final class ArrayTypeName implements TypeName {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        ArrayTypeName that = (ArrayTypeName) obj;
+        ArrayTypeName that = (ArrayTypeName) other;
         return this.componentType.equals(that.componentType);
     }
 

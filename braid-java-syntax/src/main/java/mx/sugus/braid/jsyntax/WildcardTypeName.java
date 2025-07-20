@@ -71,14 +71,14 @@ public final class WildcardTypeName implements TypeName {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        WildcardTypeName that = (WildcardTypeName) obj;
+        WildcardTypeName that = (WildcardTypeName) other;
         return Objects.equals(this.rawType, that.rawType)
             && this.upperBounds.equals(that.upperBounds)
             && this.lowerBounds.equals(that.lowerBounds);

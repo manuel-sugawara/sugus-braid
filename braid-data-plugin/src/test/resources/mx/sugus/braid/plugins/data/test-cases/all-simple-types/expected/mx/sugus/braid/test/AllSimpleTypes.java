@@ -123,14 +123,14 @@ public final class AllSimpleTypes {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        AllSimpleTypes that = (AllSimpleTypes) obj;
+        AllSimpleTypes that = (AllSimpleTypes) other;
         return Objects.equals(this.aByte, that.aByte)
             && Objects.equals(this.aShort, that.aShort)
             && Objects.equals(this.anInt, that.anInt)

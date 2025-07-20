@@ -120,14 +120,14 @@ public final class AbstractMethodSyntax implements BaseMethodSyntax {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        AbstractMethodSyntax that = (AbstractMethodSyntax) obj;
+        AbstractMethodSyntax that = (AbstractMethodSyntax) other;
         return this.name.equals(that.name)
             && this.typeParams.equals(that.typeParams)
             && this.returns.equals(that.returns)

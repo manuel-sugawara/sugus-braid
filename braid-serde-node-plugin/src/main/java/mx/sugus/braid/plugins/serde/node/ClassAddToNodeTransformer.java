@@ -1,5 +1,7 @@
 package mx.sugus.braid.plugins.serde.node;
 
+import static mx.sugus.braid.plugins.data.producers.UnionVariantData.memberVariantName;
+
 import java.util.Map;
 import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.plugin.Identifier;
@@ -230,22 +232,9 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
 
     static void addSimpleMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var target = state.model().expectShape(member.getTarget());
-        var memberField = "this." + Utils.toJavaName(state, member);
         var getterName = Utils.toGetterName(state, member) + "()";
-        if (isNotNullable(state, member)) {
-            if (member.hasTrait(ConstTrait.class)) {
-                body.addStatement("builder.withMember($S, $C)",
-                                  member.getMemberName(), valueToNode(getterName, state, target));
-            } else {
-                body.addStatement("builder.withMember($S, $C)",
-                                  member.getMemberName(), valueToNode(getterName, state, target));
-            }
-        } else {
-            body.ifStatement("$L != null", memberField, then -> {
-                then.addStatement("builder.withMember($S, $C)",
-                                  member.getMemberName(), valueToNode(getterName, state, target));
-            });
-        }
+        body.addStatement("builder.withMember($S, $C)",
+                          member.getMemberName(), valueToNode(getterName, state, target));
     }
 
     private static CodeBlock valueToNode(String source, ShapeCodegenState state, Shape target) {

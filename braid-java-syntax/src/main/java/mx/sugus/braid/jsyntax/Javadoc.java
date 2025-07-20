@@ -64,14 +64,14 @@ public final class Javadoc implements SyntaxNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        Javadoc that = (Javadoc) obj;
+        Javadoc that = (Javadoc) other;
         return Objects.equals(this.body, that.body)
             && this.params.equals(that.params)
             && Objects.equals(this.returns, that.returns);

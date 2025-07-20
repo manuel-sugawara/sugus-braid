@@ -60,14 +60,14 @@ public final class CaseClause implements SyntaxNode {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        CaseClause that = (CaseClause) obj;
+        CaseClause that = (CaseClause) other;
         return this.label.equals(that.label)
             && this.body.equals(that.body);
     }

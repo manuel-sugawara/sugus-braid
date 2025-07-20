@@ -29,14 +29,14 @@ public final class Const {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        Const that = (Const) obj;
+        Const that = (Const) other;
         return Objects.equals(this.aConst, that.aConst);
     }
 

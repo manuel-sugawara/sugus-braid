@@ -29,14 +29,14 @@ public final class ObjectStructure {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        ObjectStructure that = (ObjectStructure) obj;
+        ObjectStructure that = (ObjectStructure) other;
         return Objects.equals(this.object, that.object);
     }
 

@@ -149,7 +149,7 @@ public final class CodegenModule {
                 LOG.fine(() -> String.format("Running transformer `%s` for producer `%s` on shape `%s",
                                              transformer.taskId(), task.taskId(), state.shape().getId()));
                 result = transformer.transform(result, state);
-                // Transformers return null to break the pipeline.
+                // Transformers can return null to break the pipeline.
                 if (result == null) {
                     return null;
                 }

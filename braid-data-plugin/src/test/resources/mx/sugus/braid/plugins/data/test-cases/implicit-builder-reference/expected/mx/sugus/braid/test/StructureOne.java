@@ -39,14 +39,14 @@ public final class StructureOne {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        StructureOne that = (StructureOne) obj;
+        StructureOne that = (StructureOne) other;
         return Objects.equals(this.stringMember, that.stringMember)
             && Objects.equals(this.intMember, that.intMember);
     }

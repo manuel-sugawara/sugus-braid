@@ -29,14 +29,14 @@ public final class Map {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        Map that = (Map) obj;
+        Map that = (Map) other;
         return Objects.equals(this.member, that.member);
     }
 

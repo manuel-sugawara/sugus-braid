@@ -64,14 +64,14 @@ public final class StructureWithAggregates {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        StructureWithAggregates that = (StructureWithAggregates) obj;
+        StructureWithAggregates that = (StructureWithAggregates) other;
         return Objects.equals(this.simpleMember, that.simpleMember)
             && this.structuresOne.equals(that.structuresOne)
             && this.structureTwoMap.equals(that.structureTwoMap)

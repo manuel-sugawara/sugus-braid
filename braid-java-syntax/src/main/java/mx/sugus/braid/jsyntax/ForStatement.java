@@ -66,14 +66,14 @@ public final class ForStatement implements Statement {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        ForStatement that = (ForStatement) obj;
+        ForStatement that = (ForStatement) other;
         return this.initializer.equals(that.initializer)
             && this.statement.equals(that.statement);
     }

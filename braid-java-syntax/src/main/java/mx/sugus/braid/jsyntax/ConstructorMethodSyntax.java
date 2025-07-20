@@ -101,14 +101,14 @@ public final class ConstructorMethodSyntax implements BaseMethodSyntax {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        ConstructorMethodSyntax that = (ConstructorMethodSyntax) obj;
+        ConstructorMethodSyntax that = (ConstructorMethodSyntax) other;
         return this.body.equals(that.body)
             && Objects.equals(this.javadoc, that.javadoc)
             && this.annotations.equals(that.annotations)

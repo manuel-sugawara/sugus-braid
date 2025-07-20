@@ -37,14 +37,14 @@ public final class FormatBoolean implements Format {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
+    public boolean equals(Object other) {
+        if (this == other) {
             return true;
         }
-        if (obj == null || getClass() != obj.getClass()) {
+        if (other == null || getClass() != other.getClass()) {
             return false;
         }
-        FormatBoolean that = (FormatBoolean) obj;
+        FormatBoolean that = (FormatBoolean) other;
         return Objects.equals(this.value, that.value);
     }
 

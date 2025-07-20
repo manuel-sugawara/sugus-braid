@@ -107,7 +107,7 @@ public final class SymbolCodegen {
         var type = Utils.aggregateType(state, member);
         String name;
         if (useGetters) {
-            name = Utils.toGetterName(state, member).toString() + "()";
+            name = "variantValue()";
         } else {
             name = Utils.toJavaName(state, member).toString();
         }
