@@ -102,6 +102,11 @@ public abstract class AnyAggregateType {
         }
 
         @Override
+        public String toString() {
+            return "AnyAggregateType{structure: " + structure + "}";
+        }
+
+        @Override
         @SuppressWarnings("unchecked")
         public <T extends AnyAggregateType> T asMember(Class<T> memberType) {
             if (memberType != getClass()) {
@@ -157,6 +162,11 @@ public abstract class AnyAggregateType {
         @Override
         public VariantTag variantTag() {
             return VariantTag.UNION;
+        }
+
+        @Override
+        public String toString() {
+            return "AnyAggregateType{union: " + union + "}";
         }
 
         @Override
@@ -218,6 +228,11 @@ public abstract class AnyAggregateType {
         }
 
         @Override
+        public String toString() {
+            return "AnyAggregateType{list: " + list + "}";
+        }
+
+        @Override
         @SuppressWarnings("unchecked")
         public <T extends AnyAggregateType> T asMember(Class<T> memberType) {
             if (memberType != getClass()) {
@@ -273,6 +288,11 @@ public abstract class AnyAggregateType {
         @Override
         public VariantTag variantTag() {
             return VariantTag.MAP;
+        }
+
+        @Override
+        public String toString() {
+            return "AnyAggregateType{map: " + map + "}";
         }
 
         @Override

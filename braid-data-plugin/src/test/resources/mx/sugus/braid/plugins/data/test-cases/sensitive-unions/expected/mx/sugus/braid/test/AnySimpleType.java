@@ -106,6 +106,11 @@ public abstract class AnySimpleType {
         }
 
         @Override
+        public String toString() {
+            return "AnySimpleType{byte: " + aByte + "}";
+        }
+
+        @Override
         @SuppressWarnings("unchecked")
         public <T extends AnySimpleType> T asMember(Class<T> memberType) {
             if (memberType != getClass()) {
@@ -161,6 +166,11 @@ public abstract class AnySimpleType {
         @Override
         public VariantTag variantTag() {
             return VariantTag.SHORT;
+        }
+
+        @Override
+        public String toString() {
+            return "AnySimpleType{short: " + aShort + "}";
         }
 
         @Override
@@ -222,6 +232,11 @@ public abstract class AnySimpleType {
         }
 
         @Override
+        public String toString() {
+            return "AnySimpleType{int: <*** REDACTED ***>}";
+        }
+
+        @Override
         @SuppressWarnings("unchecked")
         public <T extends AnySimpleType> T asMember(Class<T> memberType) {
             if (memberType != getClass()) {
@@ -277,6 +292,11 @@ public abstract class AnySimpleType {
         @Override
         public VariantTag variantTag() {
             return VariantTag.LONG;
+        }
+
+        @Override
+        public String toString() {
+            return "AnySimpleType{long: " + aLong + "}";
         }
 
         @Override
@@ -338,6 +358,11 @@ public abstract class AnySimpleType {
         }
 
         @Override
+        public String toString() {
+            return "AnySimpleType{bigInteger: " + bigInteger + "}";
+        }
+
+        @Override
         @SuppressWarnings("unchecked")
         public <T extends AnySimpleType> T asMember(Class<T> memberType) {
             if (memberType != getClass()) {
@@ -393,6 +418,11 @@ public abstract class AnySimpleType {
         @Override
         public VariantTag variantTag() {
             return VariantTag.FLOAT;
+        }
+
+        @Override
+        public String toString() {
+            return "AnySimpleType{float: " + aFloat + "}";
         }
 
         @Override
@@ -454,6 +484,11 @@ public abstract class AnySimpleType {
         }
 
         @Override
+        public String toString() {
+            return "AnySimpleType{double: " + aDouble + "}";
+        }
+
+        @Override
         @SuppressWarnings("unchecked")
         public <T extends AnySimpleType> T asMember(Class<T> memberType) {
             if (memberType != getClass()) {
@@ -509,6 +544,11 @@ public abstract class AnySimpleType {
         @Override
         public VariantTag variantTag() {
             return VariantTag.BIG_DECIMAL;
+        }
+
+        @Override
+        public String toString() {
+            return "AnySimpleType{bigDecimal: " + bigDecimal + "}";
         }
 
         @Override
@@ -570,6 +610,11 @@ public abstract class AnySimpleType {
         }
 
         @Override
+        public String toString() {
+            return "AnySimpleType{string: " + string + "}";
+        }
+
+        @Override
         @SuppressWarnings("unchecked")
         public <T extends AnySimpleType> T asMember(Class<T> memberType) {
             if (memberType != getClass()) {
@@ -625,6 +670,11 @@ public abstract class AnySimpleType {
         @Override
         public VariantTag variantTag() {
             return VariantTag.INSTANT;
+        }
+
+        @Override
+        public String toString() {
+            return "AnySimpleType{instant: " + instant + "}";
         }
 
         @Override

@@ -7,11 +7,13 @@ import static mx.sugus.braid.plugins.data.producers.StructureData.accessor;
 import java.util.List;
 import java.util.Objects;
 import javax.lang.model.element.Modifier;
+import mx.sugus.braid.core.SensitiveKnowledgeIndex;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.Annotation;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
+import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.ConstructorMethodSyntax;
 import mx.sugus.braid.jsyntax.FieldSyntax;
 import mx.sugus.braid.jsyntax.MemberValue;
@@ -88,6 +90,7 @@ public final class UnionVariantData implements DirectedClass {
         return List.of(accessor(state, member),
                        variantValue(state, member),
                        variantTag(state, member),
+                       toStringMethod(state),
                        asMember(state, className(state)),
                        equalsMethod(state),
                        hashCodeMethod(state));
@@ -119,6 +122,29 @@ public final class UnionVariantData implements DirectedClass {
                            .returns(UnionVariantTagEnumData.VARIANT_TAG_NAME)
                            .addStatement("return $T.$L", UnionVariantTagEnumData.VARIANT_TAG_NAME, unionVariant)
                            .build();
+    }
+
+    MethodSyntax toStringMethod(ShapeCodegenState state) {
+        var sensitiveIndex = SensitiveKnowledgeIndex.of(state.model());
+        if (sensitiveIndex.isSensitive(state.shape())) {
+            return CodegenUtils.toStringForSensitive();
+        }
+        var builder = CodegenUtils.toStringTemplate();
+        var toStringReturn = CodeBlock.builder();
+        String literalName = member.getMemberName() + ": ";
+
+        if (sensitiveIndex.isSensitive(member)) {
+            toStringReturn.addCode("return $S",
+                                   state.shape().getId().getName() + "{" +
+                                   literalName + "<*** REDACTED ***>}");
+        } else {
+            var name = Utils.toJavaName(state, member);
+            toStringReturn.addCode("return $S + $L + $S",
+                                   state.shape().getId().getName() + "{" +
+                                   literalName, name, "}");
+        }
+        builder.addStatement(toStringReturn.build());
+        return builder.build();
     }
 
     MethodSyntax equalsMethod(ShapeCodegenState state) {

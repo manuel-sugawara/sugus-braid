@@ -88,6 +88,11 @@ public abstract class SensitiveUnion {
         }
 
         @Override
+        public String toString() {
+            return "<*** REDACTED ***>";
+        }
+
+        @Override
         @SuppressWarnings("unchecked")
         public <T extends SensitiveUnion> T asMember(Class<T> memberType) {
             if (memberType != getClass()) {
@@ -139,6 +144,11 @@ public abstract class SensitiveUnion {
         @Override
         public VariantTag variantTag() {
             return VariantTag.INT_SECRET_MEMBER;
+        }
+
+        @Override
+        public String toString() {
+            return "<*** REDACTED ***>";
         }
 
         @Override

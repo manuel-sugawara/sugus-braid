@@ -96,6 +96,5 @@ public final class CodegenUtils {
                            .addAnnotation(Override.class)
                            .addModifier(Modifier.PUBLIC)
                            .returns(int.class);
-
     }
 }
