@@ -28,11 +28,6 @@ import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.traits.DocumentationTrait;
 
 public final class UnionVariantData implements DirectedClass {
-    private static final Annotation SUPPRESS_UNCHECKED =
-        Annotation.builder()
-                  .type(ClassName.from(SuppressWarnings.class))
-                  .putMember("value", MemberValue.forExpression("$S", "unchecked"))
-                  .build();
     private final MemberShape member;
 
     public UnionVariantData(MemberShape member) {
@@ -91,7 +86,6 @@ public final class UnionVariantData implements DirectedClass {
                        variantValue(state, member),
                        variantTag(state, member),
                        toStringMethod(state),
-                       asMember(state, className(state)),
                        equalsMethod(state),
                        hashCodeMethod(state));
     }
@@ -100,8 +94,8 @@ public final class UnionVariantData implements DirectedClass {
         var name = Utils.toJavaName(state, member);
         var type = Utils.toJavaTypeName(state, member);
         var builder = MethodSyntax.builder("variantValue")
-                                  .addAnnotation(Override.class)
-                                  .addAnnotation(SUPPRESS_UNCHECKED)
+                                  .addAnnotation(CodegenUtils.override())
+                                  .addAnnotation(CodegenUtils.suppressUnchecked())
                                   .addModifier(Modifier.PUBLIC)
                                   .addTypeParam("T")
                                   .returns(TypeVariableTypeName.from("T"));
@@ -117,7 +111,7 @@ public final class UnionVariantData implements DirectedClass {
     MethodSyntax variantTag(ShapeCodegenState state, MemberShape member) {
         var unionVariant = Utils.toSourceName(state, member, Name.Convention.SCREAM_CASE).toString();
         return MethodSyntax.builder("variantTag")
-                           .addAnnotation(Override.class)
+                           .addAnnotation(CodegenUtils.override())
                            .addModifier(Modifier.PUBLIC)
                            .returns(UnionVariantTagEnumData.VARIANT_TAG_NAME)
                            .addStatement("return $T.$L", UnionVariantTagEnumData.VARIANT_TAG_NAME, unionVariant)
@@ -210,28 +204,6 @@ public final class UnionVariantData implements DirectedClass {
         var name = Utils.toJavaName(state, member);
         var type = Utils.toJavaTypeName(state, member);
         return FieldSyntax.from(type, name.toString());
-    }
-
-    static MethodSyntax asMember(ShapeCodegenState state, ClassName baseClass) {
-        var type = TypeVariableTypeName.builder()
-                                       .name("T")
-                                       .addBound(baseClass)
-                                       .build();
-        var typeVariableName = TypeVariableTypeName.from("T");
-        var builder = MethodSyntax.builder("asMember")
-                                  .addModifier(Modifier.PUBLIC)
-                                  .addAnnotation(Override.class)
-                                  .addAnnotation(SUPPRESS_UNCHECKED)
-                                  .addTypeParam(type)
-                                  .returns(typeVariableName)
-                                  .addParameter(ParameterizedTypeName.from(Class.class, typeVariableName), "memberType");
-        builder.ifStatement("memberType != getClass()", then -> {
-            then.addStatement("throw new $T(\"Member of class: \" + getClass().getName() + \" cannot be casted to: \" + "
-                              + "memberType.getName())",
-                              ClassCastException.class);
-        });
-        builder.addStatement("return (T) this");
-        return builder.build();
     }
 
     public static Name memberVariantName(ShapeCodegenState state, MemberShape member) {

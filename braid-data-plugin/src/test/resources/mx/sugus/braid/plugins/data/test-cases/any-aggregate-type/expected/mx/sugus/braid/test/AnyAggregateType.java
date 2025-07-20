@@ -25,6 +25,19 @@ public abstract class AnyAggregateType {
     }
 
     /**
+     * Returns the specific member type.
+     * 
+     * @return The specific member type
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends AnyAggregateType> T asMember(Class<T> memberType) {
+        if (memberType != getClass()) {
+            throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+        }
+        return (T) this;
+    }
+
+    /**
      * Creates a new builder to create instances of this class.
      * 
      * @return A new builder to create instances of this class.
@@ -43,13 +56,6 @@ public abstract class AnyAggregateType {
     public abstract VariantTag variantTag();
 
     public abstract <T> T variantValue();
-
-    /**
-     * Returns the specific member type.
-     * 
-     * @return The specific member type
-     */
-    public abstract <T extends AnyAggregateType> T asMember(Class<T> memberType);
 
     public enum VariantTag {
         STRUCTURE("structure"),
@@ -107,15 +113,6 @@ public abstract class AnyAggregateType {
         }
 
         @Override
-        @SuppressWarnings("unchecked")
-        public <T extends AnyAggregateType> T asMember(Class<T> memberType) {
-            if (memberType != getClass()) {
-                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
-            }
-            return (T) this;
-        }
-
-        @Override
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -167,15 +164,6 @@ public abstract class AnyAggregateType {
         @Override
         public String toString() {
             return "AnyAggregateType{union: " + union + "}";
-        }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public <T extends AnyAggregateType> T asMember(Class<T> memberType) {
-            if (memberType != getClass()) {
-                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
-            }
-            return (T) this;
         }
 
         @Override
@@ -233,15 +221,6 @@ public abstract class AnyAggregateType {
         }
 
         @Override
-        @SuppressWarnings("unchecked")
-        public <T extends AnyAggregateType> T asMember(Class<T> memberType) {
-            if (memberType != getClass()) {
-                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
-            }
-            return (T) this;
-        }
-
-        @Override
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -296,15 +275,6 @@ public abstract class AnyAggregateType {
         }
 
         @Override
-        @SuppressWarnings("unchecked")
-        public <T extends AnyAggregateType> T asMember(Class<T> memberType) {
-            if (memberType != getClass()) {
-                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
-            }
-            return (T) this;
-        }
-
-        @Override
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -342,15 +312,6 @@ public abstract class AnyAggregateType {
         @SuppressWarnings("unchecked")
         public <T> T variantValue() {
             return (T) this.unknownVariantName;
-        }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public <T extends AnyAggregateType> T asMember(Class<T> memberType) {
-            if (memberType != getClass()) {
-                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
-            }
-            return (T) this;
         }
     }
 
@@ -476,31 +437,28 @@ public abstract class AnyAggregateType {
             return this;
         }
 
-        Object getValue() {
+        @SuppressWarnings("unchecked")
+        <T> T getValue() {
             switch (this.variantTag) {
-                case STRUCTURE:
-                    return structure().asPersistent();
-                case UNION:
-                    return this.variantValue;
                 case LIST:
-                    return list().asPersistent();
+                    return (T) list().asPersistent();
                 case MAP:
-                    return map().asPersistent();
+                    return (T) map().asPersistent();
                 default:
-                    return this.variantValue;
+                    return (T) this.variantValue;
             }
         }
 
         public AnyAggregateType build() {
             switch (this.variantTag) {
                 case STRUCTURE:
-                    return new StructureMember((AllSimpleTypes) getValue());
+                    return new StructureMember(getValue());
                 case UNION:
-                    return new UnionMember((AnySimpleType) getValue());
+                    return new UnionMember(getValue());
                 case LIST:
-                    return new ListMember((List<AllSimpleTypes>) getValue());
+                    return new ListMember(getValue());
                 case MAP:
-                    return new MapMember((Map<String, AnySimpleType>) getValue());
+                    return new MapMember(getValue());
                 default:
                     if (this.variantValue == null) {
                         throw new NullPointerException("no value set");

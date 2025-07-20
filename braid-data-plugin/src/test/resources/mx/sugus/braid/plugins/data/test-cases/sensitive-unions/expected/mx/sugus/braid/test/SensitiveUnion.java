@@ -17,6 +17,19 @@ public abstract class SensitiveUnion {
     }
 
     /**
+     * Returns the specific member type.
+     * 
+     * @return The specific member type
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends SensitiveUnion> T asMember(Class<T> memberType) {
+        if (memberType != getClass()) {
+            throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+        }
+        return (T) this;
+    }
+
+    /**
      * Creates a new builder to create instances of this class.
      * 
      * @return A new builder to create instances of this class.
@@ -35,13 +48,6 @@ public abstract class SensitiveUnion {
     public abstract VariantTag variantTag();
 
     public abstract <T> T variantValue();
-
-    /**
-     * Returns the specific member type.
-     * 
-     * @return The specific member type
-     */
-    public abstract <T extends SensitiveUnion> T asMember(Class<T> memberType);
 
     public enum VariantTag {
         STRING_SECRET_MEMBER("stringSecretMember"),
@@ -90,15 +96,6 @@ public abstract class SensitiveUnion {
         @Override
         public String toString() {
             return "<*** REDACTED ***>";
-        }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public <T extends SensitiveUnion> T asMember(Class<T> memberType) {
-            if (memberType != getClass()) {
-                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
-            }
-            return (T) this;
         }
 
         @Override
@@ -152,15 +149,6 @@ public abstract class SensitiveUnion {
         }
 
         @Override
-        @SuppressWarnings("unchecked")
-        public <T extends SensitiveUnion> T asMember(Class<T> memberType) {
-            if (memberType != getClass()) {
-                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
-            }
-            return (T) this;
-        }
-
-        @Override
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -199,15 +187,6 @@ public abstract class SensitiveUnion {
         public <T> T variantValue() {
             return (T) this.unknownVariantName;
         }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public <T extends SensitiveUnion> T asMember(Class<T> memberType) {
-            if (memberType != getClass()) {
-                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
-            }
-            return (T) this;
-        }
     }
 
     public static final class Builder {
@@ -242,16 +221,17 @@ public abstract class SensitiveUnion {
             return this;
         }
 
-        Object getValue() {
-            return this.variantValue;
+        @SuppressWarnings("unchecked")
+        <T> T getValue() {
+            return (T) this.variantValue;
         }
 
         public SensitiveUnion build() {
             switch (this.variantTag) {
                 case STRING_SECRET_MEMBER:
-                    return new StringSecretMemberMember((String) getValue());
+                    return new StringSecretMemberMember(getValue());
                 case INT_SECRET_MEMBER:
-                    return new IntSecretMemberMember((int) getValue());
+                    return new IntSecretMemberMember(getValue());
                 default:
                     if (this.variantValue == null) {
                         throw new NullPointerException("no value set");

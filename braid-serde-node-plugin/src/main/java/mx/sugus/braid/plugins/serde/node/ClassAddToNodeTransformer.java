@@ -1,7 +1,5 @@
 package mx.sugus.braid.plugins.serde.node;
 
-import static mx.sugus.braid.plugins.data.producers.UnionVariantData.memberVariantName;
-
 import java.util.Map;
 import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.plugin.Identifier;
@@ -14,6 +12,7 @@ import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.plugins.data.TypeSyntaxResult;
+import mx.sugus.braid.plugins.data.producers.CodegenUtils;
 import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
 import mx.sugus.braid.plugins.data.producers.Utils;
 import mx.sugus.braid.traits.ConstTrait;
@@ -58,7 +57,7 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
         var javadoc = "Converts this instance to Node.";
         var builder = MethodSyntax.builder("toNode")
                                   .javadoc(JavadocExt.document(javadoc))
-                                  .addAnnotation(Override.class)
+                                  .addAnnotation(CodegenUtils.override())
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(Node.class);
         var body = new BodyBuilder();

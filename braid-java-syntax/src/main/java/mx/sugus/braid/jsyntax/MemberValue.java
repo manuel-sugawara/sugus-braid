@@ -24,6 +24,19 @@ public abstract class MemberValue {
     }
 
     /**
+     * Returns the specific member type.
+     * 
+     * @return The specific member type
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends MemberValue> T asMember(Class<T> memberType) {
+        if (memberType != getClass()) {
+            throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+        }
+        return (T) this;
+    }
+
+    /**
      * Creates a new builder to create instances of this class.
      * 
      * @return A new builder to create instances of this class.
@@ -63,13 +76,6 @@ public abstract class MemberValue {
     public abstract VariantTag variantTag();
 
     public abstract <T> T variantValue();
-
-    /**
-     * Returns the specific member type.
-     * 
-     * @return The specific member type
-     */
-    public abstract <T extends MemberValue> T asMember(Class<T> memberType);
 
     public enum VariantTag {
         EXPRESSION("expression"),
@@ -124,15 +130,6 @@ public abstract class MemberValue {
         @Override
         public String toString() {
             return "MemberValue{expression: " + expression + "}";
-        }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public <T extends MemberValue> T asMember(Class<T> memberType) {
-            if (memberType != getClass()) {
-                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
-            }
-            return (T) this;
         }
 
         @Override
@@ -192,15 +189,6 @@ public abstract class MemberValue {
         }
 
         @Override
-        @SuppressWarnings("unchecked")
-        public <T extends MemberValue> T asMember(Class<T> memberType) {
-            if (memberType != getClass()) {
-                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
-            }
-            return (T) this;
-        }
-
-        @Override
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -238,15 +226,6 @@ public abstract class MemberValue {
         @SuppressWarnings("unchecked")
         public <T> T variantValue() {
             return (T) this.unknownVariantName;
-        }
-
-        @Override
-        @SuppressWarnings("unchecked")
-        public <T extends MemberValue> T asMember(Class<T> memberType) {
-            if (memberType != getClass()) {
-                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
-            }
-            return (T) this;
         }
     }
 
@@ -314,23 +293,22 @@ public abstract class MemberValue {
             return this;
         }
 
-        Object getValue() {
+        @SuppressWarnings("unchecked")
+        <T> T getValue() {
             switch (this.variantTag) {
-                case EXPRESSION:
-                    return this.variantValue;
                 case ARRAY_EXPRESSION:
-                    return arrayExpression().asPersistent();
+                    return (T) arrayExpression().asPersistent();
                 default:
-                    return this.variantValue;
+                    return (T) this.variantValue;
             }
         }
 
         public MemberValue build() {
             switch (this.variantTag) {
                 case EXPRESSION:
-                    return new ExpressionMember((Expression) getValue());
+                    return new ExpressionMember(getValue());
                 case ARRAY_EXPRESSION:
-                    return new ArrayExpressionMember((List<Expression>) getValue());
+                    return new ArrayExpressionMember(getValue());
                 default:
                     if (this.variantValue == null) {
                         throw new NullPointerException("no value set");

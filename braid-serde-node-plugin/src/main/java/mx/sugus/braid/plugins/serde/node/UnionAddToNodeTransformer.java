@@ -16,6 +16,7 @@ import mx.sugus.braid.jsyntax.TypeSyntax;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.plugins.data.TypeSyntaxResult;
+import mx.sugus.braid.plugins.data.producers.CodegenUtils;
 import mx.sugus.braid.plugins.data.producers.UnionJavaProducer;
 import mx.sugus.braid.plugins.data.producers.Utils;
 import software.amazon.smithy.model.node.Node;
@@ -79,7 +80,7 @@ public final class UnionAddToNodeTransformer implements ShapeTaskTransformer<Typ
         var javadoc = "Converts this instance to Node.";
         var toNode = MethodSyntax.builder("toNode")
                                  .javadoc(JavadocExt.document(javadoc))
-                                 .addAnnotation(Override.class)
+                                 .addAnnotation(CodegenUtils.override())
                                  .addModifier(Modifier.PUBLIC)
                                  .returns(Node.class)
                                  .addStatement("throw new $T($S)",
@@ -96,7 +97,7 @@ public final class UnionAddToNodeTransformer implements ShapeTaskTransformer<Typ
         var javadoc = "Converts this instance to Node.";
         var builder = MethodSyntax.builder("toNode")
                                   .javadoc(JavadocExt.document(javadoc))
-                                  .addAnnotation(Override.class)
+                                  .addAnnotation(CodegenUtils.override())
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(Node.class);
         var body = new BodyBuilder();
