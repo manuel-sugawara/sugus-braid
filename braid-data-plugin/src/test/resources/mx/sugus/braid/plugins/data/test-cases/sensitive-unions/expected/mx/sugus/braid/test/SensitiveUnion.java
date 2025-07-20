@@ -41,7 +41,7 @@ public abstract class SensitiveUnion {
     /**
      * Returns the enum value representing which member of this object is populated.
      * <p>
-     * This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.
+     * This will be {@link VariantTag#UNKNOWN_TO_VERSION} if no member is set.
      * 
      * @return The enum value representing which member of this object is populated
      */
