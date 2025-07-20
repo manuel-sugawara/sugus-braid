@@ -5,7 +5,9 @@ import java.util.List;
 import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.util.Lazy;
+import mx.sugus.braid.jsyntax.Annotation;
 import mx.sugus.braid.jsyntax.ClassName;
+import mx.sugus.braid.jsyntax.MemberValue;
 import mx.sugus.braid.jsyntax.MethodSyntax;
 import mx.sugus.braid.jsyntax.Parameter;
 import mx.sugus.braid.traits.Argument;
@@ -21,6 +23,11 @@ public final class CodegenUtils {
             .addStatement("return $S", "<*** REDACTED ***>")
             .build()
     );
+    static final Lazy<Annotation> SUPPRESS_UNCHECKED = new Lazy<>(
+        () -> Annotation.fromStringValue(SuppressWarnings.class, "unchecked"));
+
+    static final Lazy<Annotation> OVERRIDE = new Lazy<>(
+        () -> Annotation.builder(Override.class).build());
 
     public static ClassName builderType() {
         return BUILDER_TYPE;
@@ -74,14 +81,14 @@ public final class CodegenUtils {
 
     public static MethodSyntax.Builder toStringTemplate() {
         return MethodSyntax.builder("toString")
-                           .addAnnotation(Override.class)
+                           .addAnnotation(override())
                            .addModifier(Modifier.PUBLIC)
                            .returns(String.class);
     }
 
     public static MethodSyntax.Builder equalsTemplate() {
         var builder = MethodSyntax.builder("equals")
-                                  .addAnnotation(Override.class)
+                                  .addAnnotation(override())
                                   .addModifier(Modifier.PUBLIC)
                                   .returns(boolean.class)
                                   .addParameter(Object.class, "other");
@@ -93,8 +100,16 @@ public final class CodegenUtils {
 
     public static MethodSyntax.Builder hashCodeTemplate() {
         return MethodSyntax.builder("hashCode")
-                           .addAnnotation(Override.class)
+                           .addAnnotation(override())
                            .addModifier(Modifier.PUBLIC)
                            .returns(int.class);
+    }
+
+    public static Annotation suppressUnchecked() {
+        return SUPPRESS_UNCHECKED.get();
+    }
+
+    public static Annotation override() {
+        return OVERRIDE.get();
     }
 }

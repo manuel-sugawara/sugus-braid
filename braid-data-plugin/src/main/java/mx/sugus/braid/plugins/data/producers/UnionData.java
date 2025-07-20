@@ -27,13 +27,12 @@ import software.amazon.smithy.model.shapes.MemberShape;
 import software.amazon.smithy.model.traits.DocumentationTrait;
 
 public final class UnionData implements DirectedClass {
-    static Annotation SUPPRESS_UNCHECKED = Annotation.fromStringValue(SuppressWarnings.class, "unchecked");
 
     @Override
     public ClassSyntax.Builder typeSpec(ShapeCodegenState state) {
         var builder = ClassSyntax.builder(state.symbol().getName())
                                  .addAnnotation(Utils.generatedBy(DataPlugin.ID))
-                                 .addAnnotation(SUPPRESS_UNCHECKED)
+                                 .addAnnotation(CodegenUtils.suppressUnchecked())
                                  .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT);
         var shape = state.shape();
         shape.getTrait(DocumentationTrait.class)
@@ -66,18 +65,19 @@ public final class UnionData implements DirectedClass {
     public List<MethodSyntax> extraMethods(ShapeCodegenState state) {
         var result = new ArrayList<MethodSyntax>();
         result.add(toBuilderMethod(state));
+        result.add(asMember(state));
         result.addAll(builderMethods(state));
         return result;
     }
 
     @Override
     public List<AbstractMethodSyntax> extraAbstractMethods(ShapeCodegenState state) {
-        return List.of(accessorForTag(), accessorForValue(), asMember(state));
+        return List.of(accessorForTag(), accessorForValue());
     }
 
     private AbstractMethodSyntax accessorForTag() {
         var body = "Returns the enum value representing which member of this object is populated.\n\n"
-                   + "This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.";
+                   + "This will be {@link VariantTag#UNKNOWN_TO_VERSION} if no member is set.";
         var doc = Javadoc.builder()
                          .body(body)
                          .returns("The enum value representing which member of this object is populated")
@@ -97,24 +97,31 @@ public final class UnionData implements DirectedClass {
                                    .build();
     }
 
-    private AbstractMethodSyntax asMember(ShapeCodegenState state) {
+    private MethodSyntax asMember(ShapeCodegenState state) {
         var body = "Returns the specific member type.";
         var doc = Javadoc.builder()
                          .body(body)
                          .returns("The specific member type")
                          .build();
         var type = TypeVariableTypeName.builder()
-                                        .name("T")
-                                        .addBound(className(state))
-                                        .build();
+                                       .name("T")
+                                       .addBound(className(state))
+                                       .build();
         var typeVariableName = TypeVariableTypeName.from("T");
-        return AbstractMethodSyntax.builder("asMember")
-                                   .javadoc(doc)
-                                   .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
-                                   .addTypeParam(type)
-                                   .returns(typeVariableName)
-                                   .addParameter(ParameterizedTypeName.from(Class.class, typeVariableName), "memberType")
-                                   .build();
+        var builder = MethodSyntax.builder("asMember")
+                                  .javadoc(doc)
+                                  .addAnnotation(CodegenUtils.suppressUnchecked())
+                                  .addModifier(Modifier.PUBLIC)
+                                  .addTypeParam(type)
+                                  .returns(typeVariableName)
+                                  .addParameter(ParameterizedTypeName.from(Class.class, typeVariableName), "memberType");
+        builder.ifStatement("memberType != getClass()", then -> {
+            then.addStatement("throw new $T(\"Member of class: \" + getClass().getName() + \" cannot be casted to: \" + "
+                              + "memberType.getName())",
+                              ClassCastException.class);
+        });
+        builder.addStatement("return (T) this");
+        return builder.build();
     }
 
     public MethodSyntax toBuilderMethod(ShapeCodegenState state) {
@@ -178,9 +185,7 @@ public final class UnionData implements DirectedClass {
 
         @Override
         public List<MethodSyntax> extraMethods(ShapeCodegenState state) {
-            var superClass = (ClassName) Utils.toJavaTypeName(state, state.shape());
-            return List.of(variantTag(state), variantValue(state),
-                           UnionVariantData.asMember(state, superClass));
+            return List.of(variantTag(state), variantValue(state));
         }
 
         @Override
@@ -201,7 +206,7 @@ public final class UnionData implements DirectedClass {
 
         MethodSyntax variantTag(ShapeCodegenState state) {
             return MethodSyntax.builder("variantTag")
-                               .addAnnotation(Override.class)
+                               .addAnnotation(CodegenUtils.override())
                                .addModifier(Modifier.PUBLIC)
                                .returns(UnionVariantTagEnumData.VARIANT_TAG_NAME)
                                .addStatement("return $T.UNKNOWN_TO_VERSION", UnionVariantTagEnumData.VARIANT_TAG_NAME)
@@ -210,11 +215,8 @@ public final class UnionData implements DirectedClass {
 
         MethodSyntax variantValue(ShapeCodegenState state) {
             return MethodSyntax.builder("variantValue")
-                               .addAnnotation(Override.class)
-                               .addAnnotation(Annotation.builder()
-                                                        .type(ClassName.from(SuppressWarnings.class))
-                                                        .putMember("value", MemberValue.forExpression("$S", "unchecked"))
-                                                        .build())
+                               .addAnnotation(CodegenUtils.override())
+                               .addAnnotation(CodegenUtils.suppressUnchecked())
                                .addModifier(Modifier.PUBLIC)
                                .addTypeParam("T")
                                .returns(TypeVariableTypeName.from("T"))

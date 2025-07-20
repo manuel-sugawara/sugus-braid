@@ -57,7 +57,7 @@ public final class UnionVariantTagEnumData implements DirectedEnum {
 
     MethodSyntax toStringMethod(ShapeCodegenState state) {
         return MethodSyntax.builder("toString")
-                           .addAnnotation(Override.class)
+                           .addAnnotation(CodegenUtils.override())
                            .addModifier(Modifier.PUBLIC)
                            .returns(String.class)
                            .addStatement("return value")
