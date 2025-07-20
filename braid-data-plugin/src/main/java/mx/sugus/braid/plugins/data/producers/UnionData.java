@@ -19,6 +19,7 @@ import mx.sugus.braid.jsyntax.FieldSyntax;
 import mx.sugus.braid.jsyntax.Javadoc;
 import mx.sugus.braid.jsyntax.MemberValue;
 import mx.sugus.braid.jsyntax.MethodSyntax;
+import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeVariableTypeName;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.plugins.data.DataPlugin;
@@ -57,20 +58,6 @@ public final class UnionData implements DirectedClass {
         return List.of();
     }
 
-    public ConstructorMethodSyntax constructorFromBuilder(ShapeCodegenState state) {
-        return ConstructorMethodSyntax.builder()
-                                      .addModifier(Modifier.PRIVATE)
-                                      .addParameter(builderJavaClassName(), "builder")
-                                      .addStatement("this.variantValue = builder.getValue()")
-                                      .addStatement("this.variantTag = builder.variantTag")
-                                      .build();
-    }
-
-    @Override
-    public List<MethodSyntax> methodsFor(ShapeCodegenState state, MemberShape member) {
-        return List.of();
-    }
-
     ClassName builderJavaClassName() {
         return BUILDER_TYPE;
     }
@@ -85,7 +72,7 @@ public final class UnionData implements DirectedClass {
 
     @Override
     public List<AbstractMethodSyntax> extraAbstractMethods(ShapeCodegenState state) {
-        return List.of(accessorForTag(), accessorForValue());
+        return List.of(accessorForTag(), accessorForValue(), asMember(state));
     }
 
     private AbstractMethodSyntax accessorForTag() {
@@ -107,6 +94,26 @@ public final class UnionData implements DirectedClass {
                                    .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                                    .addTypeParam("T")
                                    .returns(TypeVariableTypeName.from("T"))
+                                   .build();
+    }
+
+    private AbstractMethodSyntax asMember(ShapeCodegenState state) {
+        var body = "Returns the specific member type.";
+        var doc = Javadoc.builder()
+                         .body(body)
+                         .returns("The specific member type")
+                         .build();
+        var type = TypeVariableTypeName.builder()
+                                        .name("T")
+                                        .addBound(className(state))
+                                        .build();
+        var typeVariableName = TypeVariableTypeName.from("T");
+        return AbstractMethodSyntax.builder("asMember")
+                                   .javadoc(doc)
+                                   .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                                   .addTypeParam(type)
+                                   .returns(typeVariableName)
+                                   .addParameter(ParameterizedTypeName.from(Class.class, typeVariableName), "memberType")
                                    .build();
     }
 
@@ -171,7 +178,9 @@ public final class UnionData implements DirectedClass {
 
         @Override
         public List<MethodSyntax> extraMethods(ShapeCodegenState state) {
-            return List.of(variantTag(state), variantValue(state));
+            var superClass = (ClassName) Utils.toJavaTypeName(state, state.shape());
+            return List.of(variantTag(state), variantValue(state),
+                           UnionVariantData.asMember(state, superClass));
         }
 
         @Override
