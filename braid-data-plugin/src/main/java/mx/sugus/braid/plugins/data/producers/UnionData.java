@@ -77,7 +77,7 @@ public final class UnionData implements DirectedClass {
 
     private AbstractMethodSyntax accessorForTag() {
         var body = "Returns the enum value representing which member of this object is populated.\n\n"
-                   + "This will be {@link Type#UNKNOWN_TO_VERSION} if no members are set.";
+                   + "This will be {@link VariantTag#UNKNOWN_TO_VERSION} if no member is set.";
         var doc = Javadoc.builder()
                          .body(body)
                          .returns("The enum value representing which member of this object is populated")

@@ -58,8 +58,7 @@ public final class UnionDataBuilder implements DirectedClass {
 
     @Override
     public List<MethodSyntax> extraMethods(ShapeCodegenState state) {
-        return
-            List.of(getValueMethod(state), buildMethod(state));
+        return List.of(getValueMethod(state), buildMethod(state));
     }
 
     private MethodSyntax getValueMethod(ShapeCodegenState state) {
