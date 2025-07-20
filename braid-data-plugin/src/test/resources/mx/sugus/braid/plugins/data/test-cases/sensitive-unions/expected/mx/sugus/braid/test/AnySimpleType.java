@@ -42,6 +42,13 @@ public abstract class AnySimpleType {
 
     public abstract <T> T variantValue();
 
+    /**
+     * Returns the specific member type.
+     * 
+     * @return The specific member type
+     */
+    public abstract <T extends AnySimpleType> T asMember(Class<T> memberType);
+
     public enum VariantTag {
         BYTE("byte"),
         SHORT("short"),
@@ -99,6 +106,20 @@ public abstract class AnySimpleType {
         }
 
         @Override
+        public String toString() {
+            return "AnySimpleType{byte: " + aByte + "}";
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnySimpleType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
+        }
+
+        @Override
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -145,6 +166,20 @@ public abstract class AnySimpleType {
         @Override
         public VariantTag variantTag() {
             return VariantTag.SHORT;
+        }
+
+        @Override
+        public String toString() {
+            return "AnySimpleType{short: " + aShort + "}";
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnySimpleType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
         }
 
         @Override
@@ -197,6 +232,20 @@ public abstract class AnySimpleType {
         }
 
         @Override
+        public String toString() {
+            return "AnySimpleType{int: <*** REDACTED ***>}";
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnySimpleType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
+        }
+
+        @Override
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -243,6 +292,20 @@ public abstract class AnySimpleType {
         @Override
         public VariantTag variantTag() {
             return VariantTag.LONG;
+        }
+
+        @Override
+        public String toString() {
+            return "AnySimpleType{long: " + aLong + "}";
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnySimpleType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
         }
 
         @Override
@@ -295,6 +358,20 @@ public abstract class AnySimpleType {
         }
 
         @Override
+        public String toString() {
+            return "AnySimpleType{bigInteger: " + bigInteger + "}";
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnySimpleType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
+        }
+
+        @Override
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -341,6 +418,20 @@ public abstract class AnySimpleType {
         @Override
         public VariantTag variantTag() {
             return VariantTag.FLOAT;
+        }
+
+        @Override
+        public String toString() {
+            return "AnySimpleType{float: " + aFloat + "}";
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnySimpleType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
         }
 
         @Override
@@ -393,6 +484,20 @@ public abstract class AnySimpleType {
         }
 
         @Override
+        public String toString() {
+            return "AnySimpleType{double: " + aDouble + "}";
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnySimpleType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
+        }
+
+        @Override
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -439,6 +544,20 @@ public abstract class AnySimpleType {
         @Override
         public VariantTag variantTag() {
             return VariantTag.BIG_DECIMAL;
+        }
+
+        @Override
+        public String toString() {
+            return "AnySimpleType{bigDecimal: " + bigDecimal + "}";
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnySimpleType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
         }
 
         @Override
@@ -491,6 +610,20 @@ public abstract class AnySimpleType {
         }
 
         @Override
+        public String toString() {
+            return "AnySimpleType{string: " + string + "}";
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnySimpleType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
+        }
+
+        @Override
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -540,6 +673,20 @@ public abstract class AnySimpleType {
         }
 
         @Override
+        public String toString() {
+            return "AnySimpleType{instant: " + instant + "}";
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnySimpleType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
+        }
+
+        @Override
         public boolean equals(Object other) {
             if (this == other) {
                 return true;
@@ -577,6 +724,15 @@ public abstract class AnySimpleType {
         @SuppressWarnings("unchecked")
         public <T> T variantValue() {
             return (T) this.unknownVariantName;
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public <T extends AnySimpleType> T asMember(Class<T> memberType) {
+            if (memberType != getClass()) {
+                throw new ClassCastException("Member of class: " + getClass().getName() + " cannot be casted to: " + memberType.getName());
+            }
+            return (T) this;
         }
     }
 

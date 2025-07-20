@@ -309,10 +309,7 @@ public final class StructureData implements DirectedClass {
         if (sensitiveIndex.isSensitive(state.shape())) {
             return CodegenUtils.toStringForSensitive();
         }
-        var builder = MethodSyntax.builder("toString")
-                                  .addAnnotation(Override.class)
-                                  .addModifier(Modifier.PUBLIC)
-                                  .returns(String.class);
+        var builder = CodegenUtils.toStringTemplate();
         var isFirst = true;
         var toStringReturn = CodeBlock.builder();
         toStringReturn.addCode("return $S", state.shape().getId().getName() + "{");
