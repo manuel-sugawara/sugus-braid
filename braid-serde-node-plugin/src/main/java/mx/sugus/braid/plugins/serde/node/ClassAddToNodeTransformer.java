@@ -138,8 +138,9 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
 
     private static String addNestedListMember(ShapeCodegenState state, ListShape listShape, String source, int depth,
                                               BodyBuilder body) {
-        var innerBuilderName = "innerBuilder" + (depth == 0 ? "" : Integer.toString(depth));
-        var innerItemName = "innerItem" + (depth == 0 ? "" : Integer.toString(depth));
+        var suffix = depth == 0 ? "" : Integer.toString(depth);
+        var innerBuilderName = "innerBuilder" + suffix;
+        var innerItemName = "innerItem" + suffix;
         var target = state.model().expectShape(listShape.getMember().getTarget());
         var targetType = Utils.toJavaTypeName(state, target);
         var aggregateType = Utils.aggregateType(state, target);
@@ -202,8 +203,9 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
 
     private static String addNestedMapMember(ShapeCodegenState state, MapShape mapShape, String source, int depth,
                                              BodyBuilder body) {
-        var innerBuilderName = "innerBuilder" + (depth == 0 ? "" : Integer.toString(depth));
-        var innerKvpName = "innerKvp" + (depth == 0 ? "" : Integer.toString(depth));
+        var suffix = depth == 0 ? "" : Integer.toString(depth);
+        var innerBuilderName = "innerBuilder" + suffix;;
+        var innerKvpName = "innerKvp" + suffix;;
         var target = state.model().expectShape(mapShape.getValue().getTarget());
         var targetType = Utils.toJavaTypeName(state, target);
         var aggregateType = Utils.aggregateType(state, target);
@@ -232,8 +234,15 @@ public final class ClassAddToNodeTransformer implements ShapeTaskTransformer<Typ
     static void addSimpleMember(ShapeCodegenState state, MemberShape member, BodyBuilder body) {
         var target = state.model().expectShape(member.getTarget());
         var getterName = Utils.toGetterName(state, member) + "()";
-        body.addStatement("builder.withMember($S, $C)",
-                          member.getMemberName(), valueToNode(getterName, state, target));
+        if (isNotNullable(state, member)) {
+            body.addStatement("builder.withMember($S, $C)",
+                    member.getMemberName(), valueToNode(getterName, state, target));
+        } else {
+            var memberName = Utils.toJavaName(state, member);
+            body.ifStatement("$L != null", memberName, then ->
+                    then.addStatement("builder.withMember($S, $C)",
+                            member.getMemberName(), valueToNode(getterName, state, target)));
+        }
     }
 
     private static CodeBlock valueToNode(String source, ShapeCodegenState state, Shape target) {

@@ -281,7 +281,9 @@ public final class Parent implements ToNode {
     @Override
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
-        builder.withMember("stringMember", Node.from(stringMember()));
+        if (stringMember != null) {
+            builder.withMember("stringMember", Node.from(stringMember()));
+        }
         if (!this.children.isEmpty()) {
             ObjectNode.Builder childrenBuilder = ObjectNode.builder();
             for (Map.Entry<String, Child> kvp : children().entrySet()) {
