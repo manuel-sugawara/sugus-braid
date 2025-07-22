@@ -82,7 +82,9 @@ public final class ChildFoo implements SyntaxNodeChild, SyntaxNode, ToNode {
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
         builder.withMember("kind", Node.from(kind().toString()));
-        builder.withMember("foo", Node.from(foo()));
+        if (foo != null) {
+            builder.withMember("foo", Node.from(foo()));
+        }
         return builder.build();
     }
 
