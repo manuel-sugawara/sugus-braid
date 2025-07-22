@@ -1,5 +1,6 @@
 package mx.sugus.braid.core.util;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 /**
@@ -13,7 +14,7 @@ public final class Lazy<T> {
     private volatile T value;
 
     public Lazy(Supplier<T> initializer) {
-        this.initializer = initializer;
+        this.initializer = Objects.requireNonNull(initializer, "initializer");
     }
 
     /**
@@ -32,6 +33,6 @@ public final class Lazy<T> {
                 }
             }
         }
-        return value;
+        return result;
     }
 }
