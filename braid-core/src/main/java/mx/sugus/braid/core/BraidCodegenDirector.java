@@ -15,7 +15,7 @@ import software.amazon.smithy.model.shapes.Shape;
 public final class BraidCodegenDirector {
     private static final Logger LOG = Logger.getLogger(BraidCodegenDirector.class.getName());
     private final FileManifest fileManifest;
-    private final BrideCodegenSettings settings;
+    private final BraidCodegenSettings settings;
     private final CodegenModule module;
     private final SymbolProvider symbolProvider;
     private final Model model;
@@ -74,9 +74,9 @@ public final class BraidCodegenDirector {
     public static class Builder {
         private Model model;
         private FileManifest fileManifest;
-        private BrideCodegenSettings settings;
+        private BraidCodegenSettings settings;
         private SymbolProvider symbolProvider;
-        private BiFunction<Model, BrideCodegenSettings, SymbolProvider> symbolProviderFactory;
+        private BiFunction<Model, BraidCodegenSettings, SymbolProvider> symbolProviderFactory;
         private CodegenModule module;
 
         public Builder model(Model model) {
@@ -89,7 +89,7 @@ public final class BraidCodegenDirector {
             return this;
         }
 
-        public Builder settings(BrideCodegenSettings settings) {
+        public Builder settings(BraidCodegenSettings settings) {
             this.settings = settings;
             return this;
         }
@@ -104,7 +104,7 @@ public final class BraidCodegenDirector {
             return this;
         }
 
-        public Builder symbolProviderFactory(BiFunction<Model, BrideCodegenSettings, SymbolProvider> symbolProviderFactory) {
+        public Builder symbolProviderFactory(BiFunction<Model, BraidCodegenSettings, SymbolProvider> symbolProviderFactory) {
             this.symbolProviderFactory = symbolProviderFactory;
             return this;
         }
