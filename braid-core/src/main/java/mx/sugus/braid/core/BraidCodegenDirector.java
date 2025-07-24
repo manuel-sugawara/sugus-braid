@@ -12,6 +12,24 @@ import software.amazon.smithy.codegen.core.SymbolProvider;
 import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.shapes.Shape;
 
+/**
+ * The Braid code generation director orchestrates the entire code generation process.
+ * 
+ * <p>The director manages the complete workflow for transforming Smithy models into Java code:
+ * <ol>
+ *   <li><strong>Model Preparation:</strong> Applies early and standard model transformations</li>
+ *   <li><strong>Symbol Provider Setup:</strong> Creates and decorates symbol providers for type mapping</li>
+ *   <li><strong>Shape Selection:</strong> Determines which shapes to process for code generation</li>
+ *   <li><strong>Shape Code Generation:</strong> Processes each selected shape through the pipeline</li>
+ *   <li><strong>Non-Shape Code Generation:</strong> Generates additional artifacts not tied to specific shapes</li>
+ * </ol>
+ * 
+ * <p>The director is immutable after construction and is built using the {@link Builder} pattern.
+ * All model transformations and symbol provider decorations are applied during the build phase,
+ * ensuring the director is ready for immediate execution.
+ * 
+ * <p>Thread Safety: This class is thread-safe as it is immutable after construction.
+ */
 public final class BraidCodegenDirector {
     private static final Logger LOG = Logger.getLogger(BraidCodegenDirector.class.getName());
     private final FileManifest fileManifest;
@@ -28,16 +46,35 @@ public final class BraidCodegenDirector {
         this.module = Objects.requireNonNull(builder.module, "module");
     }
 
+    /**
+     * Executes the complete code generation process.
+     * 
+     * <p>This method orchestrates the generation workflow by:
+     * <ol>
+     *   <li>Selecting shapes to process using the configured shape selector</li>
+     *   <li>Generating code for each selected shape through the producer-transformer-consumer pipeline</li>
+     *   <li>Generating additional non-shape artifacts</li>
+     * </ol>
+     * 
+     * <p>All model transformations and symbol provider decorations have already been applied
+     * during the director's construction, so this method focuses solely on code generation.
+     */
     public void execute() {
-        var sortedShapes = selectedShapes();
-        LOG.fine("Beginning shape codegen");
-        for (var shape : sortedShapes) {
-            var javaShapeState = stateForShape(shape);
-            module.generateShape(javaShapeState);
+        try {
+            var sortedShapes = selectedShapes();
+            LOG.fine(() -> String.format("Beginning shape codegen for %d shapes", sortedShapes.size()));
+            for (var shape : sortedShapes) {
+                var javaShapeState = stateForShape(shape);
+                module.generateShape(javaShapeState);
+            }
+            LOG.fine("Beginning non-shape codegen");
+            var nonShapeState = stateFor();
+            module.generateNonShape(nonShapeState);
+            LOG.fine("Code generation completed successfully");
+        } catch (Exception e) {
+            LOG.severe(() -> String.format("Code generation failed: %s", e.getMessage()));
+            throw new RuntimeException("Code generation failed", e);
         }
-        LOG.fine("Beginning non-shape codegen");
-        var nonShapeState = stateFor();
-        module.generateNonShape(nonShapeState);
     }
 
     private Collection<Shape> selectedShapes() {
@@ -67,6 +104,11 @@ public final class BraidCodegenDirector {
             .build();
     }
 
+    /**
+     * Creates a new builder for constructing a {@link BraidCodegenDirector}.
+     * 
+     * @return A new builder instance
+     */
     public static Builder builder() {
         return new Builder();
     }
@@ -80,32 +122,32 @@ public final class BraidCodegenDirector {
         private CodegenModule module;
 
         public Builder model(Model model) {
-            this.model = model;
+            this.model = Objects.requireNonNull(model, "model");
             return this;
         }
 
         public Builder fileManifest(FileManifest fileManifest) {
-            this.fileManifest = fileManifest;
+            this.fileManifest = Objects.requireNonNull(fileManifest, "fileManifest");
             return this;
         }
 
         public Builder settings(BraidCodegenSettings settings) {
-            this.settings = settings;
+            this.settings = Objects.requireNonNull(settings, "settings");
             return this;
         }
 
         public Builder symbolProvider(SymbolProvider symbolProvider) {
-            this.symbolProvider = symbolProvider;
+            this.symbolProvider = Objects.requireNonNull(symbolProvider, "symbolProvider");
             return this;
         }
 
         public Builder module(CodegenModule module) {
-            this.module = module;
+            this.module = Objects.requireNonNull(module, "module");
             return this;
         }
 
         public Builder symbolProviderFactory(BiFunction<Model, BraidCodegenSettings, SymbolProvider> symbolProviderFactory) {
-            this.symbolProviderFactory = symbolProviderFactory;
+            this.symbolProviderFactory = Objects.requireNonNull(symbolProviderFactory, "symbolProviderFactory");
             return this;
         }
 
@@ -114,7 +156,15 @@ public final class BraidCodegenDirector {
             Objects.requireNonNull(model, "model");
             Objects.requireNonNull(module, "module");
             Objects.requireNonNull(fileManifest, "fileManifest");
-            Objects.requireNonNull(symbolProviderFactory, "symbolProviderFactory");
+            
+            // Validate symbol provider configuration
+            if (symbolProvider != null && symbolProviderFactory != null) {
+                throw new IllegalStateException("Cannot specify both symbolProvider and symbolProviderFactory");
+            }
+            if (symbolProvider == null && symbolProviderFactory == null) {
+                throw new IllegalStateException("Must specify either symbolProvider or symbolProviderFactory");
+            }
+            
             // We prepare here such that afterward the director can be fully
             // immutable.
             prepare();
@@ -122,15 +172,27 @@ public final class BraidCodegenDirector {
         }
 
         private void prepare() {
-            LOG.fine("Running module configured model early processors");
-            var newModel = module.earlyPreprocessModel(model);
-            LOG.fine("Running module configured model processors");
-            newModel = module.preprocessModel(newModel);
-            this.model = newModel;
-            LOG.fine("Running symbol provider decorators");
-            var sourceSymbolProvider = symbolProviderFactory.apply(model, settings);
-            // For small models using the cache does not seem to add any measurable value.
-            this.symbolProvider = SymbolProvider.cache(module.decorateSymbolProvider(this.model, sourceSymbolProvider));
+            try {
+                LOG.fine("Running module configured model early processors");
+                var newModel = module.earlyPreprocessModel(model);
+                LOG.fine("Running module configured model processors");
+                newModel = module.preprocessModel(newModel);
+                this.model = newModel;
+                
+                LOG.fine("Running symbol provider decorators");
+                SymbolProvider sourceSymbolProvider;
+                if (symbolProviderFactory != null) {
+                    sourceSymbolProvider = symbolProviderFactory.apply(model, settings);
+                } else {
+                    sourceSymbolProvider = symbolProvider;
+                }
+                // For small models using the cache does not seem to add any measurable value.
+                this.symbolProvider = SymbolProvider.cache(module.decorateSymbolProvider(this.model, sourceSymbolProvider));
+                LOG.fine("Director preparation completed successfully");
+            } catch (Exception e) {
+                LOG.severe(() -> String.format("Failed to prepare code generation director: %s", e.getMessage()));
+                throw new RuntimeException("Failed to prepare code generation director", e);
+            }
         }
     }
 }
