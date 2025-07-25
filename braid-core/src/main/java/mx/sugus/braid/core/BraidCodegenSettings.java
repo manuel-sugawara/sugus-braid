@@ -66,7 +66,7 @@ public record BraidCodegenSettings(
         return new BraidCodegenSettings(
             node,
             node.expectStringMember("service").expectShapeId(),
-            node.expectStringMember("shortName").asStringNode().map(StringNode::getValue).orElse(null),
+            node.getStringMember("shortName").map(StringNode::getValue).orElse(null),
             node.expectStringMember("package").getValue(),
             node.expectStringMember("packageVersion").getValue()
         );

@@ -123,6 +123,9 @@ public final class ImplementsKnowledgeIndex implements KnowledgeIndex {
      */
     public Map<MemberShape, StructureShape> polymorphicDispatchTable(StructureShape parent) {
         var dispatchMember = polymorphicDispatchMember(parent);
+        if (dispatchMember == null) {
+            return Map.of();
+        }
         var inheritors = implementers(parent);
         var dispatchMemberName = dispatchMember.getMemberName();
         List<Pair<String, Pair<MemberShape, StructureShape>>> allMembers = new ArrayList<>();
