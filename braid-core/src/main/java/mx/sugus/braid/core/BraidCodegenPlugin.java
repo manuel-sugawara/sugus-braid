@@ -23,7 +23,7 @@ public final class BraidCodegenPlugin implements SmithyBuildPlugin {
     @Override
     public void execute(PluginContext context) {
         var settingsNode = context.getSettings();
-        var settings = BrideCodegenSettings.from(settingsNode);
+        var settings = BraidCodegenSettings.from(settingsNode);
         var configured = DefaultBaseModuleConfig.buildDependants(pluginLoader(), settings.settingsNode());
         var moduleConfig = mergeDefaults(settings, configured);
         var module = new CodegenModule(moduleConfig);
@@ -41,14 +41,14 @@ public final class BraidCodegenPlugin implements SmithyBuildPlugin {
         return new ComposedPluginLoader(new ClassPathPluginLoader(), new SpiPluginLoader());
     }
 
-    private CodegenModuleConfig mergeDefaults(BrideCodegenSettings settings, CodegenModuleConfig configured) {
+    private CodegenModuleConfig mergeDefaults(BraidCodegenSettings settings, CodegenModuleConfig configured) {
         return CodegenModuleConfig.builder()
                                   .putDependency(DefaultDependencies.SETTINGS, settings)
                                   .merge(configured)
                                   .build();
     }
 
-    private static SymbolProvider createSymbolProvider(Model model, BrideCodegenSettings settings) {
+    private static SymbolProvider createSymbolProvider(Model model, BraidCodegenSettings settings) {
         return shape -> {
             throw new UnsupportedOperationException(
                 "shape to symbol not supported for shape type: " + shape.getType()

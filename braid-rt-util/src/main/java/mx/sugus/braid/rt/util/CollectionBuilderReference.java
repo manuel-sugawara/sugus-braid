@@ -11,9 +11,52 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Builder reference for collections.
+ * Specialized BuilderReference for Java collections that provides copy-on-write optimization
+ * for common collection types used in code generation pipelines.
+ * <p>
+ * This interface provides factory methods for creating BuilderReference instances optimized
+ * for specific collection types:
+ * <ul>
+ *   <li><strong>Maps</strong>: Both ordered (LinkedHashMap) and unordered (HashMap) variants</li>
+ *   <li><strong>Sets</strong>: Both ordered (LinkedHashSet) and unordered (HashSet) variants</li>
+ *   <li><strong>Lists</strong>: ArrayList-based implementation</li>
+ * </ul>
+ * 
+ * <h3>Usage in Code Generation</h3>
+ * <p>Typical usage pattern in a builder class:
+ * <pre>{@code
+ * public class ConfigBuilder {
+ *     private final CollectionBuilderReference<Map<String, String>> properties = 
+ *         CollectionBuilderReference.forOrderedMap();
+ *     
+ *     public ConfigBuilder fromTemplate(Config template) {
+ *         properties.setPersistent(template.getProperties());
+ *         return this;
+ *     }
+ *     
+ *     public ConfigBuilder addProperty(String key, String value) {
+ *         properties.asTransient().put(key, value); // Lazy copy on first modification
+ *         return this;
+ *     }
+ *     
+ *     public Config build() {
+ *         return new Config(properties.asPersistent());
+ *     }
+ * }
+ * }</pre>
+ * 
+ * <h3>Performance Benefits</h3>
+ * <p>For code generation scenarios where many builders are created from templates:
+ * <ul>
+ *   <li><strong>Template reuse</strong>: Zero copy cost when builders aren't modified</li>
+ *   <li><strong>Incremental building</strong>: Only pay copy cost when actually making changes</li>
+ *   <li><strong>Memory efficiency</strong>: Share immutable data between multiple builders</li>
+ * </ul>
+ * 
+ * <p><strong>Thread Safety</strong>: Not thread-safe. Each instance should be used by a single thread.
+ * However, the persistent (immutable) collections returned by {@code asPersistent()} are thread-safe.
  *
- * @param <T> The collection type.
+ * @param <T> The collection type (Map, Set, List, etc.)
  */
 public interface CollectionBuilderReference<T> extends BuilderReference<T, T> {
 
@@ -62,20 +105,27 @@ public interface CollectionBuilderReference<T> extends BuilderReference<T, T> {
     }
 
     /**
-     * Creates a builder reference to a list.
+     * Creates a builder reference for a list (ArrayList-based).
+     * <p>
+     * Provides efficient random access and good performance for most operations.
+     * Order is always preserved.
      *
-     * @param <T> Type of value in the list.
-     * @return Returns the created list.
+     * @param <T> Type of elements in the list
+     * @return A new builder reference starting in empty state
      */
     static <T> CollectionBuilderReference<List<T>> forList() {
         return new ListBuilderReference<>();
     }
 
     /**
-     * Creates a builder reference to a list.
+     * Creates a builder reference for a list, initialized with existing data.
+     * <p>
+     * The provided list will be used as the initial persistent state. Element order
+     * will be preserved.
      *
-     * @param <T> Type of value in the list.
-     * @return Returns the created list.
+     * @param <T> Type of elements in the list
+     * @param persistent the initial persistent list data, may be {@code null} for empty
+     * @return A new builder reference initialized with the provided data
      */
     static <T> CollectionBuilderReference<List<T>> fromPersistentList(List<T> persistent) {
         return new ListBuilderReference<>(persistent);
@@ -122,10 +172,14 @@ public interface CollectionBuilderReference<T> extends BuilderReference<T, T> {
     }
 
     /**
-     * A builder reference for maps.
+     * BuilderReference implementation for unordered maps using HashMap as the transient representation
+     * and Collections.unmodifiableMap as the persistent representation.
+     * <p>
+     * This implementation provides O(1) average-case performance for put/get operations
+     * but does not preserve insertion order.
      *
-     * @param <K> The type of the key.
-     * @param <V> The type of the value.
+     * @param <K> The type of the map keys
+     * @param <V> The type of the map values
      */
     class UnorderedMapBuilderReference<K, V>
         extends AbstractBuilderReference<Map<K, V>, Map<K, V>>
@@ -160,10 +214,8 @@ public interface CollectionBuilderReference<T> extends BuilderReference<T, T> {
 
         @Override
         protected Map<K, V> clearTransient(Map<K, V> source) {
-            if (asTransient != null) {
-                asTransient.clear();
-            }
-            return asTransient;
+            source.clear();
+            return source;
         }
     }
 
@@ -206,10 +258,8 @@ public interface CollectionBuilderReference<T> extends BuilderReference<T, T> {
 
         @Override
         protected Map<K, V> clearTransient(Map<K, V> source) {
-            if (asTransient != null) {
-                asTransient.clear();
-            }
-            return asTransient;
+            source.clear();
+            return source;
         }
     }
 
@@ -251,10 +301,8 @@ public interface CollectionBuilderReference<T> extends BuilderReference<T, T> {
 
         @Override
         protected List<T> clearTransient(List<T> source) {
-            if (asTransient != null) {
-                asTransient.clear();
-            }
-            return asTransient;
+            source.clear();
+            return source;
         }
     }
 
@@ -296,10 +344,8 @@ public interface CollectionBuilderReference<T> extends BuilderReference<T, T> {
 
         @Override
         protected Set<T> clearTransient(Set<T> source) {
-            if (asTransient != null) {
-                asTransient.clear();
-            }
-            return asTransient;
+            source.clear();
+            return source;
         }
     }
 
@@ -341,10 +387,8 @@ public interface CollectionBuilderReference<T> extends BuilderReference<T, T> {
 
         @Override
         protected Set<T> clearTransient(Set<T> source) {
-            if (asTransient != null) {
-                asTransient.clear();
-            }
-            return asTransient;
+            source.clear();
+            return source;
         }
     }
 }

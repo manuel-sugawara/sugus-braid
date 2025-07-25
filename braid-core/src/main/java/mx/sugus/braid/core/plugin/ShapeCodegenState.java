@@ -1,7 +1,7 @@
 package mx.sugus.braid.core.plugin;
 
 import java.util.Objects;
-import mx.sugus.braid.core.BrideCodegenSettings;
+import mx.sugus.braid.core.BraidCodegenSettings;
 import software.amazon.smithy.build.FileManifest;
 import software.amazon.smithy.codegen.core.Symbol;
 import software.amazon.smithy.codegen.core.SymbolProvider;
@@ -16,7 +16,7 @@ public final class ShapeCodegenState implements CodegenState {
     private final Model model;
     private final Shape shape;
     private final SymbolProvider symbolProvider;
-    private final BrideCodegenSettings settings;
+    private final BraidCodegenSettings settings;
     private final FileManifest fileManifest;
     private final Dependencies dependencies;
 
@@ -45,7 +45,7 @@ public final class ShapeCodegenState implements CodegenState {
     }
 
     @Override
-    public BrideCodegenSettings settings() {
+    public BraidCodegenSettings settings() {
         return settings;
     }
 
@@ -70,7 +70,7 @@ public final class ShapeCodegenState implements CodegenState {
         private Model model;
         private Shape shape;
         private SymbolProvider symbolProvider;
-        private BrideCodegenSettings settings;
+        private BraidCodegenSettings settings;
         private FileManifest fileManifest;
         private Dependencies dependencies;
 
@@ -94,7 +94,7 @@ public final class ShapeCodegenState implements CodegenState {
             return this;
         }
 
-        public Builder settings(BrideCodegenSettings settings) {
+        public Builder settings(BraidCodegenSettings settings) {
             this.settings = settings;
             return this;
         }
