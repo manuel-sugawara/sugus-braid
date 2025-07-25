@@ -24,19 +24,89 @@ import mx.sugus.braid.plugins.data.transformers.UnionFromFactoryOverridesTransfo
 import mx.sugus.braid.rt.util.annotations.Generated;
 import software.amazon.smithy.model.node.ObjectNode;
 
+/**
+ * The main plugin for generating Java data classes from Smithy models.
+ *
+ * <p>This plugin provides comprehensive Java code generation for Smithy data structures including:
+ * <ul>
+ *   <li><strong>Structures</strong> - Generated as Java records or classes with builders</li>
+ *   <li><strong>Unions</strong> - Generated as sealed interfaces with variant implementations</li>
+ *   <li><strong>Enums</strong> - Generated as Java enums with proper value mappings</li>
+ *   <li><strong>Interfaces</strong> - Generated as Java interfaces with implementations</li>
+ * </ul>
+ *
+ * <p>The plugin integrates with the Braid code generation framework by:
+ * <ul>
+ *   <li>Registering shape producers for each supported Smithy shape type</li>
+ *   <li>Providing symbol provider decorations for type mapping</li>
+ *   <li>Adding transformers for builder patterns, factory methods, and overrides</li>
+ *   <li>Managing dependencies and configuration through {@link DataPluginConfig}</li>
+ * </ul>
+ *
+ * <p>The generated Java code includes:
+ * <ul>
+ *   <li>Immutable data structures with proper equals/hashCode/toString</li>
+ *   <li>Builder patterns for complex types</li>
+ *   <li>Factory methods for convenience construction</li>
+ *   <li>Null-safety annotations based on configuration</li>
+ *   <li>Generated annotations for tooling support</li>
+ * </ul>
+ *
+ * <p>Example usage in a Smithy build:
+ * <pre>{@code
+ * {
+ *   "version": "1.0",
+ *   "plugins": {
+ *     "mx.sugus.braid.plugins.data": {
+ *       "nullabilityCheckMode": "NON_CLIENT_OPTIONAL",
+ *       "packageName": "com.example.generated"
+ *     }
+ *   }
+ * }
+ * }</pre>
+ *
+ * @see DataPluginConfig for configuration options
+ * @see JavaSyntaxPlugin for Java syntax generation support
+ */
 public final class DataPlugin implements SmithyGeneratorPlugin<DataPluginConfig> {
+    /**
+     * The unique identifier for this plugin.
+     */
     public static final Identifier ID = Identifier.of(DataPlugin.class);
 
+    /**
+     * Returns the unique identifier for this plugin.
+     *
+     * @return the plugin identifier
+     */
     @Override
     public Identifier provides() {
         return ID;
     }
 
+    /**
+     * Returns the collection of plugin identifiers that this plugin depends on.
+     *
+     * <p>This plugin requires the {@link JavaSyntaxPlugin} to be loaded first,
+     * as it provides the underlying Java syntax tree generation capabilities.
+     *
+     * @return collection containing the JavaSyntaxPlugin identifier
+     */
     @Override
     public Collection<Identifier> requires() {
         return List.of(JavaSyntaxPlugin.ID);
     }
 
+    /**
+     * Creates a plugin configuration from the provided JSON node.
+     *
+     * <p>If the node is null, returns a default configuration with all
+     * settings at their default values. Otherwise, deserializes the node
+     * into a {@link DataPluginConfig} instance.
+     *
+     * @param node the JSON node containing plugin configuration, or null for defaults
+     * @return the plugin configuration
+     */
     @Override
     public DataPluginConfig fromNode(ObjectNode node) {
         if (node == null) {
@@ -45,6 +115,20 @@ public final class DataPlugin implements SmithyGeneratorPlugin<DataPluginConfig>
         return DataPluginConfig.fromNode(node);
     }
 
+    /**
+     * Builds the code generation module configuration for this plugin.
+     *
+     * <p>This method registers all the necessary components for Java data class generation:
+     * <ul>
+     *   <li><strong>Producers</strong> - Generate Java code for structures, unions, enums, and interfaces</li>
+     *   <li><strong>Transformers</strong> - Apply builder patterns, factory methods, and overrides</li>
+     *   <li><strong>Symbol Provider</strong> - Maps Smithy types to Java types</li>
+     *   <li><strong>Dependencies</strong> - Injects plugin configuration into the generation context</li>
+     * </ul>
+     *
+     * @param config the plugin configuration to use for code generation
+     * @return the configured code generation module
+     */
     @Override
     public CodegenModuleConfig moduleConfig(DataPluginConfig config) {
         return CodegenModuleConfig
