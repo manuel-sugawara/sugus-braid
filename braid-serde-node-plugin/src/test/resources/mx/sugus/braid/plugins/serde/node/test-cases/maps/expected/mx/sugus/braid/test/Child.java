@@ -88,12 +88,8 @@ public final class Child implements ToNode {
     @Override
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
-        if (stringValue != null) {
-            builder.withMember("stringValue", Node.from(stringValue()));
-        }
-        if (intValue != null) {
-            builder.withMember("intValue", Node.from(intValue()));
-        }
+        builder.withMember("stringValue", Node.from(stringValue()));
+        builder.withMember("intValue", Node.from(intValue()));
         return builder.build();
     }
 

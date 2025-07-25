@@ -9,9 +9,9 @@ import software.amazon.smithy.model.Model;
 import software.amazon.smithy.model.shapes.Shape;
 
 /**
- * The codegen module implements the codegen pipeline by using configuration to produce elements, 
- * transform them, and finally consume them.
- * 
+ * The codegen module implements the codegen pipeline by using configuration to produce elements, transform them, and finally
+ * consume them.
+ *
  * <p>The module orchestrates the entire code generation process through a series of phases:
  * <ol>
  *   <li><strong>Shape Selection:</strong> Selects which shapes to process for code generation</li>
@@ -20,7 +20,7 @@ import software.amazon.smithy.model.shapes.Shape;
  *   <li><strong>Shape Generation:</strong> Runs producers, transformers, and consumers for each shape</li>
  *   <li><strong>Non-Shape Generation:</strong> Generates additional artifacts not tied to specific shapes</li>
  * </ol>
- * 
+ *
  * <p>This class is thread-safe as it is immutable after construction.
  */
 public final class CodegenModule {
@@ -98,7 +98,7 @@ public final class CodegenModule {
     /**
      * Applies all the configured symbol provider decorators and returns the final decorated symbol provider.
      *
-     * @param model The model, must not be null
+     * @param model          The model, must not be null
      * @param symbolProvider The source symbol provider, must not be null
      * @return the decorated symbol provider
      * @throws NullPointerException if model or symbolProvider is null
@@ -186,10 +186,10 @@ public final class CodegenModule {
         } catch (Exception e) {
             var shapeId = state.shape().getId();
             var taskId = task.taskId();
-            LOG.severe(() -> String.format("Failed to process shape task '%s' for shape '%s': %s", 
-                                          taskId, shapeId, e.getMessage()));
-            throw new RuntimeException(String.format("Failed to process shape task '%s' for shape '%s'", 
-                                                    taskId, shapeId), e);
+            LOG.severe(() -> String.format("Failed to process shape task '%s' for shape '%s': %s",
+                                           taskId, shapeId, e.getMessage()));
+            throw new RuntimeException(String.format("Failed to process shape task '%s' for shape '%s'",
+                                                     taskId, shapeId), e);
         }
     }
 
@@ -204,8 +204,8 @@ public final class CodegenModule {
             }
         } catch (Exception e) {
             var taskId = task.taskId();
-            LOG.severe(() -> String.format("Failed to process non-shape task '%s': %s", 
-                                          taskId, e.getMessage()));
+            LOG.severe(() -> String.format("Failed to process non-shape task '%s': %s",
+                                           taskId, e.getMessage()));
             throw new RuntimeException(String.format("Failed to process non-shape task '%s'", taskId), e);
         }
     }

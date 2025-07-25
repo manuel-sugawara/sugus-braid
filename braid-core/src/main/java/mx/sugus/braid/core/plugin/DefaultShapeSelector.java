@@ -6,7 +6,7 @@ import software.amazon.smithy.model.loader.Prelude;
 import software.amazon.smithy.model.shapes.Shape;
 
 /**
- * Default shape selector, includes all the shapes in the model exluding only prelude shapes.
+ * Default shape selector, includes all the shapes in the model excluding only prelude shapes.
  */
 public final class DefaultShapeSelector implements ShapeSelectorTask {
     private static final ShapeSelectorTask INSTANCE = new DefaultShapeSelector();

@@ -82,9 +82,7 @@ public final class ChildBar implements SyntaxNodeChild, SyntaxNode, ToNode {
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
         builder.withMember("kind", Node.from(kind().toString()));
-        if (bar != null) {
-            builder.withMember("bar", Node.from(bar()));
-        }
+        builder.withMember("bar", Node.from(bar()));
         return builder.build();
     }
 

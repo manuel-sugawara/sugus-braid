@@ -267,9 +267,7 @@ public final class Parent implements ToNode {
     @Override
     public Node toNode() {
         ObjectNode.Builder builder = Node.objectNodeBuilder();
-        if (stringMember != null) {
-            builder.withMember("stringMember", Node.from(stringMember()));
-        }
+        builder.withMember("stringMember", Node.from(stringMember()));
         if (!children().isEmpty()) {
             ArrayNode.Builder childrenBuilder = ArrayNode.builder();
             for (Child item : children()) {
