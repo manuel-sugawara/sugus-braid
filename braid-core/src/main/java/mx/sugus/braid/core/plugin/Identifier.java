@@ -1,10 +1,29 @@
 package mx.sugus.braid.core.plugin;
 
 /**
- * Represents a identifier, that is, a name within a namespace.
+ * A namespace-qualified identifier used to uniquely identify plugins, producers, transformers, and other components.
  *
- * @param namespace The namespace
- * @param name      The simple name.
+ * <p>Identifiers consist of a namespace (typically a package-like dotted name) and a simple name,
+ * separated by a hash character (#). This structure ensures unique identification of components across different plugins and
+ * modules while avoiding naming conflicts.
+ *
+ * <p>Format: {@code namespace#name}
+ * <ul>
+ *   <li><strong>Namespace:</strong> A dot-separated string (e.g., "mx.sugus.braid.core")</li>
+ *   <li><strong>Name:</strong> A simple Java identifier (e.g., "DataPlugin")</li>
+ * </ul>
+ *
+ * <p>Examples:
+ * <ul>
+ *   <li>{@code mx.sugus.braid.plugins.data#DataPlugin}</li>
+ *   <li>{@code mx.sugus.braid.core.plugin#DefaultShapeSelector}</li>
+ * </ul>
+ *
+ * <p>Both namespace and name components must follow Java identifier rules, and the namespace
+ * supports dot-separated segments like Java package names.
+ *
+ * @param namespace The dotted namespace identifier
+ * @param name      The simple name component
  */
 public record Identifier(String namespace, String name) implements Comparable<Identifier> {
 
@@ -140,5 +159,4 @@ public record Identifier(String namespace, String name) implements Comparable<Id
             this.position = position;
         }
     }
-
 }

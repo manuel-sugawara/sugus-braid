@@ -14,7 +14,7 @@ import software.amazon.smithy.model.shapes.Shape;
 
 /**
  * The Braid code generation director orchestrates the entire code generation process.
- * 
+ *
  * <p>The director manages the complete workflow for transforming Smithy models into Java code:
  * <ol>
  *   <li><strong>Model Preparation:</strong> Applies early and standard model transformations</li>
@@ -23,11 +23,11 @@ import software.amazon.smithy.model.shapes.Shape;
  *   <li><strong>Shape Code Generation:</strong> Processes each selected shape through the pipeline</li>
  *   <li><strong>Non-Shape Code Generation:</strong> Generates additional artifacts not tied to specific shapes</li>
  * </ol>
- * 
+ *
  * <p>The director is immutable after construction and is built using the {@link Builder} pattern.
  * All model transformations and symbol provider decorations are applied during the build phase,
  * ensuring the director is ready for immediate execution.
- * 
+ *
  * <p>Thread Safety: This class is thread-safe as it is immutable after construction.
  */
 public final class BraidCodegenDirector {
@@ -48,14 +48,14 @@ public final class BraidCodegenDirector {
 
     /**
      * Executes the complete code generation process.
-     * 
+     *
      * <p>This method orchestrates the generation workflow by:
      * <ol>
      *   <li>Selecting shapes to process using the configured shape selector</li>
      *   <li>Generating code for each selected shape through the producer-transformer-consumer pipeline</li>
      *   <li>Generating additional non-shape artifacts</li>
      * </ol>
-     * 
+     *
      * <p>All model transformations and symbol provider decorations have already been applied
      * during the director's construction, so this method focuses solely on code generation.
      */
@@ -106,7 +106,7 @@ public final class BraidCodegenDirector {
 
     /**
      * Creates a new builder for constructing a {@link BraidCodegenDirector}.
-     * 
+     *
      * @return A new builder instance
      */
     public static Builder builder() {
@@ -156,7 +156,7 @@ public final class BraidCodegenDirector {
             Objects.requireNonNull(model, "model");
             Objects.requireNonNull(module, "module");
             Objects.requireNonNull(fileManifest, "fileManifest");
-            
+
             // Validate symbol provider configuration
             if (symbolProvider != null && symbolProviderFactory != null) {
                 throw new IllegalStateException("Cannot specify both symbolProvider and symbolProviderFactory");
@@ -164,7 +164,7 @@ public final class BraidCodegenDirector {
             if (symbolProvider == null && symbolProviderFactory == null) {
                 throw new IllegalStateException("Must specify either symbolProvider or symbolProviderFactory");
             }
-            
+
             // We prepare here such that afterward the director can be fully
             // immutable.
             prepare();
@@ -178,7 +178,7 @@ public final class BraidCodegenDirector {
                 LOG.fine("Running module configured model processors");
                 newModel = module.preprocessModel(newModel);
                 this.model = newModel;
-                
+
                 LOG.fine("Running symbol provider decorators");
                 SymbolProvider sourceSymbolProvider;
                 if (symbolProviderFactory != null) {

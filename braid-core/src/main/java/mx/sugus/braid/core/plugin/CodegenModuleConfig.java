@@ -111,8 +111,6 @@ public final class CodegenModuleConfig {
             return DefaultShapeSelector.get();
         }
         if (shapeSelectors.size() > 1) {
-            // TODO: is there a better way to validate/error out for this case?, e.g.,
-            //  at build time/ merge time.
             throw new RuntimeException("Multiple shape selectors defined, only one must be defined: " +
                                        shapeSelectors.stream()
                                                      .map(ShapeSelectorTask::taskId)

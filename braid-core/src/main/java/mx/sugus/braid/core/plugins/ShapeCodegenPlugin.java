@@ -18,7 +18,36 @@ import software.amazon.smithy.model.shapes.Shape;
 import software.amazon.smithy.model.transform.ModelTransformer;
 
 /**
- * Plugin to configure the model shape selector and corresponding transforms for service codegen.
+ * A plugin that configures code generation for shape-based Smithy models using selector queries.
+ *
+ * <p>This plugin provides a flexible alternative to service-oriented code generation by allowing
+ * the use of Smithy selector expressions to choose exactly which shapes should be processed. This approach is ideal for
+ * generating data type libraries, utility classes, or any scenario where fine-grained control over shape selection is needed.
+ *
+ * <p>Key features:
+ * <ul>
+ *   <li><strong>Selector-based shape selection:</strong> Uses Smithy selector syntax to
+ *       precisely control which shapes are included in code generation</li>
+ *   <li><strong>Neighbor discovery:</strong> Automatically includes shapes referenced by
+ *       selected shapes to ensure complete type definitions</li>
+ *   <li><strong>Topological ordering:</strong> Ensures shapes are processed in dependency order</li>
+ *   <li><strong>Standard transformations:</strong> Applies common model preprocessing including
+ *       mixin flattening and enum conversion</li>
+ * </ul>
+ *
+ * <p>Configuration:
+ * <ul>
+ *   <li>{@code selector}: A Smithy selector expression defining which shapes to process</li>
+ * </ul>
+ *
+ * <p>Example selectors:
+ * <ul>
+ *   <li>{@code structure}: Select all structure shapes</li>
+ *   <li>{@code [namespace = 'com.example.types']}: Select shapes in a specific namespace</li>
+ *   <li>{@code structure:not([trait|service])}: Select structures not used by services</li>
+ * </ul>
+ *
+ * @see software.amazon.smithy.model.selector.Selector
  */
 public final class ShapeCodegenPlugin implements SmithyGeneratorPlugin<ObjectNode> {
     private final Identifier ID = Identifier.of(ShapeCodegenPlugin.class);

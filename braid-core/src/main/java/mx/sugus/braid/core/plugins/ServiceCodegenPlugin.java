@@ -18,7 +18,30 @@ import software.amazon.smithy.model.shapes.ShapeId;
 import software.amazon.smithy.model.transform.ModelTransformer;
 
 /**
- * Plugin to configure the model shape selector and corresponding transforms for service codegen.
+ * A plugin that configures code generation for service-oriented Smithy models.
+ *
+ * <p>This plugin specializes the code generation pipeline for service-based code generation,
+ * where the focus is on generating client SDKs or service implementations from a specific Smithy service definition. It
+ * automatically selects all shapes connected to the target service and applies service-specific model transformations.
+ *
+ * <p>Key features:
+ * <ul>
+ *   <li><strong>Service-focused shape selection:</strong> Automatically discovers and includes
+ *       all shapes reachable from the specified service</li>
+ *   <li><strong>Service model transformations:</strong> Applies service-specific preprocessing
+ *       including error copying, input/output generation, and mixin flattening</li>
+ *   <li><strong>Configurable naming:</strong> Supports custom suffixes for request/response types</li>
+ * </ul>
+ *
+ * <p>Configuration options:
+ * <ul>
+ *   <li>{@code service}: The shape ID of the service to generate code for</li>
+ *   <li>{@code inputSuffix}: Suffix for input/request types (default: "Request")</li>
+ *   <li>{@code outputSuffix}: Suffix for output/response types (default: "Response")</li>
+ * </ul>
+ *
+ * <p>This plugin is typically used when generating complete service SDKs rather than
+ * individual data type libraries.
  */
 public final class ServiceCodegenPlugin implements SmithyGeneratorPlugin<ObjectNode> {
     private final Identifier ID = Identifier.of(ServiceCodegenPlugin.class);

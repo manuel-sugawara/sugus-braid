@@ -18,6 +18,25 @@ import software.amazon.smithy.model.shapes.ToShapeId;
 import software.amazon.smithy.model.shapes.UnionShape;
 import software.amazon.smithy.model.traits.SensitiveTrait;
 
+/**
+ * A knowledge index that tracks which shapes in a Smithy model contain sensitive data.
+ *
+ * <p>This index analyzes the entire model to determine which shapes are marked as sensitive,
+ * either directly through the {@code @sensitive} trait or transitively through their relationships with other sensitive shapes.
+ * This information is crucial for generating appropriate handling code for sensitive data in the final output.
+ *
+ * <p>The index considers the following shapes as sensitive:
+ * <ul>
+ *   <li>Shapes directly annotated with the {@code @sensitive} trait</li>
+ *   <li>Container shapes (lists, maps) whose members are sensitive</li>
+ *   <li>Structure and union shapes that contain sensitive members</li>
+ * </ul>
+ *
+ * <p>Service, operation, and resource shapes are never considered sensitive as they
+ * represent structural elements rather than data containers.
+ *
+ * @see software.amazon.smithy.model.traits.SensitiveTrait
+ */
 public class SensitiveKnowledgeIndex implements KnowledgeIndex {
 
     private final Set<ShapeId> sensitiveShapes = new HashSet<>();
@@ -32,10 +51,28 @@ public class SensitiveKnowledgeIndex implements KnowledgeIndex {
         }
     }
 
+    /**
+     * Checks whether the specified shape contains sensitive data.
+     *
+     * <p>This method returns {@code true} if the shape is marked as sensitive either
+     * directly through the {@code @sensitive} trait or transitively through its relationship with other sensitive shapes.
+     *
+     * @param toShapeId The shape to check for sensitivity
+     * @return {@code true} if the shape contains sensitive data, {@code false} otherwise
+     */
     public boolean isSensitive(ToShapeId toShapeId) {
         return sensitiveShapes.contains(toShapeId.toShapeId());
     }
 
+    /**
+     * Creates or retrieves a SensitiveKnowledgeIndex for the given model.
+     *
+     * <p>This method uses Smithy's knowledge index caching mechanism to ensure
+     * that only one index is created per model, improving performance when the index is accessed multiple times.
+     *
+     * @param model The Smithy model to analyze for sensitive shapes
+     * @return A SensitiveKnowledgeIndex for the model
+     */
     public static SensitiveKnowledgeIndex of(Model model) {
         return model.getKnowledge(SensitiveKnowledgeIndex.class, SensitiveKnowledgeIndex::new);
     }

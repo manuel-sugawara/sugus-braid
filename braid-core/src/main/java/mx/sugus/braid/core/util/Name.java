@@ -151,7 +151,7 @@ public final class Name {
     }
 
     static Name ofLiteral(String value) {
-        return new Name(new String[]{value}, Convention.UNKNOWN);
+        return new Name(new String[] {value}, Convention.UNKNOWN);
     }
 
     // Adapted from
