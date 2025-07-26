@@ -1,7 +1,7 @@
 plugins {
     `java-library`
     checkstyle
-    id("com.github.spotbugs") version "6.0.17"
+    id("com.github.spotbugs") version "6.0.26"
     `maven-publish`
     jacoco
 }
@@ -47,10 +47,10 @@ subprojects {
 
         // Apply junit 5 and hamcrest test dependencies to all java projects.
         dependencies {
-            testImplementation("org.junit.jupiter:junit-jupiter-api:5.4.0")
-            testImplementation("org.junit.jupiter:junit-jupiter-engine:5.4.0")
-            testImplementation("org.junit.jupiter:junit-jupiter-params:5.4.0")
-            testImplementation("org.hamcrest:hamcrest:2.1")
+            testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
+            testImplementation("org.junit.jupiter:junit-jupiter-engine:5.11.3")
+            testImplementation("org.junit.jupiter:junit-jupiter-params:5.11.3")
+            testImplementation("org.hamcrest:hamcrest:3.0")
         }
 
         // Configure jars to include license related info
@@ -83,7 +83,7 @@ subprojects {
         tasks.spotbugsMain {
             reports.create("html") {
                 required.set(true)
-                outputLocation.set(file("$buildDir/reports/spotbugs.html"))
+                outputLocation.set(layout.buildDirectory.file("reports/spotbugs.html"))
                 setStylesheet("fancy-hist.xsl")
             }
         }

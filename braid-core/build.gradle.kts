@@ -11,7 +11,7 @@ plugins {
 
 buildscript {
     val smithyVersion: String by project
-
+    
     repositories {
         mavenCentral()
     }
@@ -38,5 +38,5 @@ dependencies {
     implementation(project(":braid-rt-util"))
     implementation("software.amazon.smithy:smithy-codegen-core:$smithyVersion")
     implementation("software.amazon.smithy:smithy-model:$smithyVersion")
-    testImplementation("org.mockito:mockito-core:3.+")
+    testImplementation("org.mockito:mockito-core:5.14.2")
 }

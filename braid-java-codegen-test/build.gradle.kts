@@ -1,6 +1,7 @@
 //extra["displayName"] = "Smithy :: Codegen :: Test"
 //extra["moduleName"] = "mx.sugus.codegen.test"
 
+
 val smithyVersion: String by project
 
 buildscript {
@@ -42,5 +43,5 @@ tasks.withType<JavaCompile> {
 }
 
 java.sourceSets["main"].java {
-    srcDirs("model", "$buildDir/smithyprojections/braid-java-codegen-test/source/braid-codegen")
+    srcDirs("model", layout.buildDirectory.dir("smithyprojections/braid-java-codegen-test/source/braid-codegen"))
 }

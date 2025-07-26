@@ -1,6 +1,7 @@
 extra["displayName"] = "Smithy :: Codegen :: JavaSyntax"
 extra["moduleName"] = "mx.sugus.codegen.test"
 
+
 val smithyVersion: String by project
 
 buildscript {
@@ -43,5 +44,5 @@ tasks.withType<JavaCompile> {
 }
 
 java.sourceSets["main"].java {
-    srcDirs("model", "$buildDir/smithyprojections/braid-java-syntax-model/source/braid-codegen")
+    srcDirs("model", layout.buildDirectory.dir("smithyprojections/braid-java-syntax-model/source/braid-codegen"))
 }
