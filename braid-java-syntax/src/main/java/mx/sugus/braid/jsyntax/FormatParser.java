@@ -175,7 +175,11 @@ public final class FormatParser {
                 }
                 var format = consumeFormat(source, start);
                 tokens.add(format(format, next, position, implicit));
-                implicit++;
+                // The validation that the format is not null is done
+                // upstream after consuming the whole source.
+                if (format != null && formatTakesArgument(format)) {
+                    implicit++;
+                }
                 if (format != null) {
                     start += 1;
                 }
@@ -196,13 +200,7 @@ public final class FormatParser {
     }
 
     private static int nextFormatStart(String source, int start) {
-        var length = source.length();
-        for (var idx = start; idx < length; idx++) {
-            if (source.charAt(idx) == '$') {
-                return idx;
-            }
-        }
-        return -1;
+        return source.indexOf('$', start);
     }
 
     private static String consumeIndex(String source, int start) {
