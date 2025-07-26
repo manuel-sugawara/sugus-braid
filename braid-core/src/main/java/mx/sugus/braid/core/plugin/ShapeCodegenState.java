@@ -1,5 +1,6 @@
 package mx.sugus.braid.core.plugin;
 
+import java.util.Collection;
 import java.util.Objects;
 import mx.sugus.braid.core.BraidCodegenSettings;
 import software.amazon.smithy.build.FileManifest;
@@ -35,6 +36,7 @@ import software.amazon.smithy.model.shapes.Shape;
 public final class ShapeCodegenState implements CodegenState {
     private final Model model;
     private final Shape shape;
+    private final Collection<Shape> selectedShapes;
     private final SymbolProvider symbolProvider;
     private final BraidCodegenSettings settings;
     private final FileManifest fileManifest;
@@ -43,6 +45,7 @@ public final class ShapeCodegenState implements CodegenState {
     ShapeCodegenState(Builder builder) {
         this.model = Objects.requireNonNull(builder.model, "model");
         this.shape = Objects.requireNonNull(builder.shape, "shape");
+        this.selectedShapes = Objects.requireNonNull(builder.selectedShapes, "selectedShapes");
         this.symbolProvider = Objects.requireNonNull(builder.symbolProvider, "symbolProvider");
         this.settings = Objects.requireNonNull(builder.settings, "settings");
         this.fileManifest = Objects.requireNonNull(builder.fileManifest, "fileManifest");
@@ -72,6 +75,11 @@ public final class ShapeCodegenState implements CodegenState {
     @Override
     public Dependencies dependencies() {
         return dependencies;
+    }
+
+    @Override
+    public Collection<Shape> selectedShapes() {
+        return selectedShapes;
     }
 
     /**
@@ -108,6 +116,7 @@ public final class ShapeCodegenState implements CodegenState {
     public static class Builder {
         private Model model;
         private Shape shape;
+        private Collection<Shape> selectedShapes;
         private SymbolProvider symbolProvider;
         private BraidCodegenSettings settings;
         private FileManifest fileManifest;
@@ -121,6 +130,18 @@ public final class ShapeCodegenState implements CodegenState {
          */
         public Builder model(Model model) {
             this.model = model;
+            return this;
+        }
+
+
+        /**
+         * Sets all the selected shapes to be processed.
+         *
+         * @param selectedShapes The Smithy shape to process
+         * @return This builder for method chaining
+         */
+        public Builder selectedShapes(Collection<Shape> selectedShapes) {
+            this.selectedShapes = selectedShapes;
             return this;
         }
 

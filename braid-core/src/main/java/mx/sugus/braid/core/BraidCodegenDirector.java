@@ -61,14 +61,14 @@ public final class BraidCodegenDirector {
      */
     public void execute() {
         try {
-            var sortedShapes = selectedShapes();
-            LOG.fine(() -> String.format("Beginning shape codegen for %d shapes", sortedShapes.size()));
-            for (var shape : sortedShapes) {
-                var javaShapeState = stateForShape(shape);
+            var selectedShapes = selectedShapes();
+            LOG.fine(() -> String.format("Beginning shape codegen for %d shapes", selectedShapes.size()));
+            for (var shape : selectedShapes) {
+                var javaShapeState = stateForShape(selectedShapes, shape);
                 module.generateShape(javaShapeState);
             }
             LOG.fine("Beginning non-shape codegen");
-            var nonShapeState = stateFor();
+            var nonShapeState = stateFor(selectedShapes);
             module.generateNonShape(nonShapeState);
             LOG.fine("Code generation completed successfully");
         } catch (Exception e) {
@@ -81,10 +81,11 @@ public final class BraidCodegenDirector {
         return module.select(model);
     }
 
-    private ShapeCodegenState stateForShape(Shape shape) {
+    private ShapeCodegenState stateForShape(Collection<Shape> selectedShapes, Shape shape) {
         return ShapeCodegenState
             .builder()
             .model(model)
+            .selectedShapes(selectedShapes)
             .shape(shape)
             .symbolProvider(symbolProvider)
             .fileManifest(fileManifest)
@@ -93,9 +94,10 @@ public final class BraidCodegenDirector {
             .build();
     }
 
-    private NonShapeCodegenState stateFor() {
+    private NonShapeCodegenState stateFor(Collection<Shape> selectedShapes) {
         return NonShapeCodegenState
             .builder()
+            .selectedShapes(selectedShapes)
             .model(model)
             .symbolProvider(symbolProvider)
             .fileManifest(fileManifest)
