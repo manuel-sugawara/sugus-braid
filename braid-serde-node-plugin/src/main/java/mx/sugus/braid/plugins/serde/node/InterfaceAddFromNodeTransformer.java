@@ -1,6 +1,5 @@
 package mx.sugus.braid.plugins.serde.node;
 
-import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.ImplementsKnowledgeIndex;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
@@ -12,6 +11,7 @@ import mx.sugus.braid.jsyntax.DefaultCaseClause;
 import mx.sugus.braid.jsyntax.InterfaceSyntax;
 import mx.sugus.braid.jsyntax.Javadoc;
 import mx.sugus.braid.jsyntax.MethodSyntax;
+import mx.sugus.braid.jsyntax.Modifier;
 import mx.sugus.braid.jsyntax.SwitchStatement;
 import mx.sugus.braid.plugins.data.TypeSyntaxResult;
 import mx.sugus.braid.plugins.data.producers.StructureInterfaceJavaProducer;

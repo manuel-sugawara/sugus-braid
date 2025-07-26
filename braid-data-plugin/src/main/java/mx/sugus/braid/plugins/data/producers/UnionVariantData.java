@@ -6,7 +6,6 @@ import static mx.sugus.braid.plugins.data.producers.StructureData.accessor;
 
 import java.util.List;
 import java.util.Objects;
-import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.SensitiveKnowledgeIndex;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.util.Name;
@@ -18,6 +17,7 @@ import mx.sugus.braid.jsyntax.ConstructorMethodSyntax;
 import mx.sugus.braid.jsyntax.FieldSyntax;
 import mx.sugus.braid.jsyntax.MemberValue;
 import mx.sugus.braid.jsyntax.MethodSyntax;
+import mx.sugus.braid.jsyntax.Modifier;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.PrimitiveTypeName;
 import mx.sugus.braid.jsyntax.TypeKind;

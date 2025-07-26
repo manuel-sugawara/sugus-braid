@@ -4,12 +4,12 @@ import static mx.sugus.braid.plugins.data.producers.CodegenUtils.BUILDER_TYPE;
 import static mx.sugus.braid.plugins.data.producers.StructureData.toBuilderDoc;
 
 import java.util.List;
-import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.ImplementsKnowledgeIndex;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.jsyntax.AbstractMethodSyntax;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.InterfaceSyntax;
+import mx.sugus.braid.jsyntax.Modifier;
 import mx.sugus.braid.jsyntax.TypeName;
 import mx.sugus.braid.jsyntax.ext.JavadocExt;
 import mx.sugus.braid.plugins.data.DataPlugin;

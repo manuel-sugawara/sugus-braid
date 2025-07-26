@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
-import javax.lang.model.element.Modifier;
 import mx.sugus.braid.jsyntax.block.AbstractBlockBuilder;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.rt.util.BuilderReference;

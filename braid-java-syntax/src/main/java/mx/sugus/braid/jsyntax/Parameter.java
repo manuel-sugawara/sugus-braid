@@ -159,7 +159,7 @@ public final class Parameter implements SyntaxNode {
          * @return This instance for chain calling.
          */
         public Builder varargs(boolean varargs) {
-            this.varargs = varargs;
+            this.varargs = Objects.requireNonNull(varargs, "varargs");
             return this;
         }
 

@@ -5,7 +5,6 @@ import static mx.sugus.braid.plugins.serde.node.ClassAddFromNodeTransformer.addS
 import static mx.sugus.braid.plugins.serde.node.ClassAddFromNodeTransformer.defaultFromNodeMethod;
 
 import java.util.Map;
-import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
@@ -16,6 +15,7 @@ import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.DefaultCaseClause;
 import mx.sugus.braid.jsyntax.Javadoc;
 import mx.sugus.braid.jsyntax.MethodSyntax;
+import mx.sugus.braid.jsyntax.Modifier;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.SwitchStatement;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;

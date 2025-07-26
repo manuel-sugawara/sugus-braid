@@ -3,7 +3,7 @@ package mx.sugus.braid.jsyntax.writer;
 import java.io.StringWriter;
 import java.util.Collections;
 import java.util.List;
-import javax.lang.model.element.Modifier;
+import mx.sugus.braid.jsyntax.Modifier;
 import mx.sugus.braid.jsyntax.writer.CodeWriter;
 import mx.sugus.braid.jsyntax.writer.CodeWriterWalkVisitor;
 import mx.sugus.braid.jsyntax.ClassName;

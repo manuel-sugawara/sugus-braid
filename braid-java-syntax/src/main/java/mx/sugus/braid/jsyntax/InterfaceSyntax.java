@@ -3,7 +3,6 @@ package mx.sugus.braid.jsyntax;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import javax.lang.model.element.Modifier;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 

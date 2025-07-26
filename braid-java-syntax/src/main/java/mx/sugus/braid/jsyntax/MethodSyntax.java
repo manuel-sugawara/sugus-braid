@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Consumer;
-import javax.lang.model.element.Modifier;
 import mx.sugus.braid.jsyntax.block.AbstractBlockBuilder;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.rt.util.BuilderReference;
@@ -51,7 +50,7 @@ public final class MethodSyntax implements BaseMethodSyntax {
     }
 
     /**
-     * An opetional set of type params for this method
+     * An optional set of type params for this method
      * 
      * @return The value of the {@code typeParams} member
      */
