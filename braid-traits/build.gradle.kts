@@ -2,6 +2,7 @@ description = "Generates code from Smithy models"
 extra["displayName"] = "Smithy :: Codegen Smithy Plugin"
 extra["moduleName"] = "mx.sugus.codegen.plugin"
 
+
 val smithyVersion: String by project
 
 buildscript {
@@ -44,7 +45,7 @@ repositories {
 dependencies {
     implementation("software.amazon.smithy:smithy-model:$smithyVersion")
     implementation("software.amazon.smithy:smithy-trait-codegen:$smithyVersion")
-    testImplementation("org.mockito:mockito-core:3.+")
+    testImplementation("org.mockito:mockito-core:5.14.2")
 }
 
 tasks.withType<JavaCompile> {
@@ -56,5 +57,5 @@ java.sourceSets["main"].java {
 }
 
 java.sourceSets["main"].resources {
-    srcDirs("$buildDir/smithyprojections/braid-traits/source/trait-codegen")
+    srcDirs(layout.buildDirectory.dir("smithyprojections/braid-traits/source/trait-codegen"))
 }

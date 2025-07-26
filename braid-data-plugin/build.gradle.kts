@@ -6,6 +6,7 @@ plugins {
     `maven-publish`
 }
 
+
 val smithyVersion: String by project
 
 buildscript {
