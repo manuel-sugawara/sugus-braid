@@ -29,7 +29,7 @@ public final class StructureShape implements ToNode {
     }
 
     /**
-     *
+     * 
      * @return The value of the {@code modifier} member
      */
     public Modifier modifier() {
@@ -37,7 +37,7 @@ public final class StructureShape implements ToNode {
     }
 
     /**
-     *
+     * 
      * @return The value of the {@code anotherModifier} member
      */
     public Modifier anotherModifier() {
@@ -45,7 +45,7 @@ public final class StructureShape implements ToNode {
     }
 
     /**
-     *
+     * 
      * @return The value of the {@code modifierList} member
      */
     public List<Modifier> modifierList() {
@@ -54,7 +54,7 @@ public final class StructureShape implements ToNode {
 
     /**
      * Returns a new builder to modify a copy of this instance.
-     *
+     * 
      * @return A new builder to modify a copy of this instance.
      */
     public Builder toBuilder() {
@@ -71,8 +71,8 @@ public final class StructureShape implements ToNode {
         }
         StructureShape that = (StructureShape) other;
         return Objects.equals(this.modifier, that.modifier)
-               && this.anotherModifier.equals(that.anotherModifier)
-               && this.modifierList.equals(that.modifierList);
+            && this.anotherModifier.equals(that.anotherModifier)
+            && this.modifierList.equals(that.modifierList);
     }
 
     @Override
@@ -90,14 +90,14 @@ public final class StructureShape implements ToNode {
     @Override
     public String toString() {
         return "StructureShape{"
-               + "modifier: " + modifier
-               + ", anotherModifier: " + anotherModifier
-               + ", modifierList: " + modifierList + "}";
+            + "modifier: " + modifier
+            + ", anotherModifier: " + anotherModifier
+            + ", modifierList: " + modifierList + "}";
     }
 
     /**
      * Creates a new builder to create instances of this class.
-     *
+     * 
      * @return A new builder to create instances of this class.
      */
     public static Builder builder() {
@@ -126,7 +126,7 @@ public final class StructureShape implements ToNode {
 
     /**
      * Deserialize a StructureShape from a {@link Node}.
-     *
+     * 
      * @param node The node to deserialize from.
      * @return The deserialized instance.
      */
@@ -136,7 +136,7 @@ public final class StructureShape implements ToNode {
 
     /**
      * Deserialize a StructureShape from a {@link Node}.
-     *
+     * 
      * @param validator A validator to collect any issues found during deserialization.
      * @param node The node to deserialize from.
      * @return The deserialized instance.
@@ -188,7 +188,7 @@ public final class StructureShape implements ToNode {
 
         /**
          * Sets the value for {@code modifier}.
-         *
+         * 
          * @param modifier The value to be set.
          * @return This instance for chain calling.
          */
@@ -199,7 +199,7 @@ public final class StructureShape implements ToNode {
 
         /**
          * Sets the value for {@code anotherModifier}.
-         *
+         * 
          * @param anotherModifier The value to be set.
          * @return This instance for chain calling.
          */
@@ -210,7 +210,7 @@ public final class StructureShape implements ToNode {
 
         /**
          * Sets the value for {@code modifierList}.
-         *
+         * 
          * @param modifierList The value to be set.
          * @return This instance for chain calling.
          */
@@ -222,7 +222,7 @@ public final class StructureShape implements ToNode {
 
         /**
          * Adds a value to {@code modifierList}.
-         *
+         * 
          * @param modifierList The value tp add
          * @return This instance for chain calling.
          */
@@ -233,7 +233,7 @@ public final class StructureShape implements ToNode {
 
         /**
          * Returns a new instance of {@link StructureShape}
-         *
+         * 
          * @return A new instance of {@link StructureShape}
          */
         public StructureShape build() {
