@@ -1,7 +1,6 @@
 package mx.sugus.braid.jsyntax.plugins;
 
 import java.util.List;
-import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
@@ -10,6 +9,7 @@ import mx.sugus.braid.jsyntax.CodeBlock;
 import mx.sugus.braid.jsyntax.CompilationUnit;
 import mx.sugus.braid.jsyntax.Javadoc;
 import mx.sugus.braid.jsyntax.MethodSyntax;
+import mx.sugus.braid.jsyntax.Modifier;
 import mx.sugus.braid.jsyntax.Parameter;
 import mx.sugus.braid.jsyntax.transforms.AddMethodsTransform;
 import mx.sugus.braid.jsyntax.transforms.MethodMatcher;

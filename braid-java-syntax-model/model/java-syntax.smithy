@@ -235,8 +235,36 @@ structure SwitchStatement {
 }
 
 // --- Java Types
-@java("javax.lang.model.element.Modifier")
-structure Modifier {}
+enum Modifier {
+    ///  The modifier `public`
+    PUBLIC = "public"
+    ///  The modifier `protected`
+    PROTECTED = "protected"
+    ///  The modifier `private`
+    PRIVATE = "private"
+    ///  The modifier `abstract`
+    ABSTRACT = "abstract"
+    /// The modifier `default`
+    DEFAULT = "default"
+    ///  The modifier `static`
+    STATIC = "static"
+    /// The modifier `sealed`
+    SEALED = "sealed"
+    /// The modifier `non-sealed`
+    NON_SEALED = "non-sealed"
+    ///  The modifier `final`
+    FINAL = "final"
+    ///  The modifier `transient`
+    TRANSIENT = "transient"
+    ///  The modifier `volatile`
+    VOLATILE = "volatile"
+    ///  The modifier `synchronized`
+    SYNCHRONIZED = "synchronized"
+    ///  The modifier `native`
+    NATIVE = "native"
+    ///  The modifier `strictfp`
+    STRICTFP = "strictfp"
+}
 
 @uniqueItems
 list ModifierList {
@@ -335,7 +363,7 @@ structure MethodSyntax {
     @required
     name: String
 
-    /// An opetional set of type params for this method
+    /// An optional set of type params for this method
     typeParams: TypeVariableTypeNames
 
     /// The return type for the method

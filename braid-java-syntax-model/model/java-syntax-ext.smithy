@@ -49,11 +49,11 @@ apply ModifierList @multiAddOverrides([
     {
         args: [
             {
-                type: "javax.lang.model.element.Modifier"
+                type: "Modifier"
                 name: "modifier1"
             }
             {
-                type: "javax.lang.model.element.Modifier"
+                type: "Modifier"
                 name: "modifier2"
             }
         ]
@@ -62,15 +62,15 @@ apply ModifierList @multiAddOverrides([
     {
         args: [
             {
-                type: "javax.lang.model.element.Modifier"
+                type: "Modifier"
                 name: "modifier1"
             }
             {
-                type: "javax.lang.model.element.Modifier"
+                type: "Modifier"
                 name: "modifier2"
             }
             {
-                type: "javax.lang.model.element.Modifier"
+                type: "Modifier"
                 name: "modifier3"
             }
         ]
@@ -92,7 +92,7 @@ apply FieldSyntax @fromFactories([
         ]
         body: ["""
             return FieldSyntax.builder()
-                       .addModifiers(javax.lang.model.element.Modifier.PRIVATE, javax.lang.model.element.Modifier.FINAL)
+                       .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
                        .name(name)
                        .type(type)
                        .build()"""]
@@ -110,7 +110,7 @@ apply FieldSyntax @fromFactories([
         ]
         body: ["""
             return FieldSyntax.builder()
-                       .addModifiers(javax.lang.model.element.Modifier.PRIVATE, javax.lang.model.element.Modifier.FINAL)
+                       .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
                        .name(name)
                        .type(ClassName.from(kclass))
                        .build()"""]
@@ -129,7 +129,7 @@ apply FieldSyntax @fromFactories([
         ]
         body: ["""
             return FieldSyntax.builder()
-                       .addModifier(javax.lang.model.element.Modifier.PRIVATE)
+                       .addModifier(Modifier.PRIVATE)
                        .name(name)
                        .type(type)
                        .build()"""]
@@ -148,7 +148,7 @@ apply FieldSyntax @fromFactories([
         ]
         body: ["""
             return FieldSyntax.builder()
-                       .addModifier(javax.lang.model.element.Modifier.PRIVATE)
+                       .addModifier(Modifier.PRIVATE)
                        .name(name)
                        .type(ClassName.from(kclass))
                        .build()"""]

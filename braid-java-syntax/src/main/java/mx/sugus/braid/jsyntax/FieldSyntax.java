@@ -3,7 +3,6 @@ package mx.sugus.braid.jsyntax;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import javax.lang.model.element.Modifier;
 import mx.sugus.braid.rt.util.CollectionBuilderReference;
 import mx.sugus.braid.rt.util.annotations.Generated;
 
@@ -158,7 +157,7 @@ public final class FieldSyntax implements SyntaxNode {
 
     public static FieldSyntax from(TypeName type, String name) {
         return FieldSyntax.builder()
-                       .addModifiers(javax.lang.model.element.Modifier.PRIVATE, javax.lang.model.element.Modifier.FINAL)
+                       .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
                        .name(name)
                        .type(type)
                        .build();
@@ -166,7 +165,7 @@ public final class FieldSyntax implements SyntaxNode {
 
     public static FieldSyntax from(Class<?> kclass, String name) {
         return FieldSyntax.builder()
-                       .addModifiers(javax.lang.model.element.Modifier.PRIVATE, javax.lang.model.element.Modifier.FINAL)
+                       .addModifiers(Modifier.PRIVATE, Modifier.FINAL)
                        .name(name)
                        .type(ClassName.from(kclass))
                        .build();
@@ -174,7 +173,7 @@ public final class FieldSyntax implements SyntaxNode {
 
     public static FieldSyntax mutableFrom(TypeName type, String name) {
         return FieldSyntax.builder()
-                       .addModifier(javax.lang.model.element.Modifier.PRIVATE)
+                       .addModifier(Modifier.PRIVATE)
                        .name(name)
                        .type(type)
                        .build();
@@ -182,7 +181,7 @@ public final class FieldSyntax implements SyntaxNode {
 
     public static FieldSyntax mutableFrom(Class<?> kclass, String name) {
         return FieldSyntax.builder()
-                       .addModifier(javax.lang.model.element.Modifier.PRIVATE)
+                       .addModifier(Modifier.PRIVATE)
                        .name(name)
                        .type(ClassName.from(kclass))
                        .build();

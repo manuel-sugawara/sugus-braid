@@ -167,7 +167,7 @@ public final class ParameterizedTypeName implements TypeName {
         /**
          * Adds a value to {@code typeArguments}.
          * 
-         * @param typeArgument The value tp add
+         * @param typeArguments The value tp add
          * @return This instance for chain calling.
          */
         public Builder addTypeArgument(TypeName typeArgument) {

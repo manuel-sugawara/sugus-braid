@@ -51,10 +51,16 @@ public class PluginTestRunner {
 
     public static void assertContentEquals(String left, String right) {
         try {
-            assertEquals(left.replaceAll("\n +", "\n"), right.replaceAll("\n +", "\n"));
+            assertEquals(normalizeSpace(left), normalizeSpace(right));
         } catch (Throwable e) {
             assertEquals(left, right);
         }
+    }
+
+    private static String normalizeSpace(String value) {
+        return value
+            .replaceAll("\n +", "\n")
+            .replaceAll(" +\n", "\n");
     }
 
     public static Path findExpected(String expected, Set<Path> manifestFiles) {

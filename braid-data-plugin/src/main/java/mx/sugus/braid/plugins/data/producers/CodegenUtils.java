@@ -2,13 +2,13 @@ package mx.sugus.braid.plugins.data.producers;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.util.Lazy;
 import mx.sugus.braid.jsyntax.Annotation;
 import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.MemberValue;
 import mx.sugus.braid.jsyntax.MethodSyntax;
+import mx.sugus.braid.jsyntax.Modifier;
 import mx.sugus.braid.jsyntax.Parameter;
 import mx.sugus.braid.traits.Argument;
 import software.amazon.smithy.model.shapes.MemberShape;

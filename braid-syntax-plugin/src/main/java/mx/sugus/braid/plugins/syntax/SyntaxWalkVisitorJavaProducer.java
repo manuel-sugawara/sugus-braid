@@ -1,6 +1,5 @@
 package mx.sugus.braid.plugins.syntax;
 
-import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.ImplementsKnowledgeIndex;
 import mx.sugus.braid.core.plugin.CodegenState;
 import mx.sugus.braid.core.plugin.Identifier;
@@ -9,6 +8,7 @@ import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.CompilationUnit;
 import mx.sugus.braid.jsyntax.MethodSyntax;
+import mx.sugus.braid.jsyntax.Modifier;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.block.BodyBuilder;
 import mx.sugus.braid.plugins.data.TypeSyntaxResult;

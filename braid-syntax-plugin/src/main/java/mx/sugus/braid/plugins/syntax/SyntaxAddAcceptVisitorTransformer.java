@@ -1,7 +1,6 @@
 package mx.sugus.braid.plugins.syntax;
 
 import java.util.List;
-import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeTaskTransformer;
@@ -10,6 +9,7 @@ import mx.sugus.braid.jsyntax.ClassName;
 import mx.sugus.braid.jsyntax.ClassSyntax;
 import mx.sugus.braid.jsyntax.Javadoc;
 import mx.sugus.braid.jsyntax.MethodSyntax;
+import mx.sugus.braid.jsyntax.Modifier;
 import mx.sugus.braid.jsyntax.ParameterizedTypeName;
 import mx.sugus.braid.jsyntax.TypeVariableTypeName;
 import mx.sugus.braid.jsyntax.ext.TypeNameExt;
@@ -17,6 +17,7 @@ import mx.sugus.braid.jsyntax.transforms.AddMethodsTransform;
 import mx.sugus.braid.jsyntax.transforms.MethodMatcher;
 import mx.sugus.braid.jsyntax.transforms.TypeMatcher;
 import mx.sugus.braid.plugins.data.TypeSyntaxResult;
+import mx.sugus.braid.plugins.data.producers.CodegenUtils;
 import mx.sugus.braid.plugins.data.producers.StructureJavaProducer;
 import mx.sugus.braid.plugins.data.producers.Utils;
 import software.amazon.smithy.model.shapes.ShapeId;
@@ -76,7 +77,7 @@ public record SyntaxAddAcceptVisitorTransformer(String syntaxNode) implements Sh
                          .returns("The result from the visitor")
                          .build();
         return MethodSyntax.builder("accept")
-                           .addAnnotation(Override.class)
+                           .addAnnotation(CodegenUtils.override())
                            .addModifier(Modifier.PUBLIC)
                            .javadoc(doc)
                            .returns(TypeVariableTypeName.builder()

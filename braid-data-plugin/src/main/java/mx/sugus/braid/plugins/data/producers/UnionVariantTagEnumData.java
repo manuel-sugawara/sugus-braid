@@ -1,7 +1,6 @@
 package mx.sugus.braid.plugins.data.producers;
 
 import java.util.List;
-import javax.lang.model.element.Modifier;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import mx.sugus.braid.core.util.Name;
 import mx.sugus.braid.jsyntax.ClassName;
@@ -11,6 +10,7 @@ import mx.sugus.braid.jsyntax.EnumConstant;
 import mx.sugus.braid.jsyntax.EnumSyntax;
 import mx.sugus.braid.jsyntax.FieldSyntax;
 import mx.sugus.braid.jsyntax.MethodSyntax;
+import mx.sugus.braid.jsyntax.Modifier;
 
 public final class UnionVariantTagEnumData implements DirectedEnum {
     static final ClassName VARIANT_TAG_NAME = ClassName.builder().name("VariantTag").build();
