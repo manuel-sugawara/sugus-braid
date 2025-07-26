@@ -11,7 +11,7 @@ string const
 structure interface {}
 
 /// Marks any structure with a java type name.
-@trait(selector: "*")
+@trait(selector: ":is(structure, enum)")
 string java
 
 /// Marks a member as optional.
