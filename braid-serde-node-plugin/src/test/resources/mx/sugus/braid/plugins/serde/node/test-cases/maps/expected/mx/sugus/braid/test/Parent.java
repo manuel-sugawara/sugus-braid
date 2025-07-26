@@ -32,9 +32,11 @@ public final class Parent implements ToNode {
     private final Map<String, String> strings;
     private final Map<String, BigDecimal> bigDecimals;
     private final Map<String, EnumValue> enumValues;
+    private final List<Map<String, Integer>> integerMapList;
     private final Map<String, List<Integer>> integerListMap;
     private final Map<String, Map<String, List<Integer>>> nestedIntegerListMap;
     private final Map<String, List<Map<String, Integer>>> nestedNestedIntegerMap;
+    private final Map<String, Map<String, Map<String, List<Integer>>>> nestedNestedIntegerListMap;
     private int _hashCode = 0;
 
     private Parent(Builder builder) {
@@ -51,9 +53,11 @@ public final class Parent implements ToNode {
         this.strings = Objects.requireNonNull(builder.strings.asPersistent(), "strings");
         this.bigDecimals = Objects.requireNonNull(builder.bigDecimals.asPersistent(), "bigDecimals");
         this.enumValues = Objects.requireNonNull(builder.enumValues.asPersistent(), "enumValues");
+        this.integerMapList = Objects.requireNonNull(builder.integerMapList.asPersistent(), "integerMapList");
         this.integerListMap = Objects.requireNonNull(builder.integerListMap.asPersistent(), "integerListMap");
         this.nestedIntegerListMap = Objects.requireNonNull(builder.nestedIntegerListMap.asPersistent(), "nestedIntegerListMap");
         this.nestedNestedIntegerMap = Objects.requireNonNull(builder.nestedNestedIntegerMap.asPersistent(), "nestedNestedIntegerMap");
+        this.nestedNestedIntegerListMap = Objects.requireNonNull(builder.nestedNestedIntegerListMap.asPersistent(), "nestedNestedIntegerListMap");
     }
 
     /**
@@ -162,6 +166,14 @@ public final class Parent implements ToNode {
 
     /**
      * 
+     * @return The value of the {@code integerMapList} member
+     */
+    public List<Map<String, Integer>> integerMapList() {
+        return this.integerMapList;
+    }
+
+    /**
+     * 
      * @return The value of the {@code integerListMap} member
      */
     public Map<String, List<Integer>> integerListMap() {
@@ -182,6 +194,14 @@ public final class Parent implements ToNode {
      */
     public Map<String, List<Map<String, Integer>>> nestedNestedIntegerMap() {
         return this.nestedNestedIntegerMap;
+    }
+
+    /**
+     * 
+     * @return The value of the {@code nestedNestedIntegerListMap} member
+     */
+    public Map<String, Map<String, Map<String, List<Integer>>>> nestedNestedIntegerListMap() {
+        return this.nestedNestedIntegerListMap;
     }
 
     /**
@@ -215,9 +235,11 @@ public final class Parent implements ToNode {
             && this.strings.equals(that.strings)
             && this.bigDecimals.equals(that.bigDecimals)
             && this.enumValues.equals(that.enumValues)
+            && this.integerMapList.equals(that.integerMapList)
             && this.integerListMap.equals(that.integerListMap)
             && this.nestedIntegerListMap.equals(that.nestedIntegerListMap)
-            && this.nestedNestedIntegerMap.equals(that.nestedNestedIntegerMap);
+            && this.nestedNestedIntegerMap.equals(that.nestedNestedIntegerMap)
+            && this.nestedNestedIntegerListMap.equals(that.nestedNestedIntegerListMap);
     }
 
     @Override
@@ -237,9 +259,11 @@ public final class Parent implements ToNode {
             hashCode = 31 * hashCode + strings.hashCode();
             hashCode = 31 * hashCode + bigDecimals.hashCode();
             hashCode = 31 * hashCode + enumValues.hashCode();
+            hashCode = 31 * hashCode + integerMapList.hashCode();
             hashCode = 31 * hashCode + integerListMap.hashCode();
             hashCode = 31 * hashCode + nestedIntegerListMap.hashCode();
             hashCode = 31 * hashCode + nestedNestedIntegerMap.hashCode();
+            hashCode = 31 * hashCode + nestedNestedIntegerListMap.hashCode();
             _hashCode = hashCode;
         }
         return _hashCode;
@@ -261,9 +285,11 @@ public final class Parent implements ToNode {
             + ", strings: " + strings
             + ", bigDecimals: " + bigDecimals
             + ", enumValues: " + enumValues
+            + ", integerMapList: " + integerMapList
             + ", integerListMap: " + integerListMap
             + ", nestedIntegerListMap: " + nestedIntegerListMap
-            + ", nestedNestedIntegerMap: " + nestedNestedIntegerMap + "}";
+            + ", nestedNestedIntegerMap: " + nestedNestedIntegerMap
+            + ", nestedNestedIntegerListMap: " + nestedNestedIntegerListMap + "}";
     }
 
     /**
@@ -366,6 +392,17 @@ public final class Parent implements ToNode {
             }
             builder.withMember("enumValues", enumValuesBuilder.build());
         }
+        if (!integerMapList().isEmpty()) {
+            ArrayNode.Builder integerMapListBuilder = ArrayNode.builder();
+            for (Map<String, Integer> item : integerMapList()) {
+                ObjectNode.Builder innerBuilder = ObjectNode.builder();
+                for (Map.Entry<String, Integer> innerKvp : kvp.getValue().entrySet()) {
+                    innerBuilder.withMember(kvp.getKey(), Node.from(kvp.getValue()));
+                }
+                integerMapListBuilder.withValue(innerBuilder.build());
+            }
+            builder.withMember("integerMapList", integerMapListBuilder.build());
+        }
         if (!this.integerListMap.isEmpty()) {
             ObjectNode.Builder integerListMapBuilder = ObjectNode.builder();
             for (Map.Entry<String, List<Integer>> kvp : integerListMap().entrySet()) {
@@ -406,6 +443,25 @@ public final class Parent implements ToNode {
                 nestedNestedIntegerMapBuilder.withMember(kvp.getKey(), innerBuilder.build());
             }
             builder.withMember("nestedNestedIntegerMap", nestedNestedIntegerMapBuilder.build());
+        }
+        if (!this.nestedNestedIntegerListMap.isEmpty()) {
+            ObjectNode.Builder nestedNestedIntegerListMapBuilder = ObjectNode.builder();
+            for (Map.Entry<String, Map<String, Map<String, List<Integer>>>> kvp : nestedNestedIntegerListMap().entrySet()) {
+                ObjectNode.Builder innerBuilder = ObjectNode.builder();
+                for (Map.Entry<String, Map<String, List<Integer>>> innerKvp : kvp.getValue().entrySet()) {
+                    ObjectNode.Builder innerBuilder1 = ObjectNode.builder();
+                    for (Map.Entry<String, List<Integer>> innerKvp1 : innerKvp.getValue().entrySet()) {
+                        ArrayNode.Builder innerBuilder2 = ArrayNode.builder();
+                        for (Integer innerItem2 : innerKvp1.getValue()) {
+                            innerBuilder2.withValue(Node.from(innerItem2));
+                        }
+                        innerBuilder1.withMember(innerKvp1.getKey(), innerBuilder2.build());
+                    }
+                    innerBuilder.withMember(innerKvp.getKey(), innerBuilder1.build());
+                }
+                nestedNestedIntegerListMapBuilder.withMember(kvp.getKey(), innerBuilder.build());
+            }
+            builder.withMember("nestedNestedIntegerListMap", nestedNestedIntegerListMapBuilder.build());
         }
         return builder.build();
     }
@@ -510,6 +566,16 @@ public final class Parent implements ToNode {
                         builder.putEnumValue(memberKvp.getKey().getValue(), EnumValue.from(valueNode.expectStringNode().getValue()));
                     }
                     break;
+                case "integerMapList":
+                    for (Node lstNodeValue : value.expectArrayNode()) {
+                        Map<String, Integer> mapValue = new LinkedHashMap<>();
+                        for (Map.Entry<StringNode, Node> innerKvp : valueNode.expectObjectNode().getMembers().entrySet()) {
+                            Node innerValue = innerKvp.getValue();
+                            mapValue.put(innerKvp.getKey().getValue(), valueNode.expectNumberNode().getValue().intValue());
+                        }
+                        builder.addIntegerMapList(mapValue);
+                    }
+                    break;
                 case "integerListMap":
                     for (Map.Entry<StringNode, Node> memberKvp : value.expectObjectNode().getMembers().entrySet()) {
                         Node valueNode = memberKvp.getValue();
@@ -550,6 +616,26 @@ public final class Parent implements ToNode {
                         builder.putNestedNestedIntegerMap(memberKvp.getKey().getValue(), lstMember);
                     }
                     break;
+                case "nestedNestedIntegerListMap":
+                    for (Map.Entry<StringNode, Node> memberKvp : value.expectObjectNode().getMembers().entrySet()) {
+                        Node valueNode = memberKvp.getValue();
+                        Map<String, Map<String, List<Integer>>> mapValue = new LinkedHashMap<>();
+                        for (Map.Entry<StringNode, Node> innerKvp : valueNode.expectObjectNode().getMembers().entrySet()) {
+                            Node innerValue = innerKvp.getValue();
+                            Map<String, List<Integer>> mapValue1 = new LinkedHashMap<>();
+                            for (Map.Entry<StringNode, Node> innerKvp1 : innerValue.expectObjectNode().getMembers().entrySet()) {
+                                Node innerValue1 = innerKvp1.getValue();
+                                List<Integer> lstMember2 = new ArrayList<>();
+                                for (Node innerNodeValue2 : innerValue1.expectArrayNode()) {
+                                    lstMember2.add(innerNodeValue2.expectNumberNode().getValue().intValue());
+                                }
+                                mapValue1.put(innerKvp1.getKey().getValue(), lstMember2);
+                            }
+                            mapValue.put(innerKvp.getKey().getValue(), mapValue1);
+                        }
+                        builder.putNestedNestedIntegerListMap(memberKvp.getKey().getValue(), mapValue);
+                    }
+                    break;
                 default:
                     validator.report(Validation.Severity.WARNING, key, () -> String.format("unknown key `%s` with value `%s`", key, value));
                     break;
@@ -575,9 +661,11 @@ public final class Parent implements ToNode {
         private CollectionBuilderReference<Map<String, String>> strings;
         private CollectionBuilderReference<Map<String, BigDecimal>> bigDecimals;
         private CollectionBuilderReference<Map<String, EnumValue>> enumValues;
+        private CollectionBuilderReference<List<Map<String, Integer>>> integerMapList;
         private CollectionBuilderReference<Map<String, List<Integer>>> integerListMap;
         private CollectionBuilderReference<Map<String, Map<String, List<Integer>>>> nestedIntegerListMap;
         private CollectionBuilderReference<Map<String, List<Map<String, Integer>>>> nestedNestedIntegerMap;
+        private CollectionBuilderReference<Map<String, Map<String, Map<String, List<Integer>>>>> nestedNestedIntegerListMap;
 
         Builder() {
             this.children = CollectionBuilderReference.forUnorderedMap();
@@ -592,9 +680,11 @@ public final class Parent implements ToNode {
             this.strings = CollectionBuilderReference.forUnorderedMap();
             this.bigDecimals = CollectionBuilderReference.forUnorderedMap();
             this.enumValues = CollectionBuilderReference.forUnorderedMap();
+            this.integerMapList = CollectionBuilderReference.forList();
             this.integerListMap = CollectionBuilderReference.forUnorderedMap();
             this.nestedIntegerListMap = CollectionBuilderReference.forUnorderedMap();
             this.nestedNestedIntegerMap = CollectionBuilderReference.forUnorderedMap();
+            this.nestedNestedIntegerListMap = CollectionBuilderReference.forUnorderedMap();
         }
 
         Builder(Parent data) {
@@ -611,9 +701,11 @@ public final class Parent implements ToNode {
             this.strings = CollectionBuilderReference.fromPersistentUnorderedMap(data.strings);
             this.bigDecimals = CollectionBuilderReference.fromPersistentUnorderedMap(data.bigDecimals);
             this.enumValues = CollectionBuilderReference.fromPersistentUnorderedMap(data.enumValues);
+            this.integerMapList = CollectionBuilderReference.fromPersistentList(data.integerMapList);
             this.integerListMap = CollectionBuilderReference.fromPersistentUnorderedMap(data.integerListMap);
             this.nestedIntegerListMap = CollectionBuilderReference.fromPersistentUnorderedMap(data.nestedIntegerListMap);
             this.nestedNestedIntegerMap = CollectionBuilderReference.fromPersistentUnorderedMap(data.nestedNestedIntegerMap);
+            this.nestedNestedIntegerListMap = CollectionBuilderReference.fromPersistentUnorderedMap(data.nestedNestedIntegerListMap);
         }
 
         /**
@@ -916,6 +1008,29 @@ public final class Parent implements ToNode {
         }
 
         /**
+         * Sets the value for {@code integerMapList}.
+         * 
+         * @param integerMapList The value to be set.
+         * @return This instance for chain calling.
+         */
+        public Builder integerMapList(List<Map<String, Integer>> integerMapList) {
+            this.integerMapList.clear();
+            this.integerMapList.asTransient().addAll(integerMapList);
+            return this;
+        }
+
+        /**
+         * Adds a value to {@code integerMapList}.
+         * 
+         * @param integerMapList The value tp add
+         * @return This instance for chain calling.
+         */
+        public Builder addIntegerMapList(Map<String, Integer> integerMapList) {
+            this.integerMapList.asTransient().add(integerMapList);
+            return this;
+        }
+
+        /**
          * Sets the value for {@code integerListMap}.
          * 
          * @param integerListMap The value to be set.
@@ -984,6 +1099,30 @@ public final class Parent implements ToNode {
          */
         public Builder putNestedNestedIntegerMap(String key, List<Map<String, Integer>> nestedNestedIntegerMap) {
             this.nestedNestedIntegerMap.asTransient().put(key, nestedNestedIntegerMap);
+            return this;
+        }
+
+        /**
+         * Sets the value for {@code nestedNestedIntegerListMap}.
+         * 
+         * @param nestedNestedIntegerListMap The value to be set.
+         * @return This instance for chain calling.
+         */
+        public Builder nestedNestedIntegerListMap(Map<String, Map<String, Map<String, List<Integer>>>> nestedNestedIntegerListMap) {
+            this.nestedNestedIntegerListMap.clear();
+            this.nestedNestedIntegerListMap.asTransient().putAll(nestedNestedIntegerListMap);
+            return this;
+        }
+
+        /**
+         * Puts a new entry to the {@code nestedNestedIntegerListMap} map with the given key and value.
+         * 
+         * @param key The key for the new entry
+         * @param nestedNestedIntegerListMap The value for the map entry
+         * @return This instance for chain calling.
+         */
+        public Builder putNestedNestedIntegerListMap(String key, Map<String, Map<String, List<Integer>>> nestedNestedIntegerListMap) {
+            this.nestedNestedIntegerListMap.asTransient().put(key, nestedNestedIntegerListMap);
             return this;
         }
 

@@ -94,6 +94,11 @@ map NestedNestedIntegerMap {
     value: IntegerMapList
 }
 
+map NestedNestedIntegerListMap {
+    key: String
+    value: NestedIntegerListMap
+}
+
 structure Parent {
     stringMember: String
     children: ChildMap
@@ -108,7 +113,9 @@ structure Parent {
     strings: StringMap
     bigDecimals: BigDecimalMap
     enumValues: EnumValueMap
+    integerMapList: IntegerMapList
     integerListMap: IntegerListMap
     nestedIntegerListMap: NestedIntegerListMap
     nestedNestedIntegerMap: NestedNestedIntegerMap
+    nestedNestedIntegerListMap: NestedNestedIntegerListMap
 }
