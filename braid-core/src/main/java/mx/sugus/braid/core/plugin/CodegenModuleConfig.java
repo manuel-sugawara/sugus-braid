@@ -3,6 +3,7 @@ package mx.sugus.braid.core.plugin;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -51,7 +52,9 @@ public final class CodegenModuleConfig {
     private final Map<ShapeType, Set<ShapeProducerTask<?>>> shapeProducers;
     private final Map<Identifier, Set<ShapeTaskTransformer<?>>> shapeTaskTransformers;
     private final Set<NonShapeProducerTask<?>> nonShapeProducers;
+    private final Set<NonShapeMultiProducerTask<?>> nonShapeMultiProducers;
     private final Map<Identifier, Set<NonShapeTaskTransformer<?>>> nonShapeTaskTransformers;
+    private final Map<Identifier, Set<NonShapeMultiTaskTransformer<?>>> nonShapeMultiTaskTransformers;
     private final Map<Class<?>, Set<ConsumerTask<?>>> consumers;
     private final Set<ShapeReducer<?>> shapeReducers;
     private final List<SymbolProviderDecorator> symbolProviderDecorators;
@@ -73,12 +76,17 @@ public final class CodegenModuleConfig {
 
         // Non-shape
         this.nonShapeProducers = Collections.unmodifiableSet(new LinkedHashSet<>(builder.nonShapeProducers));
+        this.nonShapeMultiProducers = Collections.unmodifiableSet(new LinkedHashSet<>(builder.nonShapeMultiProducers));
         var nonShapeTaskTransformers2 = new LinkedHashMap<Identifier, Set<NonShapeTaskTransformer<?>>>();
         for (var kvp : builder.nonShapeTaskTransformers.entrySet()) {
             nonShapeTaskTransformers2.put(kvp.getKey(), Collections.unmodifiableSet(new LinkedHashSet<>(kvp.getValue())));
         }
         this.nonShapeTaskTransformers = Collections.unmodifiableMap(nonShapeTaskTransformers2);
-
+        var nonShapeMultiTaskTransformers2 = new LinkedHashMap<Identifier, Set<NonShapeMultiTaskTransformer<?>>>();
+        for (var kvp : builder.nonShapeMultiTaskTransformers.entrySet()) {
+            nonShapeMultiTaskTransformers2.put(kvp.getKey(), Collections.unmodifiableSet(new LinkedHashSet<>(kvp.getValue())));
+        }
+        this.nonShapeMultiTaskTransformers = Collections.unmodifiableMap(nonShapeMultiTaskTransformers2);
         // consumers
         var consumers2 = new LinkedHashMap<Class<?>, Set<ConsumerTask<?>>>();
         for (var kvp : builder.consumers.entrySet()) {
@@ -138,10 +146,16 @@ public final class CodegenModuleConfig {
      * @return The collection of the configured transformers for the given task.
      */
     public <T> Collection<ShapeTaskTransformer<T>> shapeTaskTransformers(ShapeProducerTask<T> task) {
-        return shapeTaskTransformers.getOrDefault(task.taskId(), Set.of())
-                                    .stream()
-                                    .map(x -> (ShapeTaskTransformer<T>) x)
-                                    .collect(Collectors.toList());
+        var transformers = shapeTaskTransformers.get(task.taskId());
+        if (transformers == null) {
+            return List.of();
+        }
+        var result = new ArrayList<ShapeTaskTransformer<T>>(transformers.size());
+        for (var untypedTransformer : transformers) {
+            var shapeTaskTransformer = (ShapeTaskTransformer<T>) untypedTransformer;
+            result.add(shapeTaskTransformer);
+        }
+        return result;
     }
 
     /**
@@ -154,6 +168,15 @@ public final class CodegenModuleConfig {
     }
 
     /**
+     * Returns the collection of the configured producers.
+     *
+     * @return The collection of the configured producers for the given shape type.
+     */
+    public Collection<NonShapeMultiProducerTask<?>> nonShapeMultiProducers() {
+        return nonShapeMultiProducers;
+    }
+
+    /**
      * Returns the collection of the configured transformers for the given task.
      *
      * @param task The task for which the transformers are returned.
@@ -161,10 +184,20 @@ public final class CodegenModuleConfig {
      * @return The collection of the configured transformers for the given task.
      */
     public <T> Collection<NonShapeTaskTransformer<T>> nonShapeTaskTransformers(NonShapeProducerTask<T> task) {
-        return nonShapeTaskTransformers.getOrDefault(task.taskId(), Set.of())
-                                       .stream()
-                                       .map(x -> (NonShapeTaskTransformer<T>) x)
-                                       .collect(Collectors.toList());
+        return (Collection<NonShapeTaskTransformer<T>> ) (Collection)
+            nonShapeTaskTransformers.getOrDefault(task.taskId(), Set.of());
+    }
+
+    /**
+     * Returns the collection of the configured transformers for the given task.
+     *
+     * @param task The task for which the transformers are returned.
+     * @param <T>  The type that the task produces and the transformers take
+     * @return The collection of the configured transformers for the given task.
+     */
+    public <T> Collection<NonShapeMultiTaskTransformer<T>> nonShapeMultiTaskTransformers(NonShapeMultiProducerTask<T> task) {
+        return (Collection<NonShapeMultiTaskTransformer<T>>) (Collection)
+            nonShapeMultiTaskTransformers.getOrDefault(task.taskId(), Set.of());
     }
 
     /**
@@ -174,25 +207,8 @@ public final class CodegenModuleConfig {
      * @param <T>  The type that the task produces and the consumers take
      * @return The collection of configured consumers for the type returned by the given task.
      */
-    public <T> Collection<ConsumerTask<T>> consumers(ShapeProducerTask<T> task) {
-        return consumers.getOrDefault(task.output(), Set.of())
-                        .stream()
-                        .map(x -> (ConsumerTask<T>) x)
-                        .collect(Collectors.toSet());
-    }
-
-    /**
-     * Returns the collection of configured consumers for the type returned by the given task.
-     *
-     * @param task The task for which the consumers are returned.
-     * @param <T>  The type that the task produces and the consumers take
-     * @return The collection of configured consumers for the type returned by the given task.
-     */
-    public <T> Collection<ConsumerTask<T>> nonShapeConsumers(NonShapeProducerTask<T> task) {
-        return consumers.getOrDefault(task.output(), Set.of())
-                        .stream()
-                        .map(x -> (ConsumerTask<T>) x)
-                        .collect(Collectors.toSet());
+    public <T> Collection<ConsumerTask<T>> consumers(ProducerTask<T> task) {
+        return (Collection<ConsumerTask<T>>) (Collection) consumers.getOrDefault(task.output(), Set.of());
     }
 
     /**
@@ -247,7 +263,9 @@ public final class CodegenModuleConfig {
         private final Map<ShapeType, Set<ShapeProducerTask<?>>> shapeProducers = new LinkedHashMap<>();
         private final Map<Identifier, Set<ShapeTaskTransformer<?>>> shapeTaskTransformers = new LinkedHashMap<>();
         private final Set<NonShapeProducerTask<?>> nonShapeProducers = new LinkedHashSet<>();
+        private final Set<NonShapeMultiProducerTask<?>> nonShapeMultiProducers = new LinkedHashSet<>();
         private final Map<Identifier, Set<NonShapeTaskTransformer<?>>> nonShapeTaskTransformers = new LinkedHashMap<>();
+        private final Map<Identifier, Set<NonShapeMultiTaskTransformer<?>>> nonShapeMultiTaskTransformers= new LinkedHashMap<>();;
         private final Map<Class<?>, Set<ConsumerTask<?>>> consumers = new LinkedHashMap<>();
         private final Set<ShapeReducer<?>> shapeReducers = new LinkedHashSet<>();
         private final List<SymbolProviderDecorator> symbolProviderDecorators = new ArrayList<>();
@@ -287,6 +305,17 @@ public final class CodegenModuleConfig {
          */
         public Builder addProducer(NonShapeProducerTask<?> producer) {
             nonShapeProducers.add(producer);
+            return this;
+        }
+
+        /**
+         * Adds a producers to the builder
+         *
+         * @param producer The producer to be added
+         * @return This instance for method chaining.
+         */
+        public Builder addProducer(NonShapeMultiProducerTask<?> producer) {
+            nonShapeMultiProducers.add(producer);
             return this;
         }
 
@@ -401,9 +430,14 @@ public final class CodegenModuleConfig {
                                      .addAll(v);
             });
             nonShapeProducers.addAll(other.nonShapeProducers);
+            nonShapeMultiProducers.addAll(other.nonShapeMultiProducers);
             other.nonShapeTaskTransformers.forEach((k, v) -> {
                 nonShapeTaskTransformers.computeIfAbsent(k, t -> new LinkedHashSet<>())
                                         .addAll(v);
+            });
+            other.nonShapeMultiTaskTransformers.forEach((k, v) -> {
+                nonShapeMultiTaskTransformers.computeIfAbsent(k, t -> new LinkedHashSet<>())
+                                             .addAll(v);
             });
             other.consumers.forEach((k, v) -> {
                 consumers.computeIfAbsent(k, t -> new LinkedHashSet<>())

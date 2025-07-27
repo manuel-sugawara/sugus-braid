@@ -1,9 +1,11 @@
 package mx.sugus.braid.core.plugin;
 
+import java.util.Collection;
 import mx.sugus.braid.core.BraidCodegenSettings;
 import software.amazon.smithy.build.FileManifest;
 import software.amazon.smithy.codegen.core.SymbolProvider;
 import software.amazon.smithy.model.Model;
+import software.amazon.smithy.model.shapes.Shape;
 
 /**
  * Encapsulates the shared state and context information needed during code generation.
@@ -26,6 +28,8 @@ import software.amazon.smithy.model.Model;
  */
 public interface CodegenState {
     Model model();
+
+    Collection<Shape> selectedShapes();
 
     SymbolProvider symbolProvider();
 
