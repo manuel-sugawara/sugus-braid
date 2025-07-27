@@ -1,6 +1,7 @@
 package mx.sugus.braid.core.plugin;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 import mx.sugus.braid.core.BraidCodegenSettings;
 import software.amazon.smithy.build.FileManifest;
@@ -14,6 +15,7 @@ import software.amazon.smithy.model.shapes.Shape;
 public final class NonShapeCodegenState implements CodegenState {
     private final Model model;
     private final Collection<Shape> selectedShapes;
+    private final Map<Identifier, Object> reducersResults;
     private final SymbolProvider symbolProvider;
     private final BraidCodegenSettings settings;
     private final FileManifest fileManifest;
@@ -22,6 +24,7 @@ public final class NonShapeCodegenState implements CodegenState {
     NonShapeCodegenState(Builder builder) {
         this.model = Objects.requireNonNull(builder.model, "model");
         this.selectedShapes = Objects.requireNonNull(builder.selectedShapes, "selectedShapes");
+        this.reducersResults = Objects.requireNonNull(builder.reducersResults, "reducersResults");
         this.symbolProvider = Objects.requireNonNull(builder.symbolProvider, "symbolProvider");
         this.settings = Objects.requireNonNull(builder.settings, "settings");
         this.fileManifest = Objects.requireNonNull(builder.fileManifest, "fileManifest");
@@ -58,6 +61,11 @@ public final class NonShapeCodegenState implements CodegenState {
         return dependencies;
     }
 
+    @Override
+    public Map<Identifier, Object> reducersResults() {
+        return reducersResults;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -65,6 +73,7 @@ public final class NonShapeCodegenState implements CodegenState {
     public static class Builder {
         private Model model;
         private Collection<Shape> selectedShapes;
+        private Map<Identifier, Object> reducersResults = Map.of();
         private SymbolProvider symbolProvider;
         private BraidCodegenSettings settings;
         private FileManifest fileManifest;
@@ -77,6 +86,11 @@ public final class NonShapeCodegenState implements CodegenState {
 
         public Builder selectedShapes(Collection<Shape> selectedShapes) {
             this.selectedShapes = selectedShapes;
+            return this;
+        }
+
+        public Builder reducersResults(Map<Identifier, Object> reducersResults) {
+            this.reducersResults = Objects.requireNonNull(reducersResults, "reducersResults");
             return this;
         }
 

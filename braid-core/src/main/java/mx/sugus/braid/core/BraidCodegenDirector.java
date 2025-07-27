@@ -1,10 +1,13 @@
 package mx.sugus.braid.core;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.BiFunction;
 import java.util.logging.Logger;
 import mx.sugus.braid.core.plugin.CodegenModule;
+import mx.sugus.braid.core.plugin.Identifier;
 import mx.sugus.braid.core.plugin.NonShapeCodegenState;
 import mx.sugus.braid.core.plugin.ShapeCodegenState;
 import software.amazon.smithy.build.FileManifest;
@@ -62,13 +65,28 @@ public final class BraidCodegenDirector {
     public void execute() {
         try {
             var selectedShapes = selectedShapes();
+            var reducers = module.shapeReducers();
+            LOG.fine(() -> "Beginning running reducers");
+            Map<Identifier, Object> reducersResults = Map.of();
+            if (!reducers.isEmpty()) {
+                var results = new HashMap<Identifier, Object>(reducers.size());
+                for (var reducer : module.shapeReducers()) {
+                    var state = reducer.init();
+                    for (var shape : selectedShapes) {
+                        var javaShapeState = stateForShape(selectedShapes, reducersResults, shape);
+                        state.consume(javaShapeState);
+                    }
+                    results.put(reducer.taskId(), state.finalizeJob());
+                }
+                reducersResults = Map.copyOf(results);
+            }
             LOG.fine(() -> String.format("Beginning shape codegen for %d shapes", selectedShapes.size()));
             for (var shape : selectedShapes) {
-                var javaShapeState = stateForShape(selectedShapes, shape);
+                var javaShapeState = stateForShape(selectedShapes, reducersResults, shape);
                 module.generateShape(javaShapeState);
             }
             LOG.fine("Beginning non-shape codegen");
-            var nonShapeState = stateFor(selectedShapes);
+            var nonShapeState = stateFor(selectedShapes, reducersResults);
             module.generateNonShape(nonShapeState);
             LOG.fine("Code generation completed successfully");
         } catch (Exception e) {
@@ -81,7 +99,11 @@ public final class BraidCodegenDirector {
         return module.select(model);
     }
 
-    private ShapeCodegenState stateForShape(Collection<Shape> selectedShapes, Shape shape) {
+    private ShapeCodegenState stateForShape(
+        Collection<Shape> selectedShapes,
+        Map<Identifier, Object> reducersResults,
+        Shape shape
+    ) {
         return ShapeCodegenState
             .builder()
             .model(model)
@@ -94,7 +116,7 @@ public final class BraidCodegenDirector {
             .build();
     }
 
-    private NonShapeCodegenState stateFor(Collection<Shape> selectedShapes) {
+    private NonShapeCodegenState stateFor(Collection<Shape> selectedShapes, Map<Identifier, Object> reducersResults) {
         return NonShapeCodegenState
             .builder()
             .selectedShapes(selectedShapes)

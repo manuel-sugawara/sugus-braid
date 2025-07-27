@@ -315,7 +315,6 @@ public class CodeWriter implements AutoCloseable {
     }
 
     // Adapted from https://github.com/square/javapoet/blob/master/src/main/java/com/squareup/javapoet/Util.java
-    // XXX move this to an util class for cleaner sharing
     public static String escapeJavaString(String value) {
         var result = new StringBuilder(value.length() + 2);
         result.append('"');

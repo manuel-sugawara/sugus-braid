@@ -1,6 +1,7 @@
 package mx.sugus.braid.core.plugin;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Objects;
 import mx.sugus.braid.core.BraidCodegenSettings;
 import software.amazon.smithy.build.FileManifest;
@@ -37,6 +38,7 @@ public final class ShapeCodegenState implements CodegenState {
     private final Model model;
     private final Shape shape;
     private final Collection<Shape> selectedShapes;
+    private final Map<Identifier, Object> reducersResults;
     private final SymbolProvider symbolProvider;
     private final BraidCodegenSettings settings;
     private final FileManifest fileManifest;
@@ -46,6 +48,7 @@ public final class ShapeCodegenState implements CodegenState {
         this.model = Objects.requireNonNull(builder.model, "model");
         this.shape = Objects.requireNonNull(builder.shape, "shape");
         this.selectedShapes = Objects.requireNonNull(builder.selectedShapes, "selectedShapes");
+        this.reducersResults = Objects.requireNonNull(builder.reducersResults, "reducersResults");
         this.symbolProvider = Objects.requireNonNull(builder.symbolProvider, "symbolProvider");
         this.settings = Objects.requireNonNull(builder.settings, "settings");
         this.fileManifest = Objects.requireNonNull(builder.fileManifest, "fileManifest");
@@ -80,6 +83,11 @@ public final class ShapeCodegenState implements CodegenState {
     @Override
     public Collection<Shape> selectedShapes() {
         return selectedShapes;
+    }
+
+    @Override
+    public Map<Identifier, Object> reducersResults() {
+        return reducersResults;
     }
 
     /**
@@ -117,6 +125,7 @@ public final class ShapeCodegenState implements CodegenState {
         private Model model;
         private Shape shape;
         private Collection<Shape> selectedShapes;
+        private Map<Identifier, Object> reducersResults = Map.of();
         private SymbolProvider symbolProvider;
         private BraidCodegenSettings settings;
         private FileManifest fileManifest;
@@ -133,7 +142,6 @@ public final class ShapeCodegenState implements CodegenState {
             return this;
         }
 
-
         /**
          * Sets all the selected shapes to be processed.
          *
@@ -142,6 +150,17 @@ public final class ShapeCodegenState implements CodegenState {
          */
         public Builder selectedShapes(Collection<Shape> selectedShapes) {
             this.selectedShapes = selectedShapes;
+            return this;
+        }
+
+        /**
+         * Sets the reducers results.
+         *
+         * @param reducersResults The reducer results
+         * @return This builder for method chaining
+         */
+        public Builder reducersResults(Map<Identifier, Object> reducersResults) {
+            this.reducersResults = reducersResults;
             return this;
         }
 
