@@ -163,6 +163,9 @@ public final class CodegenModule {
         for (var task : config.nonShapeProducers()) {
             processNonShapeTask(state, task);
         }
+        for (var task : config.nonShapeMultiProducers()) {
+            processNonShapeMultiTask(state, task);
+        }
     }
 
     /**

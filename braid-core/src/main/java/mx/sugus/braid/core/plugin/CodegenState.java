@@ -1,6 +1,7 @@
 package mx.sugus.braid.core.plugin;
 
 import java.util.Collection;
+import java.util.Map;
 import mx.sugus.braid.core.BraidCodegenSettings;
 import software.amazon.smithy.build.FileManifest;
 import software.amazon.smithy.codegen.core.SymbolProvider;
@@ -30,6 +31,8 @@ public interface CodegenState {
     Model model();
 
     Collection<Shape> selectedShapes();
+
+    Map<Identifier, Object> reducersResults();
 
     SymbolProvider symbolProvider();
 

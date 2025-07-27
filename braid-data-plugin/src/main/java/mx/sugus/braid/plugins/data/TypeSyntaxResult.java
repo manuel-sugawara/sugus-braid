@@ -35,9 +35,9 @@ import mx.sugus.braid.jsyntax.CompilationUnit;
  * <p>This class is immutable and uses the builder pattern for construction.
  * All instances should be created through the {@link #builder()} method.
  */
+// TODO: This class needs to be removed in favor of just returning the CompilationUnit
 public final class TypeSyntaxResult {
     private final CompilationUnit syntax;
-    private final String namespace;
 
     /**
      * Creates a new TypeSyntaxResult from the provided builder.
@@ -46,7 +46,6 @@ public final class TypeSyntaxResult {
      */
     TypeSyntaxResult(TypeSyntaxResult.Builder builder) {
         this.syntax = builder.syntax;
-        this.namespace = builder.namespace;
     }
 
     /**
@@ -59,18 +58,6 @@ public final class TypeSyntaxResult {
      */
     public CompilationUnit syntax() {
         return syntax;
-    }
-
-    /**
-     * Returns the target namespace (Java package) for the generated type.
-     *
-     * <p>This namespace determines where the generated Java file will be placed
-     * in the output directory structure and affects import resolution.
-     *
-     * @return the Java package name where this type should be generated
-     */
-    public String namespace() {
-        return namespace;
     }
 
     /**
@@ -101,7 +88,6 @@ public final class TypeSyntaxResult {
      */
     public static class Builder {
         private CompilationUnit syntax;
-        private String namespace;
 
         /**
          * Creates a new builder with default values.
@@ -116,7 +102,6 @@ public final class TypeSyntaxResult {
          */
         Builder(TypeSyntaxResult result) {
             this.syntax = result.syntax;
-            this.namespace = result.namespace;
         }
 
         /**
@@ -127,17 +112,6 @@ public final class TypeSyntaxResult {
          */
         public Builder syntax(CompilationUnit syntax) {
             this.syntax = syntax;
-            return this;
-        }
-
-        /**
-         * Sets the target namespace (Java package) for the generated type.
-         *
-         * @param namespace the Java package name where the type should be generated
-         * @return this builder for method chaining
-         */
-        public Builder namespace(String namespace) {
-            this.namespace = namespace;
             return this;
         }
 
