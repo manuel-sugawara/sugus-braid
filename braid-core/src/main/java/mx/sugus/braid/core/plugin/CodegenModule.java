@@ -210,6 +210,23 @@ public final class CodegenModule {
         }
     }
 
+    /**
+     * Processes a non-shape task by running it through the producer-transformer-consumer pipeline.
+     */
+    private <T> void processNonShapeMultiTask(CodegenState state, NonShapeMultiProducerTask<T> task) {
+        try {
+            var result = runNonShapeMultiTask(state, task);
+            if (result != null) {
+                consumeNonShapeMultiResult(state, task, result);
+            }
+        } catch (Exception e) {
+            var taskId = task.taskId();
+            LOG.severe(() -> String.format("Failed to process non-shape task '%s': %s",
+                                           taskId, e.getMessage()));
+            throw new RuntimeException(String.format("Failed to process non-shape task '%s'", taskId), e);
+        }
+    }
+
     private <T> T runShapeTask(ShapeCodegenState state, ShapeProducerTask<T> task) {
         LOG.fine(() -> String.format("Running producer `%s` on shape `%s`",
                                      task.taskId(), state.shape().getId()));
@@ -246,6 +263,24 @@ public final class CodegenModule {
         return result;
     }
 
+    private <T> Collection<T> runNonShapeMultiTask(CodegenState state, NonShapeMultiProducerTask<T> task) {
+        LOG.fine(() -> String.format("Running non-shape producer `%s`",
+                                     task.taskId()));
+        var result = task.produce(state);
+        if (result != null) {
+            for (var transformer : config.nonShapeMultiTaskTransformers(task)) {
+                LOG.fine(() -> String.format("Running non-shape transformer `%s` for producer `%s`",
+                                             transformer.taskId(), task.taskId()));
+                result = transformer.transform(result, state);
+                // Transformers return null to break the pipeline.
+                if (result == null) {
+                    return null;
+                }
+            }
+        }
+        return result;
+    }
+
     private <T> void consumeResult(ShapeCodegenState state, ShapeProducerTask<T> task, T result) {
         for (var consumer : config.consumers(task)) {
             LOG.fine(() -> String.format("Running consumer `%s` for producer `%s` on shape `%s`",
@@ -255,10 +290,20 @@ public final class CodegenModule {
     }
 
     private <T> void consumeNonShapeResult(CodegenState state, NonShapeProducerTask<T> task, T result) {
-        for (var consumer : config.nonShapeConsumers(task)) {
+        for (var consumer : config.consumers(task)) {
             LOG.fine(() -> String.format("Running consumer `%s` for producer `%s`",
                                          consumer.taskId(), task.taskId()));
             consumer.consume(result, state);
+        }
+    }
+
+    private <T> void consumeNonShapeMultiResult(CodegenState state, NonShapeMultiProducerTask<T> task, Collection<T> result) {
+        for (var consumer : config.consumers(task)) {
+            LOG.fine(() -> String.format("Running consumer `%s` for producer `%s`",
+                                         consumer.taskId(), task.taskId()));
+            for (var item : result) {
+                consumer.consume(item, state);
+            }
         }
     }
 }
