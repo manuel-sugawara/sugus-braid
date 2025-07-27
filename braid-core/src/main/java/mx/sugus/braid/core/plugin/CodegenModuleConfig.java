@@ -184,16 +184,8 @@ public final class CodegenModuleConfig {
      * @return The collection of the configured transformers for the given task.
      */
     public <T> Collection<NonShapeTaskTransformer<T>> nonShapeTaskTransformers(NonShapeProducerTask<T> task) {
-        var transformers = nonShapeTaskTransformers.get(task.taskId());
-        if (transformers == null) {
-            return List.of();
-        }
-        var result = new ArrayList<NonShapeTaskTransformer<T>>(transformers.size());
-        for (var untypedTransformer : transformers) {
-            var shapeTaskTransformer = (NonShapeTaskTransformer<T>) untypedTransformer;
-            result.add(shapeTaskTransformer);
-        }
-        return result;
+        return (Collection<NonShapeTaskTransformer<T>> ) (Collection)
+            nonShapeTaskTransformers.getOrDefault(task.taskId(), Set.of());
     }
 
     /**
@@ -204,16 +196,8 @@ public final class CodegenModuleConfig {
      * @return The collection of the configured transformers for the given task.
      */
     public <T> Collection<NonShapeMultiTaskTransformer<T>> nonShapeMultiTaskTransformers(NonShapeMultiProducerTask<T> task) {
-        var transformers = nonShapeMultiTaskTransformers.get(task.taskId());
-        if (transformers == null) {
-            return List.of();
-        }
-        var result = new ArrayList<NonShapeMultiTaskTransformer<T>>(transformers.size());
-        for (var untypedTransformer : transformers) {
-            var shapeTaskTransformer = (NonShapeMultiTaskTransformer<T>) untypedTransformer;
-            result.add(shapeTaskTransformer);
-        }
-        return result;
+        return (Collection<NonShapeMultiTaskTransformer<T>>) (Collection)
+            nonShapeMultiTaskTransformers.getOrDefault(task.taskId(), Set.of());
     }
 
     /**
@@ -224,37 +208,7 @@ public final class CodegenModuleConfig {
      * @return The collection of configured consumers for the type returned by the given task.
      */
     public <T> Collection<ConsumerTask<T>> consumers(ProducerTask<T> task) {
-        var taskConsumers =  consumers.get(task.output());
-        if (taskConsumers == null) {
-            return Set.of();
-        }
-        var result = new HashSet<ConsumerTask<T>>(taskConsumers.size());
-        for (var untypedConsumer : taskConsumers) {
-            var consumerTask = (ConsumerTask<T>) untypedConsumer;
-            result.add(consumerTask);
-        }
-        return result;
-    }
-
-    /**
-     * Returns the collection of configured consumers for the type returned by the given task.
-     *
-     * @param task The task for which the consumers are returned.
-     * @param <T>  The type that the task produces and the consumers take
-     * @return The collection of configured consumers for the type returned by the given task.
-     */
-    public <T> Collection<ConsumerTask<T>> nonShapeConsumers(NonShapeProducerTask<T> task) {
-        var taskConsumers =  consumers.get(task.output());
-        if (taskConsumers == null) {
-            return Set.of();
-        }
-        //return (Collection<ConsumerTask<T>>) (Collection) taskConsumers;
-        var result = new HashSet<ConsumerTask<T>>(taskConsumers.size());
-        for (var untypedConsumer : taskConsumers) {
-            var consumerTask = (ConsumerTask<T>) untypedConsumer;
-            result.add(consumerTask);
-        }
-        return result;
+        return (Collection<ConsumerTask<T>>) (Collection) consumers.getOrDefault(task.output(), Set.of());
     }
 
     /**
