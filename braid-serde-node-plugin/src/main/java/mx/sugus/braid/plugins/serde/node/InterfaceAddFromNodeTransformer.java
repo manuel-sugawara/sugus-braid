@@ -102,8 +102,7 @@ public final class InterfaceAddFromNodeTransformer implements ShapeTaskTransform
         var implementers = implementsKnowledgeIndex.implementers(state.shape().asStructureShape().orElseThrow());
         if (implementers != null && implementers.size() == 1) {
             var implementer = implementers.iterator().next();
-            builder.addStatement("return $T.fromNode(node)", Utils.toJavaTypeName(state, implementer));
-
+            builder.addStatement("return $T.fromNode(validation, node)", Utils.toJavaTypeName(state, implementer));
         } else {
             builder.addStatement("throw new $T()", UnsupportedOperationException.class);
         }
